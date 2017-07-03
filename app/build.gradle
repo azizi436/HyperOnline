@@ -3,28 +3,83 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+
     defaultConfig {
         applicationId "ir.hatamiarash.hyperonline"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        renderscriptTargetApi 25
+        renderscriptSupportModeEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    android {
+        useLibrary 'org.apache.http.legacy'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "2048M"
+        preDexLibraries = false
+    }
+
+    return void
 }
+
+ext {
+    support_library_version = '25.3.1'
+    google_play_services_version = '10.2.1'
+}
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile "com.android.support:appcompat-v7:${support_library_version}"
+    compile "com.android.support:design:${support_library_version}"
+    compile "com.android.support:recyclerview-v7:${support_library_version}"
+    compile "com.android.support:cardview-v7:${support_library_version}"
+    compile "com.android.support:support-v4:${support_library_version}"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    // fonts
+    compile 'com.mikepenz:google-material-typeface:2.2.0.1@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
+    // custom drawer
+    compile('com.mikepenz:materialdrawer:4.5.8@aar') {
+        transitive = true
+    }
+    // google libraries
+    compile "com.google.android.gms:play-services-gcm:${google_play_services_version}"
+    compile "com.google.android.gms:play-services-maps:${google_play_services_version}"
+    compile "com.google.android.gms:play-services-location:${google_play_services_version}"
+    // toast
+    compile 'com.github.GrenderG:Toasty:1.1.3'
+    // custom dialog
+    compile 'cn.pedant.sweetalert:library:1.3'
+    compile 'com.github.javiersantos:MaterialStyledDialogs:2.0'
+    // spinner
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+    // jetbrain plugin
+    compile 'org.jetbrains:annotations-java5:15.0'
+    // butter knife - simple codes
+    compile 'com.jakewharton:butterknife:5.1.2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    // push notification
+    compile 'co.ronash.android:pushe-base:1.2.0'
+    // get device name
+    compile 'com.jaredrummler:android-device-names:1.0.9'
+    // image library
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    // image picker
+    compile 'com.yalantis:ucrop:2.2.0'
+    compile 'com.github.jksiezni.permissive:permissive:0.1'
+    // intro
+    compile 'com.github.paolorotolo:appintro:4.1.0'
 }
