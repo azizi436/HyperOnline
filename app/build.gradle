@@ -6,17 +6,17 @@ apply plugin: 'com.android.application'
 
 def minSdk = hasProperty('minSdk') ? minSdk : 16
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "ir.hatamiarash.hyperonline"
         minSdkVersion minSdk
-        targetSdkVersion 25
-        versionCode 5
-        versionName "1.6.1"
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0.0"
         vectorDrawables.useSupportLibrary = true
-        renderscriptTargetApi 25
+        renderscriptTargetApi 26
         renderscriptSupportModeEnabled true
     }
 
@@ -46,7 +46,7 @@ android {
 }
 
 ext {
-    support_library_version = '25.3.1'
+    support_library_version = '26.+'
     google_play_services_version = '10.2.1'
 }
 
@@ -61,10 +61,10 @@ dependencies {
     compile "com.android.support:support-v4:${support_library_version}"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     // fonts
-    compile 'com.mikepenz:google-material-typeface:2.2.0.1@aar'
-    compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
+    compile 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
     // custom drawer
-    compile('com.mikepenz:materialdrawer:4.5.8@aar') {
+    compile('com.mikepenz:materialdrawer:5.9.4@aar') {
         transitive = true
     }
     // blur view

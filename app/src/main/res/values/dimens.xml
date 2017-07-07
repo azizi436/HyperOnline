@@ -4,5 +4,5 @@
   -->
 
 <resources>
-
+    <dimen name="material_drawer_vertical_padding_custom">12dp</dimen>
 </resources>

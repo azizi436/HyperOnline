@@ -10,16 +10,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background2"
-    android:fitsSystemWindows="true"
-    tools:context="ir.hatamiarash.zimia.MainScreenActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background2"
-        android:id="@+id/imageView3"
-        android:scaleType="centerCrop"/>
+    android:background="@color/white"
+    tools:context="ir.hatamiarash.hyperonline.MainScreenActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -27,38 +19,9 @@
         android:layout_marginTop="25dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:ignore="HardcodedText"
         android:paddingTop="70dp"
-        android:background="@color/transparent_mine">
+        tools:ignore="HardcodedText">
 
-        <ImageView
-            android:id="@+id/btnViewResturans"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:contentDescription="@string/restaurants"
-            app:srcCompat="@drawable/res"/>
-
-        <ImageView
-            android:id="@+id/btnViewFastFoods"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:contentDescription="@string/fastfoods"
-            app:srcCompat="@drawable/fast"/>
-
-        <ImageView
-            android:id="@+id/btnViewMarkets"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:contentDescription="@string/markets"
-            app:srcCompat="@drawable/mark"/>
-
-        <ImageView
-            android:id="@+id/btnViewMap"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="75dp"
-            android:contentDescription="@string/map"
-            app:srcCompat="@drawable/map"/>
     </LinearLayout>
 
     <android.support.design.widget.AppBarLayout
