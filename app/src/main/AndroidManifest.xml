@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,10 +9,10 @@
 
     <uses-sdk tools:overrideLibrary="co.ronash.pushe"/>
     <permission
-        android:name="ir.hatamiarash.zimia.permission.C2D_MESSAGE"
+        android:name="ir.hatamiarash.hyperonline.permission.C2D_MESSAGE"
         android:protectionLevel="signature"/>
 
-    <uses-permission android:name="ir.hatamiarash.zimia.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="ir.hatamiarash.hyperonline.permission.C2D_MESSAGE"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -27,19 +30,87 @@
         android:required="true"/>
 
     <application
+        android:name="volley.AppController"
         android:allowBackup="true"
+        android:configChanges="keyboardHidden|orientation"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:label="@string/app_name_fa"
+        android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="supportsRtl, icon, label, allowBackup">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".SplashScreen"
+            android:label="@string/app_name_fa"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainScreenActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="hyper-online.ir"
+                    android:scheme="ha"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ShopCard"
+            android:label="Shop Cards"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Login"
+            android:label="Login"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".Register"
+            android:label="Register"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".UserProfile"
+            android:label="User Profile"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".EditProfile"
+            android:label="Edit User Profile"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".EditPassword"
+            android:label="Edit User Password"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".ResetPassword"
+            android:label="Reset Forgotten Password"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Lobby"
+            android:label="Lobby Page"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Intro"
+            android:label="Intro Page"/>
+        <activity
+            android:name="ir.hatamiarash.Image.TempActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
             <intent-filter>
@@ -67,6 +138,11 @@
         <meta-data
             android:name="co.ronash.pushe.cr"
             android:value="aHR0cDovLzJjNzBjZGM1N2VmNjQyMjk4NmY4NmMyNjJmNDAxZjM0OjczZTIxZjVhMDkyMzRjNjc5YWQzZWNmZTM5OGZmM2YxQGNhLnB1c2hlLmlyLzYzODE="/>
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCaLExRw_7fmt6ecXbWKoGJXAdjCfYdb4s"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="10b082ce8ebde4fabdf73437a140a4dabf641907"/>
     </application>
 </manifest>

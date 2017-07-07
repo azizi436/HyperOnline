@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="500dp"
+        android:height="500dp"
+        android:viewportHeight="500"
+        android:viewportWidth="500">
+
+    <path
+        android:fillColor="#FF059A41"
+        android:pathData="M3.01,11.837a9.038,9.038,0,0,1,9.212-8.842H487.783a9.031,9.031,0,0,1,9.207,8.842V247.492c0,8.485-9.207,17.7-9.207,17.7S260.827,482.2,256.51,486.346a9.606,9.606,0,0,1-13.094
+.124 c-2.808-2.691-229.77-221.283-229.77-221.283s-10.1-9.766-10.636-17.7V11.837Z"/>
+</vector>

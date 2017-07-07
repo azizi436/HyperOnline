@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dp"
+    android:paddingEnd="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingTop="2dp">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/seller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/badge_point"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
+                android:background="@drawable/selector_ic_label_g"
+                android:orientation="vertical">
+
+                <helper.PersianTextView
+                    android:id="@+id/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:text="5.5"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:font="shabnam"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/seller_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <helper.RoundedImageView
+                android:id="@+id/seller_photo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="centerCrop"/>
+
+            <helper.PersianTextView
+                android:id="@+id/seller_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/badge_point"
+                android:layout_toLeftOf="@+id/seller_photo"
+                android:layout_toRightOf="@+id/badge_point"
+                android:layout_toStartOf="@+id/seller_photo"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="نام فروشنده"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:font="shabnam"/>
+
+            <helper.PersianTextView
+                android:id="@+id/seller_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/seller_photo"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_toLeftOf="@+id/seller_photo"
+                android:layout_toStartOf="@+id/seller_photo"
+                android:ellipsize="end"
+                android:gravity="center_vertical|start"
+                android:maxLines="1"
+                android:text="آدرس"
+                android:textAlignment="textStart"
+                android:textColor="@color/gray2"
+                android:textSize="12sp"
+                app:font="shabnam"/>
+
+            <helper.PersianTextView
+                android:id="@+id/seller_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/seller_address"
+                android:layout_below="@+id/seller_name"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/seller_photo"
+                android:layout_toStartOf="@+id/seller_photo"
+                android:ellipsize="end"
+                android:gravity="center_vertical|start"
+                android:minLines="1"
+                android:text="توضیحات"
+                android:textColor="@color/gray2"
+                android:textSize="12sp"
+                app:font="iran_sans"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

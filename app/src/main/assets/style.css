@@ -1,0 +1,10 @@
+p{
+	direction: rtl;
+	text-align: justify;
+	font-family: font;
+}
+
+@font-face {
+	font-family:'font';
+	src:url('fonts/shabnam.ttf') format('truetype')
+}

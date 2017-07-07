@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<resources>
+    <declare-styleable name="IconEditText">
+        <attr name="iconSrc" format="reference"/>
+        <attr name="isPassword" format="boolean"/>
+        <attr name="isPhone" format="boolean"/>
+        <attr name="isAddress" format="boolean"/>
+        <attr name="isName" format="boolean"/>
+        <attr name="isEmail" format="boolean"/>
+        <attr name="hint" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="PersianTextView">
+        <attr name="font" format="string"/>
+    </declare-styleable>
+</resources>

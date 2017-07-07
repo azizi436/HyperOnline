@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/logo_white"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/materialviewpager_logoHeight"
+    android:layout_centerHorizontal="true"
+    android:adjustViewBounds="true">
+
+    <helper.PersianTextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:font="shabnam"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="30sp"/>
+</LinearLayout>

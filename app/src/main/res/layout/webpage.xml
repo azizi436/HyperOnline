@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/web_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <helper.PersianTextView
+        android:id="@+id/page_title"
+        app:font="shabnam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:text="عنوان"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        android:textSize="28sp"
+        android:textStyle="normal|bold"/>
+
+    <WebView
+        android:id="@+id/page_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="10dp"
+        android:layout_weight="8"/>
+
+    <helper.PersianTextView
+        android:id="@+id/textView4"
+        app:font="shabnam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="گروه تحقیق و توسعه آتریاد"
+        android:textColor="@color/accent"
+        android:textSize="14sp"/>
+</LinearLayout>

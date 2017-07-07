@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background3"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_mine">
+
+        <ScrollView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <helper.IconEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/image"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_google_signin_btn_text_light_default"
+                    android:ems="10"
+                    app:hint="@string/hint_name"
+                    app:iconSrc="@drawable/ic_person"
+                    app:isName="true"/>
+
+                <helper.IconEditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/current_password"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_google_signin_btn_text_light_default"
+                    android:ems="10"
+                    app:hint="@string/hint_email"
+                    app:iconSrc="@drawable/ic_email"
+                    app:isName="true"/>
+
+                <helper.IconEditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/email"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_google_signin_btn_text_light_default"
+                    android:ems="10"
+                    app:hint="@string/hint_address"
+                    app:iconSrc="@drawable/ic_location"
+                    app:isName="true"/>
+
+                <helper.IconEditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/address"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_google_signin_btn_text_light_default"
+                    android:ems="10"
+                    app:hint="@string/hint_phone"
+                    app:iconSrc="@drawable/ic_dialpad"
+                    app:isName="true"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <helper.RoundedImageView
+            android:id="@+id/image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/nobody"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/image"
+            android:layout_alignTop="@+id/image"
+            android:layout_centerHorizontal="true"/>
+
+        <helper.PersianButton
+            android:id="@+id/btnChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_above="@+id/btnConfirm"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:text="تغییر کلمه عبور"
+            android:textColor="#00B89C"
+            android:textSize="18sp"/>
+
+        <helper.PersianButton
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/btn"
+            android:paddingBottom="5dp"
+            android:text="ثبت"
+            android:textColor="@color/white"
+            android:textSize="24sp"/>
+
+        <RelativeLayout
+            android:id="@+id/add_photo"
+            android:layout_width="wrap_content"
+            android:onClick="AddPhoto"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/image"
+            android:layout_alignEnd="@+id/image"
+            android:layout_alignRight="@+id/image"
+            android:background="@drawable/selector_ic_circle_add_photo">
+
+            <Button
+                android:id="@+id/add_photo_2"
+                android:layout_height="25dp"
+                android:tint="@color/white"
+                android:onClick="AddPhoto"
+                android:background="@drawable/selector_ic_add_photo"
+                android:layout_width="25dp"
+                android:layout_margin="8dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

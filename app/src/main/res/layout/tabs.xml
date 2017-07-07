@@ -1,0 +1,21 @@
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<com.astuetz.PagerSlidingTabStrip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/materialviewpager_pagerTitleStrip"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:pstsDividerColor="#FFF"
+    app:pstsDividerPadding="20dp"
+    app:pstsIndicatorColor="#FFF"
+    app:pstsIndicatorHeight="2dp"
+    app:pstsPaddingMiddle="true"
+    app:pstsShouldExpand="true"
+    app:pstsTabPaddingLeftRight="10dp"
+    app:pstsTabTextAllCaps="true"
+    app:pstsUnderlineColor="#FFF"
+    tools:background="#FFF"/>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/badge_off"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="2dp"
+                android:layout_toEndOf="@+id/badge_point"
+                android:layout_toRightOf="@+id/badge_point"
+                android:background="@drawable/selector_ic_label_p"
+                android:orientation="vertical">
+
+                <helper.PersianTextView
+                    android:id="@+id/off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:text="% 55"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:font="shabnam"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/badge_point"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="7dp"
+                android:background="@drawable/selector_ic_label_g"
+                android:orientation="vertical">
+
+                <helper.PersianTextView
+                    android:id="@+id/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:text="5.5"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:font="shabnam"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/badge_3d"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="2dp"
+                android:layout_toEndOf="@+id/badge_off"
+                android:layout_toRightOf="@+id/badge_off"
+                android:background="@drawable/selector_ic_label_o"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/web3d"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/selector_ic_3d"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/product_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/product_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/product_off"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/product_price_backup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/product_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <helper.RoundedImageView
+                android:id="@+id/product_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"/>
+
+            <helper.PersianTextView
+                android:id="@+id/product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/badge_3d"
+                android:layout_toLeftOf="@+id/product_photo"
+                android:layout_toRightOf="@+id/badge_3d"
+                android:layout_toStartOf="@+id/product_photo"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="نام محصول"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:font="shabnam"/>
+
+            <helper.PersianTextView
+                android:id="@+id/product_price_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/product_name"
+                android:layout_alignStart="@+id/product_name"
+                android:layout_below="@+id/product_info"
+                android:layout_toLeftOf="@+id/product_photo"
+                android:layout_toStartOf="@+id/product_photo"
+                android:gravity="start"
+                android:text="1000 تومان"
+                android:textAlignment="textStart"
+                android:textColor="#FF146A"
+                app:font="shabnam"/>
+
+            <helper.PersianTextView
+                android:id="@+id/product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/product_name"
+                android:layout_alignStart="@+id/product_name"
+                android:layout_below="@+id/product_price_off"
+                android:layout_marginTop="3dp"
+                android:layout_toLeftOf="@+id/product_photo"
+                android:layout_toStartOf="@+id/product_photo"
+                android:gravity="start"
+                android:text="1000 تومان"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                app:font="shabnam"/>
+
+            <Button
+                android:id="@+id/exists"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/product_price_off"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/selector_ic_circle"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:text="موجود در سبد"
+                android:textColor="#FF146A"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/dec"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/product_price_off"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/selector_ic_circle"
+                android:paddingBottom="2dp"
+                android:text="-"
+                android:textColor="#FF146A"
+                android:textSize="15sp"/>
+
+            <helper.PersianTextView
+                android:id="@+id/count"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/dec"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="1dp"
+                android:layout_toEndOf="@+id/dec"
+                android:layout_toRightOf="@+id/dec"
+                android:text="55"
+                android:textAlignment="center"
+                android:textColor="#FF146A"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:font="shabnam"/>
+
+            <Button
+                android:id="@+id/inc"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/product_price_off"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/count"
+                android:layout_toRightOf="@+id/count"
+                android:background="@drawable/selector_ic_circle"
+                android:text="+"
+                android:textColor="#FF146A"
+                android:textSize="13sp"/>
+
+            <LinearLayout
+                android:id="@+id/add"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/product_price_off"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/inc"
+                android:layout_toRightOf="@+id/inc"
+                android:background="@drawable/selector_ic_circle"
+                android:gravity="center"
+                android:paddingTop="2dp"
+                android:textSize="13sp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/check"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector_ic_check"
+                    android:backgroundTint="#FF146A"/>
+            </LinearLayout>
+
+            <helper.PersianTextView
+                android:id="@+id/product_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/product_name"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/product_photo"
+                android:layout_toStartOf="@+id/product_photo"
+                android:gravity="center_vertical"
+                android:text="توضیحات"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                app:font="iran_sans"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

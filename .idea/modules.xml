@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HyperOnline.iml" filepath="$PROJECT_DIR$/HyperOnline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZiMia.iml" filepath="$PROJECT_DIR$/ZiMia.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
