@@ -2,22 +2,24 @@
  * Copyright (c) 2017 - All Rights Reserved - Arash Hatami
  */
 
-package helper;
+package models;
 
 public class Product {
     public String uid;
     public String name;
-    public String image;
+    public int image;
     public String price;
     public int off;
     public int count;
     public double point;
     public int point_count;
     public String description;
-    public int web3d;
-    public int type;
-
-    public Product(String uid, String name, String image, String price, int off, int count, double point, int point_count, String description, int web3d, int type) {
+    public int category;
+    
+    public Product() {
+    }
+    
+    public Product(String uid, String name, int image, String price, int off, int count, double point, int point_count, String description, int category) {
         this.uid = uid;
         this.name = name;
         this.image = image;
@@ -27,7 +29,6 @@ public class Product {
         this.point = point;
         this.point_count = point_count;
         this.description = description;
-        this.web3d = web3d;
-        this.type = type;
+        this.category = category;
     }
 }

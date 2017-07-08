@@ -30,4 +30,7 @@
     <color name="Red_Transparent">#5eff000d</color>
     <color name="transparent_mine">#8c000000</color>
     <color name="btn">#9000b89c</color>
+
+    <color name="viewBg">#f1f5f8</color>
+    <color name="album_title">#4c4c4c</color>
 </resources>

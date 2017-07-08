@@ -112,4 +112,11 @@ dependencies {
     compile 'com.github.jksiezni.permissive:permissive:0.1'
     // intro
     compile 'com.github.paolorotolo:appintro:4.1.0'
+    // slider
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
+    // recycler
+    //compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.23'
+    compile 'com.github.dan-td:snappy-recyclerview:1.0.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

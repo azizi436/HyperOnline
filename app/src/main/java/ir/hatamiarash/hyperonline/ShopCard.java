@@ -56,18 +56,23 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.FontHelper;
 import helper.FormatHelper;
 import helper.Helper;
-import helper.Product;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
+import models.Product;
 import volley.AppController;
 
 import static helper.Helper.ConvertProductType;
 
 public class ShopCard extends AppCompatActivity {
     private static final String TAG = ShopCard.class.getSimpleName(); // class tag for log
+    final static private int CODE_PAYMENT = 100;
+    private static final String PAY_PAID = "ALREADY_PAID";
+    private static final String PAY_CANCELED = "PAYMENT_CANCELED";
+    private static final String PAY_SUCCESS = "PAYMENT_SUCCESS";
+    private static final String PAY_EXPIRED = "PAYMENT_EXPIRED";
     public static SQLiteHandlerItem db_item;
     public static SQLiteHandler db_user;
     SessionManager session;
@@ -80,13 +85,6 @@ public class ShopCard extends AppCompatActivity {
     TextView total_extend;
     TextView total_pay;
     Button pay, clear;
-    final static private int CODE_PAYMENT = 100;
-    private String ORDER_CODE = "-1";
-    private String ORDER_AMOUNT = "1000";
-    private String SELLER_ID;
-    private String STUFFS = "";
-    private String DESCRIPTION = "";
-    
     int tOff = 0;
     int tPrice = 0;
     int tExtend = 0;
@@ -94,11 +92,11 @@ public class ShopCard extends AppCompatActivity {
     List<String> Item;
     int check = 0;
     int counter = 0;
-    
-    private static final String PAY_PAID = "ALREADY_PAID";
-    private static final String PAY_CANCELED = "PAYMENT_CANCELED";
-    private static final String PAY_SUCCESS = "PAYMENT_SUCCESS";
-    private static final String PAY_EXPIRED = "PAYMENT_EXPIRED";
+    private String ORDER_CODE = "-1";
+    private String ORDER_AMOUNT = "1000";
+    private String SELLER_ID;
+    private String STUFFS = "";
+    private String DESCRIPTION = "";
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -196,8 +194,8 @@ public class ShopCard extends AppCompatActivity {
                 tExtend += Integer.valueOf(extend);
                 arrayList = new ArrayList<>(new LinkedHashSet<>(arrayList));
             }
-            
-            Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info, 0, Integer.valueOf(type)));
+    
+            //Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info, 0, Integer.valueOf(type)));
             
             SELLER_ID = seller_id;
             STUFFS += name + "-";
@@ -210,145 +208,6 @@ public class ShopCard extends AppCompatActivity {
         pay.setText("پرداخت - " + FormatHelper.toPersianNumber(String.valueOf(tPrice + tExtend)) + " تومان");
         Adapter_Product adapter = new Adapter_Product(Products_List);
         list.setAdapter(adapter);
-    }
-    
-    private class Adapter_Product extends RecyclerView.Adapter<Adapter_Product.ProductViewHolder> {
-        private final String TAG = Adapter_Product.class.getSimpleName();
-        private List<Product> products;
-        
-        Adapter_Product(List<Product> products) {
-            this.products = products;
-        }
-        
-        class ProductViewHolder extends RecyclerView.ViewHolder {
-            CardView product;
-            TextView product_id;
-            TextView product_off;
-            TextView product_name;
-            TextView product_description;
-            TextView product_price;
-            TextView product_inc;
-            TextView product_count;
-            TextView product_dec;
-            
-            ProductViewHolder(View itemView) {
-                super(itemView);
-                product = (CardView) itemView.findViewById(R.id.product);
-                product_id = (TextView) itemView.findViewById(R.id.product_id);
-                product_off = (TextView) itemView.findViewById(R.id.product_off);
-                product_name = (TextView) itemView.findViewById(R.id.product_name);
-                product_description = (TextView) itemView.findViewById(R.id.product_info);
-                product_price = (TextView) itemView.findViewById(R.id.product_price);
-                product_count = (TextView) itemView.findViewById(R.id.product_count);
-                product_dec = (TextView) itemView.findViewById(R.id.product_dec);
-                product_inc = (TextView) itemView.findViewById(R.id.product_inc);
-                
-                product_dec.setOnTouchListener(new TouchListener());
-                product_inc.setOnTouchListener(new TouchListener());
-                
-                product_dec.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        vibrator.vibrate(25);
-                        if (Integer.valueOf(product_count.getText().toString()) > 1)
-                            product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) - 1));
-                        else {
-                            product_count.setText("0");
-                            removeAt(getPosition());
-                            db_item.deleteItem(product_id.getText().toString());
-                            check = products.size();
-                        }
-                    }
-                });
-                
-                product_inc.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        vibrator.vibrate(25);
-                        product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) + 1));
-                    }
-                });
-                
-                product_count.addTextChangedListener(new TextWatcher() {
-                    int temp;
-                    
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (check == products.size()) {
-                            Log.w(TAG, "OFF:" + product_off.getText().toString());
-                            int new_off = Integer.valueOf(product_off.getText().toString()) / temp * Integer.valueOf(product_count.getText().toString());
-                            product_off.setText(String.valueOf(new_off));
-                            db_item.updateItem(product_id.getText().toString(), product_count.getText().toString(), String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(product_count.getText().toString())), String.valueOf(new_off));
-                            String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
-                            String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
-                            total_pay.setText(price);
-                            pay.setText("پرداخت - " + price);
-                            total_off.setText(off);
-                            int tPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
-                            total_price.setText(String.valueOf(tPrice) + " تومان");
-                        } else
-                            check++;
-                    }
-                    
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        temp = Integer.valueOf(product_count.getText().toString());
-                    }
-                    
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-                });
-            }
-            
-            void removeAt(int position) {
-                products.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, products.size());
-            }
-        }
-        
-        @Override
-        public ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_cart_product, viewGroup, false);
-            return new ProductViewHolder(view);
-        }
-        
-        @Override
-        public int getItemCount() {
-            return products.size();
-        }
-        
-        @Override
-        public void onBindViewHolder(ProductViewHolder sellerViewHolder, int i) {
-            sellerViewHolder.product_id.setText(products.get(i).uid);
-            sellerViewHolder.product_off.setText(String.valueOf(products.get(i).off));
-            sellerViewHolder.product_name.setText(products.get(i).name);
-            sellerViewHolder.product_description.setText(products.get(i).description);
-            if (products.get(i).count > 0)
-                sellerViewHolder.product_price.setText(String.valueOf(Integer.valueOf(products.get(i).price) / products.get(i).count) + " تومان");
-            sellerViewHolder.product_count.setText(String.valueOf(products.get(i).count));
-        }
-        
-        @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            super.onAttachedToRecyclerView(recyclerView);
-        }
-    }
-    
-    private class TouchListener implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
-                    break;
-            }
-            return false;
-        }
     }
     
     private int ConvertToInteger(TextView text) {
@@ -649,5 +508,144 @@ public class ShopCard extends AppCompatActivity {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+    
+    private class Adapter_Product extends RecyclerView.Adapter<Adapter_Product.ProductViewHolder> {
+        private final String TAG = Adapter_Product.class.getSimpleName();
+        private List<Product> products;
+        
+        Adapter_Product(List<Product> products) {
+            this.products = products;
+        }
+        
+        @Override
+        public ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_cart_product, viewGroup, false);
+            return new ProductViewHolder(view);
+        }
+        
+        @Override
+        public int getItemCount() {
+            return products.size();
+        }
+        
+        @Override
+        public void onBindViewHolder(ProductViewHolder sellerViewHolder, int i) {
+            sellerViewHolder.product_id.setText(products.get(i).uid);
+            sellerViewHolder.product_off.setText(String.valueOf(products.get(i).off));
+            sellerViewHolder.product_name.setText(products.get(i).name);
+            sellerViewHolder.product_description.setText(products.get(i).description);
+            if (products.get(i).count > 0)
+                sellerViewHolder.product_price.setText(String.valueOf(Integer.valueOf(products.get(i).price) / products.get(i).count) + " تومان");
+            sellerViewHolder.product_count.setText(String.valueOf(products.get(i).count));
+        }
+        
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+        
+        class ProductViewHolder extends RecyclerView.ViewHolder {
+            CardView product;
+            TextView product_id;
+            TextView product_off;
+            TextView product_name;
+            TextView product_description;
+            TextView product_price;
+            TextView product_inc;
+            TextView product_count;
+            TextView product_dec;
+            
+            ProductViewHolder(View itemView) {
+                super(itemView);
+                product = (CardView) itemView.findViewById(R.id.product);
+                product_id = (TextView) itemView.findViewById(R.id.product_id);
+                product_off = (TextView) itemView.findViewById(R.id.product_off);
+                product_name = (TextView) itemView.findViewById(R.id.product_name);
+                product_description = (TextView) itemView.findViewById(R.id.product_info);
+                product_price = (TextView) itemView.findViewById(R.id.product_price);
+                product_count = (TextView) itemView.findViewById(R.id.product_count);
+                product_dec = (TextView) itemView.findViewById(R.id.product_dec);
+                product_inc = (TextView) itemView.findViewById(R.id.product_inc);
+                
+                product_dec.setOnTouchListener(new TouchListener());
+                product_inc.setOnTouchListener(new TouchListener());
+                
+                product_dec.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        vibrator.vibrate(25);
+                        if (Integer.valueOf(product_count.getText().toString()) > 1)
+                            product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) - 1));
+                        else {
+                            product_count.setText("0");
+                            removeAt(getPosition());
+                            db_item.deleteItem(product_id.getText().toString());
+                            check = products.size();
+                        }
+                    }
+                });
+                
+                product_inc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        vibrator.vibrate(25);
+                        product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) + 1));
+                    }
+                });
+                
+                product_count.addTextChangedListener(new TextWatcher() {
+                    int temp;
+                    
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (check == products.size()) {
+                            Log.w(TAG, "OFF:" + product_off.getText().toString());
+                            int new_off = Integer.valueOf(product_off.getText().toString()) / temp * Integer.valueOf(product_count.getText().toString());
+                            product_off.setText(String.valueOf(new_off));
+                            db_item.updateItem(product_id.getText().toString(), product_count.getText().toString(), String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(product_count.getText().toString())), String.valueOf(new_off));
+                            String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
+                            String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
+                            total_pay.setText(price);
+                            pay.setText("پرداخت - " + price);
+                            total_off.setText(off);
+                            int tPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
+                            total_price.setText(String.valueOf(tPrice) + " تومان");
+                        } else
+                            check++;
+                    }
+                    
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        temp = Integer.valueOf(product_count.getText().toString());
+                    }
+                    
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+                });
+            }
+            
+            void removeAt(int position) {
+                products.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, products.size());
+            }
+        }
+    }
+    
+    private class TouchListener implements View.OnTouchListener {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+                    break;
+            }
+            return false;
+        }
     }
 }

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--
-  ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
-  -->
-
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,18 +8,8 @@
     android:background="@color/white"
     tools:context="ir.hatamiarash.hyperonline.MainScreenActivity">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="25dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="70dp"
-        tools:ignore="HardcodedText">
-
-    </LinearLayout>
-
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -37,4 +22,138 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
     </android.support.design.widget.AppBarLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_bar"
+        android:overScrollMode="always"
+        android:paddingBottom="8dp"
+        android:scrollbars="none">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/slider_layout"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                tools:ignore="HardcodedText">
+
+                <com.daimajia.slider.library.SliderLayout
+                    android:id="@+id/slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+
+                <com.daimajia.slider.library.Indicators.PagerIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <helper.PersianTextView
+                android:id="@+id/title_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/slider_layout"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:gravity="start|center_vertical"
+                android:paddingEnd="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:paddingStart="10dp"
+                android:text="دسته بندی ها"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                app:font="iran_sans"/>
+
+            <helper.PersianTextView
+                android:id="@+id/title_category_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/title_category"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/slider_layout"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:gravity="end|center_vertical"
+                android:paddingEnd="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:paddingStart="20dp"
+                android:text="لیست کامل"
+                android:textAlignment="textEnd"
+                android:textColor="@color/Blue"
+                android:textSize="16sp"
+                app:font="iran_sans"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/category_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_category"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none"/>
+
+            <helper.PersianTextView
+                android:id="@+id/title_most"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/category_list"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:gravity="start|center_vertical"
+                android:paddingEnd="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:paddingStart="10dp"
+                android:text="پرفروش ترین ها"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                app:font="iran_sans"/>
+
+            <helper.PersianTextView
+                android:id="@+id/title_most_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/title_most"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/category_list"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:gravity="end|center_vertical"
+                android:paddingEnd="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:paddingStart="20dp"
+                android:text="لیست کامل"
+                android:textAlignment="textEnd"
+                android:textColor="@color/Blue"
+                android:textSize="16sp"
+                app:font="iran_sans"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/most_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_most"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none"/>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
