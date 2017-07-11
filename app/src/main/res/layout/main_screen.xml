@@ -154,6 +154,55 @@
                 android:nestedScrollingEnabled="false"
                 android:scrollbars="none"/>
 
+            <helper.PersianTextView
+                android:id="@+id/title_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/most_list"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:gravity="start|center_vertical"
+                android:paddingEnd="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:paddingStart="10dp"
+                android:text="جدیدترین محصولات"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                app:font="iran_sans"/>
+
+            <helper.PersianTextView
+                android:id="@+id/title_new_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/title_new"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/most_list"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:gravity="end|center_vertical"
+                android:paddingEnd="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:paddingStart="20dp"
+                android:text="لیست کامل"
+                android:textAlignment="textEnd"
+                android:textColor="@color/Blue"
+                android:textSize="16sp"
+                app:font="iran_sans"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/new_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_new"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none"/>
+
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

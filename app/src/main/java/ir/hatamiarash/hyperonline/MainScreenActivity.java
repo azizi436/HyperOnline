@@ -73,6 +73,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
     private Vibrator vibrator;
     private RecyclerView category_view;
     private RecyclerView most_view;
+    private RecyclerView new_view;
     private CategoryAdapter categoryAdapter;
     private ProductAdapter productAdapter;
     private List<Category> categoryList;
@@ -108,7 +109,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
-    
+        
         PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
         PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
@@ -130,16 +131,19 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem != null && drawerItem.getIdentifier() == 1) {
-                            Intent i = new Intent(getApplicationContext(), MainScreenActivity.class);
-                            startActivity(i);
-                            finish();
+                            /*Intent i = new Intent(getApplicationContext(), MainScreenActivity.class);
+                            startActivity(i);*/
+                            /*finish();*/
+                            result.closeDrawer();
+                            return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 2) {
-                            if (Helper.CheckInternet(getApplicationContext())) {
+                            /*if (Helper.CheckInternet(getApplicationContext())) {
                                 Intent i = new Intent(getApplicationContext(), UserProfile.class);
                                 startActivity(i);
-                            } else
-                                result.closeDrawer();
+                            } else*/
+                            result.closeDrawer();
+                            return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 3) {
                             /*Intent i = new Intent(getApplicationContext(), WebPage.class);
@@ -159,11 +163,13 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                             /*Intent i = new Intent(getApplicationContext(), ShopCard.class);
                             startActivity(i);*/
                             result.closeDrawer();
+                            return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 6) {
                             /*Intent i = new Intent(getApplicationContext(), Comment.class);
                             startActivity(i);*/
                             result.closeDrawer();
+                            return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 7) {
                             /*Popup(p_count);
@@ -174,9 +180,10 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                             startActivity(i);
                             result.closeDrawer();*/
                             
-                            Intent i = new Intent(getApplicationContext(), Intro.class);
-                            startActivity(i);
+                            /*Intent i = new Intent(getApplicationContext(), Intro.class);
+                            startActivity(i);*/
                             result.closeDrawer();
+                            return true;
                         }
                         return false;
                     }
@@ -189,23 +196,23 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         Helper.GetPermissions(this, getApplicationContext());
         
         invalidateOptionsMenu();
-    
+        
         //Logger logger = new Logger();
         //logger.execute();
-    
+        
         HashMap<String, String> urls = new HashMap<>();
         urls.put("G6", "http://cdn.gsm.ir/static/files/image/2017/7/8/g6-review-21.jpg");
         urls.put("gsm", "http://cdn.gsm.ir/static/files/image/2016/10/17/da48in_GSM%20Social%20Banner.jpg");
         urls.put("car", "http://cdn.gsm.ir/static/files/image/2017/7/8/jaguar-xe-sv-project-8-goodwood%20(5).jpg");
         urls.put("car 2", "http://cdn.gsm.ir/static/files/image/2017/7/8/Aston_Martin-Vulcan_AMR_Pro-2018-1024-04.jpg");
-    
+        
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Default);
         sliderLayout.setDuration(2500);
         sliderLayout.setCustomAnimation(new DescriptionAnimation());
         sliderLayout.addOnPageChangeListener(this);
-    
+        
         TextSliderView textSliderView = new TextSliderView(this);
-    
+        
         for (String name : urls.keySet()) {
             textSliderView
                     .image(urls.get(name))
@@ -215,7 +222,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
             textSliderView.getBundle().putString("extra", name);
             sliderLayout.addSlider(textSliderView);
         }
-    
+        
         category_view = (RecyclerView) findViewById(R.id.category_list);
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(this, categoryList);
@@ -225,16 +232,24 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         category_view.setItemAnimator(new DefaultItemAnimator());
         category_view.setAdapter(categoryAdapter);
         prepareCategories();
-    
+        
         most_view = (RecyclerView) findViewById(R.id.most_list);
         mostList = new ArrayList<>();
         productAdapter = new ProductAdapter(this, mostList);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(MainScreenActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        horizontalLayoutManager.setStackFromEnd(true);
         most_view.setLayoutManager(horizontalLayoutManager);
         most_view.setItemAnimator(new DefaultItemAnimator());
         most_view.setAdapter(productAdapter);
+        
+        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainScreenActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        horizontalLayoutManager2.setStackFromEnd(true);
+        new_view = (RecyclerView) findViewById(R.id.new_list);
+        new_view.setLayoutManager(horizontalLayoutManager2);
+        new_view.setItemAnimator(new DefaultItemAnimator());
+        new_view.setAdapter(productAdapter);
         prepareProducts();
-    
+        
         scroll.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -283,22 +298,22 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
     private void prepareProducts() {
         int cover = R.drawable.nnull;
         
-        Product a = new Product("1", "محصول", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
+        Product a = new Product("1", "محصول 1", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
         mostList.add(a);
         
-        a = new Product("1", "محصول", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("1", "محصول 2", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
         mostList.add(a);
         
-        a = new Product("1", "محصول", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("1", "محصول 3", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
         mostList.add(a);
         
-        a = new Product("1", "محصول", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("1", "محصول 4", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
         mostList.add(a);
         
-        a = new Product("1", "محصول", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("1", "محصول 5", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
         mostList.add(a);
         
-        a = new Product("1", "محصول", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("1", "محصول 6", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
         mostList.add(a);
         
         categoryAdapter.notifyDataSetChanged();
@@ -324,6 +339,9 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
             return true;
         } else if (id == R.id.cart) {
             Intent i = new Intent(getApplicationContext(), ShopCard.class);
+            startActivity(i);
+        } else if (id == R.id.search) {
+            Intent i = new Intent(getApplicationContext(), Test.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
