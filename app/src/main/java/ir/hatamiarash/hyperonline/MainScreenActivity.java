@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,7 +24,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import berlin.volders.badger.CountBadge;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import co.ronash.pushe.Pushe;
@@ -78,6 +82,9 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
     private ProductAdapter productAdapter;
     private List<Category> categoryList;
     private List<Product> mostList;
+    private Menu menu;
+    CountBadge.Factory circleFactory;
+    private TextView itemMessagesBadgeTextView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -195,7 +202,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         
         Helper.GetPermissions(this, getApplicationContext());
         
-        invalidateOptionsMenu();
+        //invalidateOptionsMenu();
         
         //Logger logger = new Logger();
         //logger.execute();
@@ -257,6 +264,8 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                 scroll.fullScroll(ScrollView.FOCUS_UP);
             }
         }, 50);
+        
+        //circleFactory = new CountBadge.Factory(this, new CustomBadgeShape(this, 0.5f, Gravity.END | Gravity.TOP));
     }
     
     private int dpToPx(int dp) {
@@ -323,7 +332,20 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.my_menu, menu);
-        return true;
+        
+        MenuItem itemCart = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(itemCart, R.layout.badge_layout);
+        View badgeLayout = itemCart.getActionView();
+        this.itemMessagesBadgeTextView = badgeLayout.findViewById(R.id.badge_textView);
+        this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
+        this.itemMessagesBadgeTextView.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/sans.ttf"));
+        (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Helper.MakeToast(getApplicationContext(), "سبد خرید خالی است", TAGs.WARNING);
+            }
+        });
+        updateCartMenu();
+        return super.onCreateOptionsMenu(menu);
     }
     
     @Override
@@ -337,11 +359,9 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         if (id == R.id.drawer) {
             result.openDrawer();
             return true;
-        } else if (id == R.id.cart) {
-            Intent i = new Intent(getApplicationContext(), ShopCard.class);
-            startActivity(i);
         } else if (id == R.id.search) {
-            Intent i = new Intent(getApplicationContext(), Test.class);
+            //Intent i = new Intent(getApplicationContext(), Test.class);
+            Intent i = new Intent(getApplicationContext(), Search.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -424,5 +444,18 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                     outRect.top = spacing; // item top
             }
         }
+    }
+    
+    public void updateCartMenu() {
+        int count = 5;
+        if (count > 0) {
+            this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+            this.itemMessagesBadgeTextView.setText("" + count);
+            this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
+            return;
+        }
+        this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        this.itemMessagesBadgeTextView.setText("" + count);
+        this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);
     }
 }

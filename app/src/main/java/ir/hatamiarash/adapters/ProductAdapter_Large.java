@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -60,6 +61,14 @@ public class ProductAdapter_Large extends RecyclerView.Adapter<ProductAdapter_La
                         .show();
             }
         });
+        
+        holder.add_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.add_layout.setVisibility(View.INVISIBLE);
+                holder.change_layout.setVisibility(View.VISIBLE);
+            }
+        });
     }
     
     @Override
@@ -70,13 +79,16 @@ public class ProductAdapter_Large extends RecyclerView.Adapter<ProductAdapter_La
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title, price;
         ImageView image, info;
+        LinearLayout add_layout, change_layout;
         
         MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.product_name);
-            price = (TextView) view.findViewById(R.id.product_price);
-            image = (ImageView) view.findViewById(R.id.product_photo);
-            info = (ImageView) view.findViewById(R.id.info);
+            title = view.findViewById(R.id.product_name);
+            price = view.findViewById(R.id.product_price);
+            image = view.findViewById(R.id.product_photo);
+            info = view.findViewById(R.id.info);
+            add_layout = view.findViewById(R.id.add_layout);
+            change_layout = view.findViewById(R.id.change_layout);
         }
     }
 }

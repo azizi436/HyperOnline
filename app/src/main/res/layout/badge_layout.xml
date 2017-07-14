@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+    <com.mikepenz.iconics.view.IconicsButton
+        android:id="@+id/badge_icon_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00ffffff"
+        android:text="{gmd_shopping_cart}"
+        android:textColor="#fff"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/badge_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/badge_icon_button"
+        android:layout_alignRight="@+id/badge_icon_button"
+        android:background="@drawable/badge_cricle"
+        android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
+        android:padding="8dp"
+        android:text="2"
+        android:textColor="#fff"
+        android:textSize="10sp"/>
+</RelativeLayout>

@@ -8,12 +8,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="2.5dp"
+    android:paddingBottom="2dp"
     android:paddingEnd="5dp"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingStart="5dp"
-    android:paddingTop="2.5dp">
+    android:paddingTop="2dp">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -37,7 +37,7 @@
                 android:background="@color/accent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="invisible">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/add"
@@ -56,14 +56,7 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="5dp"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/dec"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    card_view:srcCompat="@drawable/ic_remove"/>
+                android:visibility="invisible">
 
                 <ImageView
                     android:id="@+id/inc"
@@ -71,6 +64,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     card_view:srcCompat="@drawable/ic_add"/>
+
+                <ImageView
+                    android:id="@+id/dec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    card_view:srcCompat="@drawable/ic_remove"/>
 
             </LinearLayout>
 
@@ -137,8 +137,8 @@
                 android:id="@+id/price_layout"
                 android:layout_width="40dp"
                 android:layout_height="100dp"
-                android:layout_alignLeft="@+id/product_name"
-                android:layout_alignStart="@+id/product_name"
+                android:layout_alignLeft="@+id/info"
+                android:layout_alignStart="@+id/info"
                 android:layout_below="@+id/product_info"
                 android:layout_marginBottom="5dp"
                 android:layout_toLeftOf="@+id/product_photo"
@@ -156,7 +156,7 @@
                     android:text="1000 تومان"
                     android:textAlignment="center"
                     android:textColor="#FF146A"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:font="iran_sans"/>
 
                 <helper.PersianTextView
@@ -168,7 +168,7 @@
                     android:text="1000 تومان"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:font="iran_sans"/>
 
             </LinearLayout>

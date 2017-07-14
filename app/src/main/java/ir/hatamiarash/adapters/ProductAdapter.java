@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,8 +40,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.title.setText(product.name);
-        holder.price.setText(product.price);
+        holder.price.setText(product.price + " تومان");
         Glide.with(mContext).load(product.image).into(holder.image);
+        
+        holder.add_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.add_layout.setVisibility(View.INVISIBLE);
+                holder.change_layout.setVisibility(View.VISIBLE);
+            }
+        });
     }
     
     @Override
@@ -51,12 +60,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title, price;
         ImageView image;
+         LinearLayout add_layout, change_layout;
         
         MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            price = (TextView) view.findViewById(R.id.price);
-            image = (ImageView) view.findViewById(R.id.thumbnail);
+            title = view.findViewById(R.id.title);
+            price = view.findViewById(R.id.price);
+            image = view.findViewById(R.id.thumbnail);
+            add_layout = view.findViewById(R.id.add_layout);
+            change_layout = view.findViewById(R.id.change_layout);
         }
     }
 }
