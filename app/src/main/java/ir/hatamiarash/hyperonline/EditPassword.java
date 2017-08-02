@@ -210,7 +210,7 @@ public class EditPassword extends AppCompatActivity {
         db_user.deleteUsers();
         hideDialog();
         Intent i = new Intent(getApplicationContext(), Lobby.class);
-        MainScreenActivity.pointer.finish();
+        Activity_Main.pointer.finish();
         startActivity(i);
         finish();
     }

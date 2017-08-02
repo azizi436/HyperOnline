@@ -148,7 +148,7 @@ public class UserProfile extends Activity {
         db_item.deleteItems();
         hideDialog();
         Intent i = new Intent(UserProfile.this, Lobby.class);
-        MainScreenActivity.pointer.finish();
+        Activity_Main.pointer.finish();
         startActivity(i);
         finish();
     }

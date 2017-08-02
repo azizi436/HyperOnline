@@ -95,9 +95,9 @@ import ir.hatamiarash.utils.URLs;
 import models.Category;
 import models.Product;
 
-public class MainScreenActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
-    private static final String TAG = MainScreenActivity.class.getSimpleName();
-    public static MainScreenActivity pointer;        // use to finish activity from anywhere
+public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+    private static final String TAG = Activity_Main.class.getSimpleName();
+    public static Activity_Main pointer;        // use to finish activity from anywhere
     //public static SQLiteHandler db_user;             // items database
     public static SQLiteHandler db_user;         // items database
     public static SQLiteHandlerItem db_item;         // items database
@@ -179,7 +179,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem != null && drawerItem.getIdentifier() == 1) {
-                            /*Intent i = new Intent(getApplicationContext(), MainScreenActivity.class);
+                            /*Intent i = new Intent(getApplicationContext(), Activity_Main.class);
                             startActivity(i);*/
                             /*finish();*/
                             result.closeDrawer();
@@ -284,13 +284,13 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         most_view = (RecyclerView) findViewById(R.id.most_list);
         mostList = new ArrayList<>();
         mostAdapter = new ProductAdapter(this, mostList);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(MainScreenActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
         horizontalLayoutManager.setStackFromEnd(true);
         most_view.setLayoutManager(horizontalLayoutManager);
         most_view.setItemAnimator(new DefaultItemAnimator());
         most_view.setAdapter(mostAdapter);
         
-        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainScreenActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
         horizontalLayoutManager2.setStackFromEnd(true);
         new_view = (RecyclerView) findViewById(R.id.new_list);
         newList = new ArrayList<>();
@@ -386,7 +386,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                             newAdapter.notifyDataSetChanged();
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                            Helper.MakeToast(MainScreenActivity.this, errorMsg, TAGs.ERROR);
+                            Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -599,7 +599,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
                 String file_name = user.get(TAGs.PHONE);
                 FTPClient ftpClient = new FTPClient();
                 ftpClient.connect("192.168.1.104");
-                //ftpClient.connect(InetAddress.getByName("http://192.168.1.104"));
+                //ftpClient.connect(InetAddress.getByName("ftp.zimia.ir"));
                 ftpClient.login("hyper", "hyper1234");
                 //ftpClient.changeWorkingDirectory("/");
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);

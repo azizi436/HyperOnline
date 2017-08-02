@@ -513,7 +513,7 @@ public class EditProfile extends AppCompatActivity {
         session.setLogin(false);
         db_user.deleteUsers();
         Intent i = new Intent(getApplicationContext(), Lobby.class);
-        MainScreenActivity.pointer.finish();
+        Activity_Main.pointer.finish();
         startActivity(i);
         finish();
     }

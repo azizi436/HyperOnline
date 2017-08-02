@@ -80,7 +80,7 @@ public class Login extends Activity {
         session = new SessionManager(getApplicationContext());
         
         if (session.isLoggedIn()) {                                              // Check if user is already logged in or not
-            Intent i = new Intent(Login.this, MainScreenActivity.class);
+            Intent i = new Intent(Login.this, Activity_Main.class);
             startActivity(i);                                                    // start main activity
             finish();                                                            // close this activity
         }
@@ -149,7 +149,7 @@ public class Login extends Activity {
                             String msg = "سلام " + user.getString(TAGs.NAME);
                             Lobby.pointer.finish();
                             Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
-                            Intent i = new Intent(Login.this, MainScreenActivity.class);
+                            Intent i = new Intent(Login.this, Activity_Main.class);
                             startActivity(i);
                             finish();
                         } else {
