@@ -14,12 +14,11 @@ public class Product {
     public double point;
     public int point_count;
     public String description;
-    public int category;
     
     public Product() {
     }
     
-    public Product(String uid, String name, int image, String price, int off, int count, double point, int point_count, String description, int category) {
+    public Product(String uid, String name, int image, String price, int off, int count, double point, int point_count, String description) {
         this.uid = uid;
         this.name = name;
         this.image = image;
@@ -29,6 +28,5 @@ public class Product {
         this.point = point;
         this.point_count = point_count;
         this.description = description;
-        this.category = category;
     }
 }

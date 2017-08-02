@@ -227,8 +227,9 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("LOG_VOLLEY E", error.toString());
+                    Helper.MakeToast(Register.this, error.toString(), TAGs.ERROR);
                     hideDialog();
-                    finish();
+                    //finish();
                 }
             }) {
                 @NonNull

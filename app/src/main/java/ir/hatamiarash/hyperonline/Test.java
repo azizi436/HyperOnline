@@ -160,22 +160,22 @@ public class Test extends AppCompatActivity {
     private void prepareProducts() {
         int cover = R.drawable.nnull;
         
-        Product a = new Product("1", "محصول 1", cover, "1500", 0, 10, 5.5, 10, "توضیحات", 0);
+        Product a = new Product("1", "محصول 1", cover, "1500", 0, 10, 5.5, 10, "توضیحات");
         mostList.add(a);
         
-        a = new Product("2", "محصول 2", cover, "2000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("2", "محصول 2", cover, "2000", 0, 10, 5.5, 10, "توضیحات");
         mostList.add(a);
         
-        a = new Product("3", "محصول 3", cover, "5500", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("3", "محصول 3", cover, "5500", 0, 10, 5.5, 10, "توضیحات");
         mostList.add(a);
         
-        a = new Product("4", "محصول 4", cover, "12000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("4", "محصول 4", cover, "12000", 0, 10, 5.5, 10, "توضیحات");
         mostList.add(a);
         
-        a = new Product("5", "محصول 5", cover, "2500", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("5", "محصول 5", cover, "2500", 0, 10, 5.5, 10, "توضیحات");
         mostList.add(a);
         
-        a = new Product("6", "محصول 6", cover, "6000", 0, 10, 5.5, 10, "توضیحات", 0);
+        a = new Product("6", "محصول 6", cover, "6000", 0, 10, 5.5, 10, "توضیحات");
         mostList.add(a);
         
         productAdapter.notifyDataSetChanged();

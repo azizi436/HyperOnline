@@ -11,6 +11,9 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +22,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -28,6 +32,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -40,6 +52,12 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.jetbrains.annotations.Contract;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +65,7 @@ import java.util.List;
 import berlin.volders.badger.CountBadge;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import co.ronash.pushe.Pushe;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
@@ -57,6 +76,7 @@ import helper.SessionManager;
 import ir.hatamiarash.adapters.CategoryAdapter;
 import ir.hatamiarash.adapters.ProductAdapter;
 import ir.hatamiarash.utils.TAGs;
+import ir.hatamiarash.utils.URLs;
 import models.Category;
 import models.Product;
 
@@ -79,12 +99,13 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
     private RecyclerView most_view;
     private RecyclerView new_view;
     private CategoryAdapter categoryAdapter;
-    private ProductAdapter productAdapter;
+    private ProductAdapter newAdapter, mostAdapter, popularAdapter;
     private List<Category> categoryList;
-    private List<Product> mostList;
+    private List<Product> newList, mostList, popularList;
     private Menu menu;
     CountBadge.Factory circleFactory;
     private TextView itemMessagesBadgeTextView;
+    private SweetAlertDialog progressDialog;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +123,9 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
+        progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog.setCancelable(false);
+        progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         
         SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
         boolean isFirstTime = settings.getBoolean("my_first_time", true);
@@ -229,6 +253,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
             textSliderView.getBundle().putString("extra", name);
             sliderLayout.addSlider(textSliderView);
         }
+        FetchAllData();
         
         category_view = (RecyclerView) findViewById(R.id.category_list);
         categoryList = new ArrayList<>();
@@ -238,24 +263,24 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         category_view.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(5), true));
         category_view.setItemAnimator(new DefaultItemAnimator());
         category_view.setAdapter(categoryAdapter);
-        prepareCategories();
         
         most_view = (RecyclerView) findViewById(R.id.most_list);
         mostList = new ArrayList<>();
-        productAdapter = new ProductAdapter(this, mostList);
+        mostAdapter = new ProductAdapter(this, mostList);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(MainScreenActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontalLayoutManager.setStackFromEnd(true);
         most_view.setLayoutManager(horizontalLayoutManager);
         most_view.setItemAnimator(new DefaultItemAnimator());
-        most_view.setAdapter(productAdapter);
+        most_view.setAdapter(mostAdapter);
         
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainScreenActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontalLayoutManager2.setStackFromEnd(true);
         new_view = (RecyclerView) findViewById(R.id.new_list);
+        newList = new ArrayList<>();
+        newAdapter = new ProductAdapter(this, newList);
         new_view.setLayoutManager(horizontalLayoutManager2);
         new_view.setItemAnimator(new DefaultItemAnimator());
-        new_view.setAdapter(productAdapter);
-        prepareProducts();
+        new_view.setAdapter(newAdapter);
         
         scroll.postDelayed(new Runnable() {
             @Override
@@ -273,59 +298,113 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
     
-    private void prepareCategories() {
-        int[] covers = new int[]{
-                R.drawable.nnull,
-                R.drawable.nnull,
-                R.drawable.nnull,
-                R.drawable.nnull,
-                R.drawable.nnull,
-                R.drawable.nnull
-        };
-        
-        Category a = new Category("دسته بندی 1", covers[0]);
-        categoryList.add(a);
-        
-        a = new Category("دسته بندی 2", covers[1]);
-        categoryList.add(a);
-        
-        a = new Category("دسته بندی 3", covers[2]);
-        categoryList.add(a);
-        
-        a = new Category("دسته بندی 4", covers[3]);
-        categoryList.add(a);
-        
-        a = new Category("دسته بندی 5", covers[4]);
-        categoryList.add(a);
-        
-        a = new Category("دسته بندی 6", covers[5]);
-        categoryList.add(a);
-        
-        categoryAdapter.notifyDataSetChanged();
-    }
-    
-    private void prepareProducts() {
-        int cover = R.drawable.nnull;
-        
-        Product a = new Product("1", "محصول 1", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
-        mostList.add(a);
-        
-        a = new Product("1", "محصول 2", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
-        mostList.add(a);
-        
-        a = new Product("1", "محصول 3", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
-        mostList.add(a);
-        
-        a = new Product("1", "محصول 4", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
-        mostList.add(a);
-        
-        a = new Product("1", "محصول 5", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
-        mostList.add(a);
-        
-        a = new Product("1", "محصول 6", cover, "1000", 0, 10, 5.5, 10, "توضیحات", 0);
-        mostList.add(a);
-        
-        categoryAdapter.notifyDataSetChanged();
+    private void FetchAllData() {
+        progressDialog.setTitleText("لطفا منتظر بمانید");
+        showDialog();
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "main";
+            final String mRequestBody = null;
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_VOLLEY R", response);
+                    hideDialog();
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            JSONArray _new = jObj.getJSONArray("new");
+                            JSONArray _cat = jObj.getJSONArray("category");
+                            JSONArray _most = jObj.getJSONArray("most");
+                            JSONArray _pop = jObj.getJSONArray("popular");
+                            JSONObject _opt = jObj.getJSONObject("options");
+                            
+                            for (int i = 0; i < _cat.length(); i++) {
+                                JSONObject category = _cat.getJSONObject(i);
+                                
+                                categoryList.add(new Category(
+                                        category.getString("name"),
+                                        R.drawable.nnull
+                                ));
+                            }
+                            
+                            for (int i = 0; i < _most.length(); i++) {
+                                JSONObject most = _most.getJSONObject(i);
+                                
+                                mostList.add(new Product(
+                                                most.getString("unique_id"),
+                                                most.getString("name"),
+                                                R.drawable.nnull,
+                                                most.getString("price"),
+                                                most.getInt("off"),
+                                                most.getInt("count"),
+                                                most.getDouble("point"),
+                                                most.getInt("point_count"),
+                                                most.getString("description")
+                                        )
+                                );
+                            }
+                            
+                            for (int i = 0; i < _new.length(); i++) {
+                                JSONObject neww = _new.getJSONObject(i);
+                                
+                                newList.add(new Product(
+                                                neww.getString("unique_id"),
+                                                neww.getString("name"),
+                                                R.drawable.nnull,
+                                                neww.getString("price"),
+                                                neww.getInt("off"),
+                                                neww.getInt("count"),
+                                                neww.getDouble("point"),
+                                                neww.getInt("point_count"),
+                                                neww.getString("description")
+                                        )
+                                );
+                            }
+                            
+                            categoryAdapter.notifyDataSetChanged();
+                            mostAdapter.notifyDataSetChanged();
+                            newAdapter.notifyDataSetChanged();
+                        } else {
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(MainScreenActivity.this, errorMsg, TAGs.ERROR);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        hideDialog();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_VOLLEY E", error.toString());
+                    hideDialog();
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     @Override
@@ -457,5 +536,15 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
         this.itemMessagesBadgeTextView.setText("" + count);
         this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);
+    }
+    
+    private void showDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+    
+    private void hideDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 }
