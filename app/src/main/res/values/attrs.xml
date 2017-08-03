@@ -17,4 +17,16 @@
     <declare-styleable name="PersianTextView">
         <attr name="font" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="SymmetricProgressBar">
+        <attr
+            name="colors"
+            format="reference|integer" />
+        <attr
+            name="interpolator"
+            format="reference" />
+        <attr
+            name="duration"
+            format="reference|integer" />
+    </declare-styleable>
 </resources>

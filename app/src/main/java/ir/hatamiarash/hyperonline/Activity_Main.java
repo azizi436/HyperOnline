@@ -199,7 +199,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 3) {
                             Intent i = new Intent(getApplicationContext(), Activity_List.class);
-                            i.putExtra("cat", 1);
+                            i.putExtra("cat", "1");
                             startActivity(i);
                             result.closeDrawer();
                             return true;
@@ -343,6 +343,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                                 categoryList.add(new Category(
                                         category.getString("name"),
+                                        "info",
                                         R.drawable.nnull
                                 ));
                             }

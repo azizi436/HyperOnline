@@ -6,13 +6,12 @@ package models;
 
 public class Category {
     public String name;
+    public String info;
     public int image;
     
-    public Category() {
-    }
-    
-    public Category(String name, int image) {
+    public Category(String name, String info, int image) {
         this.name = name;
+        this.info = info;
         this.image = image;
     }
 }

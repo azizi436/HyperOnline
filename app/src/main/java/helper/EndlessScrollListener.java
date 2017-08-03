@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import org.jetbrains.annotations.Contract;
+
 public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -22,9 +24,9 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     // Sets the starting page index
     private int startingPageIndex = 1;
     
-    RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.LayoutManager mLayoutManager;
     
-    public EndlessScrollListener(LinearLayoutManager layoutManager) {
+    protected EndlessScrollListener(LinearLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
     }
     
@@ -38,7 +40,8 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
     }
     
-    public int getLastVisibleItem(int[] lastVisibleItemPositions) {
+    @Contract(pure = true)
+    private int getLastVisibleItem(int[] lastVisibleItemPositions) {
         int maxSize = 0;
         for (int i = 0; i < lastVisibleItemPositions.length; i++) {
             if (i == 0) {
@@ -105,5 +108,5 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     
     // Defines the process for actually loading more data based on page
     public abstract void onLoadMore(int page, int totalItemsCount, RecyclerView view);
-    
+
 }

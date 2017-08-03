@@ -17,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -48,6 +50,8 @@ import helper.CustomPrimaryDrawerItem;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
+import helper.SymmetricProgressBar;
+import ir.hatamiarash.adapters.CategoryAdapter_All;
 import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
@@ -58,12 +62,14 @@ public class Activity_List extends AppCompatActivity {
     private Vibrator vibrator;
     static Typeface persianTypeface;
     public Drawer result = null;
+    SymmetricProgressBar progressBar,p;
     
     public String url;
     public int list_category;
     private List<Product> productList;
     private List<Category> categoryList;
-    private ProductAdapter_All adapter;
+    private ProductAdapter_All productAdapter;
+    private CategoryAdapter_All categoryAdapter;
     
     @InjectView(R.id.list)
     public RecyclerView list;
@@ -76,11 +82,15 @@ public class Activity_List extends AppCompatActivity {
         setContentView(R.layout.list);
         ButterKnife.inject(this);
         
-        //url = getIntent().getStringExtra("url");
-        //list_category = getIntent().getIntExtra("cat", 0);
-        list_category = 1;
+        list_category = Integer.valueOf(getIntent().getStringExtra("cat"));
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
+        progressBar = new SymmetricProgressBar(this);
+        progressBar.setId(R.id.bar);
+        ViewGroup viewGroup = ((ViewGroup) this.findViewById(android.R.id.content));
+        viewGroup.addView(progressBar, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
+        p = viewGroup.findViewById(R.id.color_bar);
+        p.setVisibility(View.INVISIBLE);
         
         if (list_category == 1)
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "محصولات "));
@@ -175,30 +185,50 @@ public class Activity_List extends AppCompatActivity {
                 .withDrawerGravity(Gravity.END)
                 .build();
         
-        //if (list_category == 1) {
-        productList = new ArrayList<>();
-        adapter = new ProductAdapter_All(this, productList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        list.setLayoutManager(linearLayoutManager);
-        // Retain an instance so that you can call `resetState()` for fresh searches
-        EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                Log.w("page", String.valueOf(page));
-                loadData(page);
-            }
-        };
-        // Adds the scroll listener to RecyclerView
-        list.addOnScrollListener(scrollListener);
-        list.setItemAnimator(new DefaultItemAnimator());
-        list.setAdapter(adapter);
-        //}
-        loadData(1);
+        if (list_category == 1) {
+            productList = new ArrayList<>();
+            productAdapter = new ProductAdapter_All(this, productList);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            list.setLayoutManager(linearLayoutManager);
+            // Retain an instance so that you can call `resetState()` for fresh searches
+            EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    // Triggered only when new data needs to be appended to the list
+                    // Add whatever code is needed to append new items to the bottom of the list
+                    p.setVisibility(View.VISIBLE);
+                    loadProduct(page);
+                }
+            };
+            // Adds the scroll listener to RecyclerView
+            list.addOnScrollListener(scrollListener);
+            list.setItemAnimator(new DefaultItemAnimator());
+            list.setAdapter(productAdapter);
+            loadProduct(1);
+        } else if (list_category == 2) {
+            categoryList = new ArrayList<>();
+            categoryAdapter = new CategoryAdapter_All(this, categoryList);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            list.setLayoutManager(linearLayoutManager);
+            // Retain an instance so that you can call `resetState()` for fresh searches
+            EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    // Triggered only when new data needs to be appended to the list
+                    // Add whatever code is needed to append new items to the bottom of the list
+                    p.setVisibility(View.VISIBLE);
+                    loadCategory(page);
+                }
+            };
+            // Adds the scroll listener to RecyclerView
+            list.addOnScrollListener(scrollListener);
+            list.setItemAnimator(new DefaultItemAnimator());
+            list.setAdapter(categoryAdapter);
+            loadCategory(1);
+        }
     }
     
-    private void loadData(int page) {
+    private void loadProduct(int page) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URLs.base_URL + "products_all";
@@ -209,6 +239,7 @@ public class Activity_List extends AppCompatActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                    p.setVisibility(View.INVISIBLE);
                     Log.i("LOG_VOLLEY R", response);
                     try {
                         JSONObject jObj = new JSONObject(response);
@@ -233,7 +264,7 @@ public class Activity_List extends AppCompatActivity {
                                 );
                             }
                             
-                            adapter.notifyDataSetChanged();
+                            productAdapter.notifyDataSetChanged();
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
@@ -245,6 +276,7 @@ public class Activity_List extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    p.setVisibility(View.INVISIBLE);
                     Log.e("LOG_VOLLEY E", error.toString());
                 }
             }) {
@@ -268,6 +300,78 @@ public class Activity_List extends AppCompatActivity {
             };
             requestQueue.add(stringRequest);
         } catch (Exception e) {
+            p.setVisibility(View.INVISIBLE);
+            e.printStackTrace();
+        }
+    }
+    
+    private void loadCategory(int page) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "cat_all";
+            JSONObject params = new JSONObject();
+            params.put("index", page);
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    p.setVisibility(View.INVISIBLE);
+                    Log.i("LOG_VOLLEY R", response);
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            JSONArray categories = jObj.getJSONArray("category");
+                            
+                            for (int i = 0; i < categories.length(); i++) {
+                                JSONObject category = categories.getJSONObject(i);
+                                
+                                categoryList.add(new Category(
+                                                category.getString("name"),
+                                                category.getString("info"),
+                                                R.drawable.nnull
+                                        )
+                                );
+                            }
+                            
+                            categoryAdapter.notifyDataSetChanged();
+                        } else {
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    p.setVisibility(View.INVISIBLE);
+                    Log.e("LOG_VOLLEY E", error.toString());
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (Exception e) {
+            p.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
     }
