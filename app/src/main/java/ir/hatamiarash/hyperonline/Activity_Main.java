@@ -71,7 +71,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,16 +103,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public static SQLiteHandlerSetup db_setup;       // setup database
     static Typeface persianTypeface;                 // persian font typeface
     public Drawer result = null;
-    @InjectView(R.id.slider)
-    public SliderLayout sliderLayout;
-    @InjectView(R.id.scroll)
-    public NestedScrollView scroll;
     SessionManager session;                          // session for check user logged
     private long back_pressed;                       // for check back key pressed count
     private Vibrator vibrator;
-    private RecyclerView category_view;
-    private RecyclerView most_view;
-    private RecyclerView new_view;
     private CategoryAdapter categoryAdapter;
     private ProductAdapter newAdapter, mostAdapter, popularAdapter;
     private List<Category> categoryList;
@@ -123,12 +115,25 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     private TextView itemMessagesBadgeTextView;
     private SweetAlertDialog progressDialog;
     
+    @InjectView(R.id.category_list)
+    public RecyclerView category_view;
+    @InjectView(R.id.most_list)
+    public RecyclerView most_view;
+    @InjectView(R.id.new_list)
+    public RecyclerView new_view;
+    @InjectView(R.id.slider)
+    public SliderLayout sliderLayout;
+    @InjectView(R.id.scroll)
+    public NestedScrollView scroll;
+    @InjectView(R.id.toolbar)
+    public Toolbar toolbar;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen);
-        
         ButterKnife.inject(this);
+        
         Pushe.initialize(getApplicationContext(), true);
         Helper.GetPermissions(this, getApplicationContext());
         
@@ -154,7 +159,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             //finish();
         }
         
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
         
@@ -194,10 +198,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 3) {
-                            /*Intent i = new Intent(getApplicationContext(), WebPage.class);
-                            i.putExtra(TAGs.TITLE, "درباره ما");
-                            i.putExtra(TAGs.ADDRESS, TAGs.ABOUT);
-                            startActivity(i);*/
+                            Intent i = new Intent(getApplicationContext(), Activity_List.class);
+                            i.putExtra("cat", 1);
+                            startActivity(i);
                             result.closeDrawer();
                             return true;
                         }
@@ -272,7 +275,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         }
         FetchAllData();
         
-        category_view = (RecyclerView) findViewById(R.id.category_list);
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(this, categoryList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
@@ -281,7 +283,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         category_view.setItemAnimator(new DefaultItemAnimator());
         category_view.setAdapter(categoryAdapter);
         
-        most_view = (RecyclerView) findViewById(R.id.most_list);
         mostList = new ArrayList<>();
         mostAdapter = new ProductAdapter(this, mostList);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
@@ -292,7 +293,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
         horizontalLayoutManager2.setStackFromEnd(true);
-        new_view = (RecyclerView) findViewById(R.id.new_list);
         newList = new ArrayList<>();
         newAdapter = new ProductAdapter(this, newList);
         new_view.setLayoutManager(horizontalLayoutManager2);

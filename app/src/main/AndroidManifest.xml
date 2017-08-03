@@ -65,6 +65,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activity_List"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ShopCard"
             android:label="Shop Cards"
             android:screenOrientation="portrait"/>

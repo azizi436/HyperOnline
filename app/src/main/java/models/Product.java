@@ -14,6 +14,7 @@ public class Product {
     public double point;
     public int point_count;
     public String description;
+    public int type;
     
     public Product() {
     }
@@ -28,5 +29,6 @@ public class Product {
         this.point = point;
         this.point_count = point_count;
         this.description = description;
+        this.type = 0;
     }
 }
