@@ -99,13 +99,19 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:id="@+id/product_type"
+                android:id="@+id/product_point"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/product_point_count"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"/>
 
             <ImageView
-                android:id="@+id/product_photo"
+                android:id="@+id/product_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentEnd="true"
@@ -123,9 +129,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2.5dp"
                 android:layout_toEndOf="@+id/info"
-                android:layout_toLeftOf="@+id/product_photo"
+                android:layout_toLeftOf="@+id/product_image"
                 android:layout_toRightOf="@+id/info"
-                android:layout_toStartOf="@+id/product_photo"
+                android:layout_toStartOf="@+id/product_image"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="نام محصول"
@@ -141,8 +147,8 @@
                 android:layout_alignStart="@+id/info"
                 android:layout_below="@+id/product_info"
                 android:layout_marginBottom="5dp"
-                android:layout_toLeftOf="@+id/product_photo"
-                android:layout_toStartOf="@+id/product_photo"
+                android:layout_toLeftOf="@+id/product_image"
+                android:layout_toStartOf="@+id/product_image"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
@@ -183,9 +189,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/add_layout"
-                android:layout_toLeftOf="@+id/product_photo"
+                android:layout_toLeftOf="@+id/product_image"
                 android:layout_toRightOf="@+id/add_layout"
-                android:layout_toStartOf="@+id/product_photo"
+                android:layout_toStartOf="@+id/product_image"
                 android:gravity="center_vertical"
                 android:text="توضیحات"
                 android:textColor="@color/gray"

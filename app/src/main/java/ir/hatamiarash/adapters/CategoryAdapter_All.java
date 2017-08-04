@@ -20,7 +20,6 @@ import ir.hatamiarash.hyperonline.R;
 import models.Category;
 
 public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_All.MyViewHolder> {
-    
     private Context mContext;
     private List<Category> categoryList;
     
@@ -30,15 +29,19 @@ public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_Al
     }
     
     @Override
-    public CategoryAdapter_All.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category2, parent, false);
-        return new CategoryAdapter_All.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
     
     @Override
-    public void onBindViewHolder(final CategoryAdapter_All.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         Category category = categoryList.get(position);
-        holder.title.setText(category.name);
+        holder.id.setText(category.unique_id);
+        holder.name.setText(category.name);
+        holder.point.setText(String.valueOf(category.point));
+        holder.point_count.setText(String.valueOf(category.point_count));
+        holder.off.setText(String.valueOf(category.off));
         Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
     }
     
@@ -48,14 +51,17 @@ public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_Al
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, id;
+        TextView name, id, point, point_count, off;
         ImageView image;
         
         MyViewHolder(View view) {
             super(view);
             id = view.findViewById(R.id.category_id);
-            title = view.findViewById(R.id.category_name);
-            image = view.findViewById(R.id.category_photo);
+            point = view.findViewById(R.id.category_point);
+            point_count = view.findViewById(R.id.category_point_count);
+            off = view.findViewById(R.id.category_off);
+            name = view.findViewById(R.id.category_name);
+            image = view.findViewById(R.id.category_image);
         }
     }
 }

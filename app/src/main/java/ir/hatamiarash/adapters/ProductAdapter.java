@@ -39,8 +39,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.title.setText(product.name);
+        holder.id.setText(product.unique_id);
+        holder.name.setText(product.name);
         holder.price.setText(product.price + " تومان");
+        holder.price_backup.setText(product.price);
+        holder.point.setText(String.valueOf(product.point));
+        holder.point_count.setText(String.valueOf(product.point_count));
+        holder.off.setText(String.valueOf(product.off));
+        holder.count.setText(String.valueOf(product.count));
         Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
         
         holder.add_layout.setOnClickListener(new View.OnClickListener() {
@@ -58,15 +64,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, price;
+        TextView name, price, price_backup, id, count, point, point_count, off;
         ImageView image;
         LinearLayout add_layout, change_layout;
         
         MyViewHolder(View view) {
             super(view);
-            title = view.findViewById(R.id.title);
-            price = view.findViewById(R.id.price);
-            image = view.findViewById(R.id.image);
+            id = view.findViewById(R.id.product_id);
+            price_backup = view.findViewById(R.id.product_price_backup);
+            count = view.findViewById(R.id.product_count);
+            point = view.findViewById(R.id.product_point);
+            point_count = view.findViewById(R.id.product_point_count);
+            off = view.findViewById(R.id.product_off);
+            name = view.findViewById(R.id.product_name);
+            price = view.findViewById(R.id.product_price);
+            image = view.findViewById(R.id.product_image);
             add_layout = view.findViewById(R.id.add_layout);
             change_layout = view.findViewById(R.id.change_layout);
         }
