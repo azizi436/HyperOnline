@@ -5,22 +5,18 @@
 package models;
 
 public class Product {
-    public String uid;
+    public String unique_id;
     public String name;
-    public int image;
+    public String image;
     public String price;
     public int off;
     public int count;
     public double point;
     public int point_count;
     public String description;
-    public int type;
     
-    public Product() {
-    }
-    
-    public Product(String uid, String name, int image, String price, int off, int count, double point, int point_count, String description) {
-        this.uid = uid;
+    public Product(String unique_id, String name, String image, String price, int off, int count, double point, int point_count, String description) {
+        this.unique_id = unique_id;
         this.name = name;
         this.image = image;
         this.price = price;
@@ -29,6 +25,5 @@ public class Product {
         this.point = point;
         this.point_count = point_count;
         this.description = description;
-        this.type = 0;
     }
 }

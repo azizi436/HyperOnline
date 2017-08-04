@@ -19,7 +19,7 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/category"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true">
@@ -30,14 +30,32 @@
 
             <TextView
                 android:id="@+id/category_id"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/category_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/category_point_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/category_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/category_photo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -49,6 +67,8 @@
                 android:id="@+id/category_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/category_photo"
+                android:layout_alignTop="@+id/category_photo"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2.5dp"
@@ -57,29 +77,11 @@
                 android:layout_toRightOf="@+id/info"
                 android:layout_toStartOf="@+id/category_photo"
                 android:ellipsize="end"
+                android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="نام محصول"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
-
-            <helper.PersianTextView
-                android:id="@+id/category_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/category_name"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_toEndOf="@+id/add_layout"
-                android:layout_toLeftOf="@+id/category_photo"
-                android:layout_toRightOf="@+id/add_layout"
-                android:layout_toStartOf="@+id/category_photo"
-                android:gravity="center_vertical"
-                android:text="توضیحات"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
                 app:font="iran_sans"/>
 
         </RelativeLayout>

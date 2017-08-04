@@ -5,13 +5,19 @@
 package models;
 
 public class Category {
+    public String unique_id;
     public String name;
-    public String info;
-    public int image;
+    public String image;
+    public double point;
+    public int point_count;
+    public int off;
     
-    public Category(String name, String info, int image) {
+    public Category(String unique_id, String name, String image, double point, int point_count, int off) {
+        this.unique_id = unique_id;
         this.name = name;
-        this.info = info;
+        this.point = point;
+        this.point_count = point_count;
+        this.off = off;
         this.image = image;
     }
 }

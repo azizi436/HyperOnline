@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -82,6 +81,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import co.ronash.pushe.Pushe;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
+import helper.GridSpacingItemDecoration;
 import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
@@ -205,8 +205,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 4) {
-                            /*Intent i = new Intent(getApplicationContext(), Contact.class);
-                            startActivity(i);*/
+                            Intent i = new Intent(getApplicationContext(), Activity_List.class);
+                            i.putExtra("cat", "2");
+                            startActivity(i);
                             result.closeDrawer();
                             return true;
                         }
@@ -342,42 +343,45 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 JSONObject category = _cat.getJSONObject(i);
                                 
                                 categoryList.add(new Category(
+                                        category.getString("unique_id"),
                                         category.getString("name"),
-                                        "info",
-                                        R.drawable.nnull
+                                        category.getString("image"),
+                                        category.getDouble("point"),
+                                        category.getInt("point_count"),
+                                        category.getInt("off")
                                 ));
                             }
                             
                             for (int i = 0; i < _most.length(); i++) {
-                                JSONObject most = _most.getJSONObject(i);
+                                JSONObject product = _most.getJSONObject(i);
                                 
                                 mostList.add(new Product(
-                                                most.getString("unique_id"),
-                                                most.getString("name"),
-                                                R.drawable.nnull,
-                                                most.getString("price"),
-                                                most.getInt("off"),
-                                                most.getInt("count"),
-                                                most.getDouble("point"),
-                                                most.getInt("point_count"),
-                                                most.getString("description")
+                                                product.getString("unique_id"),
+                                                product.getString("name"),
+                                                product.getString("image"),
+                                                product.getString("price"),
+                                                product.getInt("off"),
+                                                product.getInt("count"),
+                                                product.getDouble("point"),
+                                                product.getInt("point_count"),
+                                                product.getString("description")
                                         )
                                 );
                             }
                             
                             for (int i = 0; i < _new.length(); i++) {
-                                JSONObject neww = _new.getJSONObject(i);
+                                JSONObject product = _new.getJSONObject(i);
                                 
                                 newList.add(new Product(
-                                                neww.getString("unique_id"),
-                                                neww.getString("name"),
-                                                R.drawable.nnull,
-                                                neww.getString("price"),
-                                                neww.getInt("off"),
-                                                neww.getInt("count"),
-                                                neww.getDouble("point"),
-                                                neww.getInt("point_count"),
-                                                neww.getString("description")
+                                                product.getString("unique_id"),
+                                                product.getString("name"),
+                                                product.getString("image"),
+                                                product.getString("price"),
+                                                product.getInt("off"),
+                                                product.getInt("count"),
+                                                product.getDouble("point"),
+                                                product.getInt("point_count"),
+                                                product.getString("description")
                                         )
                                 );
                             }
@@ -511,36 +515,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             Helper.MakeToast(getApplicationContext(), "برای خروج دوباره کلیک کنید", TAGs.WARNING);
         }
         back_pressed = System.currentTimeMillis();
-    }
-    
-    private class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-        
-        GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-        
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view);
-            int column = position % spanCount;
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount;
-                outRect.right = (column + 1) * spacing / spanCount;
-                if (position < spanCount) // top edge
-                    outRect.top = spacing;
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount;
-                outRect.right = spacing - (column + 1) * spacing / spanCount;
-                if (position >= spanCount)
-                    outRect.top = spacing; // item top
-            }
-        }
     }
     
     public void updateCartMenu() {

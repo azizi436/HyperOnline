@@ -194,7 +194,7 @@ public class ShopCard extends AppCompatActivity {
                 tExtend += Integer.valueOf(extend);
                 arrayList = new ArrayList<>(new LinkedHashSet<>(arrayList));
             }
-    
+            
             //Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info, 0, Integer.valueOf(type)));
             
             SELLER_ID = seller_id;
@@ -531,7 +531,7 @@ public class ShopCard extends AppCompatActivity {
         
         @Override
         public void onBindViewHolder(ProductViewHolder sellerViewHolder, int i) {
-            sellerViewHolder.product_id.setText(products.get(i).uid);
+            sellerViewHolder.product_id.setText(products.get(i).unique_id);
             sellerViewHolder.product_off.setText(String.valueOf(products.get(i).off));
             sellerViewHolder.product_name.setText(products.get(i).name);
             sellerViewHolder.product_description.setText(products.get(i).description);
@@ -558,15 +558,15 @@ public class ShopCard extends AppCompatActivity {
             
             ProductViewHolder(View itemView) {
                 super(itemView);
-                product = (CardView) itemView.findViewById(R.id.product);
-                product_id = (TextView) itemView.findViewById(R.id.product_id);
-                product_off = (TextView) itemView.findViewById(R.id.product_off);
-                product_name = (TextView) itemView.findViewById(R.id.product_name);
+                product = itemView.findViewById(R.id.product);
+                product_id = itemView.findViewById(R.id.product_id);
+                product_off = itemView.findViewById(R.id.product_off);
+                product_name = itemView.findViewById(R.id.product_name);
                 product_description = (TextView) itemView.findViewById(R.id.product_info);
-                product_price = (TextView) itemView.findViewById(R.id.product_price);
-                product_count = (TextView) itemView.findViewById(R.id.product_count);
-                product_dec = (TextView) itemView.findViewById(R.id.product_dec);
-                product_inc = (TextView) itemView.findViewById(R.id.product_inc);
+                product_price = itemView.findViewById(R.id.product_price);
+                product_count = itemView.findViewById(R.id.product_count);
+                product_dec = itemView.findViewById(R.id.product_dec);
+                product_inc = itemView.findViewById(R.id.product_inc);
                 
                 product_dec.setOnTouchListener(new TouchListener());
                 product_inc.setOnTouchListener(new TouchListener());

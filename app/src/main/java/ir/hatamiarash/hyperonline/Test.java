@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -24,26 +22,16 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
-import helper.Helper;
-import ir.hatamiarash.adapters.ProductAdapter_Large;
-import models.Product;
 
 public class Test extends AppCompatActivity {
-    private static final String TAG = Test.class.getSimpleName();
-    public static Test pointer;        // use to finish activity from anywhere
     static Typeface persianTypeface;                 // persian font typeface
     public Drawer result = null;
     @InjectView(R.id.list)
     public RecyclerView recyclerView;
-    private ProductAdapter_Large productAdapter;
-    private List<Product> mostList;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -140,45 +128,7 @@ public class Test extends AppCompatActivity {
                 .withDrawerGravity(Gravity.END)
                 .build();
         
-        Helper.GetPermissions(this, getApplicationContext());
         
-        invalidateOptionsMenu();
-        
-        //Logger logger = new Logger();
-        //logger.execute();
-        
-        mostList = new ArrayList<>();
-        productAdapter = new ProductAdapter_Large(this, mostList);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(Test.this);
-        //horizontalLayoutManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(horizontalLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(productAdapter);
-        prepareProducts();
-    }
-    
-    private void prepareProducts() {
-        int cover = R.drawable.nnull;
-        
-        Product a = new Product("1", "محصول 1", cover, "1500", 0, 10, 5.5, 10, "توضیحات");
-        mostList.add(a);
-        
-        a = new Product("2", "محصول 2", cover, "2000", 0, 10, 5.5, 10, "توضیحات");
-        mostList.add(a);
-        
-        a = new Product("3", "محصول 3", cover, "5500", 0, 10, 5.5, 10, "توضیحات");
-        mostList.add(a);
-        
-        a = new Product("4", "محصول 4", cover, "12000", 0, 10, 5.5, 10, "توضیحات");
-        mostList.add(a);
-        
-        a = new Product("5", "محصول 5", cover, "2500", 0, 10, 5.5, 10, "توضیحات");
-        mostList.add(a);
-        
-        a = new Product("6", "محصول 6", cover, "6000", 0, 10, 5.5, 10, "توضیحات");
-        mostList.add(a);
-        
-        productAdapter.notifyDataSetChanged();
     }
     
     @Override

@@ -39,8 +39,7 @@ public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_Al
     public void onBindViewHolder(final CategoryAdapter_All.MyViewHolder holder, int position) {
         Category category = categoryList.get(position);
         holder.title.setText(category.name);
-        holder.info.setText(category.info);
-        Glide.with(mContext).load(category.image).into(holder.image);
+        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
     }
     
     @Override
@@ -49,14 +48,13 @@ public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_Al
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, info, id;
+        TextView title, id;
         ImageView image;
         
         MyViewHolder(View view) {
             super(view);
             id = view.findViewById(R.id.category_id);
             title = view.findViewById(R.id.category_name);
-            info = view.findViewById(R.id.category_info);
             image = view.findViewById(R.id.category_photo);
         }
     }

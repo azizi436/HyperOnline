@@ -45,7 +45,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         Product product = productList.get(position);
         holder.title.setText(product.name);
         holder.price.setText(product.price + " تومان");
-        Glide.with(mContext).load(product.image).into(holder.image);
+        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
         
         holder.info.setOnClickListener(new View.OnClickListener() {
             @Override

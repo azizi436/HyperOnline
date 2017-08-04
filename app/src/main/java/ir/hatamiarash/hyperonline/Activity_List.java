@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -11,14 +12,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -49,6 +51,7 @@ import butterknife.InjectView;
 import helper.CustomPrimaryDrawerItem;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
+import helper.GridSpacingItemDecoration;
 import helper.Helper;
 import helper.SymmetricProgressBar;
 import ir.hatamiarash.adapters.CategoryAdapter_All;
@@ -62,7 +65,7 @@ public class Activity_List extends AppCompatActivity {
     private Vibrator vibrator;
     static Typeface persianTypeface;
     public Drawer result = null;
-    SymmetricProgressBar progressBar,p;
+    SymmetricProgressBar progressBar, p;
     
     public String url;
     public int list_category;
@@ -190,17 +193,13 @@ public class Activity_List extends AppCompatActivity {
             productAdapter = new ProductAdapter_All(this, productList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             list.setLayoutManager(linearLayoutManager);
-            // Retain an instance so that you can call `resetState()` for fresh searches
             EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
                 @Override
                 public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                    // Triggered only when new data needs to be appended to the list
-                    // Add whatever code is needed to append new items to the bottom of the list
                     p.setVisibility(View.VISIBLE);
                     loadProduct(page);
                 }
             };
-            // Adds the scroll listener to RecyclerView
             list.addOnScrollListener(scrollListener);
             list.setItemAnimator(new DefaultItemAnimator());
             list.setAdapter(productAdapter);
@@ -210,22 +209,23 @@ public class Activity_List extends AppCompatActivity {
             categoryAdapter = new CategoryAdapter_All(this, categoryList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             list.setLayoutManager(linearLayoutManager);
-            // Retain an instance so that you can call `resetState()` for fresh searches
             EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
                 @Override
                 public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                    // Triggered only when new data needs to be appended to the list
-                    // Add whatever code is needed to append new items to the bottom of the list
                     p.setVisibility(View.VISIBLE);
                     loadCategory(page);
                 }
             };
-            // Adds the scroll listener to RecyclerView
             list.addOnScrollListener(scrollListener);
             list.setItemAnimator(new DefaultItemAnimator());
             list.setAdapter(categoryAdapter);
             loadCategory(1);
         }
+    }
+    
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
     
     private void loadProduct(int page) {
@@ -253,7 +253,7 @@ public class Activity_List extends AppCompatActivity {
                                 productList.add(new Product(
                                                 product.getString("unique_id"),
                                                 product.getString("name"),
-                                                R.drawable.nnull,
+                                                product.getString("image"),
                                                 product.getString("price"),
                                                 product.getInt("off"),
                                                 product.getInt("count"),
@@ -308,9 +308,11 @@ public class Activity_List extends AppCompatActivity {
     private void loadCategory(int page) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URLs.base_URL + "cat_all";
+            String URL = URLs.base_URL + "categories_all";
             JSONObject params = new JSONObject();
             params.put("index", page);
+            params.put("level", "3");
+            params.put("parent", "n");
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -328,9 +330,12 @@ public class Activity_List extends AppCompatActivity {
                                 JSONObject category = categories.getJSONObject(i);
                                 
                                 categoryList.add(new Category(
+                                                category.getString("unique_id"),
                                                 category.getString("name"),
-                                                category.getString("info"),
-                                                R.drawable.nnull
+                                                category.getString("image"),
+                                                category.getDouble("point"),
+                                                category.getInt("point_count"),
+                                                category.getInt("off")
                                         )
                                 );
                             }

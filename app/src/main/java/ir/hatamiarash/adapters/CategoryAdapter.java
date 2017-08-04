@@ -43,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         holder.title.setText(category.name);
         
         // loading category cover using Glide library
-        Glide.with(mContext).load(category.image).into(holder.thumbnail);
+        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
     }
     
     @Override
@@ -53,12 +53,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     
     class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
-        ImageView thumbnail;
+        ImageView image;
         
         MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            image = (ImageView) view.findViewById(R.id.image);
         }
     }
 }

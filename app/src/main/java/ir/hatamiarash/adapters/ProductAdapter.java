@@ -41,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         Product product = productList.get(position);
         holder.title.setText(product.name);
         holder.price.setText(product.price + " تومان");
-        Glide.with(mContext).load(product.image).into(holder.image);
+        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
         
         holder.add_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,13 +60,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title, price;
         ImageView image;
-         LinearLayout add_layout, change_layout;
+        LinearLayout add_layout, change_layout;
         
         MyViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.title);
             price = view.findViewById(R.id.price);
-            image = view.findViewById(R.id.thumbnail);
+            image = view.findViewById(R.id.image);
             add_layout = view.findViewById(R.id.add_layout);
             change_layout = view.findViewById(R.id.change_layout);
         }
