@@ -5,7 +5,6 @@
 package ir.hatamiarash.hyperonline;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -18,13 +17,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -61,12 +58,13 @@ import helper.SQLiteHandlerItem;
 import helper.SymmetricProgressBar;
 import ir.hatamiarash.adapters.CategoryAdapter_All;
 import ir.hatamiarash.adapters.ProductAdapter_All;
+import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Category;
 import models.Product;
 
-public class Activity_List extends AppCompatActivity {
+public class Activity_List extends AppCompatActivity implements CardBadge {
     private Vibrator vibrator;
     static Typeface persianTypeface;
     public Drawer result = null;
@@ -111,12 +109,12 @@ public class Activity_List extends AppCompatActivity {
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         
         setSupportActionBar(toolbar);
-    
+        
         //PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         //PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
         PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
         //PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
-    
+        
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -405,7 +403,7 @@ public class Activity_List extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        updateCartMenu();
+        updateBadge();
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -429,18 +427,34 @@ public class Activity_List extends AppCompatActivity {
     }
     
     public void updateCartMenu() {
-        int count =db_item.getItemCount() ;
-        if (count > 0) {
-            this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        int count = db_item.getItemCount();
+        /*if (count > 0) {
+            //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
             this.itemMessagesBadgeTextView.setText("" + count);
             this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
             return;
         }
-        this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
         this.itemMessagesBadgeTextView.setText("" + count);
-        this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);
+        //this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);*/
+        this.itemMessagesBadgeTextView.setText("" + count);
+        this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
     }
     
+    @Override
+    public void updateBadge() {
+        updateCartMenu();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            updateCartMenu();
+        } catch (NullPointerException e) {
+            Log.i("Badge", "Known Error");
+        }
+    }
 }
 /* for search a new data we should clear view
 // 1. First, clear the array of data

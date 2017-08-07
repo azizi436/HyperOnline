@@ -24,13 +24,14 @@ import java.util.List;
 import helper.Helper;
 import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.interfaces.CardBadge;
 import models.Product;
 
 import static com.github.florent37.viewtooltip.ViewTooltip.ALIGN.CENTER;
 import static com.github.florent37.viewtooltip.ViewTooltip.Position.BOTTOM;
 
 public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.MyViewHolder> {
-    
+    private CardBadge cardBadge;
     private Context mContext;
     private List<Product> productList;
     private SQLiteHandlerItem db_item;
@@ -39,6 +40,11 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         this.mContext = mContext;
         this.productList = productList;
         db_item = new SQLiteHandlerItem(mContext);
+        try {
+            this.cardBadge = ((CardBadge) mContext);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement AdapterCallback.");
+        }
     }
     
     @Override
@@ -128,6 +134,11 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
                         String.valueOf(off),
                         String.valueOf(1)
                 );
+                try {
+                    cardBadge.updateBadge();
+                } catch (ClassCastException e) {
+                    Log.w("CallBack", e.getMessage());
+                }
             }
         });
     }

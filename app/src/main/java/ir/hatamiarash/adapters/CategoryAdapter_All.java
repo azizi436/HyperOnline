@@ -19,6 +19,7 @@ import java.util.List;
 
 import ir.hatamiarash.hyperonline.Activity_List;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.interfaces.CardBadge;
 import models.Category;
 
 public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_All.MyViewHolder> {

@@ -89,12 +89,13 @@ import helper.SQLiteHandlerSetup;
 import helper.SessionManager;
 import ir.hatamiarash.adapters.CategoryAdapter;
 import ir.hatamiarash.adapters.ProductAdapter;
+import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Category;
 import models.Product;
 
-public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, CardBadge {
     private static final String TAG = Activity_Main.class.getSimpleName();
     public static Activity_Main pointer;        // use to finish activity from anywhere
     //public static SQLiteHandler db_user;             // items database
@@ -449,7 +450,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 startActivity(i);
             }
         });
-        updateCartMenu();
+        updateBadge();
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -470,6 +471,21 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public void updateBadge() {
+        updateCartMenu();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            updateCartMenu();
+        } catch (NullPointerException e) {
+            Log.i("Badge", "Known Error");
+        }
     }
     
     @Override
@@ -523,15 +539,17 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     
     public void updateCartMenu() {
         int count = db_item.getItemCount();
-        if (count > 0) {
-            this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        /*if (count > 0) {
+            //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
             this.itemMessagesBadgeTextView.setText("" + count);
             this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
             return;
         }
-        this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        //this.itemMessagesBadgeTextView.setText("" + count);
+        this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);*/
         this.itemMessagesBadgeTextView.setText("" + count);
-        this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);
+        this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
     }
     
     private class Logger extends AsyncTask<Void, Boolean, Boolean> {
