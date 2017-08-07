@@ -139,6 +139,19 @@
                 android:textSize="20sp"
                 app:font="iran_sans"/>
 
+            <TextView
+                android:id="@+id/product_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/price_layout"
+                android:layout_alignLeft="@+id/price_layout"
+                android:layout_alignRight="@+id/price_layout"
+                android:layout_alignTop="@+id/price_layout"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="TextView"
+                android:textSize="16sp"/>
+
             <LinearLayout
                 android:id="@+id/price_layout"
                 android:layout_width="40dp"

@@ -4,23 +4,28 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -51,8 +56,8 @@ import butterknife.InjectView;
 import helper.CustomPrimaryDrawerItem;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
-import helper.GridSpacingItemDecoration;
 import helper.Helper;
+import helper.SQLiteHandlerItem;
 import helper.SymmetricProgressBar;
 import ir.hatamiarash.adapters.CategoryAdapter_All;
 import ir.hatamiarash.adapters.ProductAdapter_All;
@@ -66,13 +71,16 @@ public class Activity_List extends AppCompatActivity {
     static Typeface persianTypeface;
     public Drawer result = null;
     SymmetricProgressBar progressBar, p;
+    public static SQLiteHandlerItem db_item;
     
-    public String url;
+    private String url, category_id, parent_id;
     public int list_category;
     private List<Product> productList;
     private List<Category> categoryList;
     private ProductAdapter_All productAdapter;
     private CategoryAdapter_All categoryAdapter;
+    
+    private TextView itemMessagesBadgeTextView;
     
     @InjectView(R.id.list)
     public RecyclerView list;
@@ -94,21 +102,21 @@ public class Activity_List extends AppCompatActivity {
         viewGroup.addView(progressBar, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
         p = viewGroup.findViewById(R.id.color_bar);
         p.setVisibility(View.INVISIBLE);
+        db_item = new SQLiteHandlerItem(getApplicationContext());
         
-        if (list_category == 1)
-            toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "محصولات "));
-        else if (list_category == 2)
-            toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "دسته بندی "));
-        else
+        category_id = getIntent().getStringExtra("cat_id");
+        if (list_category == 1 || list_category == 2) {
+            toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getIntent().getStringExtra("title")));
+        } else
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         
         setSupportActionBar(toolbar);
-        
-        PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
-        PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
-        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
-        PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
-        
+    
+        //PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
+        //PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
+        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
+        //PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+    
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -116,10 +124,10 @@ public class Activity_List extends AppCompatActivity {
                         .withHeaderBackground(R.drawable.drawer_header)
                         .build())
                 .addDrawerItems(
-                        item_home,
-                        item_profile,
-                        item_cart,
-                        item_comment
+                        //item_home,
+                        //item_profile,
+                        item_cart
+                        //item_comment
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -191,6 +199,7 @@ public class Activity_List extends AppCompatActivity {
         if (list_category == 1) {
             productList = new ArrayList<>();
             productAdapter = new ProductAdapter_All(this, productList);
+            productAdapter.setHasStableIds(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             list.setLayoutManager(linearLayoutManager);
             EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
@@ -207,25 +216,21 @@ public class Activity_List extends AppCompatActivity {
         } else if (list_category == 2) {
             categoryList = new ArrayList<>();
             categoryAdapter = new CategoryAdapter_All(this, categoryList);
+            categoryAdapter.setHasStableIds(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             list.setLayoutManager(linearLayoutManager);
             EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
                 @Override
                 public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                     p.setVisibility(View.VISIBLE);
-                    loadCategory(page);
+                    loadCategory(page, getIntent().getStringExtra("level"));
                 }
             };
             list.addOnScrollListener(scrollListener);
             list.setItemAnimator(new DefaultItemAnimator());
             list.setAdapter(categoryAdapter);
-            loadCategory(1);
+            loadCategory(1, getIntent().getStringExtra("level"));
         }
-    }
-    
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
     
     private void loadProduct(int page) {
@@ -234,6 +239,7 @@ public class Activity_List extends AppCompatActivity {
             String URL = URLs.base_URL + "products_all";
             JSONObject params = new JSONObject();
             params.put("index", page);
+            params.put("cat", category_id);
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -305,14 +311,14 @@ public class Activity_List extends AppCompatActivity {
         }
     }
     
-    private void loadCategory(int page) {
+    private void loadCategory(int page, String level) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URLs.base_URL + "categories_all";
             JSONObject params = new JSONObject();
             params.put("index", page);
-            params.put("level", "3");
-            params.put("parent", "n");
+            params.put("level", level);
+            params.put("parent", category_id);
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -335,7 +341,8 @@ public class Activity_List extends AppCompatActivity {
                                                 category.getString("image"),
                                                 category.getDouble("point"),
                                                 category.getInt("point_count"),
-                                                category.getInt("off")
+                                                category.getInt("off"),
+                                                category.getInt("level")
                                         )
                                 );
                             }
@@ -379,6 +386,59 @@ public class Activity_List extends AppCompatActivity {
             p.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        
+        MenuItem itemCart = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(itemCart, R.layout.badge_layout);
+        View badgeLayout = itemCart.getActionView();
+        this.itemMessagesBadgeTextView = badgeLayout.findViewById(R.id.badge_textView);
+        this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
+        this.itemMessagesBadgeTextView.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/sans.ttf"));
+        (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                startActivity(i);
+            }
+        });
+        updateCartMenu();
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.drawer) {
+            result.openDrawer();
+            return true;
+        } else if (id == R.id.search) {
+            //Intent i = new Intent(getApplicationContext(), Test.class);
+            Intent i = new Intent(getApplicationContext(), Search.class);
+            startActivity(i);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    public void updateCartMenu() {
+        int count =db_item.getItemCount() ;
+        if (count > 0) {
+            this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+            this.itemMessagesBadgeTextView.setText("" + count);
+            this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
+            return;
+        }
+        this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
+        this.itemMessagesBadgeTextView.setText("" + count);
+        this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);
     }
     
 }

@@ -162,10 +162,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
         
-        PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
-        PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
-        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
-        PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        //PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
+        //PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
+        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
+        //PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -174,10 +174,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         .withHeaderBackground(R.drawable.drawer_header)
                         .build())
                 .addDrawerItems(
-                        item_home,
-                        item_profile,
-                        item_cart,
-                        item_comment
+                        //item_home,
+                        //item_profile,
+                        item_cart
+                        //item_comment
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -200,6 +200,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         if (drawerItem != null && drawerItem.getIdentifier() == 3) {
                             Intent i = new Intent(getApplicationContext(), Activity_List.class);
                             i.putExtra("cat", "1");
+                            i.putExtra("title", "محصولات");
+                            i.putExtra("cat_id", "n");
                             startActivity(i);
                             result.closeDrawer();
                             return true;
@@ -335,9 +337,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         if (!error) {
                             JSONArray _new = jObj.getJSONArray("new");
                             JSONArray _cat = jObj.getJSONArray("category");
-                            JSONArray _most = jObj.getJSONArray("most");
-                            JSONArray _pop = jObj.getJSONArray("popular");
-                            JSONObject _opt = jObj.getJSONObject("options");
+                            //JSONArray _most = jObj.getJSONArray("most");
+                            //JSONArray _pop = jObj.getJSONArray("popular");
+                            //JSONObject _opt = jObj.getJSONObject("options");
                             
                             for (int i = 0; i < _cat.length(); i++) {
                                 JSONObject category = _cat.getJSONObject(i);
@@ -348,11 +350,12 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                         category.getString("image"),
                                         category.getDouble("point"),
                                         category.getInt("point_count"),
-                                        category.getInt("off")
+                                        category.getInt("off"),
+                                        category.getInt("level")
                                 ));
                             }
                             
-                            for (int i = 0; i < _most.length(); i++) {
+                            /*for (int i = 0; i < _most.length(); i++) {
                                 JSONObject product = _most.getJSONObject(i);
                                 
                                 mostList.add(new Product(
@@ -367,7 +370,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                                 product.getString("description")
                                         )
                                 );
-                            }
+                            }*/
                             
                             for (int i = 0; i < _new.length(); i++) {
                                 JSONObject product = _new.getJSONObject(i);
@@ -442,7 +445,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         this.itemMessagesBadgeTextView.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/sans.ttf"));
         (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Helper.MakeToast(getApplicationContext(), "سبد خرید خالی است", TAGs.WARNING);
+                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                startActivity(i);
             }
         });
         updateCartMenu();
@@ -518,7 +522,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     }
     
     public void updateCartMenu() {
-        int count = 5;
+        int count = db_item.getItemCount();
         if (count > 0) {
             this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
             this.itemMessagesBadgeTextView.setText("" + count);

@@ -34,7 +34,7 @@ public class SplashScreen extends AppCompatActivity {
         Wave animation = new Wave();
         spinner.setIndeterminateDrawable(animation);
 
-        logo.setImageDrawable(getResources().getDrawable(R.drawable.logo));
+        logo.setImageDrawable(getResources().getDrawable(R.drawable.motor));
 
         Thread timerThread = new Thread() {
             public void run() {

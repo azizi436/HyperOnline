@@ -23,13 +23,9 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
     private static final String KEY_UID = "uid";
     private static final String KEY_NAME = "name";
     private static final String KEY_PRICE = "price";
-    private static final String KEY_PRICE_EXTEND = "price_extend";
     private static final String KEY_COUNT = "count";
     private static final String KEY_INFO = "info";
-    private static final String KEY_SELLER_ID = "seller_id";
-    private static final String KEY_SELLER = "seller";
-    private static final String KEY_OFF = "seller_name";
-    private static final String KEY_TYPE = "type";
+    private static final String KEY_OFF = "off";
     
     public SQLiteHandlerItem(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,13 +39,9 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 + KEY_UID + " TEXT,"
                 + KEY_NAME + " TEXT,"
                 + KEY_PRICE + " TEXT,"
-                + KEY_PRICE_EXTEND + " TEXT,"
                 + KEY_INFO + " TEXT,"
-                + KEY_SELLER_ID + " TEXT,"
-                + KEY_SELLER + " TEXT,"
                 + KEY_OFF + " TEXT,"
-                + KEY_COUNT + " TEXT,"
-                + KEY_TYPE + " TEXT"
+                + KEY_COUNT + " TEXT"
                 + ")";
         db.execSQL(CREATE_CARD_TABLE);
         Log.d(TAG, "Database table created - onCreate");
@@ -71,13 +63,9 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 + KEY_UID + " TEXT,"
                 + KEY_NAME + " TEXT,"
                 + KEY_PRICE + " TEXT,"
-                + KEY_PRICE_EXTEND + " TEXT,"
                 + KEY_INFO + " TEXT,"
-                + KEY_SELLER_ID + " TEXT,"
-                + KEY_SELLER + " TEXT,"
                 + KEY_OFF + " TEXT,"
-                + KEY_COUNT + " TEXT,"
-                + KEY_TYPE + " TEXT"
+                + KEY_COUNT + " TEXT"
                 + ")";
         db.execSQL(CREATE_CARD_TABLE);
         db.close();
@@ -85,40 +73,28 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
     }
     
     // add item data to database
-    public void addItem(String uid, String name, String price, String info, String seller_id, String seller, String off, String count, String extend, String type) {
+    public void addItem(String uid, String name, String price, String info, String off, String count) {
         SQLiteDatabase db = this.getWritableDatabase();
         name = "'" + name + "'";
         price = "'" + price + "'";
         count = "'" + count + "'";
         uid = "'" + uid + "'";
         info = "'" + info + "'";
-        seller_id = "'" + seller_id + "'";
-        seller = "'" + seller + "'";
         off = "'" + off + "'";
-        extend = "'" + extend + "'";
-        type = "'" + type + "'";
         String query = "INSERT OR REPLACE INTO " + TABLE + "("
                 + KEY_UID + ", "
                 + KEY_NAME + ", "
                 + KEY_PRICE + ", "
-                + KEY_PRICE_EXTEND + ", "
                 + KEY_INFO + ", "
-                + KEY_SELLER_ID + ", "
-                + KEY_SELLER + ", "
                 + KEY_OFF + ", "
-                + KEY_COUNT + ", "
-                + KEY_TYPE
+                + KEY_COUNT
                 + ") VALUES("
                 + uid + ", "
                 + name + ", "
                 + price + ", "
-                + extend + ", "
                 + info + ", "
-                + seller_id + ", "
-                + seller + ", "
                 + off + ", "
-                + count + ", "
-                + type
+                + count
                 + ")";
         db.execSQL(query);
         db.close();
@@ -127,6 +103,22 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
     
     // update item's details
     public void updateItem(String uid, String count, String price, String off) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        uid = "'" + uid + "'";
+        count = "'" + count + "'";
+        price = "'" + price + "'";
+        off = "'" + off + "'";
+        String query = "UPDATE " + TABLE + " SET "
+                + KEY_COUNT + "=" + count + ", "
+                + KEY_PRICE + "=" + price + ", "
+                + KEY_OFF + "=" + off
+                + " WHERE " + KEY_UID + "=" + uid;
+        db.execSQL(query);
+        db.close();
+        Log.d(TAG, uid + " updated : " + count + " " + price + " " + off);
+    }
+    
+    public void updateCount(String uid, String count, String price, String off) {
         SQLiteDatabase db = this.getWritableDatabase();
         uid = "'" + uid + "'";
         count = "'" + count + "'";
@@ -155,13 +147,9 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_UID)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_PRICE)));
-                item.add(cursor.getString(cursor.getColumnIndex(KEY_PRICE_EXTEND)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_INFO)));
-                item.add(cursor.getString(cursor.getColumnIndex(KEY_SELLER_ID)));
-                item.add(cursor.getString(cursor.getColumnIndex(KEY_SELLER)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_OFF)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT)));
-                item.add(cursor.getString(cursor.getColumnIndex(KEY_TYPE)));
                 cursor.moveToNext();
             }
         }
@@ -185,6 +173,24 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
             return true;
         }
         Log.d(TAG, "Item Not Found : " + name);
+        cursor.close();
+        db.close();
+        return false;
+    }
+    
+    public Boolean isExistsID(String uid) {
+        uid = "'" + uid + "'";
+        String selectQuery = "SELECT * FROM " + TABLE + " WHERE " + KEY_UID + "=" + uid;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            Log.d(TAG, "Item Found : " + uid);
+            cursor.close();
+            db.close();
+            return true;
+        }
+        Log.d(TAG, "Item Not Found : " + uid);
         cursor.close();
         db.close();
         return false;
@@ -217,7 +223,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             while (!cursor.isAfterLast()) {
-                total += Integer.parseInt(cursor.getString(8));
+                total += Integer.parseInt(cursor.getString(5));
                 cursor.moveToNext();
             }
         }
@@ -246,7 +252,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             while (!cursor.isAfterLast()) {
-                total += Integer.parseInt(cursor.getString(9));
+                total += Integer.parseInt(cursor.getString(6));
                 cursor.moveToNext();
             }
         }

@@ -42,7 +42,7 @@ public class PersianTextView extends TextView {
         try {
             _font = a.getString(R.styleable.PersianTextView_font);
         } catch (Exception e) {
-            Log.e(TAG, "Unable to parse attributes due to: " + e.getMessage());
+            Log.w(TAG, "Unable to parse attributes due to: " + e.getMessage());
             e.printStackTrace();
         } finally {
             a.recycle();
@@ -50,7 +50,7 @@ public class PersianTextView extends TextView {
     }
 
     private void initialize(Context context) {
-        Log.d(TAG, "initialize()");
+        //Log.d(TAG, "initialize()");
         if (!isInEditMode())
             if (_font.equals("shabnam"))
                 this.setTypeface(FontHelper.getInstance(context).Shabnam());

@@ -49,7 +49,6 @@ import java.io.Writer;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -87,14 +86,13 @@ public class ShopCard extends AppCompatActivity {
     Button pay, clear;
     int tOff = 0;
     int tPrice = 0;
-    int tExtend = 0;
+    int tExtend = 1000;
     ArrayList<String> arrayList = new ArrayList<>();
     List<String> Item;
     int check = 0;
     int counter = 0;
     private String ORDER_CODE = "-1";
     private String ORDER_AMOUNT = "1000";
-    private String SELLER_ID;
     private String STUFFS = "";
     private String DESCRIPTION = "";
     
@@ -174,30 +172,27 @@ public class ShopCard extends AppCompatActivity {
         Item = db_item.getItemDetails();
         arrayList.add("null");
         // numbers must be same of database fields !!!!! all numbers Item.size() / n [] i * n + 1
-        for (int i = 0; i < (Item.size() / 11); i++) {
+        for (int i = 0; i < (Item.size() / 7); i++) {
             //String id = Item.get(i * 10);
-            String uid = Item.get(i * 11 + 1);
-            String name = Item.get(i * 11 + 2);
-            String price = Item.get(i * 11 + 3);
-            String extend = Item.get(i * 11 + 4);
-            String info = Item.get(i * 11 + 5);
-            String seller_id = Item.get(i * 11 + 6);
+            String uid = Item.get(i * 7 + 1);
+            String name = Item.get(i * 7 + 2);
+            String price = Item.get(i * 7 + 3);
+            String info = Item.get(i * 7 + 4);
             //String seller = Item.get(i * 11 + 7);
-            String off = Item.get(i * 11 + 8);
-            String count = Item.get(i * 11 + 9);
-            String type = Item.get(i * 11 + 10);
+            String off = Item.get(i * 7 + 5);
+            String count = Item.get(i * 7 + 6);
             
+            Log.w("uid", uid);
+            Log.w("name", name);
+            Log.w("price", price);
+            Log.w("info", info);
+            Log.w("off", off);
+            Log.w("count", count);
             tOff += Integer.valueOf(off);
-            tPrice += Integer.valueOf(price);
-            if (!arrayList.contains(seller_id)) {
-                arrayList.add(seller_id);
-                tExtend += Integer.valueOf(extend);
-                arrayList = new ArrayList<>(new LinkedHashSet<>(arrayList));
-            }
+            tPrice += Integer.valueOf(price) * Integer.valueOf(count);
             
-            //Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info, 0, Integer.valueOf(type)));
+            Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info));
             
-            SELLER_ID = seller_id;
             STUFFS += name + "-";
         }
         Log.w(TAG, String.valueOf(arrayList));
@@ -228,10 +223,10 @@ public class ShopCard extends AppCompatActivity {
                     ORDER_AMOUNT = AMOUNT;
                     // TODO: i think we can't use webview because there isn't back !!!
                     // TODO: but if we use internal android web client maybe we have a return command to application
-                    //Intent i = new Intent(getApplicationContext(), Web.class);
-                    //i.putExtra(TAGs.ADDRESS, Address);
+                    Intent i = new Intent(getApplicationContext(), Web.class);
+                    i.putExtra(TAGs.ADDRESS, Address);
                     //Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
-                    //startActivityForResult(i, CODE_PAYMENT);
+                    startActivityForResult(i, CODE_PAYMENT);
                 } else
                     Helper.MakeToast(getApplicationContext(), response, TAGs.ERROR);
                 hideDialog();
@@ -490,7 +485,6 @@ public class ShopCard extends AppCompatActivity {
                 params.put(TAGs.TAG, "payment_done");
                 params.put("order_code", ORDER_CODE);
                 params.put("order_amount", ORDER_AMOUNT);
-                params.put(TAGs.SID, SELLER_ID);
                 params.put("user_id", user.get(TAGs.UID));
                 params.put("stuffs", STUFFS.substring(0, STUFFS.length() - 1));
                 params.put("description", DESCRIPTION);
@@ -595,12 +589,14 @@ public class ShopCard extends AppCompatActivity {
                 });
                 
                 product_count.addTextChangedListener(new TextWatcher() {
+                    // save old count
                     int temp;
                     
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (check == products.size()) {
                             Log.w(TAG, "OFF:" + product_off.getText().toString());
+                            // off / old count * new count
                             int new_off = Integer.valueOf(product_off.getText().toString()) / temp * Integer.valueOf(product_count.getText().toString());
                             product_off.setText(String.valueOf(new_off));
                             db_item.updateItem(product_id.getText().toString(), product_count.getText().toString(), String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(product_count.getText().toString())), String.valueOf(new_off));

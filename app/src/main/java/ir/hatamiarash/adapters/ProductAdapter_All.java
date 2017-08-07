@@ -5,7 +5,10 @@
 package ir.hatamiarash.adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,8 @@ import com.github.florent37.viewtooltip.ViewTooltip;
 
 import java.util.List;
 
+import helper.Helper;
+import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
 import models.Product;
 
@@ -28,10 +33,12 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
     
     private Context mContext;
     private List<Product> productList;
+    private SQLiteHandlerItem db_item;
     
     public ProductAdapter_All(Context mContext, List<Product> productList) {
         this.mContext = mContext;
         this.productList = productList;
+        db_item = new SQLiteHandlerItem(mContext);
     }
     
     @Override
@@ -42,7 +49,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
     
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Product product = productList.get(position);
+        final Product product = productList.get(position);
         holder.id.setText(product.unique_id);
         holder.name.setText(product.name);
         holder.price.setText(product.price + " تومان");
@@ -50,9 +57,41 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         holder.point.setText(String.valueOf(product.point));
         holder.point_count.setText(String.valueOf(product.point_count));
         holder.off.setText(String.valueOf(product.off));
-        holder.info.setText(String.valueOf(product.description));
         holder.count.setText(String.valueOf(product.count));
         Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
+        
+        if (!product.description.equals("null"))
+            holder.info.setText(product.description);
+        else
+            holder.info.setVisibility(View.INVISIBLE);
+        
+        if (product.off == 0)
+            holder.price_off.setVisibility(View.INVISIBLE);
+        else {
+            holder.price_off.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
+            holder.price_backup.setText(Helper.CalculatePrice(product.price, product.off));
+            holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+            holder.price_off.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+        }
+        
+        if (product.count == 0) {
+            holder.price_layout.setVisibility(View.INVISIBLE);
+            holder.add_layout.setVisibility(View.INVISIBLE);
+            holder.status.setVisibility(View.VISIBLE);
+            holder.status.setText("موجود نمی باشد");
+            holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+        } else
+            holder.status.setVisibility(View.INVISIBLE);
+        
+        if (db_item.isExistsID(product.unique_id) && db_item.isExists(product.name)) {
+            holder.price_layout.setVisibility(View.INVISIBLE);
+            holder.add_layout.setVisibility(View.INVISIBLE);
+            holder.status.setVisibility(View.VISIBLE);
+            holder.status.setText("در سبد خرید موجود است");
+            holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+        }
+        
         
         holder.info.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,9 +112,34 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
             @Override
             public void onClick(View view) {
                 holder.add_layout.setVisibility(View.INVISIBLE);
-                holder.change_layout.setVisibility(View.VISIBLE);
+                //holder.change_layout.setVisibility(View.VISIBLE);
+                holder.price_layout.setVisibility(View.INVISIBLE);
+                holder.status.setVisibility(View.VISIBLE);
+                holder.status.setText("به سبد خرید اضافه شد");
+                holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                int off = product.off * Integer.valueOf(product.price) / 100;
+                int fPrice = Integer.valueOf(product.price) - off;
+                Log.w("price", String.valueOf(off) + " " + String.valueOf(fPrice));
+                db_item.addItem(
+                        product.unique_id,
+                        product.name,
+                        String.valueOf(fPrice),
+                        product.description,
+                        String.valueOf(off),
+                        String.valueOf(1)
+                );
             }
         });
+    }
+    
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+    
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
     
     @Override
@@ -84,10 +148,10 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price, price_off, price_backup, id, count, point, point_count, off, info;
+        TextView name, price, price_off, price_backup, id, count, point, point_count, off, info, status;
         ImageView image;
         LinearLayout add_layout, change_layout, price_layout;
-    
+        
         MyViewHolder(View view) {
             super(view);
             id = view.findViewById(R.id.product_id);
@@ -104,6 +168,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
             add_layout = view.findViewById(R.id.add_layout);
             change_layout = view.findViewById(R.id.change_layout);
             price_layout = view.findViewById(R.id.price_layout);
+            status = view.findViewById(R.id.product_status);
         }
     }
 }

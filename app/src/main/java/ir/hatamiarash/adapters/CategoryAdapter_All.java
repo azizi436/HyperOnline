@@ -5,6 +5,7 @@
 package ir.hatamiarash.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import ir.hatamiarash.hyperonline.Activity_List;
 import ir.hatamiarash.hyperonline.R;
 import models.Category;
 
@@ -43,6 +45,9 @@ public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_Al
         holder.point_count.setText(String.valueOf(category.point_count));
         holder.off.setText(String.valueOf(category.off));
         Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
+        
+        holder.name.setOnClickListener(new MyClickListener(category.unique_id, category.name, category.level));
+        holder.image.setOnClickListener(new MyClickListener(category.unique_id, category.name, category.level));
     }
     
     @Override
@@ -62,6 +67,34 @@ public class CategoryAdapter_All extends RecyclerView.Adapter<CategoryAdapter_Al
             off = view.findViewById(R.id.category_off);
             name = view.findViewById(R.id.category_name);
             image = view.findViewById(R.id.category_image);
+        }
+    }
+    
+    private class MyClickListener implements View.OnClickListener {
+        private String id;
+        private String name;
+        private int level;
+        
+        MyClickListener(String id, String name, int level) {
+            this.id = id;
+            this.name = name;
+            this.level = level;
+        }
+    
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(mContext, Activity_List.class);
+            // we are in level 3 and we want products
+            if (level == 3)
+                i.putExtra("cat", "1");
+            else {
+                i.putExtra("cat", "2");
+                // go to next level category
+                i.putExtra("level", String.valueOf(level + 1));
+            }
+            i.putExtra("cat_id", id);
+            i.putExtra("title", name);
+            mContext.startActivity(i);
         }
     }
 }
