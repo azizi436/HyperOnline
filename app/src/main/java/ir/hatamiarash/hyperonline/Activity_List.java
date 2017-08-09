@@ -56,7 +56,7 @@ import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandlerItem;
 import helper.SymmetricProgressBar;
-import ir.hatamiarash.adapters.CategoryAdapter_All;
+import ir.hatamiarash.adapters.CategoryAdapter_Small;
 import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
@@ -76,12 +76,14 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     private List<Product> productList;
     private List<Category> categoryList;
     private ProductAdapter_All productAdapter;
-    private CategoryAdapter_All categoryAdapter;
+    private CategoryAdapter_Small categoryAdapter;
     
     private TextView itemMessagesBadgeTextView;
     
     @InjectView(R.id.list)
     public RecyclerView list;
+    @InjectView(R.id.category_list)
+    public RecyclerView category_list;
     @InjectView(R.id.toolbar)
     public Toolbar toolbar;
     
@@ -101,6 +103,9 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         p = viewGroup.findViewById(R.id.color_bar);
         p.setVisibility(View.INVISIBLE);
         db_item = new SQLiteHandlerItem(getApplicationContext());
+        
+        if (list_category == 1)
+            category_list.setVisibility(View.GONE);
         
         category_id = getIntent().getStringExtra("cat_id");
         if (list_category == 1 || list_category == 2) {
@@ -194,39 +199,32 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 .withDrawerGravity(Gravity.END)
                 .build();
         
+        productList = new ArrayList<>();
+        productAdapter = new ProductAdapter_All(this, productList);
+        productAdapter.setHasStableIds(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        list.setLayoutManager(linearLayoutManager);
+        EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                p.setVisibility(View.VISIBLE);
+                loadProduct(page);
+            }
+        };
+        list.addOnScrollListener(scrollListener);
+        list.setItemAnimator(new DefaultItemAnimator());
+        list.setAdapter(productAdapter);
+        
         if (list_category == 1) {
-            productList = new ArrayList<>();
-            productAdapter = new ProductAdapter_All(this, productList);
-            productAdapter.setHasStableIds(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            list.setLayoutManager(linearLayoutManager);
-            EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
-                @Override
-                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                    p.setVisibility(View.VISIBLE);
-                    loadProduct(page);
-                }
-            };
-            list.addOnScrollListener(scrollListener);
-            list.setItemAnimator(new DefaultItemAnimator());
-            list.setAdapter(productAdapter);
             loadProduct(1);
         } else if (list_category == 2) {
             categoryList = new ArrayList<>();
-            categoryAdapter = new CategoryAdapter_All(this, categoryList);
+            categoryAdapter = new CategoryAdapter_Small(this, categoryList);
             categoryAdapter.setHasStableIds(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            list.setLayoutManager(linearLayoutManager);
-            EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
-                @Override
-                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                    p.setVisibility(View.VISIBLE);
-                    loadCategory(page, getIntent().getStringExtra("level"));
-                }
-            };
-            list.addOnScrollListener(scrollListener);
-            list.setItemAnimator(new DefaultItemAnimator());
-            list.setAdapter(categoryAdapter);
+            LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(Activity_List.this, LinearLayoutManager.HORIZONTAL, false);
+            category_list.setLayoutManager(horizontalLayoutManager);
+            category_list.setItemAnimator(new DefaultItemAnimator());
+            category_list.setAdapter(categoryAdapter);
             loadCategory(1, getIntent().getStringExtra("level"));
         }
     }
@@ -329,6 +327,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
                             JSONArray categories = jObj.getJSONArray("category");
+                            JSONArray products = jObj.getJSONArray("product");
                             
                             for (int i = 0; i < categories.length(); i++) {
                                 JSONObject category = categories.getJSONObject(i);
@@ -344,8 +343,25 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                         )
                                 );
                             }
+                            for (int i = 0; i < products.length(); i++) {
+                                JSONObject product = products.getJSONObject(i);
+                                
+                                productList.add(new Product(
+                                                product.getString("unique_id"),
+                                                product.getString("name"),
+                                                product.getString("image"),
+                                                product.getString("price"),
+                                                product.getInt("off"),
+                                                product.getInt("count"),
+                                                product.getDouble("point"),
+                                                product.getInt("point_count"),
+                                                product.getString("description")
+                                        )
+                                );
+                            }
                             
                             categoryAdapter.notifyDataSetChanged();
+                            productAdapter.notifyDataSetChanged();
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
@@ -419,7 +435,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             result.openDrawer();
             return true;
         } else if (id == R.id.search) {
-            //Intent i = new Intent(getApplicationContext(), Test.class);
             Intent i = new Intent(getApplicationContext(), Search.class);
             startActivity(i);
         }
@@ -428,15 +443,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     
     public void updateCartMenu() {
         int count = db_item.getItemCount();
-        /*if (count > 0) {
-            //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
-            this.itemMessagesBadgeTextView.setText("" + count);
-            this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
-            return;
-        }
-        //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
-        this.itemMessagesBadgeTextView.setText("" + count);
-        //this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);*/
         this.itemMessagesBadgeTextView.setText("" + count);
         this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
     }

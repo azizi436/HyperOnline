@@ -31,7 +31,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -137,6 +136,17 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         Pushe.initialize(getApplicationContext(), true);
         Helper.GetPermissions(this, getApplicationContext());
+        /*PusherOptions options = new PusherOptions();
+        options.setCluster("ap2");
+        Pusher pusher = new Pusher("11976217c74aaf5a9daf", options);
+        Channel channel = pusher.subscribe("my-channel");
+        channel.bind("my-event", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(String channelName, String eventName, final String data) {
+                System.out.println(data);
+            }
+        });
+        pusher.connect();*/
         
         session = new SessionManager(getApplicationContext());
         pointer = this;
@@ -466,7 +476,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             result.openDrawer();
             return true;
         } else if (id == R.id.search) {
-            //Intent i = new Intent(getApplicationContext(), Test.class);
             Intent i = new Intent(getApplicationContext(), Search.class);
             startActivity(i);
         }
@@ -539,15 +548,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     
     public void updateCartMenu() {
         int count = db_item.getItemCount();
-        /*if (count > 0) {
-            //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
-            this.itemMessagesBadgeTextView.setText("" + count);
-            this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
-            return;
-        }
-        //this.itemMessagesBadgeTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale));
-        //this.itemMessagesBadgeTextView.setText("" + count);
-        this.itemMessagesBadgeTextView.setVisibility(View.INVISIBLE);*/
         this.itemMessagesBadgeTextView.setText("" + count);
         this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
     }
