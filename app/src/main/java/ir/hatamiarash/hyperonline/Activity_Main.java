@@ -73,7 +73,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import berlin.volders.badger.CountBadge;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -96,9 +95,8 @@ import models.Product;
 
 public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, CardBadge {
     private static final String TAG = Activity_Main.class.getSimpleName();
-    public static Activity_Main pointer;        // use to finish activity from anywhere
-    //public static SQLiteHandler db_user;             // items database
-    public static SQLiteHandler db_user;         // items database
+    public static Activity_Main pointer;             // use to finish activity from anywhere
+    public static SQLiteHandler db_user;             // items database
     public static SQLiteHandlerItem db_item;         // items database
     public static SQLiteHandlerSetup db_setup;       // setup database
     static Typeface persianTypeface;                 // persian font typeface
@@ -111,7 +109,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     private List<Category> categoryList;
     private List<Product> newList, mostList, popularList, offList, collectionList;
     private Menu menu;
-    CountBadge.Factory circleFactory;
     private TextView itemMessagesBadgeTextView;
     private SweetAlertDialog progressDialog;
     
@@ -363,8 +360,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 scroll.fullScroll(ScrollView.FOCUS_UP);
             }
         }, 50);
-        
-        //circleFactory = new CountBadge.Factory(this, new CustomBadgeShape(this, 0.5f, Gravity.END | Gravity.TOP));
     }
     
     private int dpToPx(int dp) {
@@ -633,16 +628,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        /*Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
-        intent.putExtra("id", String.valueOf(slider.getBundle().get("id")));
-        intent.putExtra("uid", String.valueOf(slider.getBundle().get("uid")));
-        intent.putExtra("author", String.valueOf(slider.getBundle().get("author")));
-        intent.putExtra("cid", String.valueOf(slider.getBundle().get("cid")));
-        intent.putExtra("title", String.valueOf(slider.getBundle().get("title")));
-        intent.putExtra("content", String.valueOf(slider.getBundle().get("content")));
-        intent.putExtra("url", String.valueOf(slider.getBundle().get("url")));
-        intent.putExtra("created_at", String.valueOf(slider.getBundle().get("created_at")));
-        startActivity(intent);*/
+        Helper.MakeToast(getApplicationContext(), String.valueOf(slider.getBundle().get("title")), TAGs.SUCCESS);
     }
     
     @Override

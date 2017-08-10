@@ -51,8 +51,6 @@ ext {
 }
 
 dependencies {
-    // badges
-    //compile files('libs/android-viewbadger.jar')
     // android libraries
     compile "com.android.support:appcompat-v7:${support_library_version}"
     compile "com.android.support:design:${support_library_version}"
@@ -116,11 +114,8 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     // recycler
-    //compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.23'
     compile 'com.github.dan-td:snappy-recyclerview:1.0.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // tooltip
     compile 'com.github.florent37:viewtooltip:1.0.6'
-    // badge
-    compile "berlin.volders:badger:0.2.1"
 }

@@ -10,7 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -41,8 +44,10 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
         holder.point.setText(String.valueOf(category.point));
         holder.point_count.setText(String.valueOf(category.point_count));
         holder.off.setText(String.valueOf(category.off));
+        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
         
         holder.name.setOnClickListener(new MyClickListener(category.unique_id, category.name, category.level));
+        holder.image.setOnClickListener(new MyClickListener(category.unique_id, category.name, category.level));
     }
     
     @Override
@@ -52,6 +57,7 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
     
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, id, point, point_count, off;
+        ImageView image;
         
         MyViewHolder(View view) {
             super(view);
@@ -60,6 +66,7 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
             point_count = view.findViewById(R.id.category_point_count);
             off = view.findViewById(R.id.category_off);
             name = view.findViewById(R.id.category_name);
+            image = view.findViewById(R.id.category_image);
         }
     }
     
