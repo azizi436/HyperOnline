@@ -107,9 +107,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     private long back_pressed;                       // for check back key pressed count
     private Vibrator vibrator;
     private CategoryAdapter categoryAdapter;
-    private ProductAdapter newAdapter, mostAdapter, popularAdapter;
+    private ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
     private List<Category> categoryList;
-    private List<Product> newList, mostList, popularList;
+    private List<Product> newList, mostList, popularList, offList, collectionList;
     private Menu menu;
     CountBadge.Factory circleFactory;
     private TextView itemMessagesBadgeTextView;
@@ -121,12 +121,42 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public RecyclerView most_view;
     @InjectView(R.id.new_list)
     public RecyclerView new_view;
+    @InjectView(R.id.off_list)
+    public RecyclerView off_view;
+    @InjectView(R.id.collection_list)
+    public RecyclerView collection_view;
+    @InjectView(R.id.popular_list)
+    public RecyclerView popular_view;
     @InjectView(R.id.slider)
     public SliderLayout sliderLayout;
     @InjectView(R.id.scroll)
     public NestedScrollView scroll;
     @InjectView(R.id.toolbar)
     public Toolbar toolbar;
+    @InjectView(R.id.title_category)
+    public TextView title_category;
+    @InjectView(R.id.title_category_more)
+    public TextView title_category_more;
+    @InjectView(R.id.title_collection)
+    public TextView title_collection;
+    @InjectView(R.id.title_collection_more)
+    public TextView title_collection_more;
+    @InjectView(R.id.title_most)
+    public TextView title_most;
+    @InjectView(R.id.title_most_more)
+    public TextView title_most_more;
+    @InjectView(R.id.title_new)
+    public TextView title_new;
+    @InjectView(R.id.title_new_more)
+    public TextView title_new_more;
+    @InjectView(R.id.title_popular)
+    public TextView title_popular;
+    @InjectView(R.id.title_popular_more)
+    public TextView title_popular_more;
+    @InjectView(R.id.title_off)
+    public TextView title_off;
+    @InjectView(R.id.title_off_more)
+    public TextView title_off_more;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,21 +166,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         Pushe.initialize(getApplicationContext(), true);
         Helper.GetPermissions(this, getApplicationContext());
-        /*PusherOptions options = new PusherOptions();
-        options.setCluster("ap2");
-        Pusher pusher = new Pusher("11976217c74aaf5a9daf", options);
-        Channel channel = pusher.subscribe("my-channel");
-        channel.bind("my-event", new SubscriptionEventListener() {
-            @Override
-            public void onEvent(String channelName, String eventName, final String data) {
-                System.out.println(data);
-            }
-        });
-        pusher.connect();*/
         
         session = new SessionManager(getApplicationContext());
         pointer = this;
-        //db_user = new SQLiteHandler(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
@@ -194,6 +212,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem != null && drawerItem.getIdentifier() == 1) {
+                            vibrator.vibrate(50);
                             /*Intent i = new Intent(getApplicationContext(), Activity_Main.class);
                             startActivity(i);*/
                             /*finish();*/
@@ -299,19 +318,43 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         mostList = new ArrayList<>();
         mostAdapter = new ProductAdapter(this, mostList);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
-        horizontalLayoutManager.setStackFromEnd(true);
-        most_view.setLayoutManager(horizontalLayoutManager);
+        LinearLayoutManager mostLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
+        mostLayoutManager.setStackFromEnd(true);
+        most_view.setLayoutManager(mostLayoutManager);
         most_view.setItemAnimator(new DefaultItemAnimator());
         most_view.setAdapter(mostAdapter);
         
-        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
-        horizontalLayoutManager2.setStackFromEnd(true);
         newList = new ArrayList<>();
         newAdapter = new ProductAdapter(this, newList);
-        new_view.setLayoutManager(horizontalLayoutManager2);
+        LinearLayoutManager newLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
+        newLayoutManager.setStackFromEnd(true);
+        new_view.setLayoutManager(newLayoutManager);
         new_view.setItemAnimator(new DefaultItemAnimator());
         new_view.setAdapter(newAdapter);
+        
+        popularList = new ArrayList<>();
+        popularAdapter = new ProductAdapter(this, popularList);
+        LinearLayoutManager popularLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
+        popularLayoutManager.setStackFromEnd(true);
+        popular_view.setLayoutManager(popularLayoutManager);
+        popular_view.setItemAnimator(new DefaultItemAnimator());
+        popular_view.setAdapter(popularAdapter);
+        
+        offList = new ArrayList<>();
+        offAdapter = new ProductAdapter(this, offList);
+        LinearLayoutManager offLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
+        offLayoutManager.setStackFromEnd(true);
+        off_view.setLayoutManager(offLayoutManager);
+        off_view.setItemAnimator(new DefaultItemAnimator());
+        off_view.setAdapter(offAdapter);
+        
+        collectionList = new ArrayList<>();
+        collectionAdapter = new ProductAdapter(this, collectionList);
+        LinearLayoutManager collectionLayoutManager = new LinearLayoutManager(Activity_Main.this, LinearLayoutManager.HORIZONTAL, false);
+        collectionLayoutManager.setStackFromEnd(true);
+        collection_view.setLayoutManager(collectionLayoutManager);
+        collection_view.setItemAnimator(new DefaultItemAnimator());
+        collection_view.setAdapter(collectionAdapter);
         
         scroll.postDelayed(new Runnable() {
             @Override
@@ -346,15 +389,11 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            JSONArray _new = jObj.getJSONArray("new");
-                            JSONArray _cat = jObj.getJSONArray("category");
-                            //JSONArray _most = jObj.getJSONArray("most");
-                            //JSONArray _pop = jObj.getJSONArray("popular");
-                            //JSONObject _opt = jObj.getJSONObject("options");
+                            JSONObject _opt = jObj.getJSONObject("options");
                             
+                            JSONArray _cat = jObj.getJSONArray("category");
                             for (int i = 0; i < _cat.length(); i++) {
                                 JSONObject category = _cat.getJSONObject(i);
-                                
                                 categoryList.add(new Category(
                                         category.getString("unique_id"),
                                         category.getString("name"),
@@ -365,44 +404,128 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                         category.getInt("level")
                                 ));
                             }
+                            categoryAdapter.notifyDataSetChanged();
                             
-                            /*for (int i = 0; i < _most.length(); i++) {
-                                JSONObject product = _most.getJSONObject(i);
-                                
-                                mostList.add(new Product(
-                                                product.getString("unique_id"),
-                                                product.getString("name"),
-                                                product.getString("image"),
-                                                product.getString("price"),
-                                                product.getInt("off"),
-                                                product.getInt("count"),
-                                                product.getDouble("point"),
-                                                product.getInt("point_count"),
-                                                product.getString("description")
-                                        )
-                                );
-                            }*/
-                            
-                            for (int i = 0; i < _new.length(); i++) {
-                                JSONObject product = _new.getJSONObject(i);
-                                
-                                newList.add(new Product(
-                                                product.getString("unique_id"),
-                                                product.getString("name"),
-                                                product.getString("image"),
-                                                product.getString("price"),
-                                                product.getInt("off"),
-                                                product.getInt("count"),
-                                                product.getDouble("point"),
-                                                product.getInt("point_count"),
-                                                product.getString("description")
-                                        )
-                                );
+                            if (_opt.getString("c").equals("1")) {
+                                JSONArray _col = jObj.getJSONArray("collection");
+                                for (int i = 0; i < _col.length(); i++) {
+                                    JSONObject collection = _col.getJSONObject(i);
+                                    collectionList.add(new Product(
+                                                    collection.getString("unique_id"),
+                                                    collection.getString("name"),
+                                                    collection.getString("image"),
+                                                    collection.getString("price"),
+                                                    collection.getInt("off"),
+                                                    collection.getInt("count"),
+                                                    collection.getDouble("point"),
+                                                    collection.getInt("point_count"),
+                                                    collection.getString("description")
+                                            )
+                                    );
+                                }
+                                collectionAdapter.notifyDataSetChanged();
+                            } else {
+                                title_collection.setVisibility(View.GONE);
+                                title_collection_more.setVisibility(View.GONE);
+                                collection_view.setVisibility(View.GONE);
                             }
                             
-                            categoryAdapter.notifyDataSetChanged();
-                            mostAdapter.notifyDataSetChanged();
-                            newAdapter.notifyDataSetChanged();
+                            if (_opt.getString("m").equals("1")) {
+                                JSONArray _most = jObj.getJSONArray("most");
+                                for (int i = 0; i < _most.length(); i++) {
+                                    JSONObject product = _most.getJSONObject(i);
+                                    mostList.add(new Product(
+                                                    product.getString("unique_id"),
+                                                    product.getString("name"),
+                                                    product.getString("image"),
+                                                    product.getString("price"),
+                                                    product.getInt("off"),
+                                                    product.getInt("count"),
+                                                    product.getDouble("point"),
+                                                    product.getInt("point_count"),
+                                                    product.getString("description")
+                                            )
+                                    );
+                                }
+                                mostAdapter.notifyDataSetChanged();
+                            } else {
+                                title_most.setVisibility(View.GONE);
+                                title_most_more.setVisibility(View.GONE);
+                                most_view.setVisibility(View.GONE);
+                            }
+                            
+                            if (_opt.getString("n").equals("1")) {
+                                JSONArray _new = jObj.getJSONArray("new");
+                                for (int i = 0; i < _new.length(); i++) {
+                                    JSONObject product = _new.getJSONObject(i);
+                                    newList.add(new Product(
+                                                    product.getString("unique_id"),
+                                                    product.getString("name"),
+                                                    product.getString("image"),
+                                                    product.getString("price"),
+                                                    product.getInt("off"),
+                                                    product.getInt("count"),
+                                                    product.getDouble("point"),
+                                                    product.getInt("point_count"),
+                                                    product.getString("description")
+                                            )
+                                    );
+                                }
+                                newAdapter.notifyDataSetChanged();
+                            } else {
+                                title_new.setVisibility(View.GONE);
+                                title_new_more.setVisibility(View.GONE);
+                                new_view.setVisibility(View.GONE);
+                            }
+                            
+                            if (_opt.getString("n").equals("1")) {
+                                JSONArray _pop = jObj.getJSONArray("popular");
+                                for (int i = 0; i < _pop.length(); i++) {
+                                    JSONObject product = _pop.getJSONObject(i);
+                                    popularList.add(new Product(
+                                                    product.getString("unique_id"),
+                                                    product.getString("name"),
+                                                    product.getString("image"),
+                                                    product.getString("price"),
+                                                    product.getInt("off"),
+                                                    product.getInt("count"),
+                                                    product.getDouble("point"),
+                                                    product.getInt("point_count"),
+                                                    product.getString("description")
+                                            )
+                                    );
+                                }
+                                popularAdapter.notifyDataSetChanged();
+                            } else {
+                                title_popular.setVisibility(View.GONE);
+                                title_popular_more.setVisibility(View.GONE);
+                                popular_view.setVisibility(View.GONE);
+                            }
+                            
+                            if (_opt.getString("o").equals("1")) {
+                                JSONArray _off = jObj.getJSONArray("popular");
+                                for (int i = 0; i < _off.length(); i++) {
+                                    JSONObject product = _off.getJSONObject(i);
+                                    offList.add(new Product(
+                                                    product.getString("unique_id"),
+                                                    product.getString("name"),
+                                                    product.getString("image"),
+                                                    product.getString("price"),
+                                                    product.getInt("off"),
+                                                    product.getInt("count"),
+                                                    product.getDouble("point"),
+                                                    product.getInt("point_count"),
+                                                    product.getString("description")
+                                            )
+                                    );
+                                }
+                                offAdapter.notifyDataSetChanged();
+                            } else {
+                                title_off.setVisibility(View.GONE);
+                                title_off_more.setVisibility(View.GONE);
+                                off_view.setVisibility(View.GONE);
+                            }
+                            
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
