@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -213,28 +214,36 @@ public class ShopCard extends AppCompatActivity {
         String string_req = "req_fetch";
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.Check_URL, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send ", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Check Response: " + response);
-                if (Helper.isNumber(response)) {
-                    String Address = URLs.Pay_URL + response;
-                    ORDER_CODE = response;
-                    ORDER_AMOUNT = AMOUNT;
-                    // TODO: i think we can't use webview because there isn't back !!!
-                    // TODO: but if we use internal android web client maybe we have a return command to application
-                    Intent i = new Intent(getApplicationContext(), Web.class);
-                    i.putExtra(TAGs.ADDRESS, Address);
-                    //Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
-                    startActivityForResult(i, CODE_PAYMENT);
-                } else
-                    Helper.MakeToast(getApplicationContext(), response, TAGs.ERROR);
-                hideDialog();
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int status = jObj.getInt("status");
+                    if (status == 1) {
+                        String Address = "https://pay.ir/payment/gateway/" + jObj.getString("transId");
+                        
+                        ORDER_CODE = jObj.getString("transId");
+                        ORDER_AMOUNT = AMOUNT;
+                        // TODO: i think we can't use webview because there isn't back !!!
+                        // TODO: but if we use internal android web client maybe we have a return command to application
+                        Intent i = new Intent(getApplicationContext(), Web.class);
+                        i.putExtra(TAGs.ADDRESS, Address);
+                        //Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
+                        startActivityForResult(i, CODE_PAYMENT);
+                    } else
+                        Helper.MakeToast(getApplicationContext(), jObj.getString("errorMessage"), TAGs.ERROR);
+                    hideDialog();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    hideDialog();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Check Error: " + error.getMessage());
+                Log.e(TAG, "Pay Error: " + error.getMessage());
                 if (error.getMessage() != null)
                     Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
                 else
@@ -248,6 +257,7 @@ public class ShopCard extends AppCompatActivity {
                 java.util.Map<String, String> params = new HashMap<>();
                 params.put("api", API_KEY);
                 params.put("amount", AMOUNT);
+                params.put("redirect", "http://hyper-online.ir/api/callback");
                 return params;
             }
         };
@@ -258,48 +268,47 @@ public class ShopCard extends AppCompatActivity {
         String string_req = "req_fetch";
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.Verify_URL + CODE, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/verify", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.w("Check", response);
-                switch (response) {
-                    case PAY_PAID:
-                        onPayPaid();
-                        break;
-                    case PAY_EXPIRED:
-                        onPayExpired();
-                        break;
-                    case PAY_CANCELED:
-                        if (counter == 0) {
-                            Check(ORDER_CODE, ORDER_AMOUNT);
-                            counter++;
-                        } else
-                            onPayCanceled();
-                        break;
-                    case PAY_SUCCESS:
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int status = jObj.getInt("status");
+                    if (status == 1)
                         onPaySuccess();
-                        break;
+                    else
+                        onPayCanceled();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    hideDialog();
                 }
                 hideDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Check Error: " + error.getMessage());
-                if (error.getMessage() != null)
-                    Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
-                else
-                    Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-                finish();
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.data != null) {
+                    if (response.statusCode == 422) {
+                        onPayCanceled();
+                    } else {
+                        Log.e(TAG, "Check Error: " + error.getMessage());
+                        if (error.getMessage() != null)
+                            Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
+                        else
+                            Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
+                        hideDialog();
+                        finish();
+                    }
+                }
             }
         }) {
             @Override
             protected java.util.Map<String, String> getParams() {
                 java.util.Map<String, String> params = new HashMap<>();
-                Log.w("AMOUNT", "CODE:" + CODE + " Amount:" + AMOUNT);
-                params.put("au", CODE);
-                params.put("amount", AMOUNT);
+                params.put("api", TAGs.API_KEY);
+                params.put("transId", CODE);
                 return params;
             }
         };
@@ -314,7 +323,7 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void onPaySuccess() {
-        SyncServer();
+        //SyncServer();
         new MaterialStyledDialog.Builder(ShopCard.this)
                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
                 .setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت موفقیت آمیز بود. با تشکر از انتخاب شما."))
@@ -337,50 +346,10 @@ public class ShopCard extends AppCompatActivity {
                 .show();
     }
     
-    private void onPayPaid() {
-        new MaterialStyledDialog.Builder(getApplicationContext())
-                .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-                .setDescription(FontHelper.getSpannedString(getApplicationContext(), "این پرداخت قبلا انجام شده است"))
-                .setStyle(Style.HEADER_WITH_TITLE)
-                .withDarkerOverlay(true)
-                .withDialogAnimation(true)
-                .setCancelable(true)
-                .setPositiveText("باشه")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent intent = new Intent(getApplicationContext(), ShopCard.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .show();
-    }
-    
     private void onPayCanceled() {
         new MaterialStyledDialog.Builder(ShopCard.this)
                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-                .setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت کنسل شده است"))
-                .setStyle(Style.HEADER_WITH_TITLE)
-                .withDarkerOverlay(true)
-                .withDialogAnimation(true)
-                .setCancelable(true)
-                .setPositiveText("باشه")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent intent = new Intent(getApplicationContext(), ShopCard.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .show();
-    }
-    
-    private void onPayExpired() {
-        new MaterialStyledDialog.Builder(getApplicationContext())
-                .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-                .setDescription(FontHelper.getSpannedString(getApplicationContext(), "به دلیل کند عمل کردن ، زمان پرداخت منقضی شده است. مجدد تلاش کنید"))
+                .setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید."))
                 .setStyle(Style.HEADER_WITH_TITLE)
                 .withDarkerOverlay(true)
                 .withDialogAnimation(true)
@@ -423,9 +392,9 @@ public class ShopCard extends AppCompatActivity {
             
             File file = new File(getExternalFilesDir(null), file_name + ".txt");
             FTPClient ftpClient = new FTPClient();
-            ftpClient.connect(InetAddress.getByName("ftp.zimia.ir"));
-            ftpClient.login("zm@zimia.ir", "3920512197");
-            ftpClient.changeWorkingDirectory("/include/");
+            ftpClient.connect("hyper-online.ir");
+            ftpClient.login("ho_ftp", "arash_ftp");
+            //ftpClient.changeWorkingDirectory("/include/");
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
             ftpClient.enterLocalPassiveMode();

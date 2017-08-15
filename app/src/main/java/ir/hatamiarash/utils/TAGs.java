@@ -125,7 +125,7 @@ public class TAGs {
         WALLET = "wallet";
         LOCATION = "location";
         
-        API_KEY = "428854398507066d461817e389a8b64492";
+        API_KEY = "4d0d3be84eae7fbe5c317bf318c77e83";
         
         PAY_CANCELED = "PAYMENT_CANCELED";
         PAY_EXPIRED = "PAYMENT_EXPIRED";

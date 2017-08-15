@@ -704,11 +704,12 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 HashMap<String, String> user = db_user.getUserDetails();
                 String file_name = user.get(TAGs.PHONE);
                 FTPClient ftpClient = new FTPClient();
-                ftpClient.connect("192.168.1.104");
+                ftpClient.connect("hyper-online.ir");
                 //ftpClient.connect(InetAddress.getByName("ftp.zimia.ir"));
-                ftpClient.login("hyper", "hyper1234");
+                ftpClient.login("ho_ftp", "arash_ftp");
                 //ftpClient.changeWorkingDirectory("/");
-                ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                //ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
                 BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
                 ftpClient.enterLocalPassiveMode();
                 ftpClient.storeFile(file_name + ".txt", buffIn);
