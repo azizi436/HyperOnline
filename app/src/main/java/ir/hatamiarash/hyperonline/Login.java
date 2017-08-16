@@ -138,7 +138,7 @@ public class Login extends Activity {
             
                             db.addUser(
                                     user.getString(TAGs.NAME),
-                                    user.getString(TAGs.EMAIL),
+                                    "test@gmail.com",
                                     user.getString(TAGs.ADDRESS),
                                     user.getString(TAGs.PHONE),
                                     user.getString(TAGs.UNIQUE_ID),

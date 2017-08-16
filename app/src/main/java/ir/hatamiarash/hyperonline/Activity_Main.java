@@ -278,8 +278,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         //invalidateOptionsMenu();
         
-        Logger logger = new Logger();
-        logger.execute();
+        //Logger logger = new Logger();
+        //logger.execute();
         
         HashMap<String, String> urls = new HashMap<>();
         urls.put("G6", "http://cdn.gsm.ir/static/files/image/2017/7/8/g6-review-21.jpg");
