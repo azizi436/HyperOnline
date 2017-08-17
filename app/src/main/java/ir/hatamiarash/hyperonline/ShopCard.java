@@ -123,33 +123,34 @@ public class ShopCard extends AppCompatActivity {
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
+                } else {
+                    vibrator.vibrate(50);
+                    if (tPrice + tExtend > 0) {
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View customView = inflater.inflate(R.layout.custom_dialog, null);
+                        final TextView edit_text = (TextView) customView.findViewById(R.id.edit_text);
+                        new MaterialStyledDialog.Builder(ShopCard.this)
+                                .setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
+                                .setDescription(FontHelper.getSpannedString(getApplicationContext(), "توضیحات سفارش :"))
+                                .setStyle(Style.HEADER_WITH_TITLE)
+                                .setHeaderColor(R.color.green)
+                                .setCustomView(customView, 5, 5, 5, 5)
+                                .withDarkerOverlay(true)
+                                .withDialogAnimation(true)
+                                .setCancelable(true)
+                                .setPositiveText("تایید")
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        DESCRIPTION = edit_text.getText().toString();
+                                        Pay(TAGs.API_KEY, String.valueOf(1000));
+                                        //onPaySuccess();
+                                    }
+                                })
+                                .show();
+                    } else
+                        Helper.MakeToast(getApplicationContext(), "سبد خرید خالی است", TAGs.ERROR);
                 }
-                vibrator.vibrate(50);
-                if (tPrice + tExtend > 0) {
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View customView = inflater.inflate(R.layout.custom_dialog, null);
-                    final TextView edit_text = (TextView) customView.findViewById(R.id.edit_text);
-                    new MaterialStyledDialog.Builder(ShopCard.this)
-                            .setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
-                            .setDescription(FontHelper.getSpannedString(getApplicationContext(), "توضیحات سفارش :"))
-                            .setStyle(Style.HEADER_WITH_TITLE)
-                            .setHeaderColor(R.color.green)
-                            .setCustomView(customView, 5, 5, 5, 5)
-                            .withDarkerOverlay(true)
-                            .withDialogAnimation(true)
-                            .setCancelable(true)
-                            .setPositiveText("تایید")
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    DESCRIPTION = edit_text.getText().toString();
-                                    Pay(TAGs.API_KEY, String.valueOf(1000));
-                                    //onPaySuccess();
-                                }
-                            })
-                            .show();
-                } else
-                    Helper.MakeToast(getApplicationContext(), "سبد خرید خالی است", TAGs.ERROR);
             }
         });
         
@@ -354,14 +355,6 @@ public class ShopCard extends AppCompatActivity {
                 .withDialogAnimation(true)
                 .setCancelable(true)
                 .setPositiveText("باشه")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent intent = new Intent(getApplicationContext(), ShopCard.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
                 .show();
     }
     

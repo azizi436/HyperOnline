@@ -147,7 +147,6 @@ public class Login extends Activity {
                                     user.getString(TAGs.CITY)
                             );
                             String msg = "سلام " + user.getString(TAGs.NAME);
-                            Lobby.pointer.finish();
                             Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
                             finish();
                         } else {
