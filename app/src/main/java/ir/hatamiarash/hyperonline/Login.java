@@ -149,8 +149,6 @@ public class Login extends Activity {
                             String msg = "سلام " + user.getString(TAGs.NAME);
                             Lobby.pointer.finish();
                             Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
-                            Intent i = new Intent(Login.this, Activity_Main.class);
-                            startActivity(i);
                             finish();
                         } else {
                             // Error in login. Get the error message

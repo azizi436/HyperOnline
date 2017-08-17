@@ -68,8 +68,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
     Button btnLinkToLogin;
     @InjectView(R.id.current_password)
     IconEditText inputName;
-    @InjectView(R.id.email)
-    IconEditText inputEmail;
     @InjectView(R.id.password)
     IconEditText inputPassword;
     @InjectView(R.id.password2)
@@ -113,7 +111,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         
         inputPhone.setError(Register.this, "همانند نمونه 09123456789");
-        inputEmail.setError(Register.this, "اختیاری");
         inputPassword.setError(Register.this, "حداقل 8 حرف");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.provinces);
         inputProvince.setAdapter(adapter);
@@ -126,15 +123,14 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         db = new SQLiteHandler(getApplicationContext());      // SQLite database handler
         if (session.isLoggedIn()) { // Check if user is already logged in or not
             // User is already logged in. Take him to main activity
-            Intent i = new Intent(getApplicationContext(), UserProfile.class);
-            startActivity(i);
+            Helper.MakeToast(getApplicationContext(), "شما قبلا وارد شده اید", TAGs.WARNING);
+            startActivity(new Intent(getApplicationContext(), Activity_Main.class));
             finish();
         }
         // Register Button Click event
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String name = inputName.getText().toString();
-                String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
                 String password2 = inputPassword2.getText().toString();
                 String address = inputAddress.getText().toString();
@@ -143,32 +139,34 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 if (Helper.CheckInternet(Register.this))
                     if (!name.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !address.isEmpty() && !phone.isEmpty())
                         if (Helper.isValidPhone(phone))
-                            if (Helper.isValidEmail(email))
-                                if (Helper.isValidPassword(password))
-                                    if (password.equals(password2))
-                                        if (inputProvince.getSelectedItem() != null && !inputProvince.getSelectedItem().toString().equals(""))
-                                            if (inputCity.getSelectedItem() != null)
-                                                registerUser(
-                                                        name,
-                                                        email,
-                                                        password,
-                                                        address,
-                                                        phone,
-                                                        inputProvince.getSelectedItem().toString(),
-                                                        inputCity.getSelectedItem().toString(),
-                                                        String.valueOf(latitude),
-                                                        String.valueOf(longitude)
-                                                );
+                            if (Helper.isValidPassword(password))
+                                if (password.equals(password2))
+                                    if (inputProvince.getSelectedItem() != null && !inputProvince.getSelectedItem().toString().equals(""))
+                                        if (inputCity.getSelectedItem() != null)
+                                            if (inputProvince.getSelectedItem().toString().equals("همدان"))
+                                                if (inputCity.getSelectedItem().toString().equals("همدان"))
+                                                    registerUser(
+                                                            name,
+                                                            password,
+                                                            address,
+                                                            phone,
+                                                            inputProvince.getSelectedItem().toString(),
+                                                            inputCity.getSelectedItem().toString(),
+                                                            String.valueOf(latitude),
+                                                            String.valueOf(longitude)
+                                                    );
+                                                else
+                                                    MakeDialog2("با تشکر", "در حال حاضر هایپرآنلاین فقط در استان و شهرستان همدان خدمات دهی انجام می دهد.");
                                             else
-                                                Helper.MakeToast(Register.this, "شهر را انتخاب نمایید", TAGs.ERROR);
+                                                MakeDialog2("با تشکر", "در حال حاضر هایپرآنلاین فقط در استان و شهرستان همدان خدمات دهی انجام می دهد.");
                                         else
-                                            Helper.MakeToast(Register.this, "استان را انتخاب نمایید", TAGs.ERROR);
+                                            Helper.MakeToast(Register.this, "شهر را انتخاب نمایید", TAGs.ERROR);
                                     else
-                                        Helper.MakeToast(Register.this, "کلمه عبور ها تطابق ندارند", TAGs.ERROR);
+                                        Helper.MakeToast(Register.this, "استان را انتخاب نمایید", TAGs.ERROR);
                                 else
-                                    Helper.MakeToast(Register.this, "کلمه عبور معتبر نیست", TAGs.ERROR);
+                                    Helper.MakeToast(Register.this, "کلمه عبور ها تطابق ندارند", TAGs.ERROR);
                             else
-                                Helper.MakeToast(Register.this, "ایمیل را بررسی نمایید", TAGs.ERROR);
+                                Helper.MakeToast(Register.this, "کلمه عبور معتبر نیست", TAGs.ERROR);
                         else
                             Helper.MakeToast(Register.this, "شماره موبایل را بررسی نمایید", TAGs.ERROR);
                     else
@@ -195,7 +193,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         });
     }
     
-    private void registerUser(final String name, final String email, final String password, final String address, final String phone, final String state, final String city, final String loc_x, final String loc_y) {
+    private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city, final String loc_x, final String loc_y) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         
@@ -204,7 +202,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
             String URL = URLs.base_URL + "users";
             JSONObject params = new JSONObject();
             params.put(TAGs.NAME, name);
-            params.put(TAGs.EMAIL, email);
             params.put(TAGs.ADDRESS, address);
             params.put(TAGs.PHONE, phone);
             params.put(TAGs.PASSWORD, password);
@@ -286,11 +283,22 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         Intent intent = new Intent(Register.this, Login.class);
-                        Lobby.pointer.finish();
                         startActivity(intent);
                         finish();
                     }
                 })
+                .show();
+    }
+    
+    private void MakeDialog2(String Title, String Message) {
+        new MaterialStyledDialog.Builder(this)
+                .setTitle(FontHelper.getSpannedString(this, Title))
+                .setDescription(FontHelper.getSpannedString(this, Message))
+                .setStyle(Style.HEADER_WITH_TITLE)
+                .withDarkerOverlay(true)
+                .withDialogAnimation(true)
+                .setCancelable(true)
+                .setPositiveText("باشه")
                 .show();
     }
     

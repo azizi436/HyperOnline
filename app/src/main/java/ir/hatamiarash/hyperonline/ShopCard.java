@@ -47,7 +47,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,10 +68,6 @@ import static helper.Helper.ConvertProductType;
 public class ShopCard extends AppCompatActivity {
     private static final String TAG = ShopCard.class.getSimpleName(); // class tag for log
     final static private int CODE_PAYMENT = 100;
-    private static final String PAY_PAID = "ALREADY_PAID";
-    private static final String PAY_CANCELED = "PAYMENT_CANCELED";
-    private static final String PAY_SUCCESS = "PAYMENT_SUCCESS";
-    private static final String PAY_EXPIRED = "PAYMENT_EXPIRED";
     public static SQLiteHandlerItem db_item;
     public static SQLiteHandler db_user;
     SessionManager session;
@@ -125,6 +120,10 @@ public class ShopCard extends AppCompatActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!session.isLoggedIn()) {
+                    Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
+                    startActivity(new Intent(ShopCard.this, Login.class));
+                }
                 vibrator.vibrate(50);
                 if (tPrice + tExtend > 0) {
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

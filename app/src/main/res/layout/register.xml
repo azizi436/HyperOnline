@@ -63,21 +63,6 @@
                     app:isPhone="true"/>
 
                 <helper.IconEditText
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/common_google_signin_btn_text_light_default"
-                    android:ems="10"
-                    app:hint="@string/hint_email"
-                    app:iconSrc="@drawable/ic_email"
-                    app:isEmail="true"/>
-
-                <helper.IconEditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
