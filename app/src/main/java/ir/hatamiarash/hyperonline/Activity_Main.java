@@ -188,10 +188,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
         
-        //PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
+        PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
         PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
-        //PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -200,7 +200,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         .withHeaderBackground(R.drawable.drawer_header)
                         .build())
                 .addDrawerItems(
-                        //item_home,
+                        item_home,
                         item_profile,
                         item_cart
                         //item_comment
@@ -210,9 +210,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem != null && drawerItem.getIdentifier() == 1) {
                             vibrator.vibrate(50);
-                            /*Intent i = new Intent(getApplicationContext(), Activity_Main.class);
-                            startActivity(i);*/
-                            /*finish();*/
+                            Intent i = new Intent(getApplicationContext(), Activity_Main.class);
+                            startActivity(i);
+                            finish();
                             result.closeDrawer();
                             return true;
                         }
