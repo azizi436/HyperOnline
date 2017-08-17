@@ -189,7 +189,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         setSupportActionBar(toolbar);
         
         //PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
-        //PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
+        PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
         PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
         //PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
         
@@ -201,7 +201,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         .build())
                 .addDrawerItems(
                         //item_home,
-                        //item_profile,
+                        item_profile,
                         item_cart
                         //item_comment
                 )
@@ -217,11 +217,11 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 2) {
-                            /*if (Helper.CheckInternet(getApplicationContext())) {
+                            if (Helper.CheckInternet(getApplicationContext())) {
                                 Intent i = new Intent(getApplicationContext(), UserProfile.class);
                                 startActivity(i);
-                            } else*/
-                            result.closeDrawer();
+                            } else
+                                result.closeDrawer();
                             return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 3) {
