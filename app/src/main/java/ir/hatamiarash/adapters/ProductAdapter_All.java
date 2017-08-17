@@ -25,6 +25,7 @@ import helper.Helper;
 import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.interfaces.CardBadge;
+import ir.hatamiarash.utils.URLs;
 import models.Product;
 
 import static com.github.florent37.viewtooltip.ViewTooltip.ALIGN.CENTER;
@@ -64,7 +65,10 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         holder.point_count.setText(String.valueOf(product.point_count));
         holder.off.setText(String.valueOf(product.off));
         holder.count.setText(String.valueOf(product.count));
-        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
+        if (String.valueOf(product.image).equals("null"))
+            Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
+        else
+            Glide.with(mContext).load(URLs.image_URL + String.valueOf(product.image)).into(holder.image);
         
         if (!product.description.equals("null"))
             holder.info.setText(product.description);

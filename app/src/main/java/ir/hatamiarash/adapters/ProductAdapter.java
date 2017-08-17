@@ -24,6 +24,7 @@ import helper.Helper;
 import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.interfaces.CardBadge;
+import ir.hatamiarash.utils.URLs;
 import models.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
@@ -60,7 +61,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.point_count.setText(String.valueOf(product.point_count));
         holder.off.setText(String.valueOf(product.off));
         holder.count.setText(String.valueOf(product.count));
-        Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
+        if (String.valueOf(product.image).equals("null"))
+            Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
+        else
+            Glide.with(mContext).load(URLs.image_URL + String.valueOf(product.image)).into(holder.image);
         
     
         if (product.count == 0) {
