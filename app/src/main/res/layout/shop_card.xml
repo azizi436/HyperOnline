@@ -121,7 +121,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginStart="5dp"
-                android:text="تخفیف : "
+                android:text="سود شما از این خرید : "
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/md_red_A400"
