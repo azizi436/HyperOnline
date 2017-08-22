@@ -160,7 +160,7 @@
             android:value=".Search"/>
 
         <activity
-            android:name=".Search"
+            android:name=".Activity_Search"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>

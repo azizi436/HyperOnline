@@ -47,7 +47,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -166,7 +168,7 @@ public class ShopCard extends AppCompatActivity {
         });
         
         FetchAllProducts();
-        //SyncServer();
+        int time = getTime();
     }
     
     private void FetchAllProducts() {
@@ -604,5 +606,12 @@ public class ShopCard extends AppCompatActivity {
             }
             return false;
         }
+    }
+    
+    private int getTime() {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
+        Log.w("current time : ", simpleDateFormat.format(date));
+        return Integer.valueOf(simpleDateFormat.format(date));
     }
 }

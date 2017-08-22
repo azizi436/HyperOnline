@@ -604,7 +604,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             result.openDrawer();
             return true;
         } else if (id == R.id.search) {
-            Intent i = new Intent(getApplicationContext(), Search.class);
+            Intent i = new Intent(getApplicationContext(), Activity_Search.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

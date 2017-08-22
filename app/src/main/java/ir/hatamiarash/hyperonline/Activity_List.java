@@ -435,7 +435,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             result.openDrawer();
             return true;
         } else if (id == R.id.search) {
-            Intent i = new Intent(getApplicationContext(), Search.class);
+            Intent i = new Intent(getApplicationContext(), Activity_Search.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

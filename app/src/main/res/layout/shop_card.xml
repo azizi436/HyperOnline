@@ -17,11 +17,24 @@
         android:layout_above="@+id/line2"
         android:layout_marginTop="35dp"/>
 
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/l1"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textAlignment="center"/>
+
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_above="@+id/l1"
+        android:layout_above="@+id/status"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginLeft="40dp"
