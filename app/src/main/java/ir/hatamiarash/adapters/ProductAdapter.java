@@ -5,7 +5,6 @@
 package ir.hatamiarash.adapters;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +23,7 @@ import helper.Helper;
 import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.interfaces.CardBadge;
+import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Product;
 
@@ -66,26 +66,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         else
             Glide.with(mContext).load(URLs.image_URL + String.valueOf(product.image)).into(holder.image);
         
-    
+        if (product.off > 0) {
+            holder.price.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
+            holder.price_backup.setText(Helper.CalculatePrice(product.price, product.off));
+        }
+        
         if (product.count == 0) {
             holder.add_layout.setVisibility(View.INVISIBLE);
             holder.price.setVisibility(View.VISIBLE);
             holder.price.setText("موجود نمی باشد");
             holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
-    
+        
         if (db_item.isExistsID(product.unique_id) && db_item.isExists(product.name)) {
             holder.add_layout.setVisibility(View.INVISIBLE);
             holder.price.setVisibility(View.VISIBLE);
             holder.price.setText("موجود است");
             holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
-    
+        
         holder.add_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.add_layout.setVisibility(View.INVISIBLE);
-                //holder.change_layout.setVisibility(View.VISIBLE);
+                holder.change_layout.setVisibility(View.VISIBLE);
                 holder.price.setText("اضافه شد");
                 holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 int off = product.off * Integer.valueOf(product.price) / 100;
@@ -99,6 +103,68 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                         String.valueOf(off),
                         String.valueOf(1)
                 );
+                try {
+                    cardBadge.updateBadge();
+                } catch (ClassCastException e) {
+                    Log.w("CallBack", e.getMessage());
+                }
+            }
+        });
+        
+        holder.inc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
+                Log.w("COUNT", holder.count.getText().toString());
+                if (pCount <= Integer.valueOf(holder.count.getText().toString())) {
+                    int count = pCount + 1;
+                    int off = (product.off * Integer.valueOf(product.price) / 100) * count;
+                    int fPrice = Integer.valueOf(product.price) * count - off;
+                    db_item.updateCount(
+                            product.unique_id,
+                            String.valueOf(count),
+                            String.valueOf(fPrice),
+                            String.valueOf(off)
+                    );
+                    try {
+                        cardBadge.updateBadge();
+                    } catch (ClassCastException e) {
+                        Log.w("CallBack", e.getMessage());
+                    }
+                } else
+                    Helper.MakeToast(mContext, "این تعداد موجود نمی باشد", TAGs.ERROR);
+            }
+        });
+        
+        holder.dec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
+                if (pCount == 1) {
+                    db_item.deleteItem(
+                            product.unique_id
+                    );
+                    holder.add_layout.setVisibility(View.VISIBLE);
+                    holder.change_layout.setVisibility(View.INVISIBLE);
+                    holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                    if (product.off > 0) {
+                        holder.price.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
+                        holder.price_backup.setText(Helper.CalculatePrice(product.price, product.off));
+                    } else {
+                        holder.price.setText(product.price + " تومان");
+                        holder.price_backup.setText(product.price);
+                    }
+                } else {
+                    int count = pCount - 1;
+                    int off = (product.off * Integer.valueOf(product.price) / 100) * count;
+                    int fPrice = Integer.valueOf(product.price) * count - off;
+                    db_item.updateCount(
+                            product.unique_id,
+                            String.valueOf(count),
+                            String.valueOf(fPrice),
+                            String.valueOf(off)
+                    );
+                }
                 try {
                     cardBadge.updateBadge();
                 } catch (ClassCastException e) {
@@ -125,7 +191,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, price, price_backup, id, count, point, point_count, off;
-        ImageView image;
+        ImageView image, inc, dec;
         LinearLayout add_layout, change_layout;
         
         MyViewHolder(View view) {
@@ -141,6 +207,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             image = view.findViewById(R.id.product_image);
             add_layout = view.findViewById(R.id.add_layout);
             change_layout = view.findViewById(R.id.change_layout);
+            inc = view.findViewById(R.id.inc);
+            dec = view.findViewById(R.id.dec);
         }
     }
 }

@@ -135,9 +135,33 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
     }
     
     // get item's detail from database and send them
-    public List<String> getItemDetails() {
+    public List<String> getItemsDetails() {
         List<String> item = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            while (!cursor.isAfterLast()) {
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_UID)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_PRICE)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_INFO)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_OFF)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT)));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return item;
+    }
+    
+    public List<String> getItemDetails(String uid) {
+        uid = "'" + uid + "'";
+        List<String> item = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE + " WHERE " + KEY_UID + "=" + uid;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         cursor.moveToFirst();

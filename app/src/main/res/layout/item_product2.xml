@@ -94,7 +94,7 @@
                 android:paddingTop="@dimen/album_title_padding"
                 android:text="1000 تومان"
                 android:textAlignment="center"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/black"
                 android:textSize="@dimen/album_title"
                 app:font="iran_sans"/>
 

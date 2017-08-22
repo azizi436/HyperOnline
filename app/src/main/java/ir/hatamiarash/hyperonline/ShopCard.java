@@ -172,7 +172,7 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void FetchAllProducts() {
-        Item = db_item.getItemDetails();
+        Item = db_item.getItemsDetails();
         arrayList.add("null");
         // numbers must be same of database fields !!!!! all numbers Item.size() / n [] i * n + 1
         for (int i = 0; i < (Item.size() / 7); i++) {

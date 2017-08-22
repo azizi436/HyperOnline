@@ -25,6 +25,7 @@ import helper.Helper;
 import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.interfaces.CardBadge;
+import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Product;
 
@@ -97,6 +98,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         if (db_item.isExistsID(product.unique_id) && db_item.isExists(product.name)) {
             holder.price_layout.setVisibility(View.INVISIBLE);
             holder.add_layout.setVisibility(View.INVISIBLE);
+            holder.change_layout.setVisibility(View.VISIBLE);
             holder.status.setVisibility(View.VISIBLE);
             holder.status.setText("در سبد خرید موجود است");
             holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
@@ -122,7 +124,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
             @Override
             public void onClick(View view) {
                 holder.add_layout.setVisibility(View.INVISIBLE);
-                //holder.change_layout.setVisibility(View.VISIBLE);
+                holder.change_layout.setVisibility(View.VISIBLE);
                 holder.price_layout.setVisibility(View.INVISIBLE);
                 holder.status.setVisibility(View.VISIBLE);
                 holder.status.setText("به سبد خرید اضافه شد");
@@ -138,6 +140,62 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
                         String.valueOf(off),
                         String.valueOf(1)
                 );
+                try {
+                    cardBadge.updateBadge();
+                } catch (ClassCastException e) {
+                    Log.w("CallBack", e.getMessage());
+                }
+            }
+        });
+        
+        holder.inc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
+                Log.w("COUNT", holder.count.getText().toString());
+                if (pCount <= Integer.valueOf(holder.count.getText().toString())) {
+                    int count = pCount + 1;
+                    int off = (product.off * Integer.valueOf(product.price) / 100) * count;
+                    int fPrice = Integer.valueOf(product.price) * count - off;
+                    db_item.updateCount(
+                            product.unique_id,
+                            String.valueOf(count),
+                            String.valueOf(fPrice),
+                            String.valueOf(off)
+                    );
+                    try {
+                        cardBadge.updateBadge();
+                    } catch (ClassCastException e) {
+                        Log.w("CallBack", e.getMessage());
+                    }
+                } else
+                    Helper.MakeToast(mContext, "این تعداد موجود نمی باشد", TAGs.ERROR);
+            }
+        });
+        
+        holder.dec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
+                if (pCount == 1) {
+                    db_item.deleteItem(
+                            product.unique_id
+                    );
+                    holder.price_layout.setVisibility(View.VISIBLE);
+                    holder.add_layout.setVisibility(View.VISIBLE);
+                    holder.change_layout.setVisibility(View.INVISIBLE);
+                    holder.status.setVisibility(View.INVISIBLE);
+                } else {
+                    int count = pCount - 1;
+                    int off = (product.off * Integer.valueOf(product.price) / 100) * count;
+                    int fPrice = Integer.valueOf(product.price) * count - off;
+                    db_item.updateCount(
+                            product.unique_id,
+                            String.valueOf(count),
+                            String.valueOf(fPrice),
+                            String.valueOf(off)
+                    );
+                }
                 try {
                     cardBadge.updateBadge();
                 } catch (ClassCastException e) {
@@ -164,7 +222,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
     
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, price, price_off, price_backup, id, count, point, point_count, off, info, status;
-        ImageView image;
+        ImageView image, inc, dec;
         LinearLayout add_layout, change_layout, price_layout;
         
         MyViewHolder(View view) {
@@ -184,6 +242,8 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
             change_layout = view.findViewById(R.id.change_layout);
             price_layout = view.findViewById(R.id.price_layout);
             status = view.findViewById(R.id.product_status);
+            inc = view.findViewById(R.id.inc);
+            dec = view.findViewById(R.id.dec);
         }
     }
 }
