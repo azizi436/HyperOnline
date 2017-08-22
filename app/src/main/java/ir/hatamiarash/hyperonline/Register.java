@@ -143,22 +143,16 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                                 if (password.equals(password2))
                                     if (inputProvince.getSelectedItem() != null && !inputProvince.getSelectedItem().toString().equals(""))
                                         if (inputCity.getSelectedItem() != null)
-                                            if (inputProvince.getSelectedItem().toString().equals("همدان"))
-                                                if (inputCity.getSelectedItem().toString().equals("همدان"))
-                                                    registerUser(
-                                                            name,
-                                                            password,
-                                                            address,
-                                                            phone,
-                                                            inputProvince.getSelectedItem().toString(),
-                                                            inputCity.getSelectedItem().toString(),
-                                                            String.valueOf(latitude),
-                                                            String.valueOf(longitude)
-                                                    );
-                                                else
-                                                    MakeDialog2("با تشکر", "در حال حاضر هایپرآنلاین فقط در استان و شهرستان همدان خدمات دهی انجام می دهد.");
-                                            else
-                                                MakeDialog2("با تشکر", "در حال حاضر هایپرآنلاین فقط در استان و شهرستان همدان خدمات دهی انجام می دهد.");
+                                            registerUser(
+                                                    name,
+                                                    password,
+                                                    address,
+                                                    phone,
+                                                    inputProvince.getSelectedItem().toString(),
+                                                    inputCity.getSelectedItem().toString(),
+                                                    String.valueOf(latitude),
+                                                    String.valueOf(longitude)
+                                            );
                                         else
                                             Helper.MakeToast(Register.this, "شهر را انتخاب نمایید", TAGs.ERROR);
                                     else
