@@ -84,7 +84,7 @@
                 android:text="قیمت کل : "
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_red_A400"
+                android:textColor="@color/accent"
                 android:textSize="14sp"
                 app:font="shabnam"/>
 
@@ -124,7 +124,7 @@
                 android:text="سود شما از این خرید : "
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_red_A400"
+                android:textColor="@color/accent"
                 android:textSize="14sp"
                 app:font="shabnam"/>
 
@@ -164,7 +164,7 @@
                 android:text="مالیات / ارسال / بسته بندی : "
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_red_A400"
+                android:textColor="@color/accent"
                 android:textSize="14sp"
                 app:font="shabnam"/>
 
@@ -204,7 +204,7 @@
                 android:text="مبلغ قابل پرداخت : "
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_red_A400"
+                android:textColor="@color/accent"
                 android:textSize="14sp"
                 app:font="shabnam"/>
 
