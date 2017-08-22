@@ -235,7 +235,6 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        Log.d(TAG, "Total Price : " + String.valueOf(total));
         return total;
     }
     
@@ -253,7 +252,6 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        Log.d(TAG, "Total Off : " + String.valueOf(total));
         return total;
     }
     
@@ -282,7 +280,6 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        Log.d(TAG, "Total Count : " + String.valueOf(total));
         return total;
     }
     

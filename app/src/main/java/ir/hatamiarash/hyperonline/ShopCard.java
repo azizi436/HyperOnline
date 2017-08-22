@@ -59,6 +59,7 @@ import helper.FormatHelper;
 import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
+import helper.SQLiteHandlerMain;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
@@ -71,6 +72,7 @@ public class ShopCard extends AppCompatActivity {
     private static final String TAG = ShopCard.class.getSimpleName(); // class tag for log
     final static private int CODE_PAYMENT = 100;
     public static SQLiteHandlerItem db_item;
+    public static SQLiteHandlerMain db_main;
     public static SQLiteHandler db_user;
     SessionManager session;
     SweetAlertDialog progressDialog;
@@ -81,14 +83,13 @@ public class ShopCard extends AppCompatActivity {
     TextView total_off;
     TextView total_extend;
     TextView total_pay;
+    TextView status;
     Button pay, clear;
     int tOff = 0;
     int tPrice = 0;
-    int tExtend = 1000;
-    ArrayList<String> arrayList = new ArrayList<>();
+    int tExtend;
     List<String> Item;
     int check = 0;
-    int counter = 0;
     private String ORDER_CODE = "-1";
     private String ORDER_AMOUNT = "1000";
     private String STUFFS = "";
@@ -104,9 +105,11 @@ public class ShopCard extends AppCompatActivity {
         total_off = (TextView) findViewById(R.id.CardDiscount);
         total_extend = (TextView) findViewById(R.id.CardExtend);
         total_pay = (TextView) findViewById(R.id.CardTotalPrice);
+        status = (TextView) findViewById(R.id.status);
         pay = (Button) findViewById(R.id.btnPay);
         clear = (Button) findViewById(R.id.btnClear);
         
+        db_main = new SQLiteHandlerMain(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());
         session = new SessionManager(getApplicationContext());
@@ -167,13 +170,14 @@ public class ShopCard extends AppCompatActivity {
             }
         });
         
+        List<String> main = db_main.getItemsDetails();
+        tExtend = Integer.valueOf(main.get(0));
         FetchAllProducts();
-        int time = getTime();
+        sendPrice(tPrice);
     }
     
     private void FetchAllProducts() {
         Item = db_item.getItemsDetails();
-        arrayList.add("null");
         // numbers must be same of database fields !!!!! all numbers Item.size() / n [] i * n + 1
         for (int i = 0; i < (Item.size() / 7); i++) {
             //String id = Item.get(i * 10);
@@ -198,7 +202,7 @@ public class ShopCard extends AppCompatActivity {
             
             STUFFS += name + "-";
         }
-        Log.w(TAG, String.valueOf(arrayList));
+        
         total_off.setText(String.valueOf(tOff) + " تومان");
         total_price.setText(String.valueOf(tPrice + tOff) + " تومان");
         total_extend.setText(String.valueOf(tExtend) + " تومان");
@@ -365,7 +369,6 @@ public class ShopCard extends AppCompatActivity {
         try {
             HashMap<String, String> user = db_user.getUserDetails();
             String file_name = user.get(TAGs.UID); // use unique_id of user for files to prevent duplicate at same time
-            arrayList.add(TAGs.NULL);
             // numbers must be same of database fields !!!!! all numbers Item.size() / n   +++++   i * n + 1
             for (int i = 0; i < (Item.size() / 11); i++) {
                 String name = Item.get(i * 11 + 2);
@@ -557,19 +560,21 @@ public class ShopCard extends AppCompatActivity {
                     
                     @Override
                     public void afterTextChanged(Editable s) {
+                        
                         if (check == products.size()) {
                             Log.w(TAG, "OFF:" + product_off.getText().toString());
                             // off / old count * new count
                             int new_off = Integer.valueOf(product_off.getText().toString()) / temp * Integer.valueOf(product_count.getText().toString());
                             product_off.setText(String.valueOf(new_off));
                             db_item.updateItem(product_id.getText().toString(), product_count.getText().toString(), String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(product_count.getText().toString())), String.valueOf(new_off));
+                            sendPrice(db_item.TotalPrice());
                             String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
                             String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
                             total_pay.setText(price);
                             pay.setText("پرداخت - " + price);
                             total_off.setText(off);
-                            int tPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
-                            total_price.setText(String.valueOf(tPrice) + " تومان");
+                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
+                            total_price.setText(String.valueOf(ttPrice) + " تومان");
                         } else
                             check++;
                     }
@@ -613,5 +618,18 @@ public class ShopCard extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
         Log.w("current time : ", simpleDateFormat.format(date));
         return Integer.valueOf(simpleDateFormat.format(date));
+    }
+    
+    private void sendPrice(int price) {
+        Log.w("ttprice", String.valueOf(price));
+        if (price >= 35000) {
+            tExtend = 0;
+            status.setText("ارسال رایگان");
+            total_extend.setText(String.valueOf(tExtend) + " تومان");
+        } else {
+            tExtend = 5000;
+            status.setText("خرید های کمتر از 35 هزار تومان با هزینه ارسال می شوند");
+            total_extend.setText(String.valueOf(tExtend) + " تومان");
+        }
     }
 }

@@ -83,6 +83,7 @@ import helper.GridSpacingItemDecoration;
 import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
+import helper.SQLiteHandlerMain;
 import helper.SQLiteHandlerSetup;
 import helper.SessionManager;
 import ir.hatamiarash.adapters.CategoryAdapter;
@@ -99,6 +100,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public static SQLiteHandler db_user;             // items database
     public static SQLiteHandlerItem db_item;         // items database
     public static SQLiteHandlerSetup db_setup;       // setup database
+    public static SQLiteHandlerMain db_main;       // setup database
     static Typeface persianTypeface;                 // persian font typeface
     public Drawer result = null;
     SessionManager session;                          // session for check user logged
@@ -169,6 +171,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
+        db_main = new SQLiteHandlerMain(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -180,6 +183,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         if (isFirstTime) {
             db_setup.CreateTable();
             db_item.CreateTable();
+            db_main.CreateTable();
             /*Intent i = new Intent(getApplicationContext(), SetupWeb.class);
             startActivity(i);*/
             //finish();
@@ -394,6 +398,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
+                            db_main.addItem(jObj.getString("send_price"));
+                            
                             JSONObject _opt = jObj.getJSONObject("options");
                             
                             JSONArray _cat = jObj.getJSONArray("category");
