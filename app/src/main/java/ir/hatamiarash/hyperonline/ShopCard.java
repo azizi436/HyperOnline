@@ -36,6 +36,7 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,6 +91,7 @@ public class ShopCard extends AppCompatActivity {
     int tExtend;
     List<String> Item;
     int check = 0;
+    int send_time;
     private String ORDER_CODE = "-1";
     private String ORDER_AMOUNT = "1000";
     private String STUFFS = "";
@@ -131,12 +133,20 @@ public class ShopCard extends AppCompatActivity {
                 } else {
                     vibrator.vibrate(50);
                     if (tPrice + tExtend > 0) {
+                        String time = String.valueOf(times(getTime(1), getTime(2)));
+                        String time2 = String.valueOf(times(getTime(1), getTime(2)) + 1);
+                        String extend = "";
+                        if (send_time == 9 || send_time == 11)
+                            extend = " صبح";
+                        if (send_time == 16 || send_time == 18)
+                            extend = " عصر";
+                        String message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View customView = inflater.inflate(R.layout.custom_dialog, null);
                         final TextView edit_text = (TextView) customView.findViewById(R.id.edit_text);
                         new MaterialStyledDialog.Builder(ShopCard.this)
                                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
-                                .setDescription(FontHelper.getSpannedString(getApplicationContext(), "توضیحات سفارش :"))
+                                .setDescription(FontHelper.getSpannedString(getApplicationContext(), message))
                                 .setStyle(Style.HEADER_WITH_TITLE)
                                 .setHeaderColor(R.color.green)
                                 .setCustomView(customView, 5, 5, 5, 5)
@@ -613,11 +623,46 @@ public class ShopCard extends AppCompatActivity {
         }
     }
     
-    private int getTime() {
+    private int getTime(int type) {
         Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
-        Log.w("current time : ", simpleDateFormat.format(date));
-        return Integer.valueOf(simpleDateFormat.format(date));
+        SimpleDateFormat simpleDateFormat;
+        if (type == 1) {
+            simpleDateFormat = new SimpleDateFormat("HH");
+            return Integer.valueOf(simpleDateFormat.format(date));
+        } else {
+            simpleDateFormat = new SimpleDateFormat("mm");
+            return Integer.valueOf(simpleDateFormat.format(date));
+        }
+    }
+    
+    @Contract(pure = true)
+    private int times(int hour, int minute) {
+        if (hour >= 9 && hour < 10)
+            if (minute <= 40)
+                send_time = 9;
+            else
+                send_time = 11;
+        if (hour >= 10 && hour < 11) send_time = 2;
+        if (hour >= 11 && hour < 12)
+            if (minute <= 40)
+                send_time = 11;
+            else
+                send_time = 16;
+        if (hour >= 12 && hour < 16) send_time = 3;
+        if (hour >= 16 && hour < 17)
+            if (minute <= 40)
+                send_time = 16;
+            else
+                send_time = 18;
+        if (hour >= 17 && hour < 18) send_time = 4;
+        if (hour >= 18 && hour < 19)
+            if (minute <= 40)
+                send_time = 18;
+            else
+                send_time = 9;
+        if (hour >= 19 && hour <= 23) send_time = 9;
+        if (hour >= 0 && hour < 9) send_time = 9;
+        return send_time;
     }
     
     private void sendPrice(int price) {
