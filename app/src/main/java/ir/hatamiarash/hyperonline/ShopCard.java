@@ -98,13 +98,13 @@ public class ShopCard extends AppCompatActivity {
     @InjectView(R.id.btnClear)
     public Button clear;
     
-    int tOff = 0;
-    int tPrice = 0;
-    int tExtend;
+    private int tOff = 0;
+    private int tPrice = 0;
+    private int tExtend;
     List<String> Item;
     List<Product> Products_List;
-    int check = 0;
-    int send_time;
+    private int check = 0;
+    private int send_time;
     private String ORDER_CODE = "-1";
     private String ORDER_AMOUNT = "1000";
     private String STUFFS = "";

@@ -23,22 +23,59 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <helper.PersianTextView
+        android:id="@+id/title_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/app_bar"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
+        android:paddingStart="10dp"
+        android:text="دسته بندی ها"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:font="iran_sans"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/category_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/app_bar"
+        android:layout_below="@+id/title_category"
         android:layout_marginBottom="2.5dp"
-        android:layout_marginTop="5dp"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
         android:scrollbars="none"/>
+
+    <helper.PersianTextView
+        android:id="@+id/title_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/category_list"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
+        android:paddingStart="10dp"
+        android:text="محصولات"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:font="iran_sans"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/category_list"
+        android:layout_below="@+id/title_product"
         android:paddingBottom="10dp"/>
 
     <helper.SymmetricProgressBar

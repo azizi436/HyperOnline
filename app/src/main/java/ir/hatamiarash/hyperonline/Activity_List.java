@@ -86,6 +86,10 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     public RecyclerView category_list;
     @InjectView(R.id.toolbar)
     public Toolbar toolbar;
+    @InjectView(R.id.title_product)
+    public TextView title_product;
+    @InjectView(R.id.title_category)
+    public TextView title_category;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,8 +108,10 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         p.setVisibility(View.INVISIBLE);
         db_item = new SQLiteHandlerItem(getApplicationContext());
         
-        if (list_category == 1)
+        if (list_category == 1) {
             category_list.setVisibility(View.GONE);
+            title_category.setVisibility(View.GONE);
+        }
         
         category_id = getIntent().getStringExtra("cat_id");
         if (list_category == 1 || list_category == 2) {
@@ -222,6 +228,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             categoryAdapter = new CategoryAdapter_Small(this, categoryList);
             categoryAdapter.setHasStableIds(true);
             LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(Activity_List.this, LinearLayoutManager.HORIZONTAL, false);
+            horizontalLayoutManager.setStackFromEnd(true);
             category_list.setLayoutManager(horizontalLayoutManager);
             category_list.setItemAnimator(new DefaultItemAnimator());
             category_list.setAdapter(categoryAdapter);
