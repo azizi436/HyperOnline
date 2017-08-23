@@ -54,6 +54,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.FontHelper;
 import helper.FormatHelper;
@@ -77,19 +79,30 @@ public class ShopCard extends AppCompatActivity {
     public static SQLiteHandler db_user;
     SessionManager session;
     SweetAlertDialog progressDialog;
-    List<Product> Products_List;
-    RecyclerView list;
     Vibrator vibrator;
-    TextView total_price;
-    TextView total_off;
-    TextView total_extend;
-    TextView total_pay;
-    TextView status;
-    Button pay, clear;
+    
+    @InjectView(R.id.recyclerView)
+    public RecyclerView list;
+    @InjectView(R.id.CardPrice)
+    public TextView total_price;
+    @InjectView(R.id.CardDiscount)
+    public TextView total_off;
+    @InjectView(R.id.CardExtend)
+    public TextView total_extend;
+    @InjectView(R.id.CardTotalPrice)
+    public TextView total_pay;
+    @InjectView(R.id.status)
+    public TextView status;
+    @InjectView(R.id.btnPay)
+    public Button pay;
+    @InjectView(R.id.btnClear)
+    public Button clear;
+    
     int tOff = 0;
     int tPrice = 0;
     int tExtend;
     List<String> Item;
+    List<Product> Products_List;
     int check = 0;
     int send_time;
     private String ORDER_CODE = "-1";
@@ -101,15 +114,7 @@ public class ShopCard extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_card);
-        
-        list = (RecyclerView) findViewById(R.id.recyclerView);
-        total_price = (TextView) findViewById(R.id.CardPrice);
-        total_off = (TextView) findViewById(R.id.CardDiscount);
-        total_extend = (TextView) findViewById(R.id.CardExtend);
-        total_pay = (TextView) findViewById(R.id.CardTotalPrice);
-        status = (TextView) findViewById(R.id.status);
-        pay = (Button) findViewById(R.id.btnPay);
-        clear = (Button) findViewById(R.id.btnClear);
+        ButterKnife.inject(this);
         
         db_main = new SQLiteHandlerMain(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
