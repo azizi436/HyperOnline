@@ -31,6 +31,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -127,7 +128,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     @InjectView(R.id.popular_list)
     public RecyclerView popular_view;
     @InjectView(R.id.slider)
-    public SliderLayout sliderLayout;
+    public SliderLayout slider;
+    @InjectView(R.id.slider_layout)
+    public LinearLayout sliderLayout;
     @InjectView(R.id.scroll)
     public NestedScrollView scroll;
     @InjectView(R.id.toolbar)
@@ -278,7 +281,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             }
                             if (item == 9) {
                                 Intent i = new Intent(getApplicationContext(), Activity_Comment.class);
-                            startActivity(i);
+                                startActivity(i);
                                 result.closeDrawer();
                             }
                             if (item == 10) {
@@ -355,33 +358,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         Helper.GetPermissions(this, getApplicationContext());
         
-        //invalidateOptionsMenu();
-        
-        //Logger logger = new Logger();
-        //logger.execute();
-        
-        HashMap<String, String> urls = new HashMap<>();
-        urls.put("G6", "http://cdn.gsm.ir/static/files/image/2017/7/8/g6-review-21.jpg");
-        urls.put("gsm", "http://cdn.gsm.ir/static/files/image/2016/10/17/da48in_GSM%20Social%20Banner.jpg");
-        urls.put("car", "http://cdn.gsm.ir/static/files/image/2017/7/8/jaguar-xe-sv-project-8-goodwood%20(5).jpg");
-        urls.put("car 2", "http://cdn.gsm.ir/static/files/image/2017/7/8/Aston_Martin-Vulcan_AMR_Pro-2018-1024-04.jpg");
-        
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Default);
-        sliderLayout.setDuration(2500);
-        sliderLayout.setCustomAnimation(new DescriptionAnimation());
-        sliderLayout.addOnPageChangeListener(this);
-        
-        TextSliderView textSliderView = new TextSliderView(this);
-        
-        for (String name : urls.keySet()) {
-            textSliderView
-                    .image(urls.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle().putString("extra", name);
-            sliderLayout.addSlider(textSliderView);
-        }
         FetchAllData();
         
         categoryList = new ArrayList<>();
@@ -602,6 +578,36 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 off_view.setVisibility(View.GONE);
                             }
                             
+                            if (_opt.getString("b").equals("1")) {
+                                HashMap<String, String> urls = new HashMap<>();
+                                JSONArray _banner = jObj.getJSONArray("banner");
+                                for (int i = 0; i < _banner.length(); i++) {
+                                    JSONObject banner = _banner.getJSONObject(i);
+                                    urls.put(
+                                            banner.getString("title"),
+                                            URLs.image_URL + banner.getString("image")
+                                    );
+                                }
+    
+                                slider.setPresetTransformer(SliderLayout.Transformer.Default);
+                                slider.setDuration(2500);
+                                slider.setCustomAnimation(new DescriptionAnimation());
+                                slider.addOnPageChangeListener(Activity_Main.this);
+                                
+                                TextSliderView textSliderView = new TextSliderView(Activity_Main.this);
+                                
+                                for (String name : urls.keySet()) {
+                                    textSliderView
+                                            .image(urls.get(name))
+                                            .setScaleType(BaseSliderView.ScaleType.Fit)
+                                            .setOnSliderClickListener(Activity_Main.this);
+                                    textSliderView.bundle(new Bundle());
+                                    textSliderView.getBundle().putString("extra", name);
+                                    slider.addSlider(textSliderView);
+                                }
+                            } else {
+                                sliderLayout.setVisibility(View.GONE);
+                            }
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
@@ -703,7 +709,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     
     @Override
     protected void onStop() {
-        sliderLayout.stopAutoCycle();
+        slider.stopAutoCycle();
         super.onStop();
     }
     
