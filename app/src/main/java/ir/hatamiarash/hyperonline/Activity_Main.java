@@ -446,6 +446,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             JSONArray _cat = jObj.getJSONArray("category");
                             for (int i = 0; i < _cat.length(); i++) {
                                 JSONObject category = _cat.getJSONObject(i);
+                                if (_cat.length() == 0) {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                }
                                 categoryList.add(new Category(
                                         category.getString("unique_id"),
                                         category.getString("name"),
@@ -460,6 +464,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             
                             if (_opt.getString("c").equals("1")) {
                                 JSONArray _col = jObj.getJSONArray("collection");
+                                if (_col.length() == 0) {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                }
                                 for (int i = 0; i < _col.length(); i++) {
                                     JSONObject collection = _col.getJSONObject(i);
                                     collectionList.add(new Product(
@@ -484,6 +492,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             
                             if (_opt.getString("m").equals("1")) {
                                 JSONArray _most = jObj.getJSONArray("most");
+                                if (_most.length() == 0) {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                }
                                 for (int i = 0; i < _most.length(); i++) {
                                     JSONObject product = _most.getJSONObject(i);
                                     mostList.add(new Product(
@@ -508,6 +520,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             
                             if (_opt.getString("n").equals("1")) {
                                 JSONArray _new = jObj.getJSONArray("new");
+                                if (_new.length() == 0) {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                }
                                 for (int i = 0; i < _new.length(); i++) {
                                     JSONObject product = _new.getJSONObject(i);
                                     newList.add(new Product(
@@ -532,6 +548,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             
                             if (_opt.getString("n").equals("1")) {
                                 JSONArray _pop = jObj.getJSONArray("popular");
+                                if (_pop.length() == 0) {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                }
                                 for (int i = 0; i < _pop.length(); i++) {
                                     JSONObject product = _pop.getJSONObject(i);
                                     popularList.add(new Product(
@@ -556,6 +576,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             
                             if (_opt.getString("o").equals("1")) {
                                 JSONArray _off = jObj.getJSONArray("popular");
+                                if (_off.length() == 0) {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                }
                                 for (int i = 0; i < _off.length(); i++) {
                                     JSONObject product = _off.getJSONObject(i);
                                     offList.add(new Product(
@@ -588,7 +612,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             URLs.image_URL + banner.getString("image")
                                     );
                                 }
-    
+                                
                                 slider.setPresetTransformer(SliderLayout.Transformer.Default);
                                 slider.setDuration(2500);
                                 slider.setCustomAnimation(new DescriptionAnimation());
