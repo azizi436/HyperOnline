@@ -20,29 +20,10 @@
         android:background="@color/white">
 
         <helper.PersianEditText
-            android:id="@+id/comment_subject"
-            android:layout_width="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/gray"
-            android:gravity="center"
-            android:hint="عنوان پیام"
-            android:inputType="textPersonName"
-            android:maxLines="1"
-            android:padding="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_height="50dp"/>
-
-        <helper.PersianEditText
             android:id="@+id/comment_body"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@+id/buttons"
-            android:layout_below="@+id/comment_subject"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5dp"
             android:layout_marginEnd="10dp"

@@ -192,15 +192,27 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
         
-        PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
-        PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
-        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
+        PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
+        PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
+        PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
         PrimaryDrawerItem item_most_sell = new CustomPrimaryDrawerItem().withIdentifier(4).withName("پرفروش ترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_euro_symbol);
         PrimaryDrawerItem item_new = new CustomPrimaryDrawerItem().withIdentifier(5).withName("جدیدترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_query_builder);
         PrimaryDrawerItem item_pop = new CustomPrimaryDrawerItem().withIdentifier(6).withName("محبوب ترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_favorite);
         PrimaryDrawerItem item_off = new CustomPrimaryDrawerItem().withIdentifier(7).withName("تخفیف خورده ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_lightbulb_outline);
         PrimaryDrawerItem item_event = new CustomPrimaryDrawerItem().withIdentifier(8).withName("مناسبتی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_today);
         PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(9).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(10).withName("سبد خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_track = new CustomPrimaryDrawerItem().withIdentifier(11).withName("پیگیری سفارش").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_social = new CustomPrimaryDrawerItem().withIdentifier(12).withName("شبکه های اجتماعی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_terms = new CustomPrimaryDrawerItem().withIdentifier(13).withName("قوانین و مقررات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_website = new CustomPrimaryDrawerItem().withIdentifier(14).withName("ورود به وب سایت").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_chat = new CustomPrimaryDrawerItem().withIdentifier(15).withName("چت با مدیر فروش").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_share = new CustomPrimaryDrawerItem().withIdentifier(16).withName("ارسال به دوستان").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(17).withName("تماس با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_help = new CustomPrimaryDrawerItem().withIdentifier(18).withName("راهنمای خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_questions = new CustomPrimaryDrawerItem().withIdentifier(19).withName("پرسش های متداول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_about = new CustomPrimaryDrawerItem().withIdentifier(20).withName("درباره ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -211,33 +223,106 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 .addDrawerItems(
                         item_home,
                         item_profile,
-                        item_cart,
+                        item_categories,
+                        item_collections,
                         item_most_sell,
                         item_new,
                         item_pop,
                         item_off,
                         item_event,
-                        item_comment
+                        item_comment,
+                        item_cart,
+                        item_track,
+                        item_social,
+                        item_terms,
+                        item_website,
+                        item_chat,
+                        item_share,
+                        item_contact,
+                        item_help,
+                        item_questions,
+                        item_about
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem != null && drawerItem.getIdentifier() == 1) {
-                            vibrator.vibrate(50);
-                            Intent i = new Intent(getApplicationContext(), Activity_Main.class);
-                            startActivity(i);
-                            finish();
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 2) {
-                            if (Helper.CheckInternet(getApplicationContext())) {
-                                Intent i = new Intent(getApplicationContext(), UserProfile.class);
+                        vibrator.vibrate(50);
+                        if (drawerItem != null) {
+                            long item = drawerItem.getIdentifier();
+                            if (item == 1) {
+                                Intent i = new Intent(getApplicationContext(), Activity_Main.class);
                                 startActivity(i);
-                            } else
+                                finish();
                                 result.closeDrawer();
-                            return true;
+                            }
+                            if (item == 2) {
+                                
+                            }
+                            if (item == 3) {
+                                
+                            }
+                            if (item == 4) {
+                                
+                            }
+                            if (item == 5) {
+                                
+                            }
+                            if (item == 6) {
+                                
+                            }
+                            if (item == 7) {
+                                
+                            }
+                            if (item == 8) {
+                                
+                            }
+                            if (item == 9) {
+                                Intent i = new Intent(getApplicationContext(), Activity_Comment.class);
+                            startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 10) {
+                                
+                            }
+                            if (item == 11) {
+                                
+                            }
+                            if (item == 12) {
+                                
+                            }
+                            if (item == 13) {
+                                
+                            }
+                            if (item == 14) {
+                                
+                            }
+                            if (item == 15) {
+                                
+                            }
+                            if (item == 16) {
+                                
+                            }
+                            if (item == 17) {
+                                
+                            }
+                            if (item == 18) {
+                                
+                            }
+                            if (item == 19) {
+                                
+                            }
+                            if (item == 20) {
+                                
+                            }
+                            if (item == 21) {
+                                if (Helper.CheckInternet(getApplicationContext())) {
+                                    Intent i = new Intent(getApplicationContext(), UserProfile.class);
+                                    startActivity(i);
+                                } else
+                                    result.closeDrawer();
+                            }
                         }
+                        
                         if (drawerItem != null && drawerItem.getIdentifier() == 3) {
                             Intent i = new Intent(getApplicationContext(), Activity_List.class);
                             i.putExtra("cat", "1");
@@ -256,26 +341,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 5) {
                             /*Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 6) {
-                            /*Intent i = new Intent(getApplicationContext(), Comment.class);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 7) {
-                            /*Popup(p_count);
-                            result.closeDrawer();*/
-                            
-                            /*Intent i = new Intent(getApplicationContext(), Pay_Log.class);
-                            i.putExtra("order_code", "11086");
-                            startActivity(i);
-                            result.closeDrawer();*/
-                            
-                            /*Intent i = new Intent(getApplicationContext(), Intro.class);
                             startActivity(i);*/
                             result.closeDrawer();
                             return true;
