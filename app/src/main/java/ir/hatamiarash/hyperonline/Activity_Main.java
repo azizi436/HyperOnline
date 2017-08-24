@@ -305,7 +305,17 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                             }
                             if (item == 16) {
-                                
+                                try {
+                                    Intent i = new Intent(Intent.ACTION_SEND);
+                                    i.setType("text/plain");
+                                    i.putExtra(Intent.EXTRA_SUBJECT, "Hyper Online");
+                                    String sAux = "\nتا حالا با هایپرآنلاین کا کردی ؟\n\n";
+                                    sAux = sAux + "https://cafebazaar.ir/app/ir.hatamiarash.hyperonline/?l=fa \n\n";
+                                    i.putExtra(Intent.EXTRA_TEXT, sAux);
+                                    startActivity(Intent.createChooser(i, "یک گزنه انتخاب کنید"));
+                                } catch (Exception e) {
+                                    //e.toString();
+                                }
                             }
                             if (item == 17) {
                                 
