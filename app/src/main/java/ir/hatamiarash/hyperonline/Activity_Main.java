@@ -95,6 +95,7 @@ import ir.hatamiarash.adapters.ProductAdapter;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
+import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
 
@@ -187,12 +188,22 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
         boolean isFirstTime = settings.getBoolean("my_first_time", true);
         if (isFirstTime) {
-            db_setup.CreateTable();
-            db_item.CreateTable();
-            db_main.CreateTable();
-            /*Intent i = new Intent(getApplicationContext(), SetupWeb.class);
-            startActivity(i);*/
-            //finish();
+            try {
+                db_setup.CreateTable();
+                db_item.CreateTable();
+                db_main.CreateTable();
+                settings.edit().putBoolean("my_first_time", false).apply();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        boolean isConfirm = settings.getBoolean("phone_confirmed", true);
+        if (isConfirm && session.isLoggedIn()) {
+            Intent i = new Intent(getApplicationContext(), Confirm_Phone.class);
+            i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
+            startActivity(i);
+            finish();
         }
         
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
@@ -321,7 +332,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             }
                             if (item == 17) {
                                 Intent intent = new Intent(Intent.ACTION_CALL);
-                                intent.setData(Uri.parse("tel:+989182180519"));
+                                intent.setData(Uri.parse("tel:"+ Values.phoneNumber));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 if (ActivityCompat.checkSelfPermission(Activity_Main.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                                     Helper.GetPermissions(Activity_Main.this, getApplicationContext());

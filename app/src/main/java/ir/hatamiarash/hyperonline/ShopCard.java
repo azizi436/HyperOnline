@@ -6,6 +6,7 @@ package ir.hatamiarash.hyperonline;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -132,9 +133,30 @@ public class ShopCard extends AppCompatActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
+                boolean isConfirm = settings.getBoolean("phone_confirmed", true);
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
+                } else if (!isConfirm) {
+                    new MaterialStyledDialog.Builder(ShopCard.this)
+                            .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
+                            .setDescription(FontHelper.getSpannedString(ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))
+                            .setStyle(Style.HEADER_WITH_TITLE)
+                            .withDarkerOverlay(true)
+                            .withDialogAnimation(true)
+                            .setCancelable(true)
+                            .setPositiveText("باشه")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    Intent intent = new Intent(ShopCard.this, Confirm_Phone.class);
+                                    intent.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            })
+                            .show();
                 } else {
                     vibrator.vibrate(50);
                     if (tPrice + tExtend > 0) {

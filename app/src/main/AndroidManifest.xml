@@ -71,6 +71,9 @@
             android:name=".Activity_Comment"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".Confirm_Phone"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ShopCard"
             android:label="Shop Cards"
             android:screenOrientation="portrait"/>

@@ -15,36 +15,35 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.FontHelper;
 import helper.Helper;
 import helper.IconEditText;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
-import volley.AppController;
 
 public class Login extends Activity {
     private static final String TAG = Login.class.getSimpleName(); // class's tag for log
@@ -134,8 +133,8 @@ public class Login extends Activity {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {                          // Check for error node in json
                             session.setLogin(true);            // set login status true
-                            JSONObject user = jObj.getJSONObject(TAGs.USER);
-            
+                            final JSONObject user = jObj.getJSONObject(TAGs.USER);
+                            
                             db.addUser(
                                     user.getString(TAGs.NAME),
                                     "test@gmail.com",
@@ -146,9 +145,36 @@ public class Login extends Activity {
                                     user.getString(TAGs.STATE),
                                     user.getString(TAGs.CITY)
                             );
-                            String msg = "سلام " + user.getString(TAGs.NAME);
-                            Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
-                            finish();
+                            if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
+                                new MaterialStyledDialog.Builder(Login.this)
+                                        .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
+                                        .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید."))
+                                        .setStyle(Style.HEADER_WITH_TITLE)
+                                        .withDarkerOverlay(true)
+                                        .withDialogAnimation(true)
+                                        .setCancelable(true)
+                                        .setPositiveText("باشه")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                try {
+                                                    Intent intent = new Intent(Login.this, Confirm_Phone.class);
+                                                    intent.putExtra(TAGs.PHONE, user.getString(TAGs.PHONE));
+                                                    startActivity(intent);
+                                                    finish();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                String msg = "سلام " + user.getString(TAGs.NAME);
+                                Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
+                                Intent intent = new Intent(Login.this, Activity_Main.class);
+                                startActivity(intent);
+                                finish();
+                            }
                         } else {
                             // Error in login. Get the error message
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
