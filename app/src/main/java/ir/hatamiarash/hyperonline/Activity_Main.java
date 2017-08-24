@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -297,7 +298,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                             }
                             if (item == 14) {
-                                
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hyper-online.ir"));
+                                startActivity(i);
                             }
                             if (item == 15) {
                                 
