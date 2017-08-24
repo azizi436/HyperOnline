@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,22 +21,28 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.util.HashMap;
 
@@ -59,8 +67,6 @@ public class EditProfile extends AppCompatActivity {
     IconEditText txtAddress;
     @InjectView(R.id.phone)
     IconEditText txtPhone;
-    @InjectView(R.id.email)
-    IconEditText txtEmail;
     @InjectView(R.id.btnConfirm)
     Button btnConfirm;
     @InjectView(R.id.btnChangePassword)
@@ -95,7 +101,7 @@ public class EditProfile extends AppCompatActivity {
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 
         if (Helper.CheckInternet(getApplicationContext()))
-            GetUser(db_user.getUserDetails().get(TAGs.PHONE));             // get person detail from server
+            GetUser(db_user.getUserDetails().get(TAGs.UID));
         else
             finish();
 
@@ -105,26 +111,22 @@ public class EditProfile extends AppCompatActivity {
                 String name = txtName.getText().toString();
                 String address = txtAddress.getText().toString();
                 String phone = txtPhone.getText().toString();
-                String email = txtEmail.getText().toString();
                 if (Helper.CheckInternet(getApplicationContext()))
                     if (!name.isEmpty() && !address.isEmpty() && !phone.isEmpty())
-                        if (Helper.isValidEmail(email))
                             if (Helper.isValidPhone(phone))
                                 if (!phone.equals(Backup_Phone)) {
                                     if (filePath == null)
-                                        MakeQuestion("تغییر شماره تلفن", "اطلاعات ورود شما نیز تغییر خواهد کرد", name, address, phone, email);
+                                        MakeQuestion("تغییر شماره تلفن", "اطلاعات ورود شما نیز تغییر خواهد کرد", name, address, phone, "null");
                                     else
-                                        MakeQuestionPicture("تغییر شماره تلفن", "اطلاعات ورود شما نیز تغییر خواهد کرد", name, address, phone, email, filePath);
+                                        MakeQuestionPicture("تغییر شماره تلفن", "اطلاعات ورود شما نیز تغییر خواهد کرد", name, address, phone, "null", filePath);
                                 } else {
                                     if (filePath == null)
-                                        UpdateUser(name, address, phone, email);
+                                        UpdateUser(name, address, phone, "null");
                                     else
-                                        UpdateUserWithPicture(name, address, phone, email, filePath);
+                                        UpdateUserWithPicture(name, address, phone, "null", filePath);
                                 }
                             else
                                 Helper.MakeToast(getApplicationContext(), "شماره موبایل را بررسی نمایید", TAGs.WARNING);
-                        else
-                            Helper.MakeToast(getApplicationContext(), "ایمیل را بررسی نمایید", TAGs.ERROR);
                     else
                         Helper.MakeToast(getApplicationContext(), "تمامی کادر ها را پر نمایید", TAGs.WARNING);
             }
@@ -139,86 +141,99 @@ public class EditProfile extends AppCompatActivity {
             }
         });
     }
-
-    private void GetUser(final String phone) {             // check login request from server
-        String string_req = "req_get";                 // Tag used to cancel the request
+    
+    private void GetUser(final String unique_id) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.base_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Fetch Response: " + response); // log server response
-                hideDialog();                              // close dialog
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean(TAGs.ERROR);
-                    if (!error) {                          // Check for error node in json
-                        JSONObject user = jObj.getJSONObject(TAGs.USER);
-                        txtName.setText(getApplicationContext(), user.getString(TAGs.NAME));
-                        txtAddress.setText(getApplicationContext(), user.getString(TAGs.ADDRESS));
-                        txtEmail.setText(getApplicationContext(), user.getString(TAGs.EMAIL));
-                        Backup_Phone = user.getString(TAGs.PHONE);
-                        txtPhone.setText(getApplicationContext(), Backup_Phone);
-                        uid = user.getString(TAGs.UID);
-                        if (!user.getString(TAGs.IMAGE).equals(TAGs.NULL)) {
-                            progressBar.setVisibility(View.VISIBLE);
-                            Picasso
-                                    .with(getApplicationContext())
-                                    .load(URLs.image_URL + user.getString(TAGs.IMAGE))
-                                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                                    .into(image, new com.squareup.picasso.Callback() {
-                                        @Override
-                                        public void onSuccess() {
-                                            progressBar.setVisibility(View.GONE);
-                                            image.setVisibility(View.VISIBLE);
-                                            add_photo.setVisibility(View.VISIBLE);
-                                        }
-
-                                        @Override
-                                        public void onError() {
-                                            progressBar.setVisibility(View.GONE);
-                                            image.setVisibility(View.VISIBLE);
-                                            add_photo.setVisibility(View.VISIBLE);
-                                        }
-                                    });
+        
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "users/" + unique_id;
+            JSONObject params = new JSONObject();
+            params.put(TAGs.UNIQUE_ID, unique_id);
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_VOLLEY R", response);
+                    hideDialog();
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {                          // Check for error node in json
+                            JSONObject user = jObj.getJSONObject(TAGs.USER);
+                            txtName.setText(getApplicationContext(), user.getString(TAGs.NAME));
+                            txtAddress.setText(getApplicationContext(), user.getString(TAGs.ADDRESS));
+                            Backup_Phone = user.getString(TAGs.PHONE);
+                            txtPhone.setText(getApplicationContext(), Backup_Phone);
+                            uid = unique_id;
+                            if (!user.getString(TAGs.IMAGE).equals(TAGs.NULL)) {
+                                progressBar.setVisibility(View.VISIBLE);
+                                Picasso
+                                        .with(getApplicationContext())
+                                        .load(URLs.image_URL + user.getString(TAGs.IMAGE))
+                                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                                        .into(image, new com.squareup.picasso.Callback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                progressBar.setVisibility(View.GONE);
+                                                image.setVisibility(View.VISIBLE);
+                                                add_photo.setVisibility(View.VISIBLE);
+                                            }
+                        
+                                            @Override
+                                            public void onError() {
+                                                progressBar.setVisibility(View.GONE);
+                                                image.setVisibility(View.VISIBLE);
+                                                add_photo.setVisibility(View.VISIBLE);
+                                            }
+                                        });
+                            } else {
+                                add_photo.setVisibility(View.VISIBLE);
+                                image.setVisibility(View.VISIBLE);
+                            }
                         } else {
-                            add_photo.setVisibility(View.VISIBLE);
-                            image.setVisibility(View.VISIBLE);
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR); // show error message
+                            finish();
                         }
-                    } else {
-                        String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                        Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR); // show error message
+                    } catch (JSONException e) {
+                        hideDialog();
+                        e.printStackTrace();
                         finish();
                     }
-                } catch (JSONException e) {
-                    hideDialog();
-                    e.printStackTrace();
-                    finish();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Fetch Error: " + error.getMessage());
-                if (error.getMessage() != null) {
-                    Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
-                } else
-                    Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-                finish();
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() { // Posting parameters to login url
-                java.util.Map<String, String> params = new HashMap<>();
-                params.put(TAGs.TAG, "user_get");
-                params.put(TAGs.PHONE, phone);
-                return params;
-            }
-        };
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_VOLLEY E", error.toString());
+                    hideDialog();
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void UpdateUser(final String name, final String address, final String phone, final String email) {

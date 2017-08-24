@@ -151,6 +151,7 @@ public class UserProfile extends Activity {
         db_user.deleteUsers();
         db_item.deleteItems();
         hideDialog();
+        Helper.MakeToast(getApplicationContext(), "با موفقیت خارج شدید", TAGs.SUCCESS);
         finish();
     }
     
