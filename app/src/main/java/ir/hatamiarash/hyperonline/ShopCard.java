@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -27,11 +28,15 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 
@@ -48,6 +53,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,8 +75,6 @@ import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Product;
 import volley.AppController;
-
-import static helper.Helper.ConvertProductType;
 
 public class ShopCard extends AppCompatActivity {
     private static final String TAG = ShopCard.class.getSimpleName(); // class tag for log
@@ -108,7 +112,9 @@ public class ShopCard extends AppCompatActivity {
     private int send_time;
     private String ORDER_CODE = "-1";
     private String ORDER_AMOUNT = "1000";
+    private String ORDER_HOUR;
     private String STUFFS = "";
+    private String STUFFS_ID = "";
     private String DESCRIPTION = "";
     
     @Override
@@ -167,6 +173,7 @@ public class ShopCard extends AppCompatActivity {
                             extend = " صبح";
                         if (send_time == 16 || send_time == 18)
                             extend = " عصر";
+                        ORDER_HOUR = time;
                         String message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View customView = inflater.inflate(R.layout.custom_dialog, null);
@@ -238,6 +245,7 @@ public class ShopCard extends AppCompatActivity {
             Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info));
             
             STUFFS += name + "-";
+            STUFFS += uid + "-";
         }
         
         total_off.setText(String.valueOf(tOff) + " تومان");
@@ -366,7 +374,6 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void onPaySuccess() {
-        //SyncServer();
         new MaterialStyledDialog.Builder(ShopCard.this)
                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
                 .setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت موفقیت آمیز بود. با تشکر از انتخاب شما."))
@@ -379,11 +386,8 @@ public class ShopCard extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        SyncServer();
                         //db_item.deleteItems();
-                        /*Intent i = new Intent(getApplicationContext(), Pay_Log.class);
-                        i.putExtra("order_code", ORDER_CODE);
-                        startActivity(i);*/
-                        finish();
                     }
                 })
                 .show();
@@ -404,17 +408,14 @@ public class ShopCard extends AppCompatActivity {
     private void SyncServer() {
         Log.e("Sync", "Start");
         try {
-            HashMap<String, String> user = db_user.getUserDetails();
-            String file_name = user.get(TAGs.UID); // use unique_id of user for files to prevent duplicate at same time
+            String file_name = db_user.getUserDetails().get(TAGs.UNIQUE_ID); // use unique_id of user for files to prevent duplicate at same time
             // numbers must be same of database fields !!!!! all numbers Item.size() / n   +++++   i * n + 1
             for (int i = 0; i < (Item.size() / 11); i++) {
                 String name = Item.get(i * 11 + 2);
                 String price = Item.get(i * 11 + 3);
-                String count = Item.get(i * 11 + 9);
-                String type = Item.get(i * 11 + 10);
+                String count = Item.get(i * 11 + 6);
                 
                 String data = name + "-" +
-                        ConvertProductType(Integer.valueOf(type)) + "-" +
                         count + "-" +
                         price;
                 
@@ -445,56 +446,76 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void SetOrder() {
-        String string_req = "req_fetch";
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.base_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Set Response: " + response);
-                hideDialog();
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean(TAGs.ERROR);
-                    if (!error) {
-                        
-                    } else {
-                        String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                        Helper.MakeToast(ShopCard.this, errorMsg, TAGs.ERROR);
+        
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "login";
+            JSONObject params = new JSONObject();
+            params.put("user", db_user.getUserDetails().get(TAGs.UNIQUE_ID));
+            params.put("code", ORDER_CODE);
+            params.put("seller_id", "S1");
+            params.put("stuffs", STUFFS);
+            params.put("stuffs_id", STUFFS_ID);
+            params.put("price", ORDER_AMOUNT);
+            params.put("hour", ORDER_HOUR);
+            params.put("method", "online");
+            params.put("description", DESCRIPTION);
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_VOLLEY R", response);
+                    hideDialog();
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            Intent i = new Intent(getApplicationContext(), Pay_Log.class);
+                            i.putExtra("order_code", ORDER_CODE);
+                            startActivity(i);
+                        } else {
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(ShopCard.this, errorMsg, TAGs.ERROR);
+                        }
+                    } catch (JSONException e) {
+                        hideDialog();
+                        e.printStackTrace();
                         finish();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_VOLLEY E", error.toString());
                     hideDialog();
                     finish();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Set Error: " + error.getMessage());
-                if (error.getMessage() != null)
-                    Helper.MakeToast(ShopCard.this, error.getMessage(), TAGs.ERROR);
-                else
-                    Helper.MakeToast(ShopCard.this, "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-                finish();
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() {
-                java.util.Map<String, String> params = new HashMap<>();
-                HashMap<String, String> user = db_user.getUserDetails();
-                params.put(TAGs.TAG, "payment_done");
-                params.put("order_code", ORDER_CODE);
-                params.put("order_amount", ORDER_AMOUNT);
-                params.put("user_id", user.get(TAGs.UID));
-                params.put("stuffs", STUFFS.substring(0, STUFFS.length() - 1));
-                params.put("description", DESCRIPTION);
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     
     private void showDialog() {
