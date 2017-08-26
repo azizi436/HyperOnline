@@ -7,6 +7,7 @@ package ir.hatamiarash.hyperonline;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -141,10 +142,11 @@ public class ShopCard extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
                 boolean isConfirm = settings.getBoolean("phone_confirmed", true);
+                isConfirm = false;
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
-                } else if (!isConfirm) {
+                } else if (isConfirm == true) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
                             .setDescription(FontHelper.getSpannedString(ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))
@@ -245,7 +247,7 @@ public class ShopCard extends AppCompatActivity {
             Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info));
             
             STUFFS += name + "-";
-            STUFFS += uid + "-";
+            STUFFS_ID += uid + "-";
         }
         
         total_off.setText(String.valueOf(tOff) + " تومان");
@@ -386,7 +388,7 @@ public class ShopCard extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SyncServer();
+                        new Sync().execute();
                         //db_item.deleteItems();
                     }
                 })
@@ -405,43 +407,58 @@ public class ShopCard extends AppCompatActivity {
                 .show();
     }
     
-    private void SyncServer() {
-        Log.e("Sync", "Start");
-        try {
-            String file_name = db_user.getUserDetails().get(TAGs.UNIQUE_ID); // use unique_id of user for files to prevent duplicate at same time
-            // numbers must be same of database fields !!!!! all numbers Item.size() / n   +++++   i * n + 1
-            for (int i = 0; i < (Item.size() / 11); i++) {
-                String name = Item.get(i * 11 + 2);
-                String price = Item.get(i * 11 + 3);
-                String count = Item.get(i * 11 + 6);
+    private class Sync extends AsyncTask<Void, Boolean, Boolean> {
+        protected void onPreExecute() {
+            Log.e("Sync", "Start");
+            progressDialog.setTitleText("لطفا منتظر بمانید");
+            showDialog();
+        }
+        
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                String file_name = ORDER_CODE; // use unique_id of user for files to prevent duplicate at same time
+                // numbers must be same of database fields !!!!! all numbers Item.size() / n   +++++   i * n + 1
+                for (int i = 0; i < (Item.size() / 7); i++) {
+                    String name = Item.get(i * 7 + 2);
+                    String price = Item.get(i * 7 + 3);
+                    String count = Item.get(i * 7 + 6);
+                    
+                    String data = name + "-" +
+                            count + "-" +
+                            price;
+                    
+                    Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(getExternalFilesDir(null), file_name + ".txt"), true), "UTF-8"));
+                    out.write(data);
+                    out.write('\n');
+                    out.close();
+                }
                 
-                String data = name + "-" +
-                        count + "-" +
-                        price;
-                
-                Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(getExternalFilesDir(null), file_name + ".txt"), true), "UTF-8"));
-                out.write(data);
-                out.write('\n');
-                out.close();
+                File file = new File(getExternalFilesDir(null), file_name + ".txt");
+                FTPClient ftpClient = new FTPClient();
+                ftpClient.connect("192.168.1.104");
+                ftpClient.login("hatamiarashftp", "arashp");
+                ftpClient.changeWorkingDirectory("ftp/orders/");
+                ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
+                BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
+                ftpClient.enterLocalPassiveMode();
+                ftpClient.storeFile(file_name + ".txt", buffIn);
+                buffIn.close();
+                ftpClient.logout();
+                ftpClient.disconnect();
+                file.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            
-            File file = new File(getExternalFilesDir(null), "log.txt");
-            FTPClient ftpClient = new FTPClient();
-            ftpClient.connect("192.168.1.104");
-            ftpClient.login("hatamiarashftp", "arashp");
-            ftpClient.changeWorkingDirectory("ftp/orders/");
-            ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
-            BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.storeFile(file_name + ".txt", buffIn);
-            buffIn.close();
-            ftpClient.logout();
-            ftpClient.disconnect();
-            file.delete();
-            Log.e("Sync", "Done");
-            SetOrder();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return true;
+        }
+        
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                hideDialog();
+                Log.e("Sync", "Done");
+                SetOrder();
+            }
         }
     }
     
@@ -451,11 +468,13 @@ public class ShopCard extends AppCompatActivity {
         
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URLs.base_URL + "login";
+            String URL = URLs.base_URL + "orders";
             JSONObject params = new JSONObject();
-            params.put("user", db_user.getUserDetails().get(TAGs.UNIQUE_ID));
+            String uid = db_user.getUserDetails().get(TAGs.UID);
+            Log.w("user", uid);
+            params.put("user", uid);
             params.put("code", ORDER_CODE);
-            params.put("seller_id", "S1");
+            params.put("seller", "S1");
             params.put("stuffs", STUFFS);
             params.put("stuffs_id", STUFFS_ID);
             params.put("price", ORDER_AMOUNT);
@@ -473,10 +492,12 @@ public class ShopCard extends AppCompatActivity {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            Intent i = new Intent(getApplicationContext(), Pay_Log.class);
+                            /*Intent i = new Intent(getApplicationContext(), Pay_Log.class);
                             i.putExtra("order_code", ORDER_CODE);
-                            startActivity(i);
+                            startActivity(i);*/
+                            Helper.MakeToast(getApplicationContext(), "OKOKOKOKOK", TAGs.SUCCESS);
                         } else {
+                            Log.e("Error", jObj.getString(TAGs.ERROR_MSG));
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(ShopCard.this, errorMsg, TAGs.ERROR);
                         }

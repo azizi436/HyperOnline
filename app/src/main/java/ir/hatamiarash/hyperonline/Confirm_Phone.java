@@ -358,7 +358,7 @@ public class Confirm_Phone extends AppCompatActivity {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
                             SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
-                            settings.edit().putBoolean("phone_confirmed", false).apply();
+                            settings.edit().putBoolean("phone_confirmed", false).commit();
                             Helper.MakeToast(getApplicationContext(), "حساب شما فعال شد :)", TAGs.SUCCESS);
                             Intent i = new Intent(Confirm_Phone.this, Activity_Main.class);
                             startActivity(i);
