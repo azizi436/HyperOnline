@@ -159,7 +159,7 @@ public class ShopCard extends AppCompatActivity {
                             .show();
                 } else {
                     vibrator.vibrate(50);
-                    if (tPrice + tExtend > 0) {
+                    if (tPrice > 0) {
                         String time = String.valueOf(times(getTime(1), getTime(2)));
                         String time2 = String.valueOf(times(getTime(1), getTime(2)) + 1);
                         String extend = "";
@@ -185,8 +185,8 @@ public class ShopCard extends AppCompatActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         DESCRIPTION = edit_text.getText().toString();
-                                        Pay(TAGs.API_KEY, String.valueOf(1000));
-                                        //onPaySuccess();
+                                        //Pay(TAGs.API_KEY, String.valueOf(1000));
+                                        onPaySuccess();
                                     }
                                 })
                                 .show();
@@ -379,7 +379,7 @@ public class ShopCard extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        db_item.deleteItems();
+                        //db_item.deleteItems();
                         /*Intent i = new Intent(getApplicationContext(), Pay_Log.class);
                         i.putExtra("order_code", ORDER_CODE);
                         startActivity(i);*/
@@ -424,12 +424,12 @@ public class ShopCard extends AppCompatActivity {
                 out.close();
             }
             
-            File file = new File(getExternalFilesDir(null), file_name + ".txt");
+            File file = new File(getExternalFilesDir(null), "log.txt");
             FTPClient ftpClient = new FTPClient();
-            ftpClient.connect("hyper-online.ir");
-            ftpClient.login("ho_ftp", "arash_ftp");
-            //ftpClient.changeWorkingDirectory("/include/");
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftpClient.connect("192.168.1.104");
+            ftpClient.login("hatamiarashftp", "arashp");
+            ftpClient.changeWorkingDirectory("ftp/orders/");
+            ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
             BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
             ftpClient.enterLocalPassiveMode();
             ftpClient.storeFile(file_name + ".txt", buffIn);

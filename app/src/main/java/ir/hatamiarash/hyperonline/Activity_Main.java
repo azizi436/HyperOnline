@@ -332,7 +332,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             }
                             if (item == 17) {
                                 Intent intent = new Intent(Intent.ACTION_CALL);
-                                intent.setData(Uri.parse("tel:"+ Values.phoneNumber));
+                                intent.setData(Uri.parse("tel:" + Values.phoneNumber));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 if (ActivityCompat.checkSelfPermission(Activity_Main.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                                     Helper.GetPermissions(Activity_Main.this, getApplicationContext());
@@ -395,6 +395,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 .build();
         
         Helper.GetPermissions(this, getApplicationContext());
+        
+        Logger log = new Logger();
+        log.execute();
         
         FetchAllData();
         
@@ -853,11 +856,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 HashMap<String, String> user = db_user.getUserDetails();
                 String file_name = user.get(TAGs.PHONE);
                 FTPClient ftpClient = new FTPClient();
-                ftpClient.connect("hyper-online.ir");
-                //ftpClient.connect(InetAddress.getByName("ftp.zimia.ir"));
-                ftpClient.login("ho_ftp", "arash_ftp");
-                //ftpClient.changeWorkingDirectory("/");
-                //ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                ftpClient.connect("192.168.1.104");
+                ftpClient.login("hatamiarashftp", "arashp");
+                ftpClient.changeWorkingDirectory("ftp/logs/");
                 ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
                 BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
                 ftpClient.enterLocalPassiveMode();
