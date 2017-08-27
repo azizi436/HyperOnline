@@ -396,8 +396,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         
         Helper.GetPermissions(this, getApplicationContext());
         
-        Logger log = new Logger();
-        log.execute();
+        /*Logger log = new Logger();
+        log.execute();*/
         
         FetchAllData();
         
@@ -856,12 +856,16 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 HashMap<String, String> user = db_user.getUserDetails();
                 String file_name = user.get(TAGs.PHONE);
                 FTPClient ftpClient = new FTPClient();
+                Log.e("LS", "Connecting");
                 ftpClient.connect("192.168.1.104");
+                Log.e("LS", "Login");
                 ftpClient.login("hatamiarashftp", "arashp");
+                Log.e("LS", "Change Directory");
                 ftpClient.changeWorkingDirectory("ftp/logs/");
                 ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
                 BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
                 ftpClient.enterLocalPassiveMode();
+                Log.e("LS", "Uploading");
                 ftpClient.storeFile(file_name + ".txt", buffIn);
                 buffIn.close();
                 ftpClient.logout();

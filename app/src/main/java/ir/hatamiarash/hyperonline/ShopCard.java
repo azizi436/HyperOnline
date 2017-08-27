@@ -388,8 +388,7 @@ public class ShopCard extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new Sync().execute();
-                        //db_item.deleteItems();
+                        SetOrder();
                     }
                 })
                 .show();
@@ -405,61 +404,6 @@ public class ShopCard extends AppCompatActivity {
                 .setCancelable(true)
                 .setPositiveText("باشه")
                 .show();
-    }
-    
-    private class Sync extends AsyncTask<Void, Boolean, Boolean> {
-        protected void onPreExecute() {
-            Log.e("Sync", "Start");
-            progressDialog.setTitleText("لطفا منتظر بمانید");
-            showDialog();
-        }
-        
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                String file_name = ORDER_CODE; // use unique_id of user for files to prevent duplicate at same time
-                // numbers must be same of database fields !!!!! all numbers Item.size() / n   +++++   i * n + 1
-                for (int i = 0; i < (Item.size() / 7); i++) {
-                    String name = Item.get(i * 7 + 2);
-                    String price = Item.get(i * 7 + 3);
-                    String count = Item.get(i * 7 + 6);
-                    
-                    String data = name + "-" +
-                            count + "-" +
-                            price;
-                    
-                    Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(getExternalFilesDir(null), file_name + ".txt"), true), "UTF-8"));
-                    out.write(data);
-                    out.write('\n');
-                    out.close();
-                }
-                
-                File file = new File(getExternalFilesDir(null), file_name + ".txt");
-                FTPClient ftpClient = new FTPClient();
-                ftpClient.connect("192.168.1.104");
-                ftpClient.login("hatamiarashftp", "arashp");
-                ftpClient.changeWorkingDirectory("ftp/orders/");
-                ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
-                BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
-                ftpClient.enterLocalPassiveMode();
-                ftpClient.storeFile(file_name + ".txt", buffIn);
-                buffIn.close();
-                ftpClient.logout();
-                ftpClient.disconnect();
-                file.delete();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return true;
-        }
-        
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                hideDialog();
-                Log.e("Sync", "Done");
-                SetOrder();
-            }
-        }
     }
     
     private void SetOrder() {
@@ -492,10 +436,11 @@ public class ShopCard extends AppCompatActivity {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            /*Intent i = new Intent(getApplicationContext(), Pay_Log.class);
+                            db_item.deleteItems();
+                            Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
                             i.putExtra("order_code", ORDER_CODE);
-                            startActivity(i);*/
-                            Helper.MakeToast(getApplicationContext(), "OKOKOKOKOK", TAGs.SUCCESS);
+                            startActivity(i);
+                            finish();
                         } else {
                             Log.e("Error", jObj.getString(TAGs.ERROR_MSG));
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);

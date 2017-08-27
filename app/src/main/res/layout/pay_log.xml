@@ -14,6 +14,7 @@
         android:id="@+id/pay_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -22,19 +23,19 @@
         android:gravity="center"
         android:text="Message"
         android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="28sp"
-        app:font="iran_sans"
-        android:layout_marginBottom="20dp"/>
+        app:font="iran_sans"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/pay_log_download"
+        android:layout_below="@+id/pay_msg"
         android:layout_centerInParent="true"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        android:layout_above="@+id/pay_log_download"
-        android:layout_below="@+id/pay_msg"/>
+        app:lottie_loop="true"/>
 
     <helper.PersianButton
         android:id="@+id/pay_log_download"
@@ -43,8 +44,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:background="@null"
         android:text="دانلود فاکتور"
-        android:textSize="24sp"
-        android:layout_marginTop="10dp"/>
+        android:textColor="@color/white"
+        android:textSize="24sp"/>
 </RelativeLayout>
