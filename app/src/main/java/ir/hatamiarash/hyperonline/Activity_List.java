@@ -178,8 +178,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                             return true;
                         }
                         if (drawerItem != null && drawerItem.getIdentifier() == 6) {
-                            /*Intent i = new Intent(getApplicationContext(), Comment.class);
-                            startActivity(i);*/
+                            
                             result.closeDrawer();
                             return true;
                         }
