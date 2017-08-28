@@ -8,12 +8,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="1dp"
-    android:paddingEnd="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingStart="5dp"
-    android:paddingTop="1dp">
+    android:paddingBottom="2dp"
+    android:paddingEnd="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingStart="8dp"
+    android:paddingTop="2dp">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -21,12 +21,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="2dp"
+        card_view:cardElevation="3dp"
         card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
 
             <helper.PersianTextView
                 android:id="@+id/date"
@@ -36,6 +42,7 @@
                 android:gravity="center"
                 android:text="تاریخ"
                 android:textAlignment="center"
+                android:textDirection="anyRtl"
                 app:font="iran_sans"/>
 
             <View
@@ -117,6 +124,29 @@
                 android:layout_toLeftOf="@+id/statusTitle"
                 android:layout_toStartOf="@+id/statusTitle"
                 android:text="وضعیت"
+                app:font="shabnam"/>
+
+            <helper.PersianTextView
+                android:id="@+id/hourTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/status"
+                android:layout_margin="10dp"
+                android:text="ساعت ارسال :"
+                android:textStyle="bold"
+                app:font="iran_sans"/>
+
+            <helper.PersianTextView
+                android:id="@+id/hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/status"
+                android:layout_margin="10dp"
+                android:layout_toLeftOf="@+id/hourTitle"
+                android:layout_toStartOf="@+id/hourTitle"
+                android:text="ساعت"
                 app:font="shabnam"/>
 
         </RelativeLayout>

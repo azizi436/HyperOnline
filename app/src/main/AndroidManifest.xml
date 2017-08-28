@@ -74,6 +74,9 @@
             android:name=".Activity_Factor"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".Activity_UserOrders"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".Confirm_Phone"
             android:screenOrientation="portrait"/>
         <activity

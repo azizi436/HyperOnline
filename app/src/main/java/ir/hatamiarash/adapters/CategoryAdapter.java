@@ -55,6 +55,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
     
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+    
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+    
+    @Override
     public int getItemCount() {
         return categoryList.size();
     }

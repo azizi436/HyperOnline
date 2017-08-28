@@ -302,7 +302,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                             }
                             if (item == 11) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_UserOrders.class);
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 12) {
                                 
