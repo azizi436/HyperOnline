@@ -94,7 +94,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list);
+        setContentView(R.layout.list_complex);
         ButterKnife.inject(this);
         
         list_category = Integer.valueOf(getIntent().getStringExtra("cat"));

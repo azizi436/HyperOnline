@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -39,24 +40,25 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandler;
-import ir.hatamiarash.adapters.OrderAdapter;
+import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
-import models.Order;
+import models.Product;
 
-public class Activity_UserOrders extends AppCompatActivity implements CardBadge {
+public class Activity_ListDetails extends AppCompatActivity implements CardBadge {
     private Vibrator vibrator;
     static Typeface persianTypeface;
     public Drawer result = null;
     SweetAlertDialog progressDialog;
     public static SQLiteHandler db_user;
     
-    private List<Order> orderList;
-    private OrderAdapter orderAdapter;
+    private List<Product> productList;
+    private ProductAdapter_All productAdapter;
     
     @InjectView(R.id.toolbar)
     public Toolbar toolbar;
@@ -75,29 +77,39 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+        progressDialog.setTitleText("لطفا منتظر بمانید");
         
-        toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "لیست سفارشات"));
-        setSupportActionBar(toolbar);
+        Intent i = getIntent();
+        final int type = Integer.valueOf(i.getStringExtra("type"));
+        setToolbarTitle(type);
         
-        orderList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(this, orderList);
-        orderAdapter.setHasStableIds(true);
+        productList = new ArrayList<>();
+        productAdapter = new ProductAdapter_All(this, productList);
+        productAdapter.setHasStableIds(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(linearLayoutManager);
+        EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                showDialog();
+                loadProducts(type, page);
+            }
+        };
+        list.addOnScrollListener(scrollListener);
         list.setItemAnimator(new DefaultItemAnimator());
-        list.setAdapter(orderAdapter);
+        list.setAdapter(productAdapter);
         
-        loadOrders();
+        loadProducts(type, 1);
     }
     
-    private void loadOrders() {
+    private void loadProducts(int type, int page) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URLs.base_URL + "user_orders";
+            String URL = URLs.base_URL + "products_detail";
             JSONObject params = new JSONObject();
-            params.put("unique_id", db_user.getUserDetails().get(TAGs.UID));
+            params.put("type", String.valueOf(type));
+            params.put("index", String.valueOf(page));
             final String mRequestBody = params.toString();
-            progressDialog.setTitleText("لطفا منتظر بمانید");
             showDialog();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -109,30 +121,29 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            JSONArray orders = jObj.getJSONArray("orders");
+                            JSONArray products = jObj.getJSONArray("products");
                             
-                            for (int i = 0; i < orders.length(); i++) {
-                                JSONObject order = orders.getJSONObject(i);
+                            for (int i = 0; i < products.length(); i++) {
+                                JSONObject product = products.getJSONObject(i);
                                 
-                                orderList.add(new Order(
-                                                order.getString("unique_id"),
-                                                order.getString("code"),
-                                                order.getString("seller_name"),
-                                                order.getString("stuffs"),
-                                                order.getString("price"),
-                                                order.getInt("hour"),
-                                                order.getString("method"),
-                                                order.getString("status"),
-                                                order.getString("description"),
-                                                order.getString("create_date")
+                                productList.add(new Product(
+                                                product.getString("unique_id"),
+                                                product.getString("name"),
+                                                product.getString("image"),
+                                                product.getString("price"),
+                                                product.getInt("off"),
+                                                product.getInt("count"),
+                                                product.getDouble("point"),
+                                                product.getInt("point_count"),
+                                                product.getString("description")
                                         )
                                 );
                             }
                             
-                            orderAdapter.notifyDataSetChanged();
+                            productAdapter.notifyDataSetChanged();
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                            Helper.MakeToast(Activity_UserOrders.this, errorMsg, TAGs.ERROR);
+                            Helper.MakeToast(Activity_ListDetails.this, errorMsg, TAGs.ERROR);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -168,6 +179,30 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
             hideDialog();
             e.printStackTrace();
         }
+    }
+    
+    private void setToolbarTitle(int type) {
+        switch (type) {
+            case 1:
+                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "سبد های غذایی"));
+                break;
+            case 2:
+                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرفروش ترین ها"));
+                break;
+            case 3:
+                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "جدیدترین ها"));
+                break;
+            case 4:
+                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "محبوب ترین ها"));
+                break;
+            case 5:
+                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "تخفیف خورده ها"));
+                break;
+            case 6:
+                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "مناسبتی ها"));
+                break;
+        }
+        setSupportActionBar(toolbar);
     }
     
     @Override

@@ -276,22 +276,40 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                             }
                             if (item == 3) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "1");
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 4) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "2");
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 5) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "3");
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 6) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "4");
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 7) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "5");
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 8) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "6");
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 9) {
                                 Intent i = new Intent(getApplicationContext(), Activity_Comment.class);
@@ -364,29 +382,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 } else
                                     result.closeDrawer();
                             }
-                        }
-                        
-                        if (drawerItem != null && drawerItem.getIdentifier() == 3) {
-                            Intent i = new Intent(getApplicationContext(), Activity_List.class);
-                            i.putExtra("cat", "1");
-                            i.putExtra("title", "محصولات");
-                            i.putExtra("cat_id", "n");
-                            startActivity(i);
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 4) {
-                            Intent i = new Intent(getApplicationContext(), Activity_List.class);
-                            i.putExtra("cat", "2");
-                            startActivity(i);
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 5) {
-                            /*Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
                         }
                         return false;
                     }
