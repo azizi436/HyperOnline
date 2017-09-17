@@ -80,6 +80,9 @@
             android:name=".Activity_ListDetails"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".Activity_Cat"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".Confirm_Phone"
             android:screenOrientation="portrait"/>
         <activity

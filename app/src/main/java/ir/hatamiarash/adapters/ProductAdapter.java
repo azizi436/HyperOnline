@@ -81,7 +81,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         if (db_item.isExistsID(product.unique_id) && db_item.isExists(product.name)) {
             holder.add_layout.setVisibility(View.INVISIBLE);
             holder.price.setVisibility(View.VISIBLE);
-            holder.price.setText("موجود است");
+            holder.price.setText("در سبد موجود است");
             holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
         

@@ -44,21 +44,21 @@ import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandler;
-import ir.hatamiarash.adapters.ProductAdapter_All;
+import ir.hatamiarash.adapters.CategoryAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
-import models.Product;
+import models.Category;
 
-public class Activity_ListDetails extends AppCompatActivity implements CardBadge {
+public class Activity_Cat extends AppCompatActivity implements CardBadge {
     private Vibrator vibrator;
     static Typeface persianTypeface;
     public Drawer result = null;
     SweetAlertDialog progressDialog;
     public static SQLiteHandler db_user;
     
-    private List<Product> productList;
-    private ProductAdapter_All productAdapter;
+    private List<Category> categoryList;
+    private CategoryAdapter_All categoryAdapter;
     
     @InjectView(R.id.toolbar)
     public Toolbar toolbar;
@@ -79,35 +79,32 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         progressDialog.setTitleText("لطفا منتظر بمانید");
         
-        Intent i = getIntent();
-        final int type = Integer.valueOf(i.getStringExtra("type"));
-        setToolbarTitle(type);
+        toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "دسته بندی ها"));
         
-        productList = new ArrayList<>();
-        productAdapter = new ProductAdapter_All(this, productList);
-        productAdapter.setHasStableIds(true);
+        categoryList = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter_All(this, categoryList);
+        categoryAdapter.setHasStableIds(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(linearLayoutManager);
         EndlessScrollListener scrollListener = new EndlessScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 showDialog();
-                loadProducts(type, page);
+                loadCategories(page);
             }
         };
         list.addOnScrollListener(scrollListener);
         list.setItemAnimator(new DefaultItemAnimator());
-        list.setAdapter(productAdapter);
+        list.setAdapter(categoryAdapter);
         
-        loadProducts(type, 1);
+        loadCategories(1);
     }
     
-    private void loadProducts(int type, int page) {
+    private void loadCategories(int page) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URLs.base_URL + "products_detail";
+            String URL = URLs.base_URL + "categories";
             JSONObject params = new JSONObject();
-            params.put("type", String.valueOf(type));
             params.put("index", String.valueOf(page));
             final String mRequestBody = params.toString();
             showDialog();
@@ -121,29 +118,27 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            JSONArray products = jObj.getJSONArray("products");
+                            JSONArray categories = jObj.getJSONArray("cat");
                             
-                            for (int i = 0; i < products.length(); i++) {
-                                JSONObject product = products.getJSONObject(i);
+                            for (int i = 0; i < categories.length(); i++) {
+                                JSONObject category = categories.getJSONObject(i);
                                 
-                                productList.add(new Product(
-                                                product.getString("unique_id"),
-                                                product.getString("name"),
-                                                product.getString("image"),
-                                                product.getString("price"),
-                                                product.getInt("off"),
-                                                product.getInt("count"),
-                                                product.getDouble("point"),
-                                                product.getInt("point_count"),
-                                                product.getString("description")
+                                categoryList.add(new Category(
+                                                category.getString("unique_id"),
+                                                category.getString("name"),
+                                                category.getString("image"),
+                                                category.getDouble("point"),
+                                                category.getInt("point_count"),
+                                                category.getInt("off"),
+                                                1
                                         )
                                 );
                             }
                             
-                            productAdapter.notifyDataSetChanged();
+                            categoryAdapter.notifyDataSetChanged();
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                            Helper.MakeToast(Activity_ListDetails.this, errorMsg, TAGs.ERROR);
+                            Helper.MakeToast(Activity_Cat.this, errorMsg, TAGs.ERROR);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -179,30 +174,6 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
             hideDialog();
             e.printStackTrace();
         }
-    }
-    
-    private void setToolbarTitle(int type) {
-        switch (type) {
-            case 1:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "سبد های غذایی"));
-                break;
-            case 2:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرفروش ترین ها"));
-                break;
-            case 3:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "جدیدترین ها"));
-                break;
-            case 4:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "محبوب ترین ها"));
-                break;
-            case 5:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "تخفیف خورده ها"));
-                break;
-            case 6:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "مناسبتی ها"));
-                break;
-        }
-        setSupportActionBar(toolbar);
     }
     
     @Override

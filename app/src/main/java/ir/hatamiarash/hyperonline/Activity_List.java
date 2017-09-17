@@ -371,6 +371,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

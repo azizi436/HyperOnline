@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -244,7 +245,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         item_collections,
                         item_most_sell,
                         item_new,
-                        item_pop,
+//                        item_pop,
                         item_off,
                         item_event,
                         item_comment,
@@ -253,7 +254,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         item_social,
                         item_terms,
                         item_website,
-                        item_chat,
+//                        item_chat,
                         item_share,
                         item_contact,
                         item_help,
@@ -273,7 +274,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 result.closeDrawer();
                             }
                             if (item == 2) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_Cat.class);
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 3) {
                                 Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
