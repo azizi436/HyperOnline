@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -75,6 +74,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -456,6 +456,54 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 scroll.fullScroll(ScrollView.FOCUS_UP);
             }
         }, 50);
+        
+        title_category_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Activity_Cat.class);
+                startActivity(i);
+            }
+        });
+        title_most_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                i.putExtra("type", "2");
+                startActivity(i);
+            }
+        });
+        title_collection_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                i.putExtra("type", "6");
+                startActivity(i);
+            }
+        });
+        title_new_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                i.putExtra("type", "3");
+                startActivity(i);
+            }
+        });
+        title_off_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                i.putExtra("type", "5");
+                startActivity(i);
+            }
+        });
+        title_popular_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                i.putExtra("type", "4");
+                startActivity(i);
+            }
+        });
     }
     
     private int dpToPx(int dp) {
@@ -487,10 +535,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             JSONArray _cat = jObj.getJSONArray("category");
                             for (int i = 0; i < _cat.length(); i++) {
                                 JSONObject category = _cat.getJSONObject(i);
-                                if (_cat.length() == 0) {
-                                    title_collection.setVisibility(View.GONE);
-                                    title_collection_more.setVisibility(View.GONE);
-                                }
+                                
                                 categoryList.add(new Category(
                                         category.getString("unique_id"),
                                         category.getString("name"),
@@ -524,6 +569,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             )
                                     );
                                 }
+                                Collections.reverse(collectionList);
                                 collectionAdapter.notifyDataSetChanged();
                             } else {
                                 title_collection.setVisibility(View.GONE);
@@ -534,8 +580,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             if (_opt.getString("m").equals("1")) {
                                 JSONArray _most = jObj.getJSONArray("most");
                                 if (_most.length() == 0) {
-                                    title_collection.setVisibility(View.GONE);
-                                    title_collection_more.setVisibility(View.GONE);
+                                    title_most.setVisibility(View.GONE);
+                                    title_most_more.setVisibility(View.GONE);
                                 }
                                 for (int i = 0; i < _most.length(); i++) {
                                     JSONObject product = _most.getJSONObject(i);
@@ -552,6 +598,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             )
                                     );
                                 }
+                                Collections.reverse(mostList);
                                 mostAdapter.notifyDataSetChanged();
                             } else {
                                 title_most.setVisibility(View.GONE);
@@ -562,8 +609,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             if (_opt.getString("n").equals("1")) {
                                 JSONArray _new = jObj.getJSONArray("new");
                                 if (_new.length() == 0) {
-                                    title_collection.setVisibility(View.GONE);
-                                    title_collection_more.setVisibility(View.GONE);
+                                    title_new.setVisibility(View.GONE);
+                                    title_new_more.setVisibility(View.GONE);
                                 }
                                 for (int i = 0; i < _new.length(); i++) {
                                     JSONObject product = _new.getJSONObject(i);
@@ -580,6 +627,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             )
                                     );
                                 }
+                                Collections.reverse(newList);
                                 newAdapter.notifyDataSetChanged();
                             } else {
                                 title_new.setVisibility(View.GONE);
@@ -587,11 +635,11 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 new_view.setVisibility(View.GONE);
                             }
                             
-                            if (_opt.getString("n").equals("1")) {
+                            if (_opt.getString("p").equals("1")) {
                                 JSONArray _pop = jObj.getJSONArray("popular");
                                 if (_pop.length() == 0) {
-                                    title_collection.setVisibility(View.GONE);
-                                    title_collection_more.setVisibility(View.GONE);
+                                    title_popular.setVisibility(View.GONE);
+                                    title_popular_more.setVisibility(View.GONE);
                                 }
                                 for (int i = 0; i < _pop.length(); i++) {
                                     JSONObject product = _pop.getJSONObject(i);
@@ -608,6 +656,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             )
                                     );
                                 }
+                                Collections.reverse(popularList);
                                 popularAdapter.notifyDataSetChanged();
                             } else {
                                 title_popular.setVisibility(View.GONE);
@@ -616,10 +665,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             }
                             
                             if (_opt.getString("o").equals("1")) {
-                                JSONArray _off = jObj.getJSONArray("popular");
+                                JSONArray _off = jObj.getJSONArray("off");
                                 if (_off.length() == 0) {
-                                    title_collection.setVisibility(View.GONE);
-                                    title_collection_more.setVisibility(View.GONE);
+                                    title_off.setVisibility(View.GONE);
+                                    title_off_more.setVisibility(View.GONE);
                                 }
                                 for (int i = 0; i < _off.length(); i++) {
                                     JSONObject product = _off.getJSONObject(i);
@@ -636,6 +685,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             )
                                     );
                                 }
+                                Collections.reverse(offList);
                                 offAdapter.notifyDataSetChanged();
                             } else {
                                 title_off.setVisibility(View.GONE);
