@@ -45,24 +45,23 @@
             <ImageView
                 android:id="@+id/category_image"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/album_cover_height"
+                android:layout_height="100dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:scaleType="centerCrop"/>
+                android:padding="5dp"
+                android:scaleType="fitCenter"/>
 
             <helper.PersianTextView
                 android:id="@+id/category_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/category_image"
+                android:layout_margin="5dp"
                 android:gravity="center"
-                android:paddingBottom="@dimen/album_title_padding"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
+                android:padding="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/album_title"
-                android:textSize="@dimen/album_title"
+                android:textSize="15sp"
                 app:font="iran_sans"/>
 
         </RelativeLayout>
