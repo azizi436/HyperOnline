@@ -209,10 +209,21 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 @Override
                 public void onResponse(String response) {
                     Log.i("LOG_VOLLEY R", response);
-                    if (response.equals("201"))
-                        MakeDialog("ثبت نام انجام شد", "نام کاربری شما تلفن همراهتان می باشد ، اکنون می توانید وارد شوید");
-                    else
-                        Helper.MakeToast(Register.this, "خطایی رخ داده است", TAGs.ERROR);
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            MakeDialog("ثبت نام انجام شد", "نام کاربری شما تلفن همراهتان می باشد ، اکنون می توانید وارد شوید");
+                        } else {
+                            // Error in login. Get the error message
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(Register.this, errorMsg, TAGs.ERROR); // show error message
+                        }
+                    } catch (JSONException e) {
+                        hideDialog();
+                        e.printStackTrace();
+                        finish();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override

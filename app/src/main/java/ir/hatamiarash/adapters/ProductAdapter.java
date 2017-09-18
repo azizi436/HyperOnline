@@ -94,7 +94,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                 holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 int off = product.off * Integer.valueOf(product.price) / 100;
                 int fPrice = Integer.valueOf(product.price) - off;
-                Log.w("price", String.valueOf(off) + " " + String.valueOf(fPrice));
                 db_item.addItem(
                         product.unique_id,
                         product.name,
@@ -120,7 +119,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                     int count = pCount + 1;
                     int off = (product.off * Integer.valueOf(product.price) / 100) * count;
                     int fPrice = Integer.valueOf(product.price) * count - off;
-                    db_item.updateCount(
+                    db_item.updateItem(
                             product.unique_id,
                             String.valueOf(count),
                             String.valueOf(fPrice),

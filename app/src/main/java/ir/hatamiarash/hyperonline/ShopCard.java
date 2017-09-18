@@ -7,7 +7,6 @@ package ir.hatamiarash.hyperonline;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -41,21 +40,11 @@ import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,6 +105,7 @@ public class ShopCard extends AppCompatActivity {
     private String ORDER_HOUR;
     private String STUFFS = "";
     private String STUFFS_ID = "";
+    private String STUFFS_COUNT = "";
     private String DESCRIPTION = "";
     
     @Override
@@ -242,14 +232,15 @@ public class ShopCard extends AppCompatActivity {
             Log.w("off", off);
             Log.w("count", count);
             tOff += Integer.valueOf(off);
-            tPrice += Integer.valueOf(price) * Integer.valueOf(count);
+            tPrice += Integer.valueOf(price);
             
             Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info));
             
-            STUFFS += name + "-";
-            STUFFS_ID += uid + "-";
+            STUFFS += name + ",";
+            STUFFS_ID += uid + ",";
+            STUFFS_COUNT += count + ",";
         }
-        
+        ORDER_AMOUNT = String.valueOf(tPrice + tExtend);
         total_off.setText(String.valueOf(tOff) + " تومان");
         total_price.setText(String.valueOf(tPrice + tOff) + " تومان");
         total_extend.setText(String.valueOf(tExtend) + " تومان");
@@ -257,6 +248,17 @@ public class ShopCard extends AppCompatActivity {
         pay.setText("پرداخت - " + FormatHelper.toPersianNumber(String.valueOf(tPrice + tExtend)) + " تومان");
         Adapter_Product adapter = new Adapter_Product(Products_List);
         list.setAdapter(adapter);
+    }
+    
+    private String getCounts() {
+        Item = db_item.getItemsDetails();
+        String c = "";
+        for (int i = 0; i < (Item.size() / 7); i++) {
+            String count = Item.get(i * 7 + 6);
+            c += count + ",";
+        }
+        Log.w("count", c);
+        return c;
     }
     
     private int ConvertToInteger(TextView text) {
@@ -418,10 +420,13 @@ public class ShopCard extends AppCompatActivity {
             Log.w("user", uid);
             params.put("user", uid);
             params.put("code", ORDER_CODE);
-            params.put("seller", "S1");
+            params.put("seller", "vbkYwlL98I3F3");
             params.put("stuffs", STUFFS);
             params.put("stuffs_id", STUFFS_ID);
-            params.put("price", ORDER_AMOUNT);
+            params.put("stuffs_count", getCounts());
+//            params.put("price", ORDER_AMOUNT);
+            String p = total_pay.getText().toString();
+            params.put("price", FormatHelper.toEnglishNumber(p.substring(0, p.length() - 6)));
             params.put("hour", ORDER_HOUR);
             params.put("method", "online");
             params.put("description", DESCRIPTION);
@@ -599,6 +604,7 @@ public class ShopCard extends AppCompatActivity {
                             total_off.setText(off);
                             int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
                             total_price.setText(String.valueOf(ttPrice) + " تومان");
+                            ORDER_AMOUNT = String.valueOf(ttPrice);
                         } else
                             check++;
                     }

@@ -100,6 +100,8 @@ import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
 
+
+
 public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, CardBadge {
     private static final String TAG = Activity_Main.class.getSimpleName();
     public static Activity_Main pointer;             // use to finish activity from anywhere
@@ -812,6 +814,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         super.onResume();
         try {
             updateCartMenu();
+            //FetchAllData();
         } catch (NullPointerException e) {
             Log.i("Badge", "Known Error");
         }
