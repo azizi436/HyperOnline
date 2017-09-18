@@ -201,13 +201,13 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             }
         }
         
-        boolean isConfirm = settings.getBoolean("phone_confirmed", true);
+        /*boolean isConfirm = settings.getBoolean("phone_confirmed", true);
         if (isConfirm && session.isLoggedIn()) {
             Intent i = new Intent(getApplicationContext(), Confirm_Phone.class);
             i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
             startActivity(i);
             finish();
-        }
+        }*/
         
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
