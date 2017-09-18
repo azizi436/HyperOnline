@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -189,6 +188,9 @@ public class Activity_Factor extends Activity {
                     e.printStackTrace();
                     Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR);
                 } finally {
+                    Activity_Main.pointer.finish();
+                    Intent intent = new Intent(Activity_Factor.this, Activity_Main.class);
+                    startActivity(intent);
                     finish();
                 }
             }

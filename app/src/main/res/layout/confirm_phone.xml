@@ -50,7 +50,7 @@
             app:font="iran_sans"/>
 
         <helper.PersianTextView
-            android:id="@+id/new_password_2"
+            android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
@@ -64,7 +64,7 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/new_password_2"
+            android:layout_below="@+id/phone"
             android:layout_marginTop="20dp">
 
             <EditText

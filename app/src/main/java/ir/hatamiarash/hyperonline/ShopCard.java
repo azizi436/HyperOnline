@@ -132,11 +132,11 @@ public class ShopCard extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
                 boolean isConfirm = settings.getBoolean("phone_confirmed", true);
-                isConfirm = false;
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
-                } else if (isConfirm == true) {
+                }
+               /*  else if (isConfirm) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
                             .setDescription(FontHelper.getSpannedString(ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))
@@ -155,7 +155,8 @@ public class ShopCard extends AppCompatActivity {
                                 }
                             })
                             .show();
-                } else {
+                }*/
+                else {
                     vibrator.vibrate(50);
                     if (tPrice > 0) {
                         String time = String.valueOf(times(getTime(1), getTime(2)));
