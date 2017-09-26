@@ -172,6 +172,7 @@ public class Login extends Activity {
                                 String msg = "سلام " + user.getString(TAGs.NAME);
                                 Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
                                 Intent intent = new Intent(Login.this, Activity_Main.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 finish();
                             }
