@@ -54,6 +54,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.FormatHelper;
 import helper.Helper;
@@ -73,6 +74,7 @@ public class ShopCard extends AppCompatActivity {
     public static SQLiteHandlerMain db_main;
     public static SQLiteHandler db_user;
     SessionManager session;
+    ConfirmManager confirmManager;
     SweetAlertDialog progressDialog;
     Vibrator vibrator;
     
@@ -118,6 +120,7 @@ public class ShopCard extends AppCompatActivity {
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());
         session = new SessionManager(getApplicationContext());
+        confirmManager = new ConfirmManager(getApplicationContext());
         list.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(layoutManager);
@@ -130,12 +133,10 @@ public class ShopCard extends AppCompatActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
-                boolean isConfirm = settings.getBoolean("phone_confirmed", true);
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
-                } else if (isConfirm) {
+                } else if (confirmManager.isPhoneConfirm()) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
                             .setDescription(FontHelper.getSpannedString(ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))

@@ -11,7 +11,6 @@ package ir.hatamiarash.hyperonline;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -54,6 +53,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
@@ -62,6 +62,7 @@ import ir.hatamiarash.utils.Values;
 
 public class Confirm_Phone extends AppCompatActivity {
     private SweetAlertDialog progressDialog;
+    private ConfirmManager confirmManager;
     
     @InjectView(R.id.button0)
     Button button0;
@@ -110,6 +111,7 @@ public class Confirm_Phone extends AppCompatActivity {
         setContentView(R.layout.confirm_phone);
         ButterKnife.inject(this);
         
+        confirmManager = new ConfirmManager(this);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
@@ -361,8 +363,7 @@ public class Confirm_Phone extends AppCompatActivity {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
-                            settings.edit().putBoolean("phone_confirmed", false).commit();
+                            confirmManager.setPhoneConfirm(true);
                             Helper.MakeToast(getApplicationContext(), "حساب شما فعال شد :)", TAGs.SUCCESS);
                             Intent i = new Intent(Confirm_Phone.this, Activity_Main.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

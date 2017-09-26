@@ -82,6 +82,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import co.ronash.pushe.Pushe;
+import helper.ConfirmManager;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
 import helper.GridSpacingItemDecoration;
@@ -101,7 +102,6 @@ import models.Category;
 import models.Product;
 
 
-
 public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, CardBadge {
     private static final String TAG = Activity_Main.class.getSimpleName();
     public static Activity_Main pointer;             // use to finish activity from anywhere
@@ -112,6 +112,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     static Typeface persianTypeface;                 // persian font typeface
     public Drawer result = null;
     SessionManager session;                          // session for check user logged
+    ConfirmManager confirmManager;
     private long back_pressed;                       // for check back key pressed count
     private Vibrator vibrator;
     private CategoryAdapter categoryAdapter;
@@ -176,12 +177,13 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         Pushe.initialize(getApplicationContext(), true);
         Helper.GetPermissions(this, getApplicationContext());
         
-        session =  new SessionManager(getApplicationContext());
-        pointer =  this;
-        db_user =  new SQLiteHandler(getApplicationContext());
-        db_item =  new SQLiteHandlerItem(getApplicationContext());
+        session = new SessionManager(getApplicationContext());
+        confirmManager = new ConfirmManager(getApplicationContext());
+        pointer = this;
+        db_user = new SQLiteHandler(getApplicationContext());
+        db_item = new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
-        db_main =  new SQLiteHandlerMain(getApplicationContext());
+        db_main = new SQLiteHandlerMain(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -201,8 +203,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             }
         }
         
-        boolean isConfirm = settings.getBoolean("phone_confirmed", true);
-        if (isConfirm && session.isLoggedIn()) {
+        if (confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
             Intent i = new Intent(getApplicationContext(), Confirm_Phone.class);
             i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
             startActivity(i);
