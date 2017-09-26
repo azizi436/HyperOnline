@@ -88,8 +88,6 @@ public class Confirm_Phone extends AppCompatActivity {
     EditText passwordInput;
     @InjectView(R.id.time)
     TextView time;
-    @InjectView(R.id.retry)
-    TextView retry;
     @InjectView(R.id.help)
     TextView help;
     @InjectView(R.id.phone)
@@ -117,7 +115,6 @@ public class Confirm_Phone extends AppCompatActivity {
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         phoneNumber = getIntent().getStringExtra(TAGs.PHONE);
         phone.setText(phoneNumber);
-        Log.w("confirm-code", phoneNumber);
         
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -153,10 +150,8 @@ public class Confirm_Phone extends AppCompatActivity {
         button7.setOnClickListener(pinButtonHandler);
         button8.setOnClickListener(pinButtonHandler);
         button9.setOnClickListener(pinButtonHandler);
-        retry.setOnClickListener(retryHandler);
         
         time.setVisibility(View.VISIBLE);
-        retry.setVisibility(View.GONE);
         
         RequestCode();
         
@@ -174,27 +169,19 @@ public class Confirm_Phone extends AppCompatActivity {
     }
     
     private void Timer() {
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                time.setText("" + String.format(FORMAT,
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
-                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                time.setText("" + String.format(
+                        FORMAT,
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))
+                        )
+                );
             }
             
             public void onFinish() {
-                if (count < 1) {
-                    time.setVisibility(View.GONE);
-                    retry.setVisibility(View.VISIBLE);
-                    retry.setText("ارسال مجدد کد");
-                } else {
-                    time.setVisibility(View.VISIBLE);
-                    retry.setVisibility(View.GONE);
-                    time.setText("ارسال مجدد امکان پذیر نیست");
-                    time.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-                    Helper.MakeToast(getApplicationContext(), "لطفا وضعیت تلفن همراه خود را بررسی نمایید", TAGs.ERROR);
-                }
+                time.setText("کد فعالسازی ارسال شده است. در صورت عدم دریافت کد ، پس از بررسی وضعیت تلفن همراه خود می توانید با ما در ارتباط باشید.");
+                time.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
             }
         }.start();
     }
@@ -211,22 +198,16 @@ public class Confirm_Phone extends AppCompatActivity {
                 if (userEntered.length() == PIN_LENGTH)
                     if (userEntered.equals(confirmCode)) {
                         syncServer();
-                    } else
+                    } else {
+                        Helper.MakeToast(getApplicationContext(), "کد وارد شده اشتباه است", TAGs.ERROR);
                         new LockKeyPadOperation().execute("");
+                    }
             } else {
                 passwordInput.setText("");
                 userEntered = "";
                 userEntered = userEntered + pressedButton.getText();
                 passwordInput.setText("8");
             }
-        }
-    };
-    
-    private View.OnClickListener retryHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-            WaitFlag = true;
-            new LockKeyPadOperation().execute();
-            count++;
         }
     };
     
@@ -255,7 +236,6 @@ public class Confirm_Phone extends AppCompatActivity {
             keyPadLockedFlag = false;
             if (WaitFlag) {
                 time.setVisibility(View.VISIBLE);
-                retry.setVisibility(View.GONE);
                 Timer();
                 WaitFlag = false;
             }
@@ -364,7 +344,7 @@ public class Confirm_Phone extends AppCompatActivity {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
                             confirmManager.setPhoneConfirm(true);
-                            Helper.MakeToast(getApplicationContext(), "حساب شما فعال شد :)", TAGs.SUCCESS);
+                            Helper.MakeToast(getApplicationContext(), "حساب شما فعال شد", TAGs.SUCCESS);
                             Intent i = new Intent(Confirm_Phone.this, Activity_Main.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);

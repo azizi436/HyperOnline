@@ -203,7 +203,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             }
         }
         
-        if (confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
+        if (!confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
             Intent i = new Intent(getApplicationContext(), Confirm_Phone.class);
             i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
             startActivity(i);

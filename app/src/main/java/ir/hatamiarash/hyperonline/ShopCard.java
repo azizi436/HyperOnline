@@ -136,7 +136,7 @@ public class ShopCard extends AppCompatActivity {
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
-                } else if (confirmManager.isPhoneConfirm()) {
+                } else if (!confirmManager.isPhoneConfirm()) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
                             .setDescription(FontHelper.getSpannedString(ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))

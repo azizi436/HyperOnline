@@ -9,9 +9,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 public class ConfirmManager {
-    private static final String PREF_NAME = "AndroidHiveLogin";
+    private static final String PREF_NAME = "HOPhone";
     private static final String KEY_PHONE = "isPhoneConfirm";
-    private static String TAG = SessionManager.class.getSimpleName();
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     Context _context;
@@ -26,7 +25,7 @@ public class ConfirmManager {
     public void setPhoneConfirm(boolean isLoggedIn) {
         editor.putBoolean(KEY_PHONE, isLoggedIn);
         editor.commit();
-        Log.d(TAG, "User phone session modified!");
+        Log.e("PhoneConfirm", "User phone session modified!");
     }
     
     public boolean isPhoneConfirm() {

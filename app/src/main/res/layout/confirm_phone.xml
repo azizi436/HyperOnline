@@ -272,23 +272,13 @@
 
         <helper.PersianTextView
             android:id="@+id/time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
+            android:gravity="center"
             android:textColor="@color/black"
-            app:font="iran_sans"/>
-
-        <helper.PersianTextView
-            android:id="@+id/retry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/accent"
-            android:visibility="gone"
             app:font="iran_sans"/>
 
         <helper.PersianTextView
