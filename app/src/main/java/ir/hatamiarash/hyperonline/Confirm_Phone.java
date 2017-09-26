@@ -111,7 +111,8 @@ public class Confirm_Phone extends AppCompatActivity {
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-        phoneNumber = getIntent().getStringExtra("phone");
+        phoneNumber = getIntent().getStringExtra(TAGs.PHONE);
+        Log.w("confirm-code", phoneNumber);
         
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

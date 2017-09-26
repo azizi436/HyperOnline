@@ -176,12 +176,12 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         Pushe.initialize(getApplicationContext(), true);
         Helper.GetPermissions(this, getApplicationContext());
         
-        session = new SessionManager(getApplicationContext());
-        pointer = this;
-        db_user = new SQLiteHandler(getApplicationContext());
-        db_item = new SQLiteHandlerItem(getApplicationContext());
+        session =  new SessionManager(getApplicationContext());
+        pointer =  this;
+        db_user =  new SQLiteHandler(getApplicationContext());
+        db_item =  new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
-        db_main = new SQLiteHandlerMain(getApplicationContext());
+        db_main =  new SQLiteHandlerMain(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -201,13 +201,13 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             }
         }
         
-        /*boolean isConfirm = settings.getBoolean("phone_confirmed", true);
+        boolean isConfirm = settings.getBoolean("phone_confirmed", true);
         if (isConfirm && session.isLoggedIn()) {
             Intent i = new Intent(getApplicationContext(), Confirm_Phone.class);
             i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
             startActivity(i);
             finish();
-        }*/
+        }
         
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);

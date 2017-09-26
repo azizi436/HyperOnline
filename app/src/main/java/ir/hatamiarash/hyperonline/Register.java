@@ -215,7 +215,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                         if (!error) {
                             MakeDialog("ثبت نام انجام شد", "نام کاربری شما تلفن همراهتان می باشد ، اکنون می توانید وارد شوید");
                         } else {
-                            // Error in login. Get the error message
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Register.this, errorMsg, TAGs.ERROR); // show error message
                         }
@@ -240,7 +239,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
-                
+    
                 @Nullable
                 @Override
                 public byte[] getBody() throws AuthFailureError {
@@ -250,13 +249,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                         VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
                         return null;
                     }
-                }
-                
-                @NonNull
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = String.valueOf(response.statusCode);
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                 }
             };
             requestQueue.add(stringRequest);

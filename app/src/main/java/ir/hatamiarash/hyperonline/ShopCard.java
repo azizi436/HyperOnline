@@ -135,8 +135,7 @@ public class ShopCard extends AppCompatActivity {
                 if (!session.isLoggedIn()) {
                     Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
                     startActivity(new Intent(ShopCard.this, Login.class));
-                }
-               /*  else if (isConfirm) {
+                } else if (isConfirm) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
                             .setDescription(FontHelper.getSpannedString(ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))
@@ -155,8 +154,7 @@ public class ShopCard extends AppCompatActivity {
                                 }
                             })
                             .show();
-                }*/
-                else {
+                } else {
                     vibrator.vibrate(50);
                     if (tPrice > 0) {
                         String time = String.valueOf(times(getTime(1), getTime(2)));
@@ -237,9 +235,9 @@ public class ShopCard extends AppCompatActivity {
             
             Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info));
             
-            STUFFS += name + ",";
-            STUFFS_ID += uid + ",";
-            STUFFS_COUNT += count + ",";
+            STUFFS += "," + name;
+            STUFFS_ID += "," + uid;
+            STUFFS_COUNT += "," + count;
         }
         ORDER_AMOUNT = String.valueOf(tPrice + tExtend);
         total_off.setText(String.valueOf(tOff) + " تومان");
@@ -418,7 +416,6 @@ public class ShopCard extends AppCompatActivity {
             String URL = URLs.base_URL + "orders";
             JSONObject params = new JSONObject();
             String uid = db_user.getUserDetails().get(TAGs.UID);
-            Log.w("user", uid);
             params.put("user", uid);
             params.put("code", ORDER_CODE);
             params.put("seller", "vbkYwlL98I3F3");
@@ -659,25 +656,25 @@ public class ShopCard extends AppCompatActivity {
     @Contract(pure = true)
     private int times(int hour, int minute) {
         if (hour >= 9 && hour < 10)
-            if (minute <= 40)
+            if (minute <= 30)
                 send_time = 9;
             else
                 send_time = 11;
         if (hour >= 10 && hour < 11) send_time = 2;
         if (hour >= 11 && hour < 12)
-            if (minute <= 40)
+            if (minute <= 30)
                 send_time = 11;
             else
                 send_time = 16;
         if (hour >= 12 && hour < 16) send_time = 3;
         if (hour >= 16 && hour < 17)
-            if (minute <= 40)
+            if (minute <= 30)
                 send_time = 16;
             else
                 send_time = 18;
         if (hour >= 17 && hour < 18) send_time = 4;
         if (hour >= 18 && hour < 19)
-            if (minute <= 40)
+            if (minute <= 30)
                 send_time = 18;
             else
                 send_time = 9;

@@ -31,7 +31,7 @@
 
     <application
         android:name="volley.AppController"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:configChanges="keyboardHidden|orientation"
         android:fullBackupContent="true"
         android:hardwareAccelerated="true"
