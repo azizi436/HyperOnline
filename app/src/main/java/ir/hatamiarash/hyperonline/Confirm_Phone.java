@@ -91,6 +91,8 @@ public class Confirm_Phone extends AppCompatActivity {
     TextView retry;
     @InjectView(R.id.help)
     TextView help;
+    @InjectView(R.id.phone)
+    TextView phone;
     
     
     private String userEntered;
@@ -112,6 +114,7 @@ public class Confirm_Phone extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         phoneNumber = getIntent().getStringExtra(TAGs.PHONE);
+        phone.setText(phoneNumber);
         Log.w("confirm-code", phoneNumber);
         
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
