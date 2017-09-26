@@ -365,6 +365,7 @@ public class Confirm_Phone extends AppCompatActivity {
                             settings.edit().putBoolean("phone_confirmed", false).commit();
                             Helper.MakeToast(getApplicationContext(), "حساب شما فعال شد :)", TAGs.SUCCESS);
                             Intent i = new Intent(Confirm_Phone.this, Activity_Main.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                             finish();
                         } else {
