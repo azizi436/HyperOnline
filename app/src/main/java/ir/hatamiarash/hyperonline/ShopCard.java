@@ -169,7 +169,7 @@ public class ShopCard extends AppCompatActivity {
                         String message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View customView = inflater.inflate(R.layout.custom_dialog, null);
-                        final TextView edit_text = (TextView) customView.findViewById(R.id.edit_text);
+                        final TextView edit_text = customView.findViewById(R.id.edit_text);
                         new MaterialStyledDialog.Builder(ShopCard.this)
                                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
                                 .setDescription(FontHelper.getSpannedString(getApplicationContext(), message))
