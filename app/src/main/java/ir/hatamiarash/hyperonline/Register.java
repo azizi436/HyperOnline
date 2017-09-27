@@ -25,13 +25,11 @@ import android.widget.Spinner;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
@@ -50,6 +48,7 @@ import java.io.UnsupportedEncodingException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import co.ronash.pushe.Pushe;
 import helper.Address;
 import helper.FontHelper;
 import helper.Helper;
@@ -203,6 +202,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
             params.put(TAGs.CITY, city);
             params.put(TAGs.LOCATION_X, loc_x);
             params.put(TAGs.LOCATION_Y, loc_y);
+            params.put("pushe", Pushe.getPusheId(getApplicationContext()));
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -239,7 +239,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
-    
+                
                 @Nullable
                 @Override
                 public byte[] getBody() throws AuthFailureError {
