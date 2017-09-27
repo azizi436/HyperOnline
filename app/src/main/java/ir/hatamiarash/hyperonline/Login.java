@@ -37,6 +37,7 @@ import java.io.UnsupportedEncodingException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
 import helper.IconEditText;
@@ -62,6 +63,7 @@ public class Login extends Activity {
     private SweetAlertDialog progressDialog;       // dialog window
     private SessionManager session;           // session for check user logged status
     private SQLiteHandler db;                 // users database
+    private ConfirmManager confirmManager;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class Login extends Activity {
         db = new SQLiteHandler(getApplicationContext());                         // users database
         db.CreateTable();                                                        // create users table
         session = new SessionManager(getApplicationContext());
+        confirmManager = new ConfirmManager(getApplicationContext());
         
         if (session.isLoggedIn()) {                                              // Check if user is already logged in or not
             Intent i = new Intent(Login.this, Activity_Main.class);
@@ -169,8 +172,12 @@ public class Login extends Activity {
                                         })
                                         .show();
                             } else {
-                                if (Integer.valueOf(user.getString("confirmed_info")) == 0)
+                                if (Integer.valueOf(user.getString("confirmed_info")) == 0) {
+                                    confirmManager.setInfoConfirm(false);
                                     Helper.MakeToast(getApplication(), "اطلاعات حساب شما هنوز تایید نشده است", TAGs.WARNING);
+                                } else {
+                                    confirmManager.setInfoConfirm(true);
+                                }
                                 String msg = "سلام " + user.getString(TAGs.NAME);
                                 Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
                                 Intent intent = new Intent(Login.this, Activity_Main.class);
