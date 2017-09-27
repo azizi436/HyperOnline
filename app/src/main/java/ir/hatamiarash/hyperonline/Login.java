@@ -169,6 +169,8 @@ public class Login extends Activity {
                                         })
                                         .show();
                             } else {
+                                if (Integer.valueOf(user.getString("confirmed_info")) == 0)
+                                    Helper.MakeToast(getApplication(), "اطلاعات حساب شما هنوز تایید نشده است", TAGs.WARNING);
                                 String msg = "سلام " + user.getString(TAGs.NAME);
                                 Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
                                 Intent intent = new Intent(Login.this, Activity_Main.class);
