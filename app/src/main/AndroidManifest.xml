@@ -159,6 +159,13 @@
                 <category android:name="ir.hatamiarash.hyperonline"/>
             </intent-filter>
         </receiver>
+        <receiver android:name="helper.NotifBroadcastReceiver">
+            <intent-filter>
+                <action android:name="co.ronash.pushe.NOTIF_CLICKED"/>
+                <action android:name="co.ronash.pushe.NOTIF_DISMISSED"/>
+                <action android:name="co.ronash.pushe.NOTIF_BTN_CLICKED"/>
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="co.ronash.pushe.token"
