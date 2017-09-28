@@ -4,11 +4,6 @@
 
 package ir.hatamiarash.hyperonline;
 
-/*
- * Copyright (c) 2017 - All Rights Reserved - Arash Hatami
- */
-
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

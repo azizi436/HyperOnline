@@ -4,11 +4,6 @@
 
 package ir.hatamiarash.hyperonline;
 
-/*
- * Copyright (c) 2017 - All Rights Reserved - Arash Hatami
- */
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;

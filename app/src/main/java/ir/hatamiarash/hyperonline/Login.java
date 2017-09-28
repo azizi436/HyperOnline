@@ -151,7 +151,7 @@ public class Login extends Activity {
                             if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
                                 new MaterialStyledDialog.Builder(Login.this)
                                         .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
-                                        .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید."))
+                                        .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید"))
                                         .setStyle(Style.HEADER_WITH_TITLE)
                                         .withDarkerOverlay(true)
                                         .withDialogAnimation(true)
@@ -186,7 +186,6 @@ public class Login extends Activity {
                                 finish();
                             }
                         } else {
-                            // Error in login. Get the error message
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Login.this, errorMsg, TAGs.ERROR); // show error message
                         }
@@ -228,12 +227,12 @@ public class Login extends Activity {
         }
     }
     
-    private void showDialog() { // show dialog
+    private void showDialog() {
         if (!progressDialog.isShowing())
             progressDialog.show();
     }
     
-    private void hideDialog() { // close dialog
+    private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
     }

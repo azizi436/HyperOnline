@@ -323,7 +323,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 result.closeDrawer();
                             }
                             if (item == 10) {
-                                
+                                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 11) {
                                 Intent i = new Intent(getApplicationContext(), Activity_UserOrders.class);

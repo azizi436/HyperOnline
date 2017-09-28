@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright (c) 2017 - All Rights Reserved - Arash Hatami
   -->
@@ -98,6 +99,7 @@
         <activity
             android:name=".Register"
             android:label="Register"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
@@ -107,16 +109,19 @@
         <activity
             android:name=".EditProfile"
             android:label="Edit User Profile"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name=".EditPassword"
             android:label="Edit User Password"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name=".ResetPassword"
             android:label="Reset Forgotten Password"
+            android:noHistory="true"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Lobby"
@@ -124,13 +129,28 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Intro"
-            android:label="Intro Page"/>
+            android:label="Intro Page"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Test"
-            android:label="Test Page"/>
+            android:label="Test Page"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Web"
-            android:label="Web Page"/>
+            android:label="Web Page"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity_Search"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
         <activity
             android:name="ir.hatamiarash.Image.TempActivity"
             android:screenOrientation="portrait"
@@ -179,21 +199,8 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="10b082ce8ebde4fabdf73437a140a4dabf641907"/>
-
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".Search"/>
-
-        <activity
-            android:name=".Activity_Search"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH"/>
-                <action android:name="android.intent.action.VIEW"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
-        </activity>
     </application>
 </manifest>
