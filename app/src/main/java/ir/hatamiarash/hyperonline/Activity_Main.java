@@ -244,6 +244,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 .addDrawerItems(
                         item_home,
                         item_profile,
+                        item_cart,
+                        item_track,
                         item_categories,
                         item_collections,
                         item_most_sell,
@@ -252,8 +254,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         item_off,
                         item_event,
                         item_comment,
-                        item_cart,
-                        item_track,
                         //item_social,
                         //item_terms,
                         item_website,
