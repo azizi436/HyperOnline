@@ -130,20 +130,32 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="invisible"
-                android:weightSum="10">
+                android:weightSum="9">
 
                 <ImageView
                     android:id="@+id/dec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     app:srcCompat="@drawable/ic_remove"/>
+
+                <helper.PersianTextView
+                    android:id="@+id/product_count_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="55"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:font="iran_sans"/>
 
                 <ImageView
                     android:id="@+id/inc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     app:srcCompat="@drawable/ic_add"/>
 
             </LinearLayout>

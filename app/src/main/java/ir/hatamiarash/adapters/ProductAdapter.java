@@ -61,6 +61,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.point_count.setText(String.valueOf(product.point_count));
         holder.off.setText(String.valueOf(product.off));
         holder.count.setText(String.valueOf(product.count));
+        holder.count_cart.setText(String.valueOf(db_item.getCount(product.unique_id)));
         if (String.valueOf(product.image).equals("null"))
             Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
         else
@@ -81,6 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         if (db_item.isExistsID(product.unique_id) && db_item.isExists(product.name)) {
             holder.add_layout.setVisibility(View.INVISIBLE);
             holder.price.setVisibility(View.VISIBLE);
+            holder.change_layout.setVisibility(View.VISIBLE);
             holder.price.setText("در سبد موجود است");
             holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
@@ -107,6 +109,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                 } catch (ClassCastException e) {
                     Log.w("CallBack", e.getMessage());
                 }
+                holder.count_cart.setText("1");
             }
         });
         
@@ -130,6 +133,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                     } catch (ClassCastException e) {
                         Log.w("CallBack", e.getMessage());
                     }
+                    holder.count_cart.setText(String.valueOf(count));
                 } else
                     Helper.MakeToast(mContext, "این تعداد موجود نمی باشد", TAGs.ERROR);
             }
@@ -163,6 +167,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                             String.valueOf(fPrice),
                             String.valueOf(off)
                     );
+                    holder.count_cart.setText(String.valueOf(count));
                 }
                 try {
                     cardBadge.updateBadge();
@@ -189,7 +194,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price, price_backup, id, count, point, point_count, off;
+        TextView name, price, price_backup, id, count, count_cart, point, point_count, off;
         ImageView image, inc, dec;
         LinearLayout add_layout, change_layout;
         
@@ -198,6 +203,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             id = view.findViewById(R.id.product_id);
             price_backup = view.findViewById(R.id.product_price_backup);
             count = view.findViewById(R.id.product_count);
+            count_cart = view.findViewById(R.id.product_count_cart);
             point = view.findViewById(R.id.product_point);
             point_count = view.findViewById(R.id.product_point_count);
             off = view.findViewById(R.id.product_off);
