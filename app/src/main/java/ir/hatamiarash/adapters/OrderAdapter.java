@@ -7,6 +7,7 @@ package ir.hatamiarash.adapters;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Order order = orderList.get(position);
         holder.id.setText(order.unique_id);
-        holder.date.setText(formatDate(order.date));
+//        holder.date.setText(formatDate(order.date));
+        holder.date.setText(order.date);
         holder.stuffs.setText(order.stuffs);
         holder.price.setText(order.price);
         holder.hour.setText(String.valueOf(order.hour) + " الی " + String.valueOf(order.hour + 1));
