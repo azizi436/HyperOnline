@@ -12,9 +12,6 @@ import android.util.Log;
 public class NotifBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.w("PUSHE", String.valueOf(intent.getData()));
-        
-        
         if (intent.getAction().equals("co.ronash.pushe.NOTIF_CLICKED")) {
             Log.i("Pushe", "Broadcast CLICKED");
         } else if (intent.getAction().equals("co.ronash.pushe.NOTIF_DISMISSED")) {

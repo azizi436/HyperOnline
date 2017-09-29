@@ -248,21 +248,21 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         item_collections,
                         item_most_sell,
                         item_new,
-//                        item_pop,
+                        //item_pop,
                         item_off,
                         item_event,
                         item_comment,
                         item_cart,
                         item_track,
-                        item_social,
-                        item_terms,
+                        //item_social,
+                        //item_terms,
                         item_website,
-//                        item_chat,
+                        //item_chat,
                         item_share,
-                        item_contact,
-                        item_help,
-                        item_questions,
-                        item_about
+                        item_contact
+                        //item_help,
+                        //item_questions,
+                        //item_about
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
