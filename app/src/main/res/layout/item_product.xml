@@ -56,20 +56,33 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="5dp"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                android:weightSum="9">
 
                 <ImageView
                     android:id="@+id/inc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     card_view:srcCompat="@drawable/ic_add"/>
+
+                <helper.PersianTextView
+                    android:id="@+id/product_count_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="55"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:font="iran_sans"/>
 
                 <ImageView
                     android:id="@+id/dec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     card_view:srcCompat="@drawable/ic_remove"/>
 
             </LinearLayout>

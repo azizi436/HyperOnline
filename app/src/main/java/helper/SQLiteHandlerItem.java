@@ -220,6 +220,20 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         return false;
     }
     
+    public int getCount(String uid) {
+        uid = "'" + uid + "'";
+        String selectQuery = "SELECT * FROM " + TABLE + " WHERE " + KEY_UID + "=" + uid;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        int count = 0;
+        if (cursor.getCount() > 0)
+            count = cursor.getInt(cursor.getColumnIndex(KEY_COUNT));
+        cursor.close();
+        db.close();
+        return count;
+    }
+    
     // calculate total price of items from database
     public int TotalPrice() {
         int total = 0;

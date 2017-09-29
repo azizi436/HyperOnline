@@ -66,6 +66,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         holder.point_count.setText(String.valueOf(product.point_count));
         holder.off.setText(String.valueOf(product.off));
         holder.count.setText(String.valueOf(product.count));
+        holder.count_cart.setText(String.valueOf(db_item.getCount(product.unique_id)));
         if (String.valueOf(product.image).equals("null"))
             Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
         else
@@ -145,6 +146,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
                 } catch (ClassCastException e) {
                     Log.w("CallBack", e.getMessage());
                 }
+                holder.count_cart.setText("1");
             }
         });
         
@@ -168,6 +170,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
                     } catch (ClassCastException e) {
                         Log.w("CallBack", e.getMessage());
                     }
+                    holder.count_cart.setText(String.valueOf(count));
                 } else
                     Helper.MakeToast(mContext, "این تعداد موجود نمی باشد", TAGs.ERROR);
             }
@@ -195,6 +198,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
                             String.valueOf(fPrice),
                             String.valueOf(off)
                     );
+                    holder.count_cart.setText(String.valueOf(count));
                 }
                 try {
                     cardBadge.updateBadge();
@@ -221,7 +225,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price, price_off, price_backup, id, count, point, point_count, off, info, status;
+        TextView name, price, price_off, price_backup, id, count, count_cart, point, point_count, off, info, status;
         ImageView image, inc, dec;
         LinearLayout add_layout, change_layout, price_layout;
         
@@ -230,6 +234,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
             id = view.findViewById(R.id.product_id);
             price_backup = view.findViewById(R.id.product_price_backup);
             count = view.findViewById(R.id.product_count);
+            count_cart = view.findViewById(R.id.product_count_cart);
             point = view.findViewById(R.id.product_point);
             point_count = view.findViewById(R.id.product_point_count);
             off = view.findViewById(R.id.product_off);
