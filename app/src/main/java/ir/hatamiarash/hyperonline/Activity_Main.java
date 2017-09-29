@@ -781,6 +781,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         this.itemMessagesBadgeTextView.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/sans.ttf"));
         (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), ShopCard.class);
                 startActivity(i);
             }
@@ -798,9 +799,11 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.drawer) {
+            vibrator.vibrate(50);
             result.openDrawer();
             return true;
         } else if (id == R.id.search) {
+            vibrator.vibrate(50);
             Intent i = new Intent(getApplicationContext(), Activity_Search.class);
             startActivity(i);
         }

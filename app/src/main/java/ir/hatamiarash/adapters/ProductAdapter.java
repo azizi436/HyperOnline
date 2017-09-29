@@ -5,6 +5,7 @@
 package ir.hatamiarash.adapters;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,11 +28,14 @@ import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Product;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
     private CardBadge cardBadge;
     private Context mContext;
     private List<Product> productList;
     private SQLiteHandlerItem db_item;
+    private Vibrator vibrator;
     
     public ProductAdapter(Context mContext, List<Product> productList) {
         this.mContext = mContext;
@@ -42,6 +46,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement AdapterCallback.");
         }
+        vibrator = (Vibrator) mContext.getSystemService(VIBRATOR_SERVICE);
     }
     
     @Override
@@ -90,6 +95,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.add_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 holder.add_layout.setVisibility(View.INVISIBLE);
                 holder.change_layout.setVisibility(View.VISIBLE);
                 holder.price.setText("اضافه شد");
@@ -116,6 +122,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.inc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
                 Log.w("COUNT", holder.count.getText().toString());
                 if (pCount <= Integer.valueOf(holder.count.getText().toString())) {
@@ -142,6 +149,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.dec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
                 if (pCount == 1) {
                     db_item.deleteItem(
