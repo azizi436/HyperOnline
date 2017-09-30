@@ -17,6 +17,7 @@ import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -99,8 +100,7 @@ public class Activity_Factor extends Activity {
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 
-                // expect HTTP 200 OK, so we don't mistakenly save error report
-                // instead of the file
+                // expect HTTP 200 OK, so we don't mistakenly save error report instead of the file
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
                     return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
                 
@@ -181,10 +181,11 @@ public class Activity_Factor extends Activity {
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR);
+                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
                 } finally {
                     Activity_Main.pointer.finish();
                     Intent intent = new Intent(Activity_Factor.this, Activity_Main.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 }

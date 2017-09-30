@@ -106,6 +106,15 @@ public class Helper {
             CustomToast.custom(context, Message, R.drawable.ic_error, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.red), Toast.LENGTH_SHORT, true, true).show();
     }
     
+    public static void MakeToast(Context context, String Message, String TAG, int DURATION) {
+        if (TAG.equals(TAGs.WARNING))
+            CustomToast.custom(context, Message, R.drawable.ic_alert, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.md_deep_orange_400), DURATION, true, true).show();
+        if (TAG.equals(TAGs.SUCCESS))
+            CustomToast.custom(context, Message, R.drawable.ic_success, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.green), DURATION, true, true).show();
+        if (TAG.equals(TAGs.ERROR))
+            CustomToast.custom(context, Message, R.drawable.ic_error, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.red), DURATION, true, true).show();
+    }
+    
     private static float PixelsToSP(Context context, float PX) {
         float ScaleDensity = context.getResources().getDisplayMetrics().scaledDensity;
         return PX / ScaleDensity;
