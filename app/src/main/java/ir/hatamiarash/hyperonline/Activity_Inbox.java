@@ -102,6 +102,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
     @Override
     public void refresh() {
         messageList.clear();
+        messageAdapter.notifyDataSetChanged();
         loadMessages();
     }
 }
