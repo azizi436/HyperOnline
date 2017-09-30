@@ -48,6 +48,7 @@ import helper.ConfirmManager;
 import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
+import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
@@ -56,6 +57,7 @@ public class UserProfile extends Activity {
     private static final String TAG = UserProfile.class.getSimpleName();
     private SQLiteHandler db_user;
     private SQLiteHandlerItem db_item;
+    private SQLiteHandlerSupport db_support;
     private SessionManager session;
     private ConfirmManager confirmManager;
     private SweetAlertDialog progressDialog;
@@ -94,6 +96,7 @@ public class UserProfile extends Activity {
         progressBar.setVisibility(View.GONE);
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
+        db_support = new SQLiteHandlerSupport(getApplicationContext());
         session = new SessionManager(getApplicationContext());
         confirmManager = new ConfirmManager(getApplicationContext());
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -155,6 +158,7 @@ public class UserProfile extends Activity {
         confirmManager.setInfoConfirm(false);
         db_user.deleteUsers();
         db_item.deleteItems();
+        db_support.deleteMessages();
         hideDialog();
         Helper.MakeToast(getApplicationContext(), "با موفقیت خارج شدید", TAGs.SUCCESS);
         Intent i = new Intent(getApplicationContext(), Activity_Main.class);

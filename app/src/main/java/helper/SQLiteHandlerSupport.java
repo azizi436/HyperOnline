@@ -102,4 +102,11 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
         db.delete(TABLE, KEY_DATE + "=" + date, null);
         db.close();
     }
+    
+    public void deleteMessages(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE, null, null);
+        db.close();
+        CreateTable();
+    }
 }
