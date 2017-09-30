@@ -825,11 +825,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         updateCartMenu();
     }
     
-    
-    public static void addMessage(String title, String body, String date) {
-        db_support.AddMessage(title, body, date);
-    }
-    
     @Override
     public void onResume() {
         super.onResume();

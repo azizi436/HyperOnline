@@ -66,6 +66,8 @@
                 android:layout_below="@+id/line2"
                 android:layout_margin="10dp"
                 android:text="عنوان :"
+                android:textColor="@color/accent"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:font="iran_sans"/>
 
@@ -89,6 +91,8 @@
                 android:layout_below="@+id/title"
                 android:layout_margin="10dp"
                 android:text="متن پیام :"
+                android:textColor="@color/accent"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:font="iran_sans"/>
 
