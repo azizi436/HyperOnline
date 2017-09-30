@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -77,6 +78,7 @@ public class Activity_Inbox extends AppCompatActivity {
                         body,
                         date
                 ));
+                Collections.reverse(messageList);
                 messageAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
