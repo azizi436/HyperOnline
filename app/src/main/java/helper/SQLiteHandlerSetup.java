@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 public class SQLiteHandlerSetup extends SQLiteOpenHelper {
     private static final String TAG = SQLiteHandlerSetup.class.getSimpleName();
-    private static final int DATABASE_VERSION = 1;             // Database Version
-    private static final String DATABASE_NAME = "android_api"; // Database Name
-    private static final String TABLE_SETUP = "setup";         // Login table name
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "android_api";
+    private static final String TABLE_SETUP = "setup";
     // Setup Table Columns names
     private static final String KEY_WEB = "web";
     private static final String KEY_ID = "id";
@@ -25,7 +25,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // create tables on call
+    // create table on call
     @Override
     public void onCreate(SQLiteDatabase db) {
         String Query = "CREATE TABLE " + TABLE_SETUP + "("
@@ -63,8 +63,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
         db.close();
         Log.d(TAG, "Database table created - Manual");
     }
-
-    // add user data to database
+    
     public void AddProperty(int value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String Query = "UPDATE " + TABLE_SETUP + " SET " + KEY_WEB + "=" + value;
@@ -72,8 +71,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
         db.close();
         Log.d(TAG, "Row Updated by val " + String.valueOf(value));
     }
-
-    // get user details from database and send them
+    
     public HashMap<String, String> GetProperties() {
         HashMap<String, String> user = new HashMap<>();
         SQLiteDatabase db = this.getReadableDatabase();

@@ -84,6 +84,9 @@
             android:name=".Activity_Cat"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".Activity_Inbox"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".Confirm_Phone"
             android:screenOrientation="portrait"/>
         <activity
@@ -186,11 +189,12 @@
                 <action android:name="co.ronash.pushe.NOTIF_BTN_CLICKED"/>
             </intent-filter>
         </receiver>
+
         <service
             android:name="helper.PusheJSONListener"
             android:exported="false">
             <intent-filter>
-                <action android:name="co.ronash.pushe.RECEIVE" />
+                <action android:name="co.ronash.pushe.RECEIVE"/>
             </intent-filter>
         </service>
 

@@ -91,6 +91,7 @@ import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerMain;
 import helper.SQLiteHandlerSetup;
+import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.adapters.CategoryAdapter;
 import ir.hatamiarash.adapters.ProductAdapter;
@@ -108,7 +109,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public static SQLiteHandler db_user;             // items database
     public static SQLiteHandlerItem db_item;         // items database
     public static SQLiteHandlerSetup db_setup;       // setup database
-    public static SQLiteHandlerMain db_main;       // setup database
+    public static SQLiteHandlerMain db_main;         // main database
+    public static SQLiteHandlerSupport db_support;   // support database
     static Typeface persianTypeface;                 // persian font typeface
     public Drawer result = null;
     SessionManager session;                          // session for check user logged
@@ -184,6 +186,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
         db_main = new SQLiteHandlerMain(getApplicationContext());
+        db_support = new SQLiteHandlerSupport(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -197,6 +200,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 db_setup.CreateTable();
                 db_item.CreateTable();
                 db_main.CreateTable();
+                db_support.CreateTable();
                 settings.edit().putBoolean("my_first_time", false).apply();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -234,6 +238,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         PrimaryDrawerItem item_questions = new CustomPrimaryDrawerItem().withIdentifier(19).withName("پرسش های متداول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_help);
         PrimaryDrawerItem item_about = new CustomPrimaryDrawerItem().withIdentifier(20).withName("درباره ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_business_center);
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_person);
+        PrimaryDrawerItem item_inbox = new CustomPrimaryDrawerItem().withIdentifier(22).withName("صندوق پیام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_inbox);
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -253,6 +258,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         //item_pop,
                         item_off,
                         item_event,
+                        item_inbox,
                         item_comment,
                         //item_social,
                         //item_terms,
@@ -389,6 +395,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                     }
                                 } else
                                     result.closeDrawer();
+                            }
+                            if (item == 22) {
+                                Intent i = new Intent(getApplicationContext(), Activity_Inbox.class);
+                                startActivity(i);
                             }
                         }
                         return false;
@@ -813,6 +823,11 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     @Override
     public void updateBadge() {
         updateCartMenu();
+    }
+    
+    
+    public static void addMessage(String title, String body, String date) {
+        db_support.AddMessage(title, body, date);
     }
     
     @Override
