@@ -150,6 +150,7 @@ public class Login extends Activity {
                                     user.getString(TAGs.CITY)
                             );
                             if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
+                                confirmManager.setPhoneConfirm(false);
                                 new MaterialStyledDialog.Builder(Login.this)
                                         .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
                                         .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید"))
@@ -173,6 +174,7 @@ public class Login extends Activity {
                                         })
                                         .show();
                             } else {
+                                confirmManager.setPhoneConfirm(true);
                                 if (Integer.valueOf(user.getString("confirmed_info")) == 0) {
                                     confirmManager.setInfoConfirm(false);
                                     Helper.MakeToast(getApplication(), "اطلاعات حساب شما هنوز تایید نشده است", TAGs.WARNING, Toast.LENGTH_LONG);
