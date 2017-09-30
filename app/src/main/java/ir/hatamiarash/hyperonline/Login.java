@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -174,7 +175,7 @@ public class Login extends Activity {
                             } else {
                                 if (Integer.valueOf(user.getString("confirmed_info")) == 0) {
                                     confirmManager.setInfoConfirm(false);
-                                    Helper.MakeToast(getApplication(), "اطلاعات حساب شما هنوز تایید نشده است", TAGs.WARNING);
+                                    Helper.MakeToast(getApplication(), "اطلاعات حساب شما هنوز تایید نشده است", TAGs.WARNING, Toast.LENGTH_LONG);
                                 } else {
                                     confirmManager.setInfoConfirm(true);
                                 }

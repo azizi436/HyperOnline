@@ -334,9 +334,16 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 result.closeDrawer();
                             }
                             if (item == 11) {
-                                Intent i = new Intent(getApplicationContext(), Activity_UserOrders.class);
-                                startActivity(i);
-                                result.closeDrawer();
+                                if (session.isLoggedIn()) {
+                                    Intent i = new Intent(getApplicationContext(), Activity_UserOrders.class);
+                                    startActivity(i);
+                                    result.closeDrawer();
+                                } else {
+                                    Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
+                                    Intent i = new Intent(getApplicationContext(), Login.class);
+                                    startActivity(i);
+                                    finish();
+                                }
                             }
                             if (item == 12) {
                                 

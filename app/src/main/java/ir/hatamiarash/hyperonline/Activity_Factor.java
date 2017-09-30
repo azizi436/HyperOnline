@@ -183,7 +183,6 @@ public class Activity_Factor extends Activity {
                     e.printStackTrace();
                     Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
                 } finally {
-                    Activity_Main.pointer.finish();
                     Intent intent = new Intent(Activity_Factor.this, Activity_Main.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
