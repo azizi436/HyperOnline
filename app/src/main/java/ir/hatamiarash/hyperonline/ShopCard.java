@@ -6,7 +6,6 @@ package ir.hatamiarash.hyperonline;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -154,6 +153,16 @@ public class ShopCard extends AppCompatActivity {
                                     finish();
                                 }
                             })
+                            .show();
+                } else if (!confirmManager.isInfoConfirm()) {
+                    new MaterialStyledDialog.Builder(ShopCard.this)
+                            .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
+                            .setDescription(FontHelper.getSpannedString(ShopCard.this, "اطلاعات حساب شما هنوز تایید نشده است. در صورت هر گونه سوال با ما تماس بگیرید"))
+                            .setStyle(Style.HEADER_WITH_TITLE)
+                            .withDarkerOverlay(true)
+                            .withDialogAnimation(true)
+                            .setCancelable(true)
+                            .setPositiveText("باشه")
                             .show();
                 } else {
                     vibrator.vibrate(50);

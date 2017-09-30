@@ -44,6 +44,7 @@ import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
+import helper.ConfirmManager;
 import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
@@ -56,6 +57,7 @@ public class UserProfile extends Activity {
     private SQLiteHandler db_user;
     private SQLiteHandlerItem db_item;
     private SessionManager session;
+    private ConfirmManager confirmManager;
     private SweetAlertDialog progressDialog;
     
     @InjectView(R.id.btnLogout)
@@ -93,6 +95,7 @@ public class UserProfile extends Activity {
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         session = new SessionManager(getApplicationContext());
+        confirmManager = new ConfirmManager(getApplicationContext());
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
@@ -148,10 +151,15 @@ public class UserProfile extends Activity {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         session.setLogin(false);
+        confirmManager.setPhoneConfirm(false);
+        confirmManager.setInfoConfirm(false);
         db_user.deleteUsers();
         db_item.deleteItems();
         hideDialog();
         Helper.MakeToast(getApplicationContext(), "با موفقیت خارج شدید", TAGs.SUCCESS);
+        Intent i = new Intent(getApplicationContext(), Activity_Main.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
         finish();
     }
     
