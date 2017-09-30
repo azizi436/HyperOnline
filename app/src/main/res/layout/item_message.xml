@@ -45,6 +45,18 @@
                 android:textDirection="anyRtl"
                 app:font="iran_sans"/>
 
+            <helper.PersianTextView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="حذف"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                app:font="iran_sans"/>
+
             <View
                 android:id="@+id/line2"
                 android:layout_width="match_parent"

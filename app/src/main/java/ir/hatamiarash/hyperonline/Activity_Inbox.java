@@ -24,9 +24,10 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.FontHelper;
 import helper.SQLiteHandlerSupport;
 import ir.hatamiarash.adapters.MessageAdapter;
+import ir.hatamiarash.interfaces.Refresh;
 import models.Message;
 
-public class Activity_Inbox extends AppCompatActivity {
+public class Activity_Inbox extends AppCompatActivity implements Refresh {
     public Drawer result = null;
     SweetAlertDialog progressDialog;
     public static SQLiteHandlerSupport db_support;
@@ -96,5 +97,11 @@ public class Activity_Inbox extends AppCompatActivity {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+    
+    @Override
+    public void refresh() {
+        messageList.clear();
+        loadMessages();
     }
 }
