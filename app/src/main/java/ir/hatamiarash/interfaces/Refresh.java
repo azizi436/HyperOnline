@@ -4,7 +4,6 @@
 
 package ir.hatamiarash.interfaces;
 
-
 public interface Refresh {
     void refresh();
 }
