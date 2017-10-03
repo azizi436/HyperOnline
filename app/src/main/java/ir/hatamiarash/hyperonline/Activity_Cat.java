@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,12 +12,18 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -79,7 +86,20 @@ public class Activity_Cat extends AppCompatActivity implements CardBadge {
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         progressDialog.setTitleText("لطفا منتظر بمانید");
         
-        toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "دسته بندی ها"));
+        setSupportActionBar(toolbar);
+        try {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = inflater.inflate(R.layout.item_action_bar_title, null);
+            ActionBar.LayoutParams p = new ActionBar.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    Gravity.END);
+            ((TextView) v.findViewById(R.id.title_text)).setText(FontHelper.getSpannedString(getApplicationContext(), "دسته بندی ها"));
+            getSupportActionBar().setCustomView(v, p);
+            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter_All(this, categoryList);

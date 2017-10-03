@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,12 +12,18 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -182,27 +189,41 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
     }
     
     private void setToolbarTitle(int type) {
-        switch (type) {
-            case 1:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "سبد های غذایی"));
-                break;
-            case 2:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرفروش ترین ها"));
-                break;
-            case 3:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "جدیدترین ها"));
-                break;
-            case 4:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "محبوب ترین ها"));
-                break;
-            case 5:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "تخفیف خورده ها"));
-                break;
-            case 6:
-                toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "مناسبتی ها"));
-                break;
-        }
         setSupportActionBar(toolbar);
+        try {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = inflater.inflate(R.layout.item_action_bar_title, null);
+            ActionBar.LayoutParams p = new ActionBar.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    Gravity.END);
+            String title = "";
+            switch (type) {
+                case 1:
+                    title = "سبد های غذایی";
+                    break;
+                case 2:
+                    title = "پرفروش ترین ها";
+                    break;
+                case 3:
+                    title = "جدیدترین ها";
+                    break;
+                case 4:
+                    title = "محبوب ترین ها";
+                    break;
+                case 5:
+                    title = "تخفیف خورده ها";
+                    break;
+                case 6:
+                    title = "مناسبتی ها";
+                    break;
+            }
+            ((TextView) v.findViewById(R.id.title_text)).setText(FontHelper.getSpannedString(getApplicationContext(), title));
+            getSupportActionBar().setCustomView(v, p);
+            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
     
     @Override

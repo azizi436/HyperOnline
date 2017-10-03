@@ -55,6 +55,8 @@ public class Activity_Comment extends AppCompatActivity {
     public EditText body;
     @InjectView(R.id.comment_send)
     public Button send;
+    @InjectView(R.id.toolbar)
+    public Toolbar toolbar;
     
     private Vibrator vibrator;
     private SessionManager session;
@@ -74,7 +76,6 @@ public class Activity_Comment extends AppCompatActivity {
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         try {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
