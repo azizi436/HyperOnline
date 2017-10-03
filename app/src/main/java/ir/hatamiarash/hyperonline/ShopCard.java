@@ -157,7 +157,7 @@ public class ShopCard extends AppCompatActivity {
                 } else if (!confirmManager.isInfoConfirm()) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
-                            .setDescription(FontHelper.getSpannedString(ShopCard.this, "اطلاعات حساب شما هنوز تایید نشده است. در صورت هر گونه سوال با ما تماس بگیرید"))
+                            .setDescription(FontHelper.getSpannedString(ShopCard.this, "متاسفانه اطلاعات حساب شما هنوز تایید نشده است. در صورت هر گونه سوال با ما تماس بگیرید"))
                             .setStyle(Style.HEADER_WITH_TITLE)
                             .withDarkerOverlay(true)
                             .withDialogAnimation(true)
