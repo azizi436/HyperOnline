@@ -193,8 +193,8 @@ public class ShopCard extends AppCompatActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         DESCRIPTION = edit_text.getText().toString();
-                                        //Pay(TAGs.API_KEY, String.valueOf(1000));
-                                        onPaySuccess();
+                                        Pay(TAGs.API_KEY, String.valueOf(1000));
+                                        //onPaySuccess();
                                     }
                                 })
                                 .show();

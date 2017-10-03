@@ -399,7 +399,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                         Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
                                         Intent i = new Intent(getApplicationContext(), Login.class);
                                         startActivity(i);
-                                        finish();
                                     }
                                 } else
                                     result.closeDrawer();
