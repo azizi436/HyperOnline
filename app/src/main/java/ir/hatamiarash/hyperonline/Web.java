@@ -54,7 +54,7 @@ public class Web extends AppCompatActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            Log.d("WebView", "page finished" + url);
+            Log.e("WebView", "page finished" + url);
             progressBar.setVisibility(View.GONE);
             if (url.equals("http://hyper-online.ir/api/callback"))
                 finish();

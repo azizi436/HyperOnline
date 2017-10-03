@@ -37,6 +37,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -979,10 +980,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             String check = jObj.getString("c");
                             if (check.equals("OK")) {
                                 if (!confirmManager.isInfoConfirm())
-                                    Helper.MakeToast(getApplicationContext(), "حساب شما تایید شد", TAGs.SUCCESS);
+                                    Helper.MakeToast(getApplicationContext(), "حساب شما تایید شد", TAGs.SUCCESS, Toast.LENGTH_LONG);
                                 confirmManager.setInfoConfirm(true);
                             } else {
-                                Helper.MakeToast(getApplicationContext(), "حساب شما تایید نشده است", TAGs.WARNING);
+                                Helper.MakeToast(getApplicationContext(), "حساب شما تایید نشده است", TAGs.WARNING, Toast.LENGTH_LONG);
                                 confirmManager.setInfoConfirm(false);
                             }
                         } else {

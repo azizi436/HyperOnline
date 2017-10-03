@@ -113,6 +113,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         inputPassword.setError(Register.this, "حداقل 8 حرف");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.provinces);
         inputProvince.setAdapter(adapter);
+        inputProvince.setEnabled(false);
         inputName.requestFocus();
         
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -141,7 +142,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                             if (Helper.isValidPassword(password))
                                 if (password.equals(password2))
                                     if (inputProvince.getSelectedItem() != null && !inputProvince.getSelectedItem().toString().equals(""))
-                                        if (inputCity.getSelectedItem() != null)
+                                        if (inputCity.getSelectedItem() != null && !inputCity.getSelectedItem().toString().equals("انتخاب کنید"))
                                             registerUser(
                                                     name,
                                                     password,

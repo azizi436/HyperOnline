@@ -157,7 +157,7 @@ public class ShopCard extends AppCompatActivity {
                 } else if (!confirmManager.isInfoConfirm()) {
                     new MaterialStyledDialog.Builder(ShopCard.this)
                             .setTitle(FontHelper.getSpannedString(ShopCard.this, "تایید حساب"))
-                            .setDescription(FontHelper.getSpannedString(ShopCard.this, "متاسفانه اطلاعات حساب شما هنوز تایید نشده است. در صورت هر گونه سوال با ما تماس بگیرید"))
+                            .setDescription(FontHelper.getSpannedString(ShopCard.this, "متاسفانه اطلاعات حساب شما هنوز تایید نشده است. جهت اطلاعات بیشتر صندوق پیام را بررسی کرده و در صورت هر گونه سوال با ما تماس بگیرید"))
                             .setStyle(Style.HEADER_WITH_TITLE)
                             .withDarkerOverlay(true)
                             .withDialogAnimation(true)
@@ -279,23 +279,19 @@ public class ShopCard extends AppCompatActivity {
         String string_req = "req_fetch";
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send ", new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Check Response: " + response);
+                Log.e(TAG, "Check Response: " + response);
                 try {
                     JSONObject jObj = new JSONObject(response);
                     int status = jObj.getInt("status");
                     if (status == 1) {
                         String Address = "https://pay.ir/payment/gateway/" + jObj.getString("transId");
-                        
                         ORDER_CODE = jObj.getString("transId");
                         ORDER_AMOUNT = AMOUNT;
-                        // TODO: i think we can't use webview because there isn't back !!!
-                        // TODO: but if we use internal android web client maybe we have a return command to application
                         Intent i = new Intent(getApplicationContext(), Web.class);
                         i.putExtra(TAGs.ADDRESS, Address);
-                        //Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
                         startActivityForResult(i, CODE_PAYMENT);
                     } else
                         Helper.MakeToast(getApplicationContext(), jObj.getString("errorMessage"), TAGs.ERROR);
@@ -322,6 +318,7 @@ public class ShopCard extends AppCompatActivity {
                 java.util.Map<String, String> params = new HashMap<>();
                 params.put("api", API_KEY);
                 params.put("amount", AMOUNT);
+                params.put("factorNumber", "1");
                 params.put("redirect", "http://hyper-online.ir/api/callback");
                 return params;
             }
@@ -330,54 +327,65 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void Check(final String CODE, final String AMOUNT) {
-        String string_req = "req_fetch";
+        
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/verify", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.w("Check", response);
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    int status = jObj.getInt("status");
-                    if (status == 1)
-                        onPaySuccess();
-                    else
-                        onPayCanceled();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    hideDialog();
-                }
-                hideDialog();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                NetworkResponse response = error.networkResponse;
-                if (response != null && response.data != null) {
-                    if (response.statusCode == 422) {
-                        onPayCanceled();
-                    } else {
-                        Log.e(TAG, "Check Error: " + error.getMessage());
-                        if (error.getMessage() != null)
-                            Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "https://pay.ir/payment/verify";
+            JSONObject params = new JSONObject();
+            params.put("api", TAGs.API_KEY);
+            params.put("transId", CODE);
+            final String mRequestBody = params.toString();
+        
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_Check", response);
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        int status = jObj.getInt("status");
+                        if (status == 1)
+                            onPaySuccess();
                         else
-                            Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
+                            onPayCanceled();
+                    } catch (JSONException e) {
                         hideDialog();
+                        e.printStackTrace();
                         finish();
                     }
                 }
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() {
-                java.util.Map<String, String> params = new HashMap<>();
-                params.put("api", TAGs.API_KEY);
-                params.put("transId", CODE);
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_Check", error.toString());
+                    Helper.MakeToast(ShopCard.this, error.toString(), TAGs.ERROR);
+                    hideDialog();
+                    //finish();
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+            
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     
     @Override
