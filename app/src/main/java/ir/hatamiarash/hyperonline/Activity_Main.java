@@ -213,6 +213,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             startActivity(i);
             finish();
         }
+        if (session.isLoggedIn())
+            checkConfirm(db_user.getUserDetails().get(TAGs.PHONE));
         
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
@@ -365,7 +367,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                     String sAux = "\nتا حالا با هایپرآنلاین کار کردی ؟\nیه نگاه بنداز\n\n";
                                     sAux = sAux + "https://cafebazaar.ir/app/ir.hatamiarash.hyperonline/?l=fa \n\n";
                                     i.putExtra(Intent.EXTRA_TEXT, sAux);
-                                    startActivity(Intent.createChooser(i, "یک گزنه انتخاب کنید"));
+                                    startActivity(Intent.createChooser(i, "یک گزینه انتخاب کنید"));
                                 } catch (Exception e) {
                                     Log.e("share", e.getMessage());
                                 }
@@ -956,6 +958,69 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         protected void onPostExecute(Boolean result) {
             if (result && status)
                 Log.e("LS", "Done !");
+        }
+    }
+    
+    private void checkConfirm(String phone) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "checkConfirm";
+            JSONObject params = new JSONObject();
+            params.put(TAGs.PHONE, phone);
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_VOLLEY R", response);
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            String check = jObj.getString("c");
+                            if (check.equals("OK")) {
+                                if (!confirmManager.isInfoConfirm())
+                                    Helper.MakeToast(getApplicationContext(), "حساب شما تایید شد", TAGs.SUCCESS);
+                                confirmManager.setInfoConfirm(true);
+                            } else {
+                                Helper.MakeToast(getApplicationContext(), "حساب شما تایید نشده است", TAGs.WARNING);
+                                confirmManager.setInfoConfirm(false);
+                            }
+                        } else {
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_VOLLEY E", error.toString());
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
     
