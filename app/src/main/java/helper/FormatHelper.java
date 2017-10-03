@@ -7,7 +7,7 @@ package helper;
 public class FormatHelper {
     // define persian numbers for replacing old ones
     private static String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
-
+    
     public static String toPersianNumber(String text) {
         if (text.isEmpty())
             return "";
@@ -26,7 +26,7 @@ public class FormatHelper {
         }
         return out;
     }
-
+    
     public static String toEnglishNumber(String text) {
         if (text.isEmpty()) return "";
         String out = "";
@@ -45,6 +45,22 @@ public class FormatHelper {
             if (c == '۹') out += '9';
             if (c == '،') out += ',';
         }
+        return out;
+    }
+    
+    public static String toEnglishNumber2(String c) {
+        String out;
+        if (c.equals("۰")) out = "0";
+        else if (c.equals("۱")) out = "1";
+        else if (c.equals("۲")) out = "2";
+        else if (c.equals("۳")) out = "3";
+        else if (c.equals("۴")) out = "4";
+        else if (c.equals("۵")) out = "5";
+        else if (c.equals("۶")) out = "6";
+        else if (c.equals("۷")) out = "7";
+        else if (c.equals("۸")) out = "8";
+        else if (c.equals("۹")) out = "9";
+        else out = c;
         return out;
     }
 }

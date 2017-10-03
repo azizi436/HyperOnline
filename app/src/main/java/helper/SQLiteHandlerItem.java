@@ -199,12 +199,10 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            Log.d(TAG, "Item Found : " + name);
             cursor.close();
             db.close();
             return true;
         }
-        Log.d(TAG, "Item Not Found : " + name);
         cursor.close();
         db.close();
         return false;
@@ -217,12 +215,10 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            Log.d(TAG, "Item Found : " + uid);
             cursor.close();
             db.close();
             return true;
         }
-        Log.d(TAG, "Item Not Found : " + uid);
         cursor.close();
         db.close();
         return false;
@@ -311,7 +307,6 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         uid = "'" + uid + "'";
         db.delete(TABLE, KEY_UID + "=" + uid, null);
         db.close();
-        Log.d(TAG, "Deleted " + uid + " from sqlite");
     }
     
     // delete all items from database
@@ -320,6 +315,5 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
         db.delete(TABLE, null, null);
         db.close();
         CreateTable();
-        Log.d(TAG, "Deleted all item info from sqlite");
     }
 }

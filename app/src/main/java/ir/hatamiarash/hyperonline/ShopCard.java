@@ -96,7 +96,7 @@ public class ShopCard extends AppCompatActivity {
     
     private int tOff = 0;
     private int tPrice = 0;
-    private int tExtend;
+    private int tExtend = 5000;
     List<String> Item;
     List<Product> Products_List;
     private int check = 0;
@@ -263,8 +263,8 @@ public class ShopCard extends AppCompatActivity {
     private String getCounts() {
         Item = db_item.getItemsDetails();
         String c = "";
-        for (int i = 0; i < (Item.size() / 7); i++) {
-            String count = Item.get(i * 7 + 6);
+        for (int i = 0; i < (Item.size() / 8); i++) {
+            String count = FormatHelper.toEnglishNumber2(Item.get(i * 8 + 6));
             c += count + ",";
         }
         Log.w("count", c);
