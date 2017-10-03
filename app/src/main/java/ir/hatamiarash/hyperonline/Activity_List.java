@@ -5,11 +5,14 @@
 package ir.hatamiarash.hyperonline;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -55,12 +58,14 @@ import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandlerItem;
+import helper.SessionManager;
 import helper.SymmetricProgressBar;
 import ir.hatamiarash.adapters.CategoryAdapter_Small;
 import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
+import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
 
@@ -70,7 +75,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     public Drawer result = null;
     SymmetricProgressBar progressBar, p;
     public static SQLiteHandlerItem db_item;
-    
+    SessionManager session;
     private String url, category_id, parent_id;
     public int list_category;
     private List<Product> productList;
@@ -96,7 +101,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_complex);
         ButterKnife.inject(this);
-        
+    
+        session = new SessionManager(getApplicationContext());
         list_category = Integer.valueOf(getIntent().getStringExtra("cat"));
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
@@ -120,12 +126,30 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         
         setSupportActionBar(toolbar);
-        
-        //PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("خانه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
-        //PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(2).withName("حساب کاربری").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
-        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(3).withName("کل محصولات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
-        //PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(4).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
-        
+    
+        PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
+        PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
+        PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
+        PrimaryDrawerItem item_most_sell = new CustomPrimaryDrawerItem().withIdentifier(4).withName("پرفروش ترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_euro_symbol);
+        PrimaryDrawerItem item_new = new CustomPrimaryDrawerItem().withIdentifier(5).withName("جدیدترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_fiber_new);
+        PrimaryDrawerItem item_pop = new CustomPrimaryDrawerItem().withIdentifier(6).withName("محبوب ترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_star);
+        PrimaryDrawerItem item_off = new CustomPrimaryDrawerItem().withIdentifier(7).withName("تخفیف خورده ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_lightbulb_outline);
+        PrimaryDrawerItem item_event = new CustomPrimaryDrawerItem().withIdentifier(8).withName("مناسبتی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_today);
+        PrimaryDrawerItem item_comment = new CustomPrimaryDrawerItem().withIdentifier(9).withName("ارسال نظر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_message);
+        PrimaryDrawerItem item_cart = new CustomPrimaryDrawerItem().withIdentifier(10).withName("سبد خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
+        PrimaryDrawerItem item_track = new CustomPrimaryDrawerItem().withIdentifier(11).withName("پیگیری سفارش").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_track_changes);
+        PrimaryDrawerItem item_social = new CustomPrimaryDrawerItem().withIdentifier(12).withName("شبکه های اجتماعی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_group);
+        PrimaryDrawerItem item_terms = new CustomPrimaryDrawerItem().withIdentifier(13).withName("قوانین و مقررات").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_priority_high);
+        PrimaryDrawerItem item_website = new CustomPrimaryDrawerItem().withIdentifier(14).withName("ورود به وب سایت").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_language);
+        PrimaryDrawerItem item_chat = new CustomPrimaryDrawerItem().withIdentifier(15).withName("چت با مدیر فروش").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_question_answer);
+        PrimaryDrawerItem item_share = new CustomPrimaryDrawerItem().withIdentifier(16).withName("ارسال به دوستان").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_share);
+        PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(17).withName("تماس با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_phone);
+        PrimaryDrawerItem item_help = new CustomPrimaryDrawerItem().withIdentifier(18).withName("راهنمای خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_live_help);
+        PrimaryDrawerItem item_questions = new CustomPrimaryDrawerItem().withIdentifier(19).withName("پرسش های متداول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_help);
+        PrimaryDrawerItem item_about = new CustomPrimaryDrawerItem().withIdentifier(20).withName("درباره ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_business_center);
+        PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_person);
+        PrimaryDrawerItem item_inbox = new CustomPrimaryDrawerItem().withIdentifier(22).withName("صندوق پیام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_inbox);
+    
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -133,68 +157,165 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                         .withHeaderBackground(R.drawable.drawer_header)
                         .build())
                 .addDrawerItems(
-                        //item_home,
-                        //item_profile,
-                        item_cart
-                        //item_comment
+                        item_home,
+                        item_profile,
+                        item_cart,
+                        item_track,
+                        item_categories,
+                        item_collections,
+                        item_most_sell,
+                        item_new,
+                        //item_pop,
+                        item_off,
+                        item_event,
+                        item_inbox,
+                        item_comment,
+                        //item_social,
+                        //item_terms,
+                        item_website,
+                        //item_chat,
+                        item_share,
+                        item_contact
+                        //item_help,
+                        //item_questions,
+                        //item_about
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         vibrator.vibrate(50);
-                        if (drawerItem != null && drawerItem.getIdentifier() == 1) {
-                            /*Intent i = new Intent(getApplicationContext(), Activity_Main.class);
-                            startActivity(i);*/
-                            /*finish();*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 2) {
-                            /*if (Helper.CheckInternet(getApplicationContext())) {
-                                Intent i = new Intent(getApplicationContext(), UserProfile.class);
+                        if (drawerItem != null) {
+                            long item = drawerItem.getIdentifier();
+                            if (item == 1) {
+                                Intent i = new Intent(getApplicationContext(), Activity_List.class);
                                 startActivity(i);
-                            } else*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 3) {
-                            /*Intent i = new Intent(getApplicationContext(), WebPage.class);
-                            i.putExtra(TAGs.TITLE, "درباره ما");
-                            i.putExtra(TAGs.ADDRESS, TAGs.ABOUT);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 4) {
-                            /*Intent i = new Intent(getApplicationContext(), Contact.class);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 5) {
-                            /*Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 6) {
+                                finish();
+                                result.closeDrawer();
+                            }
+                            if (item == 2) {
+                                Intent i = new Intent(getApplicationContext(), Activity_Cat.class);
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 3) {
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "1");
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 4) {
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "2");
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 5) {
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "3");
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 6) {
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "4");
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 7) {
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "5");
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 8) {
+                                Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
+                                i.putExtra("type", "6");
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 9) {
+                                Intent i = new Intent(getApplicationContext(), Activity_Comment.class);
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 10) {
+                                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                                startActivity(i);
+                                result.closeDrawer();
+                            }
+                            if (item == 11) {
+                                if (session.isLoggedIn()) {
+                                    Intent i = new Intent(getApplicationContext(), Activity_UserOrders.class);
+                                    startActivity(i);
+                                    result.closeDrawer();
+                                } else {
+                                    Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
+                                    Intent i = new Intent(getApplicationContext(), Login.class);
+                                    startActivity(i);
+                                }
+                            }
+                            if (item == 12) {
                             
-                            result.closeDrawer();
-                            return true;
-                        }
-                        if (drawerItem != null && drawerItem.getIdentifier() == 7) {
-                            /*Popup(p_count);
-                            result.closeDrawer();*/
+                            }
+                            if (item == 13) {
                             
-                            /*Intent i = new Intent(getApplicationContext(), Pay_Log.class);
-                            i.putExtra("order_code", "11086");
-                            startActivity(i);
-                            result.closeDrawer();*/
+                            }
+                            if (item == 14) {
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hyper-online.ir"));
+                                startActivity(i);
+                            }
+                            if (item == 15) {
                             
-                            /*Intent i = new Intent(getApplicationContext(), Intro.class);
-                            startActivity(i);*/
-                            result.closeDrawer();
-                            return true;
+                            }
+                            if (item == 16) {
+                                try {
+                                    Intent i = new Intent(Intent.ACTION_SEND);
+                                    i.setType("text/plain");
+                                    i.putExtra(Intent.EXTRA_SUBJECT, "Hyper Online");
+                                    String sAux = "\nتا حالا با هایپرآنلاین کار کردی ؟\nیه نگاه بنداز\n\n";
+                                    sAux = sAux + "https://cafebazaar.ir/app/ir.hatamiarash.hyperonline/?l=fa \n\n";
+                                    i.putExtra(Intent.EXTRA_TEXT, sAux);
+                                    startActivity(Intent.createChooser(i, "یک گزینه انتخاب کنید"));
+                                } catch (Exception e) {
+                                    Log.e("share", e.getMessage());
+                                }
+                            }
+                            if (item == 17) {
+                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                intent.setData(Uri.parse("tel:" + Values.phoneNumber));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                if (ActivityCompat.checkSelfPermission(Activity_List.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    Helper.GetPermissions(Activity_List.this, getApplicationContext());
+                                }
+                                startActivity(intent);
+                            }
+                            if (item == 18) {
+                            
+                            }
+                            if (item == 19) {
+                            
+                            }
+                            if (item == 20) {
+                            
+                            }
+                            if (item == 21) {
+                                if (Helper.CheckInternet(getApplicationContext())) {
+                                    if (session.isLoggedIn()) {
+                                        Intent i = new Intent(getApplicationContext(), UserProfile.class);
+                                        startActivity(i);
+                                    } else {
+                                        Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
+                                        Intent i = new Intent(getApplicationContext(), Login.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                } else
+                                    result.closeDrawer();
+                            }
+                            if (item == 22) {
+                                Intent i = new Intent(getApplicationContext(), Activity_Inbox.class);
+                                startActivity(i);
+                            }
                         }
                         return false;
                     }
