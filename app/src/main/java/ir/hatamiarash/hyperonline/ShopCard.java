@@ -19,10 +19,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -531,7 +531,9 @@ public class ShopCard extends AppCompatActivity {
             sellerViewHolder.product_id.setText(products.get(i).unique_id);
             sellerViewHolder.product_off.setText(String.valueOf(products.get(i).off));
             sellerViewHolder.product_name.setText(products.get(i).name);
-            sellerViewHolder.product_description.setText(products.get(i).description);
+            sellerViewHolder.product_description.setText("");
+            if (!products.get(i).description.equals("null"))
+                sellerViewHolder.product_description.setText(products.get(i).description);
             if (products.get(i).count > 0)
                 sellerViewHolder.product_price.setText(String.valueOf(Integer.valueOf(products.get(i).price) / products.get(i).count) + " تومان");
             sellerViewHolder.product_count.setText(String.valueOf(products.get(i).count));
@@ -549,9 +551,9 @@ public class ShopCard extends AppCompatActivity {
             TextView product_name;
             TextView product_description;
             TextView product_price;
-            TextView product_inc;
+            ImageView product_inc;
             TextView product_count;
-            TextView product_dec;
+            ImageView product_dec;
             
             ProductViewHolder(View itemView) {
                 super(itemView);
@@ -561,12 +563,9 @@ public class ShopCard extends AppCompatActivity {
                 product_name = itemView.findViewById(R.id.product_name);
                 product_description = (TextView) itemView.findViewById(R.id.product_info);
                 product_price = itemView.findViewById(R.id.product_price);
-                product_count = itemView.findViewById(R.id.product_count);
-                product_dec = itemView.findViewById(R.id.product_dec);
-                product_inc = itemView.findViewById(R.id.product_inc);
-                
-                product_dec.setOnTouchListener(new TouchListener());
-                product_inc.setOnTouchListener(new TouchListener());
+                product_count = itemView.findViewById(R.id.product_count_cart);
+                product_dec = itemView.findViewById(R.id.dec);
+                product_inc = itemView.findViewById(R.id.inc);
                 
                 product_dec.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -635,21 +634,21 @@ public class ShopCard extends AppCompatActivity {
             }
         }
     }
-    
-    private class TouchListener implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
-                    break;
-            }
-            return false;
-        }
-    }
+
+//    private class TouchListener implements View.OnTouchListener {
+//        public boolean onTouch(View view, MotionEvent motionEvent) {
+//            switch (motionEvent.getAction()) {
+//                case MotionEvent.ACTION_DOWN:
+//                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+//                    break;
+//                case MotionEvent.ACTION_CANCEL:
+//                case MotionEvent.ACTION_UP:
+//                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+//                    break;
+//            }
+//            return false;
+//        }
+//    }
     
     private int getTime(int type) {
         Date date = new Date();
