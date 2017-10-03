@@ -26,6 +26,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
     private static final String KEY_COUNT = "count";
     private static final String KEY_INFO = "info";
     private static final String KEY_OFF = "off";
+    private static final String KEY_COUNT_ORIGINAL = "ocount";
     
     public SQLiteHandlerItem(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,7 +42,8 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 + KEY_PRICE + " TEXT,"
                 + KEY_INFO + " TEXT,"
                 + KEY_OFF + " TEXT,"
-                + KEY_COUNT + " TEXT"
+                + KEY_COUNT + " TEXT,"
+                + KEY_COUNT_ORIGINAL + " TEXT"
                 + ")";
         db.execSQL(CREATE_CARD_TABLE);
         Log.d(TAG, "Database table created - onCreate");
@@ -65,7 +67,8 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 + KEY_PRICE + " TEXT,"
                 + KEY_INFO + " TEXT,"
                 + KEY_OFF + " TEXT,"
-                + KEY_COUNT + " TEXT"
+                + KEY_COUNT + " TEXT,"
+                + KEY_COUNT_ORIGINAL + " TEXT"
                 + ")";
         db.execSQL(CREATE_CARD_TABLE);
         db.close();
@@ -73,11 +76,12 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
     }
     
     // add item data to database
-    public void addItem(String uid, String name, String price, String info, String off, String count) {
+    public void addItem(String uid, String name, String price, String info, String off, String count, String o_count) {
         SQLiteDatabase db = this.getWritableDatabase();
         name = "'" + name + "'";
         price = "'" + price + "'";
         count = "'" + count + "'";
+        o_count = "'" + o_count + "'";
         uid = "'" + uid + "'";
         info = "'" + info + "'";
         off = "'" + off + "'";
@@ -87,14 +91,16 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 + KEY_PRICE + ", "
                 + KEY_INFO + ", "
                 + KEY_OFF + ", "
-                + KEY_COUNT
+                + KEY_COUNT + ", "
+                + KEY_COUNT_ORIGINAL
                 + ") VALUES("
                 + uid + ", "
                 + name + ", "
                 + price + ", "
                 + info + ", "
                 + off + ", "
-                + count
+                + count + ", "
+                + o_count
                 + ")";
         db.execSQL(query);
         db.close();
@@ -150,6 +156,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_INFO)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_OFF)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT_ORIGINAL)));
                 cursor.moveToNext();
             }
         }
@@ -174,6 +181,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_INFO)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_OFF)));
                 item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT)));
+                item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT_ORIGINAL)));
                 cursor.moveToNext();
             }
         }

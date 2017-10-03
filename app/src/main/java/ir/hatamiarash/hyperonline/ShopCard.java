@@ -224,15 +224,15 @@ public class ShopCard extends AppCompatActivity {
     private void FetchAllProducts() {
         Item = db_item.getItemsDetails();
         // numbers must be same of database fields !!!!! all numbers Item.size() / n [] i * n + 1
-        for (int i = 0; i < (Item.size() / 7); i++) {
+        for (int i = 0; i < (Item.size() / 8); i++) {
             //String id = Item.get(i * 10);
-            String uid = Item.get(i * 7 + 1);
-            String name = Item.get(i * 7 + 2);
-            String price = Item.get(i * 7 + 3);
-            String info = Item.get(i * 7 + 4);
-            //String seller = Item.get(i * 11 + 7);
-            String off = Item.get(i * 7 + 5);
-            String count = Item.get(i * 7 + 6);
+            String uid = Item.get(i * 8 + 1);
+            String name = Item.get(i * 8 + 2);
+            String price = Item.get(i * 8 + 3);
+            String info = Item.get(i * 8 + 4);
+            String off = Item.get(i * 8 + 5);
+            String count = Item.get(i * 8 + 6);
+            String o_count = Item.get(i * 8 + 7);
             
             Log.w("uid", uid);
             Log.w("name", name);
@@ -243,7 +243,8 @@ public class ShopCard extends AppCompatActivity {
             tOff += Integer.valueOf(off);
             tPrice += Integer.valueOf(price);
             
-            Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, 0, info));
+            // temporary use point count var for "original count"
+            Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, Integer.valueOf(o_count), info));
             
             STUFFS += "," + name;
             STUFFS_ID += "," + uid;
@@ -527,16 +528,18 @@ public class ShopCard extends AppCompatActivity {
         }
         
         @Override
-        public void onBindViewHolder(ProductViewHolder sellerViewHolder, int i) {
-            sellerViewHolder.product_id.setText(products.get(i).unique_id);
-            sellerViewHolder.product_off.setText(String.valueOf(products.get(i).off));
-            sellerViewHolder.product_name.setText(products.get(i).name);
-            sellerViewHolder.product_description.setText("");
+        public void onBindViewHolder(ProductViewHolder viewHolder, int i) {
+            viewHolder.product_id.setText(products.get(i).unique_id);
+            viewHolder.product_off.setText(String.valueOf(products.get(i).off));
+            viewHolder.product_name.setText(products.get(i).name);
+            viewHolder.product_description.setText("");
             if (!products.get(i).description.equals("null"))
-                sellerViewHolder.product_description.setText(products.get(i).description);
+                viewHolder.product_description.setText(products.get(i).description);
             if (products.get(i).count > 0)
-                sellerViewHolder.product_price.setText(String.valueOf(Integer.valueOf(products.get(i).price) / products.get(i).count) + " تومان");
-            sellerViewHolder.product_count.setText(String.valueOf(products.get(i).count));
+                viewHolder.product_price.setText(String.valueOf(Integer.valueOf(products.get(i).price) / products.get(i).count) + " تومان");
+            viewHolder.product_count.setText(String.valueOf(products.get(i).count));
+            // temporary use point count var for "original count"
+            viewHolder.product_count_original.setText(String.valueOf(products.get(i).point_count));
         }
         
         @Override
@@ -553,6 +556,7 @@ public class ShopCard extends AppCompatActivity {
             TextView product_price;
             ImageView product_inc;
             TextView product_count;
+            TextView product_count_original;
             ImageView product_dec;
             
             ProductViewHolder(View itemView) {
@@ -564,6 +568,7 @@ public class ShopCard extends AppCompatActivity {
                 product_description = (TextView) itemView.findViewById(R.id.product_info);
                 product_price = itemView.findViewById(R.id.product_price);
                 product_count = itemView.findViewById(R.id.product_count_cart);
+                product_count_original = itemView.findViewById(R.id.product_count_original);
                 product_dec = itemView.findViewById(R.id.dec);
                 product_inc = itemView.findViewById(R.id.inc);
                 
@@ -586,7 +591,11 @@ public class ShopCard extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         vibrator.vibrate(25);
-                        product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) + 1));
+                        int pCount = Integer.valueOf(product_count.getText().toString());
+                        if (pCount < Integer.valueOf(product_count_original.getText().toString())) {
+                            product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) + 1));
+                        } else
+                            Helper.MakeToast(getApplicationContext(), "تعداد بیشتر موجود نمی باشد", TAGs.ERROR);
                     }
                 });
                 

@@ -108,7 +108,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                         String.valueOf(fPrice),
                         product.description,
                         String.valueOf(off),
-                        String.valueOf(1)
+                        String.valueOf(1),
+                        String.valueOf(product.count)
                 );
                 try {
                     cardBadge.updateBadge();
@@ -124,8 +125,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             public void onClick(View view) {
                 vibrator.vibrate(50);
                 int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
-                Log.w("COUNT", holder.count.getText().toString());
-                if (pCount <= Integer.valueOf(holder.count.getText().toString())) {
+                
+                if (pCount < Integer.valueOf(holder.count.getText().toString())) {
                     int count = pCount + 1;
                     int off = (product.off * Integer.valueOf(product.price) / 100) * count;
                     int fPrice = Integer.valueOf(product.price) * count - off;
@@ -142,7 +143,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                     }
                     holder.count_cart.setText(String.valueOf(count));
                 } else
-                    Helper.MakeToast(mContext, "این تعداد موجود نمی باشد", TAGs.ERROR);
+                    Helper.MakeToast(mContext, "تعداد بیشتر موجود نمی باشد", TAGs.ERROR);
             }
         });
         
