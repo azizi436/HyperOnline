@@ -712,7 +712,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 slider.setPresetTransformer(SliderLayout.Transformer.Default);
                                 slider.setDuration(2500);
                                 slider.setCustomAnimation(new DescriptionAnimation());
-                                slider.addOnPageChangeListener(Activity_Main.this);
                                 
                                 for (String name : urls.keySet()) {
                                     DefaultSliderView SliderView = new DefaultSliderView(Activity_Main.this);
@@ -720,8 +719,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                             .image(urls.get(name))
                                             .setScaleType(BaseSliderView.ScaleType.CenterInside)
                                             .setOnSliderClickListener(Activity_Main.this);
-                                    SliderView.bundle(new Bundle());
-                                    SliderView.getBundle().putString("title", name);
                                     slider.addSlider(SliderView);
                                 }
                             } else {
@@ -838,7 +835,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Helper.MakeToast(getApplicationContext(), String.valueOf(slider.getBundle().get("title")), TAGs.SUCCESS);
     }
     
     @Override
