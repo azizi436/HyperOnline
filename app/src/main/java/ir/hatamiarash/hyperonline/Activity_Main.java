@@ -4,17 +4,13 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -57,21 +53,12 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -726,9 +713,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 slider.setCustomAnimation(new DescriptionAnimation());
                                 slider.addOnPageChangeListener(Activity_Main.this);
                                 
-                                TextSliderView textSliderView = new TextSliderView(Activity_Main.this);
-                                
                                 for (String name : urls.keySet()) {
+                                    TextSliderView textSliderView = new TextSliderView(Activity_Main.this);
+                                    Log.w("Banner", urls.get(name) + ":" + name);
                                     textSliderView
                                             .image(urls.get(name))
                                             .setScaleType(BaseSliderView.ScaleType.Fit)
