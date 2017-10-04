@@ -28,7 +28,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -68,7 +67,6 @@ import volley.AppController;
 
 public class ShopCard extends AppCompatActivity {
     private static final String TAG = ShopCard.class.getSimpleName(); // class tag for log
-    final static private int CODE_PAYMENT = 100;
     public static SQLiteHandlerItem db_item;
     public static SQLiteHandlerMain db_main;
     public static SQLiteHandler db_user;
@@ -94,6 +92,8 @@ public class ShopCard extends AppCompatActivity {
     @InjectView(R.id.btnClear)
     public Button clear;
     
+    final static private int CODE_PAYMENT = 100;
+    private int CODE_STATUS = 0;
     private int tOff = 0;
     private int tPrice = 0;
     private int tExtend = 5000;
@@ -337,7 +337,7 @@ public class ShopCard extends AppCompatActivity {
             params.put("api", TAGs.API_KEY);
             params.put("transId", CODE);
             final String mRequestBody = params.toString();
-        
+            
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -370,7 +370,7 @@ public class ShopCard extends AppCompatActivity {
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
-            
+                
                 @Nullable
                 @Override
                 public byte[] getBody() throws AuthFailureError {
@@ -583,6 +583,7 @@ public class ShopCard extends AppCompatActivity {
                 product_dec.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        CODE_STATUS = 1;
                         vibrator.vibrate(25);
                         if (Integer.valueOf(product_count.getText().toString()) > 1)
                             product_count.setText(String.valueOf(Integer.valueOf(product_count.getText().toString()) - 1));
@@ -598,6 +599,7 @@ public class ShopCard extends AppCompatActivity {
                 product_inc.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        CODE_STATUS = 1;
                         vibrator.vibrate(25);
                         int pCount = Integer.valueOf(product_count.getText().toString());
                         if (pCount < Integer.valueOf(product_count_original.getText().toString())) {
@@ -720,5 +722,12 @@ public class ShopCard extends AppCompatActivity {
             status.setText("خرید های کمتر از 35 هزار تومان با هزینه ارسال می شوند");
             total_extend.setText(String.valueOf(tExtend) + " تومان");
         }
+    }
+    
+    @Override
+    public void onBackPressed() {
+        Intent data = new Intent();
+        setResult(CODE_STATUS, data);
+        super.onBackPressed();
     }
 }

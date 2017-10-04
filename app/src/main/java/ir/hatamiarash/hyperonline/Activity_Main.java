@@ -331,7 +331,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             }
                             if (item == 10) {
                                 Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                                startActivity(i);
+                                startActivityForResult(i, 100);
                                 result.closeDrawer();
                             }
                             if (item == 11) {
@@ -795,7 +795,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             public void onClick(View view) {
                 vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                startActivity(i);
+                startActivityForResult(i, 100);
             }
         });
         updateBadge();
@@ -1026,5 +1026,36 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            if (resultCode == 1) {
+                categoryList.clear();
+                newList.clear();
+                mostList.clear();
+                popularList.clear();
+                offList.clear();
+                collectionList.clear();
+                
+                categoryAdapter.notifyDataSetChanged();
+                newAdapter.notifyDataSetChanged();
+                mostAdapter.notifyDataSetChanged();
+                popularAdapter.notifyDataSetChanged();
+                offAdapter.notifyDataSetChanged();
+                collectionAdapter.notifyDataSetChanged();
+                
+                category_view.setAdapter(categoryAdapter);
+                new_view.setAdapter(newAdapter);
+                most_view.setAdapter(mostAdapter);
+                popular_view.setAdapter(popularAdapter);
+                off_view.setAdapter(offAdapter);
+                collection_view.setAdapter(collectionAdapter);
+                
+                FetchAllData();
+            }
+        }
     }
 }
