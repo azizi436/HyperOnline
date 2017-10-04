@@ -221,12 +221,13 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         PrimaryDrawerItem item_website = new CustomPrimaryDrawerItem().withIdentifier(14).withName("ورود به وب سایت").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_language);
         PrimaryDrawerItem item_chat = new CustomPrimaryDrawerItem().withIdentifier(15).withName("چت با مدیر فروش").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_question_answer);
         PrimaryDrawerItem item_share = new CustomPrimaryDrawerItem().withIdentifier(16).withName("ارسال به دوستان").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_share);
-        PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(17).withName("تماس با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_phone);
+        PrimaryDrawerItem item_call = new CustomPrimaryDrawerItem().withIdentifier(17).withName("تماس با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_phone);
         PrimaryDrawerItem item_help = new CustomPrimaryDrawerItem().withIdentifier(18).withName("راهنمای خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_live_help);
         PrimaryDrawerItem item_questions = new CustomPrimaryDrawerItem().withIdentifier(19).withName("پرسش های متداول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_help);
         PrimaryDrawerItem item_about = new CustomPrimaryDrawerItem().withIdentifier(20).withName("درباره ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_business_center);
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_person);
         PrimaryDrawerItem item_inbox = new CustomPrimaryDrawerItem().withIdentifier(22).withName("صندوق پیام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_inbox);
+        PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -249,12 +250,13 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         item_inbox,
                         item_comment,
                         //item_social,
-                        //item_terms,
                         item_website,
                         //item_chat,
                         item_share,
+                        item_call,
                         item_contact,
-                        //item_help,
+                        item_help,
+                        item_terms,
                         //item_questions,
                         item_about
                 )
@@ -336,7 +338,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                             }
                             if (item == 13) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "قوانین و مقررات");
+                                i.putExtra(TAGs.ADDRESS, "terms");
+                                startActivity(i);
                             }
                             if (item == 14) {
                                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hyper-online.ir"));
@@ -364,7 +369,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 startActivity(intent);
                             }
                             if (item == 18) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "راهنمای خرید");
+                                i.putExtra(TAGs.ADDRESS, "help");
+                                startActivity(i);
                             }
                             if (item == 19) {
                                 
@@ -390,6 +398,12 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             }
                             if (item == 22) {
                                 Intent i = new Intent(getApplicationContext(), Activity_Inbox.class);
+                                startActivity(i);
+                            }
+                            if (item == 23) {
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "ارتباط با ما");
+                                i.putExtra(TAGs.ADDRESS, "contact");
                                 startActivity(i);
                             }
                         }
