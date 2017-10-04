@@ -45,7 +45,6 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -254,10 +253,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         item_website,
                         //item_chat,
                         item_share,
-                        item_contact
+                        item_contact,
                         //item_help,
                         //item_questions,
-                        //item_about
+                        item_about
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -371,7 +370,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 
                             }
                             if (item == 20) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "درباره ما");
+                                i.putExtra(TAGs.ADDRESS, "about");
+                                startActivity(i);
                             }
                             if (item == 21) {
                                 if (Helper.CheckInternet(getApplicationContext())) {

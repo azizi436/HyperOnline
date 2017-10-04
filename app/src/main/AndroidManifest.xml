@@ -85,6 +85,9 @@
             android:name=".Activity_Inbox"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".Activity_WebPage"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".Confirm_Phone"
             android:screenOrientation="portrait"/>
         <activity
