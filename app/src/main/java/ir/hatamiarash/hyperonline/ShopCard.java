@@ -99,6 +99,7 @@ public class ShopCard extends AppCompatActivity {
     private int tExtend = 5000;
     List<String> Item;
     List<Product> Products_List;
+    Adapter_Product adapter;
     private int check = 0;
     private int send_time;
     private String ORDER_CODE = "-1";
@@ -124,6 +125,8 @@ public class ShopCard extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(layoutManager);
         Products_List = new ArrayList<>();
+        adapter = new Adapter_Product(Products_List);
+        list.setAdapter(adapter);
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
@@ -209,9 +212,10 @@ public class ShopCard extends AppCompatActivity {
             public void onClick(View view) {
                 vibrator.vibrate(50);
                 db_item.deleteItems();
-                Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                startActivity(i);
-                finish();
+                Products_List.clear();
+                adapter.notifyDataSetChanged();
+                list.setAdapter(adapter);
+                CODE_STATUS = 1;
             }
         });
         
@@ -256,8 +260,7 @@ public class ShopCard extends AppCompatActivity {
         total_extend.setText(String.valueOf(tExtend) + " تومان");
         total_pay.setText(String.valueOf(tPrice + tExtend) + " تومان");
         pay.setText("پرداخت - " + FormatHelper.toPersianNumber(String.valueOf(tPrice + tExtend)) + " تومان");
-        Adapter_Product adapter = new Adapter_Product(Products_List);
-        list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
     
     private String getCounts() {
