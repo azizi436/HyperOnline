@@ -7,7 +7,6 @@ package ir.hatamiarash.hyperonline;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -18,7 +17,6 @@ import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -374,12 +372,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 }
                             }
                             if (item == 17) {
-                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse("tel:" + Values.phoneNumber));
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                if (ActivityCompat.checkSelfPermission(Activity_Main.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                    Helper.GetPermissions(Activity_Main.this, getApplicationContext());
-                                }
                                 startActivity(intent);
                             }
                             if (item == 18) {

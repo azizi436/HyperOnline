@@ -222,14 +222,14 @@ public class Helper {
             listPermissionsNeeded.add(Manifest.permission.INTERNET);
         if (vibration != PackageManager.PERMISSION_GRANTED)
             listPermissionsNeeded.add(Manifest.permission.VIBRATE);
-        if (call != PackageManager.PERMISSION_GRANTED)
-            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
+//        if (call != PackageManager.PERMISSION_GRANTED)
+//            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
         if (read_storage != PackageManager.PERMISSION_GRANTED)
             listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         if (write_storage != PackageManager.PERMISSION_GRANTED)
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (contact != PackageManager.PERMISSION_GRANTED)
-            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+//        if (contact != PackageManager.PERMISSION_GRANTED)
+//            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
         
         if (!listPermissionsNeeded.isEmpty())
             ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
