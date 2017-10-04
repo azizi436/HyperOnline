@@ -44,6 +44,7 @@ import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -714,15 +715,14 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 slider.addOnPageChangeListener(Activity_Main.this);
                                 
                                 for (String name : urls.keySet()) {
-                                    TextSliderView textSliderView = new TextSliderView(Activity_Main.this);
-                                    Log.w("Banner", urls.get(name) + ":" + name);
-                                    textSliderView
+                                    DefaultSliderView SliderView = new DefaultSliderView(Activity_Main.this);
+                                    SliderView
                                             .image(urls.get(name))
-                                            .setScaleType(BaseSliderView.ScaleType.Fit)
+                                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
                                             .setOnSliderClickListener(Activity_Main.this);
-                                    textSliderView.bundle(new Bundle());
-                                    textSliderView.getBundle().putString("extra", name);
-                                    slider.addSlider(textSliderView);
+                                    SliderView.bundle(new Bundle());
+                                    SliderView.getBundle().putString("title", name);
+                                    slider.addSlider(SliderView);
                                 }
                             } else {
                                 sliderLayout.setVisibility(View.GONE);
