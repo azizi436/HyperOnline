@@ -618,13 +618,17 @@ public class ShopCard extends AppCompatActivity {
                     
                     @Override
                     public void afterTextChanged(Editable s) {
-                        
                         if (check == products.size()) {
                             Log.w(TAG, "OFF:" + product_off.getText().toString());
                             // off / old count * new count
-                            int new_off = Integer.valueOf(product_off.getText().toString()) / temp * Integer.valueOf(product_count.getText().toString());
+                            int new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
                             product_off.setText(String.valueOf(new_off));
-                            db_item.updateItem(product_id.getText().toString(), product_count.getText().toString(), String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(product_count.getText().toString())), String.valueOf(new_off));
+                            db_item.updateItem(
+                                    product_id.getText().toString(),
+                                    FormatHelper.toEnglishNumber2(product_count.getText().toString()),
+                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()))),
+                                    String.valueOf(new_off)
+                            );
                             sendPrice(db_item.TotalPrice());
                             String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
                             String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
@@ -640,7 +644,7 @@ public class ShopCard extends AppCompatActivity {
                     
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        temp = Integer.valueOf(product_count.getText().toString());
+                        temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
                     }
                     
                     @Override
