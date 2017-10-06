@@ -621,7 +621,11 @@ public class ShopCard extends AppCompatActivity {
                         if (check == products.size()) {
                             Log.w(TAG, "OFF:" + product_off.getText().toString());
                             // off / old count * new count
-                            int new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+                            int new_off;
+                            if (Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString())) == 0)
+                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+                            else
+                                new_off = 0;
                             product_off.setText(String.valueOf(new_off));
                             db_item.updateItem(
                                     product_id.getText().toString(),

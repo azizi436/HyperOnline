@@ -5,14 +5,13 @@
 package ir.hatamiarash.hyperonline;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -53,6 +52,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.CustomPrimaryDrawerItem;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
@@ -76,14 +76,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     SymmetricProgressBar progressBar, p;
     public static SQLiteHandlerItem db_item;
     SessionManager session;
-    private String url, category_id, parent_id;
-    public int list_category;
-    private List<Product> productList;
-    private List<Category> categoryList;
-    private ProductAdapter_All productAdapter;
-    private CategoryAdapter_Small categoryAdapter;
-    
-    private TextView itemMessagesBadgeTextView;
+    private SweetAlertDialog progressDialog;
     
     @InjectView(R.id.list)
     public RecyclerView list;
@@ -95,13 +88,26 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     public TextView title_product;
     @InjectView(R.id.title_category)
     public TextView title_category;
+    private TextView itemMessagesBadgeTextView;
+    
+    private String url, category_id, parent_id;
+    public int list_category;
+    private List<Product> productList;
+    private List<Category> categoryList;
+    private ProductAdapter_All productAdapter;
+    private CategoryAdapter_Small categoryAdapter;
+    
+    private static String _CAT;
+    private static String _CAT_ID;
+    private static String _TITLE;
+    private static String _LEVEL;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_complex);
         ButterKnife.inject(this);
-    
+        
         session = new SessionManager(getApplicationContext());
         list_category = Integer.valueOf(getIntent().getStringExtra("cat"));
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
@@ -112,21 +118,34 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         viewGroup.addView(progressBar, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
         p = viewGroup.findViewById(R.id.color_bar);
         p.setVisibility(View.INVISIBLE);
+        progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog.setCancelable(false);
+        progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
         db_item = new SQLiteHandlerItem(getApplicationContext());
+        
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if (extras.containsKey("cat")) _CAT = extras.getString("cat", "");
+            if (extras.containsKey("cat_id")) _CAT_ID = extras.getString("cat_id", "");
+            if (extras.containsKey("title")) _TITLE = extras.getString("title", "");
+            if (extras.containsKey("level")) _LEVEL = extras.getString("level", "");
+        }
+        
         
         if (list_category == 1) {
             category_list.setVisibility(View.GONE);
             title_category.setVisibility(View.GONE);
         }
         
-        category_id = getIntent().getStringExtra("cat_id");
+        _CAT_ID = category_id = getIntent().getStringExtra("cat_id");
         if (list_category == 1 || list_category == 2) {
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getIntent().getStringExtra("title")));
         } else
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         
         setSupportActionBar(toolbar);
-    
+        
         PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
         PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
@@ -143,13 +162,14 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         PrimaryDrawerItem item_website = new CustomPrimaryDrawerItem().withIdentifier(14).withName("ورود به وب سایت").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_language);
         PrimaryDrawerItem item_chat = new CustomPrimaryDrawerItem().withIdentifier(15).withName("چت با مدیر فروش").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_question_answer);
         PrimaryDrawerItem item_share = new CustomPrimaryDrawerItem().withIdentifier(16).withName("ارسال به دوستان").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_share);
-        PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(17).withName("تماس با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_phone);
+        PrimaryDrawerItem item_call = new CustomPrimaryDrawerItem().withIdentifier(17).withName("تماس با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_phone);
         PrimaryDrawerItem item_help = new CustomPrimaryDrawerItem().withIdentifier(18).withName("راهنمای خرید").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_live_help);
         PrimaryDrawerItem item_questions = new CustomPrimaryDrawerItem().withIdentifier(19).withName("پرسش های متداول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_help);
         PrimaryDrawerItem item_about = new CustomPrimaryDrawerItem().withIdentifier(20).withName("درباره ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_business_center);
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_person);
         PrimaryDrawerItem item_inbox = new CustomPrimaryDrawerItem().withIdentifier(22).withName("صندوق پیام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_inbox);
-    
+        PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
+        
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -171,14 +191,15 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                         item_inbox,
                         item_comment,
                         //item_social,
-                        //item_terms,
                         item_website,
                         //item_chat,
                         item_share,
-                        item_contact
-                        //item_help,
+                        item_call,
+                        item_contact,
+                        item_help,
+                        item_terms,
                         //item_questions,
-                        //item_about
+                        item_about
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -187,7 +208,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                         if (drawerItem != null) {
                             long item = drawerItem.getIdentifier();
                             if (item == 1) {
-                                Intent i = new Intent(getApplicationContext(), Activity_List.class);
+                                Intent i = new Intent(getApplicationContext(), Activity_Main.class);
                                 startActivity(i);
                                 finish();
                                 result.closeDrawer();
@@ -240,7 +261,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                             }
                             if (item == 10) {
                                 Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                                startActivity(i);
+                                startActivityForResult(i, 100);
                                 result.closeDrawer();
                             }
                             if (item == 11) {
@@ -255,17 +276,20 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 }
                             }
                             if (item == 12) {
-                            
+                                
                             }
                             if (item == 13) {
-                            
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "قوانین و مقررات");
+                                i.putExtra(TAGs.ADDRESS, "terms");
+                                startActivity(i);
                             }
                             if (item == 14) {
                                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hyper-online.ir"));
                                 startActivity(i);
                             }
                             if (item == 15) {
-                            
+                                
                             }
                             if (item == 16) {
                                 try {
@@ -281,22 +305,24 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 }
                             }
                             if (item == 17) {
-                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse("tel:" + Values.phoneNumber));
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                if (ActivityCompat.checkSelfPermission(Activity_List.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                    Helper.GetPermissions(Activity_List.this, getApplicationContext());
-                                }
                                 startActivity(intent);
                             }
                             if (item == 18) {
-                            
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "راهنمای خرید");
+                                i.putExtra(TAGs.ADDRESS, "help");
+                                startActivity(i);
                             }
                             if (item == 19) {
-                            
+                                
                             }
                             if (item == 20) {
-                            
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "درباره ما");
+                                i.putExtra(TAGs.ADDRESS, "about");
+                                startActivity(i);
                             }
                             if (item == 21) {
                                 if (Helper.CheckInternet(getApplicationContext())) {
@@ -307,13 +333,18 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                         Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
                                         Intent i = new Intent(getApplicationContext(), Login.class);
                                         startActivity(i);
-                                        finish();
                                     }
                                 } else
                                     result.closeDrawer();
                             }
                             if (item == 22) {
                                 Intent i = new Intent(getApplicationContext(), Activity_Inbox.class);
+                                startActivity(i);
+                            }
+                            if (item == 23) {
+                                Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
+                                i.putExtra(TAGs.TITLE, "ارتباط با ما");
+                                i.putExtra(TAGs.ADDRESS, "contact");
                                 startActivity(i);
                             }
                         }
@@ -435,6 +466,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     }
     
     private void loadCategory(int page, String level) {
+        p.setVisibility(View.VISIBLE);
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URLs.base_URL + "categories_all";
@@ -543,8 +575,9 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         this.itemMessagesBadgeTextView.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/sans.ttf"));
         (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), ShopCard.class);
-                startActivity(i);
+                startActivityForResult(i, 100);
             }
         });
         updateBadge();
@@ -589,7 +622,25 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             Log.i("Badge", "Known Error");
         }
     }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            if (resultCode == 1) {
+                Intent intent = new Intent(getApplicationContext(), Activity_List.class);
+                intent.putExtra("cat", _CAT);
+                intent.putExtra("level", _LEVEL);
+                intent.putExtra("cat_id", _CAT_ID);
+                intent.putExtra("title", _TITLE);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
+    
 }
+
 /* for search a new data we should clear view
 // 1. First, clear the array of data
 listOfItems.clear();
