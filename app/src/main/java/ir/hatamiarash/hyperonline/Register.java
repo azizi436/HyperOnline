@@ -216,6 +216,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                         if (!error) {
                             MakeDialog("ثبت نام انجام شد", "نام کاربری شما تلفن همراهتان می باشد ، اکنون می توانید وارد شوید");
                         } else {
+                            hideDialog();
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Register.this, errorMsg, TAGs.ERROR); // show error message
                         }
@@ -255,6 +256,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
+            hideDialog();
         }
     }
     
