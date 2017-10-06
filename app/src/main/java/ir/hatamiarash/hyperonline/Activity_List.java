@@ -48,6 +48,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -131,7 +134,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             if (extras.containsKey("title")) _TITLE = extras.getString("title", "");
             if (extras.containsKey("level")) _LEVEL = extras.getString("level", "");
         }
-        
         
         if (list_category == 1) {
             category_list.setVisibility(View.GONE);
@@ -505,18 +507,20 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                             for (int i = 0; i < products.length(); i++) {
                                 JSONObject product = products.getJSONObject(i);
                                 
-                                productList.add(new Product(
-                                                product.getString("unique_id"),
-                                                product.getString("name"),
-                                                product.getString("image"),
-                                                product.getString("price"),
-                                                product.getInt("off"),
-                                                product.getInt("count"),
-                                                product.getDouble("point"),
-                                                product.getInt("point_count"),
-                                                product.getString("description")
-                                        )
+                                Product p = new Product(
+                                        product.getString("unique_id"),
+                                        product.getString("name"),
+                                        product.getString("image"),
+                                        product.getString("price"),
+                                        product.getInt("off"),
+                                        product.getInt("count"),
+                                        product.getDouble("point"),
+                                        product.getInt("point_count"),
+                                        product.getString("description")
                                 );
+                                
+                                if (!productList.contains(p))
+                                    productList.add(p);
                             }
                             
                             categoryAdapter.notifyDataSetChanged();
@@ -638,7 +642,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             }
         }
     }
-    
 }
 
 /* for search a new data we should clear view
