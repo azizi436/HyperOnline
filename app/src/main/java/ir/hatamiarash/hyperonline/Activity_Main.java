@@ -982,6 +982,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 off_view.setAdapter(offAdapter);
                 collection_view.setAdapter(collectionAdapter);
                 
+                slider.removeAllSliders();
+                
                 FetchAllData();
             }
         }
