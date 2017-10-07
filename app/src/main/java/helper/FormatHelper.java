@@ -28,7 +28,8 @@ public class FormatHelper {
     }
     
     public static String toEnglishNumber(String text) {
-        if (text.isEmpty()) return "";
+        if (text.isEmpty())
+            return "";
         String out = "";
         int length = text.length();
         for (int i = 0; i < length; i++) {

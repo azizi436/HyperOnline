@@ -5,5 +5,5 @@
 package ir.hatamiarash.utils;
 
 public class Values {
-    public static final String phoneNumber = "+989182180519";
+    public static final String phoneNumber = "+988132743297";
 }

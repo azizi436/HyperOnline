@@ -169,7 +169,7 @@ public class ShopCard extends AppCompatActivity {
                             .show();
                 } else {
                     vibrator.vibrate(50);
-                    if (tPrice > 0) {
+                    if (tPrice > 0 && db_item.getRowCount() > 0) {
                         String time = String.valueOf(times(getTime(1), getTime(2)));
                         String time2 = String.valueOf(times(getTime(1), getTime(2)) + 1);
                         String extend = "";
@@ -196,8 +196,10 @@ public class ShopCard extends AppCompatActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         DESCRIPTION = edit_text.getText().toString();
-                                        Pay(TAGs.API_KEY, String.valueOf(tPrice + tExtend));
-                                        //onPaySuccess();
+                                        String tPay = total_pay.getText().toString();
+                                        int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
+//                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+                                        onPaySuccess();
                                     }
                                 })
                                 .show();
@@ -622,20 +624,30 @@ public class ShopCard extends AppCompatActivity {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (check == products.size()) {
-                            Log.w(TAG, "OFF:" + product_off.getText().toString());
                             // off / old count * new count
                             int new_off;
-                            if (Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString())) == 0)
-                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+                            String pCount;
+                            if (product_count.getText().toString().length() == 1)
+                                pCount = FormatHelper.toEnglishNumber2(product_count.getText().toString());
                             else
+                                pCount = FormatHelper.toEnglishNumber(product_count.getText().toString());
+                            
+                            if (Integer.valueOf(pCount) == 0 || temp == 0)
                                 new_off = 0;
+                            else {
+                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(pCount);
+                            }
+                            
+                            Log.w(TAG, "count: " + pCount + " temp: " + temp);
                             product_off.setText(String.valueOf(new_off));
+                            
                             db_item.updateItem(
                                     product_id.getText().toString(),
-                                    FormatHelper.toEnglishNumber2(product_count.getText().toString()),
-                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()))),
+                                    pCount,
+                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(pCount)),
                                     String.valueOf(new_off)
                             );
+                            
                             sendPrice(db_item.TotalPrice());
                             String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
                             String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
@@ -651,7 +663,10 @@ public class ShopCard extends AppCompatActivity {
                     
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+                        if (product_count.getText().toString().length() == 1)
+                            temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+                        else
+                            temp = Integer.valueOf(FormatHelper.toEnglishNumber(product_count.getText().toString()));
                     }
                     
                     @Override
@@ -661,9 +676,13 @@ public class ShopCard extends AppCompatActivity {
             }
             
             void removeAt(int position) {
-                products.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, products.size());
+                try {
+                    products.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, products.size());
+                } catch (Exception e) {
+                    Log.e("Arash", "Known Error RemoveAt");
+                }
             }
         }
     }
