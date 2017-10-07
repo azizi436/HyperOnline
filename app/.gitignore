@@ -1,2 +1,4 @@
 /build/
 /google-services.json
+/src/main/AndroidManifest.xml
+/build.gradle

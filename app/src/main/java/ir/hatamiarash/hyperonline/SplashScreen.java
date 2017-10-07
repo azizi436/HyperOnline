@@ -35,12 +35,12 @@ public class SplashScreen extends AppCompatActivity {
         Wave animation = new Wave();
         spinner.setIndeterminateDrawable(animation);
         
-        logo.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.motor));
+        logo.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.logo));
         
         Thread timerThread = new Thread() {
             public void run() {
                 try {
-                    sleep(1500);
+                    sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
