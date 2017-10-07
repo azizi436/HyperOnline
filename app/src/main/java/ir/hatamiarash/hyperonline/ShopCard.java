@@ -285,7 +285,7 @@ public class ShopCard extends AppCompatActivity {
         StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e(TAG, "Check Response: " + response);
+                Log.e("Pay R", response);
                 try {
                     JSONObject jObj = new JSONObject(response);
                     int status = jObj.getInt("status");
@@ -307,7 +307,7 @@ public class ShopCard extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Pay Error: " + error.getMessage());
+                Log.e("Pay E", error.getMessage());
                 if (error.getMessage() != null)
                     Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
                 else
@@ -344,7 +344,7 @@ public class ShopCard extends AppCompatActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.i("LOG_Check", response);
+                    Log.i("Check R", response);
                     try {
                         JSONObject jObj = new JSONObject(response);
                         int status = jObj.getInt("status");
@@ -361,8 +361,11 @@ public class ShopCard extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_Check", error.toString());
-                    Helper.MakeToast(ShopCard.this, error.toString(), TAGs.ERROR);
+                    Log.e("Check E", error.toString());
+                    if (error.toString().equals("com.android.volley.ServerError"))
+                        Helper.MakeToast(ShopCard.this, "پرداخت لغو شد", TAGs.ERROR);
+                    else
+                        Helper.MakeToast(ShopCard.this, error.toString(), TAGs.ERROR);
                     hideDialog();
                     //finish();
                 }
@@ -455,7 +458,7 @@ public class ShopCard extends AppCompatActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.i("LOG_VOLLEY R", response);
+                    Log.i("SetOrder R", response);
                     hideDialog();
                     try {
                         JSONObject jObj = new JSONObject(response);
@@ -467,7 +470,7 @@ public class ShopCard extends AppCompatActivity {
                             startActivity(i);
                             finish();
                         } else {
-                            Log.e("Error", jObj.getString(TAGs.ERROR_MSG));
+                            Log.e("SetOrder E", jObj.getString(TAGs.ERROR_MSG));
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(ShopCard.this, errorMsg, TAGs.ERROR);
                         }
@@ -480,7 +483,7 @@ public class ShopCard extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_VOLLEY E", error.toString());
+                    Log.e("SetOrder E", error.toString());
                     hideDialog();
                     finish();
                 }
@@ -576,7 +579,7 @@ public class ShopCard extends AppCompatActivity {
                 product_id = itemView.findViewById(R.id.product_id);
                 product_off = itemView.findViewById(R.id.product_off);
                 product_name = itemView.findViewById(R.id.product_name);
-                product_description = (TextView) itemView.findViewById(R.id.product_info);
+                product_description = itemView.findViewById(R.id.product_info);
                 product_price = itemView.findViewById(R.id.product_price);
                 product_count = itemView.findViewById(R.id.product_count_cart);
                 product_count_original = itemView.findViewById(R.id.product_count_original);
@@ -733,6 +736,9 @@ public class ShopCard extends AppCompatActivity {
             status.setText("خرید های کمتر از 35 هزار تومان با هزینه ارسال می شوند");
             total_extend.setText(String.valueOf(tExtend) + " تومان");
         }
+        String p = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
+        pay.setText("پرداخت - " + p);
+        total_pay.setText(String.valueOf(tPrice + tExtend) + " تومان");
     }
     
     @Override
