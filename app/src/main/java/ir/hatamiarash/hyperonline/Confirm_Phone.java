@@ -152,12 +152,8 @@ public class Confirm_Phone extends AppCompatActivity {
         
         help.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
+                Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + Values.phoneNumber));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (ActivityCompat.checkSelfPermission(Confirm_Phone.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    Helper.GetPermissions(Confirm_Phone.this, getApplicationContext());
-                }
                 startActivity(intent);
             }
         });
