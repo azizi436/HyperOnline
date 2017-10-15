@@ -5,6 +5,7 @@
 package ir.hatamiarash.adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -72,9 +73,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         else
             Glide.with(mContext).load(URLs.image_URL + String.valueOf(product.image)).into(holder.image);
         
-        if (product.off > 0) {
-            holder.price.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
+        if (product.off == 0)
+            holder.price_off.setVisibility(View.INVISIBLE);
+        else {
+            holder.price_off.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
             holder.price_backup.setText(Helper.CalculatePrice(product.price, product.off));
+            holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+            holder.price_off.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
         
         if (product.count == 0) {
@@ -88,8 +94,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             holder.add_layout.setVisibility(View.INVISIBLE);
             holder.price.setVisibility(View.VISIBLE);
             holder.change_layout.setVisibility(View.VISIBLE);
-            holder.price.setText("در سبد موجود است");
-            holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            //holder.price.setText("در سبد موجود است");
+            //holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
         
         holder.add_layout.setOnClickListener(new View.OnClickListener() {
@@ -98,8 +104,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                 vibrator.vibrate(50);
                 holder.add_layout.setVisibility(View.INVISIBLE);
                 holder.change_layout.setVisibility(View.VISIBLE);
-                holder.price.setText("اضافه شد");
-                holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                //holder.price.setText("اضافه شد");
+                //holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 int off = product.off * Integer.valueOf(product.price) / 100;
                 int fPrice = Integer.valueOf(product.price) - off;
                 db_item.addItem(
@@ -159,12 +165,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                     holder.add_layout.setVisibility(View.VISIBLE);
                     holder.change_layout.setVisibility(View.INVISIBLE);
                     holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                    if (product.off > 0) {
-                        holder.price.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
+                    if (product.off == 0)
+                        holder.price_off.setVisibility(View.INVISIBLE);
+                    else {
+                        holder.price_off.setText(Helper.CalculatePrice(product.price, product.off) + " تومان");
                         holder.price_backup.setText(Helper.CalculatePrice(product.price, product.off));
-                    } else {
-                        holder.price.setText(product.price + " تومان");
-                        holder.price_backup.setText(product.price);
+                        holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        holder.price.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+                        holder.price_off.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                     }
                 } else {
                     int count = pCount - 1;
@@ -203,7 +211,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     }
     
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price, price_backup, id, count, count_cart, point, point_count, off;
+        TextView name, price, price_backup, price_off, id, count, count_cart, point, point_count, off;
         ImageView image, inc, dec;
         LinearLayout add_layout, change_layout;
         
@@ -218,6 +226,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             off = view.findViewById(R.id.product_off);
             name = view.findViewById(R.id.product_name);
             price = view.findViewById(R.id.product_price);
+            price_off = view.findViewById(R.id.product_price_off);
             image = view.findViewById(R.id.product_image);
             add_layout = view.findViewById(R.id.add_layout);
             change_layout = view.findViewById(R.id.change_layout);
