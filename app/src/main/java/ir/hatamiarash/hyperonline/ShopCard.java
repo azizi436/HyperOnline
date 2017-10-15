@@ -258,7 +258,8 @@ public class ShopCard extends AppCompatActivity {
         }
         ORDER_AMOUNT = String.valueOf(tPrice + tExtend);
         total_off.setText(String.valueOf(tOff) + " تومان");
-        total_price.setText(String.valueOf(tPrice + tOff) + " تومان");
+//        total_price.setText(String.valueOf(tPrice + tOff) + " تومان");
+        total_price.setText(String.valueOf(tPrice) + " تومان");
         total_extend.setText(String.valueOf(tExtend) + " تومان");
         total_pay.setText(String.valueOf(tPrice + tExtend) + " تومان");
         pay.setText("پرداخت - " + FormatHelper.toPersianNumber(String.valueOf(tPrice + tExtend)) + " تومان");
@@ -654,7 +655,8 @@ public class ShopCard extends AppCompatActivity {
                             total_pay.setText(price);
                             pay.setText("پرداخت - " + price);
                             total_off.setText(off);
-                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
+//                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
+                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) ;
                             total_price.setText(String.valueOf(ttPrice) + " تومان");
                             ORDER_AMOUNT = String.valueOf(ttPrice);
                         } else
