@@ -10,228 +10,275 @@
     android:layout_height="fill_parent"
     android:background="@color/white">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/line2"
-        android:layout_marginTop="10dp"/>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white">
 
-    <helper.PersianTextView
-        android:id="@+id/status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/l1"
-        android:layout_marginEnd="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginStart="5dp"
-        android:gravity="center"
-        android:text=""
-        android:textAlignment="center"
-        app:font="shabnam"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/line2"
+            android:layout_marginTop="10dp"/>
 
-    <View
-        android:id="@+id/line2"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_above="@+id/status"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="8dp"
-        android:background="#FFDDDDDD"/>
-
-    <LinearLayout
-        android:id="@+id/l1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnClear"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <helper.PersianTextView
-                android:id="@+id/CardPrice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:text="0 تومان"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_black_1000"
-                android:textSize="14sp"
-                app:font="shabnam"/>
-
-            <helper.PersianTextView
-                android:id="@+id/CardPriceTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:text="قیمت کل : "
-                android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/accent"
-                android:textSize="14sp"
-                app:font="shabnam"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <helper.PersianTextView
+            android:id="@+id/status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_above="@+id/l1"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:text=""
+            android:textAlignment="center"
+            app:font="shabnam"/>
 
-            <helper.PersianTextView
-                android:id="@+id/CardDiscount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:text="0 تومان"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_black_1000"
-                android:textSize="14sp"
-                app:font="shabnam"/>
-
-            <helper.PersianTextView
-                android:id="@+id/CardDiscountTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:text="سود شما از این خرید : "
-                android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/accent"
-                android:textSize="14sp"
-                app:font="shabnam"/>
-
-        </LinearLayout>
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_above="@+id/status"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            android:background="#FFDDDDDD"/>
 
         <LinearLayout
+            android:id="@+id/l1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_above="@+id/btnClear"
+            android:orientation="vertical">
 
-            <helper.PersianTextView
-                android:id="@+id/CardExtend"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:text="0 تومان"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_black_1000"
-                android:textSize="14sp"
-                app:font="shabnam"/>
+                android:layout_gravity="end"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <helper.PersianTextView
-                android:id="@+id/CardExtendTitle"
-                android:layout_width="wrap_content"
+                <helper.PersianTextView
+                    android:id="@+id/CardPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="0 تومان"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+                <helper.PersianTextView
+                    android:id="@+id/CardPriceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="قیمت کل : "
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:text="مالیات / ارسال / بسته بندی : "
-                android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/accent"
-                android:textSize="14sp"
-                app:font="shabnam"/>
+                android:layout_gravity="end"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
+                <helper.PersianTextView
+                    android:id="@+id/CardDiscount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="0 تومان"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+                <helper.PersianTextView
+                    android:id="@+id/CardDiscountTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="سود شما از این خرید : "
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <helper.PersianTextView
+                    android:id="@+id/CardExtend"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="0 تومان"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+                <helper.PersianTextView
+                    android:id="@+id/CardExtendTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="مالیات / ارسال / بسته بندی : "
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <helper.PersianTextView
+                    android:id="@+id/CardTotalPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="0 تومان"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+                <helper.PersianTextView
+                    android:id="@+id/CardTotalPriceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="مبلغ قابل پرداخت : "
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    app:font="shabnam"/>
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <helper.PersianButton
+            android:id="@+id/btnPay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_alignParentBottom="true"
+            android:background="@color/accent"
+            android:text="@string/btn_pay"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
-            <helper.PersianTextView
-                android:id="@+id/CardTotalPrice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:text="0 تومان"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/md_black_1000"
-                android:textSize="14sp"
-                app:font="shabnam"/>
+        <helper.PersianButton
+            android:id="@+id/btnClear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnPay"
+            android:background="@color/white"
+            android:text="@string/btn_clear"
+            android:textAllCaps="false"
+            android:textColor="@color/accent"
+            android:textSize="15sp"/>
 
-            <helper.PersianTextView
-                android:id="@+id/CardTotalPriceTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:text="مبلغ قابل پرداخت : "
-                android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/accent"
-                android:textSize="14sp"
-                app:font="shabnam"/>
+    </RelativeLayout>
 
-        </LinearLayout>
-    </LinearLayout>
-
-    <helper.PersianButton
-        android:id="@+id/btnPay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/accent"
-        android:text="@string/btn_pay"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="18sp"/>
-
-    <helper.PersianButton
-        android:id="@+id/btnClear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnPay"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:background="@color/white"
-        android:text="@string/btn_clear"
-        android:textAllCaps="false"
-        android:textColor="@color/accent"
-        android:textSize="15sp"/>
+        android:visibility="gone">
 
+        <helper.PersianTextView
+            android:id="@+id/notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:text="سبد خرید خالی است"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/accent"
+            android:textSize="14sp"
+            app:font="shabnam"/>
+
+        <helper.PersianButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notice"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@color/accent"
+            android:text="بازگشت"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+    </RelativeLayout>
 </RelativeLayout>
