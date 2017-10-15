@@ -28,6 +28,7 @@
             android:layout_marginTop="30dp">
 
             <LinearLayout
+                android:id="@+id/l1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -188,6 +189,24 @@
                     app:hint="@string/hint_address"
                     app:iconSrc="@drawable/ic_location"
                     app:isAddress="true"/>
+
+                <helper.PersianTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/address"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="5dp"
+                    android:text="به منظور تسهیل دریافت سفارش ها ، آدرس خود را دقیق وارد نمایید"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:font="shabnam"/>
 
             </LinearLayout>
         </ScrollView>
