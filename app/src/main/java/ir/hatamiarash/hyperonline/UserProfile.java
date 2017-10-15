@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -61,23 +62,18 @@ public class UserProfile extends Activity {
     private SessionManager session;
     private ConfirmManager confirmManager;
     private SweetAlertDialog progressDialog;
+    private Vibrator vibrator;
     
     @InjectView(R.id.btnLogout)
     public Button btnLogout;
     @InjectView(R.id.btnEdit)
     public Button btnEdit;
-    @InjectView(R.id.btnCharge)
-    public Button btnCharge;
     @InjectView(R.id.profile_name)
     public TextView User_Name;
     @InjectView(R.id.profile_address)
     public TextView User_Address;
     @InjectView(R.id.profile_phone)
     public TextView User_Phone;
-    @InjectView(R.id.Wallet)
-    public TextView User_Wallet;
-    @InjectView(R.id.Shop)
-    public TextView User_Shop;
     @InjectView(R.id.image)
     public ImageView User_Photo;
     @InjectView(R.id.progress_bar)
@@ -94,6 +90,7 @@ public class UserProfile extends Activity {
         ButterKnife.inject(this);
         
         progressBar.setVisibility(View.GONE);
+        vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_support = new SQLiteHandlerSupport(getApplicationContext());
@@ -134,16 +131,9 @@ public class UserProfile extends Activity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), EditProfile.class);
                 startActivity(i);
-                finish();
-            }
-        });
-        
-        btnCharge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.MakeToast(getApplicationContext(), "انتقال به صفحه شارژ", TAGs.WARNING);
             }
         });
         
@@ -151,6 +141,7 @@ public class UserProfile extends Activity {
     }
     
     private void logoutUser() {
+        vibrator.vibrate(50);
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         session.setLogin(false);
@@ -192,7 +183,6 @@ public class UserProfile extends Activity {
                             User_Name.setText(user.getString(TAGs.NAME));
                             User_Address.setText(user.getString(TAGs.ADDRESS));
                             User_Phone.setText(user.getString(TAGs.PHONE));
-                            User_Wallet.setText(user.getString(TAGs.WALLET) + " تومان");
                             if (!user.getString(TAGs.IMAGE).equals(TAGs.NULL)) {
                                 progressBar.setVisibility(View.VISIBLE);
                                 Picasso
