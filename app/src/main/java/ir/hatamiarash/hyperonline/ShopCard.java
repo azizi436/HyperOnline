@@ -97,6 +97,8 @@ public class ShopCard extends AppCompatActivity {
     public Button back;
     @InjectView(R.id.empty)
     public RelativeLayout empty;
+    @InjectView(R.id.origin)
+    public RelativeLayout origin;
     
     final static private int CODE_PAYMENT = 100;
     private int CODE_STATUS = 0;
@@ -225,6 +227,7 @@ public class ShopCard extends AppCompatActivity {
                 list.setAdapter(adapter);
                 CODE_STATUS = 1;
                 empty.setVisibility(View.VISIBLE);
+                origin.setVisibility(View.GONE);
             }
         });
         
@@ -273,6 +276,7 @@ public class ShopCard extends AppCompatActivity {
         }
         if (tPrice == 0) {
             empty.setVisibility(View.VISIBLE);
+            origin.setVisibility(View.GONE);
         } else {
             ORDER_AMOUNT = String.valueOf(tPrice + tExtend);
             total_off.setText(String.valueOf(tOff) + " تومان");

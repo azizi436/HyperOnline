@@ -13,6 +13,7 @@
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/origin"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white">
@@ -265,7 +266,7 @@
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/accent"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:font="shabnam"/>
 
         <helper.PersianButton
