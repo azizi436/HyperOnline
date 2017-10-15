@@ -411,7 +411,7 @@ public class ShopCard extends AppCompatActivity {
                 .setHeaderColor(R.color.green)
                 .withDarkerOverlay(true)
                 .withDialogAnimation(true)
-                .setCancelable(true)
+                .setCancelable(false)
                 .setPositiveText("باشه")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
