@@ -7,6 +7,7 @@ package ir.hatamiarash.hyperonline;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -17,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -51,6 +51,7 @@ import java.util.HashMap;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
 import helper.IconEditText;
@@ -62,6 +63,10 @@ import volley.AppController;
 
 public class EditProfile extends AppCompatActivity {
     private static final String TAG = EditProfile.class.getSimpleName();
+    private SweetAlertDialog progressDialog;
+    private SQLiteHandler db_user;
+    private Vibrator vibrator;
+    ConfirmManager confirmManager;
     
     @InjectView(R.id.name)
     IconEditText txtName;
@@ -78,21 +83,20 @@ public class EditProfile extends AppCompatActivity {
     @InjectView(R.id.progress_bar)
     ProgressBar progressBar;
     
-    private SweetAlertDialog progressDialog;
-    private SQLiteHandler db_user;
-    
-    private String uid;
+    private String uid, BACKUP_NAME, BACKUP_ADDRESS;
     private Uri filePath;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile);
-        
         ButterKnife.inject(this);
+        
         progressBar.setVisibility(View.GONE);
+        vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         add_photo.setVisibility(View.GONE);
         image.setVisibility(View.INVISIBLE);
+        confirmManager = new ConfirmManager(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());              // user local database
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
@@ -106,16 +110,24 @@ public class EditProfile extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {         // confirm button's event
             @Override
             public void onClick(View v) {
+                vibrator.vibrate(50);
                 String name = txtName.getText().toString();
                 String address = txtAddress.getText().toString();
-                if (Helper.CheckInternet(getApplicationContext()))
-                    if (!name.isEmpty() && !address.isEmpty())
-                        if (filePath == null)
-                            UpdateUser(name, address);
+                if (!BACKUP_ADDRESS.equals(address) || !BACKUP_NAME.equals(name)) {
+                    if (Helper.CheckInternet(getApplicationContext()))
+                        if (!name.isEmpty() && !address.isEmpty())
+                            if (filePath == null)
+                                UpdateUser(name, address);
+                            else
+                                UpdateUserWithPicture(name, address, filePath);
                         else
-                            UpdateUserWithPicture(name, address, filePath);
-                    else
-                        Helper.MakeToast(getApplicationContext(), "تمامی کادر ها را پر نمایید", TAGs.WARNING);
+                            Helper.MakeToast(getApplicationContext(), "تمامی کادر ها را پر نمایید", TAGs.WARNING);
+                } else {
+                    Intent data = new Intent();
+                    setResult(2, data);
+                    finish();
+                }
+                
             }
         });
         
@@ -150,8 +162,10 @@ public class EditProfile extends AppCompatActivity {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {                          // Check for error node in json
                             JSONObject user = jObj.getJSONObject(TAGs.USER);
-                            txtName.setText(getApplicationContext(), user.getString(TAGs.NAME));
-                            txtAddress.setText(getApplicationContext(), user.getString(TAGs.ADDRESS));
+                            BACKUP_ADDRESS = user.getString(TAGs.ADDRESS);
+                            BACKUP_NAME = user.getString(TAGs.NAME);
+                            txtName.setText(getApplicationContext(), BACKUP_NAME);
+                            txtAddress.setText(getApplicationContext(), BACKUP_ADDRESS);
                             uid = unique_id;
                             if (!user.getString(TAGs.IMAGE).equals(TAGs.NULL)) {
                                 progressBar.setVisibility(View.VISIBLE);
@@ -224,7 +238,7 @@ public class EditProfile extends AppCompatActivity {
     private void UpdateUser(final String name, final String address) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-    
+        
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URLs.base_URL + "user_update";
@@ -234,7 +248,7 @@ public class EditProfile extends AppCompatActivity {
             params.put(TAGs.UID, uid);
             params.put(TAGs.IMAGE, TAGs.NULL);
             final String mRequestBody = params.toString();
-        
+            
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -245,10 +259,24 @@ public class EditProfile extends AppCompatActivity {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {                          // Check for error node in json
                             db_user.updateUser(uid, name, address);
-                            Helper.MakeToast(getApplicationContext(), "اطلاعات شما به روزرسانی شد", TAGs.SUCCESS);
-                            Intent data = new Intent();
-                            setResult(1, data);
-                            finish();
+                            new MaterialStyledDialog.Builder(EditProfile.this)
+                                    .setTitle(FontHelper.getSpannedString(EditProfile.this, "ویرایش مشخصات"))
+                                    .setDescription(FontHelper.getSpannedString(EditProfile.this, "اطلاعات شما با موفقیت تغییر کرد. حساب شما نیاز به تایید مجدد دارد"))
+                                    .setStyle(Style.HEADER_WITH_TITLE)
+                                    .withDarkerOverlay(true)
+                                    .withDialogAnimation(true)
+                                    .setCancelable(false)
+                                    .setPositiveText("باشه")
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            confirmManager.setInfoConfirm(false);
+                                            Intent data = new Intent();
+                                            setResult(1, data);
+                                            finish();
+                                        }
+                                    })
+                                    .show();
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(EditProfile.this, errorMsg, TAGs.ERROR); // show error message
@@ -273,7 +301,7 @@ public class EditProfile extends AppCompatActivity {
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
-            
+                
                 @Nullable
                 @Override
                 public byte[] getBody() throws AuthFailureError {

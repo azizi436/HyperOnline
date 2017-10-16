@@ -186,6 +186,7 @@ public class Activity_Factor extends Activity {
                     Intent intent = new Intent(Activity_Factor.this, Activity_Main.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                    startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
                     finish();
                 }
             }
