@@ -26,6 +26,6 @@
         android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
         android:padding="8dp"
         android:text="2"
-        android:textColor="@color/accent"
+        android:textColor="@color/black"
         android:textSize="10sp"/>
 </RelativeLayout>

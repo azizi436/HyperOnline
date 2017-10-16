@@ -130,10 +130,10 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
                 vibrator.vibrate(50);
                 holder.add_layout.setVisibility(View.INVISIBLE);
                 holder.change_layout.setVisibility(View.VISIBLE);
-                holder.price_layout.setVisibility(View.INVISIBLE);
-                holder.status.setVisibility(View.VISIBLE);
-                holder.status.setText("به سبد خرید اضافه شد");
-                holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+//                holder.price_layout.setVisibility(View.INVISIBLE);
+//                holder.status.setVisibility(View.VISIBLE);
+//                holder.status.setText("به سبد خرید اضافه شد");
+//                holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 int off = product.off * Integer.valueOf(product.price) / 100;
                 int fPrice = Integer.valueOf(product.price) - off;
                 Log.w("price", String.valueOf(off) + " " + String.valueOf(fPrice));

@@ -6,6 +6,7 @@ package ir.hatamiarash.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,12 @@ import models.Category;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
     private Context mContext;
     private List<Category> categoryList;
+    private Vibrator vibrator;
     
     public CategoryAdapter(Context mContext, List<Category> categoryList) {
         this.mContext = mContext;
         this.categoryList = categoryList;
+        vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
     
     @Override
@@ -97,6 +100,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         
         @Override
         public void onClick(View v) {
+            vibrator.vibrate(50);
             Intent i = new Intent(mContext, Activity_List.class);
             // we are in level 3 and we want products
             if (level == 3)
