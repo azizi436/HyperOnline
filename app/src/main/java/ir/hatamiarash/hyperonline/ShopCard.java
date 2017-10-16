@@ -115,7 +115,6 @@ public class ShopCard extends AppCompatActivity {
     private String ORDER_HOUR;
     private String STUFFS = "";
     private String STUFFS_ID = "";
-    private String STUFFS_COUNT = "";
     private String DESCRIPTION = "";
     
     @Override
@@ -258,12 +257,6 @@ public class ShopCard extends AppCompatActivity {
             String count = Item.get(i * 8 + 6);
             String o_count = Item.get(i * 8 + 7);
             
-            Log.w("uid", uid);
-            Log.w("name", name);
-            Log.w("price", price);
-            Log.w("info", info);
-            Log.w("off", off);
-            Log.w("count", count);
             tOff += Integer.valueOf(off);
             tPrice += Integer.valueOf(price);
             
@@ -272,7 +265,6 @@ public class ShopCard extends AppCompatActivity {
             
             STUFFS += "," + name;
             STUFFS_ID += "," + uid;
-            STUFFS_COUNT += "," + count;
         }
         if (tPrice == 0) {
             empty.setVisibility(View.VISIBLE);
@@ -296,7 +288,6 @@ public class ShopCard extends AppCompatActivity {
             String count = FormatHelper.toEnglishNumber2(Item.get(i * 8 + 6));
             c += count + ",";
         }
-        Log.w("count", c);
         return c;
     }
     
@@ -662,7 +653,6 @@ public class ShopCard extends AppCompatActivity {
                                 new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(pCount);
                             }
                             
-                            Log.w(TAG, "count: " + pCount + " temp: " + temp);
                             product_off.setText(String.valueOf(new_off));
                             
                             db_item.updateItem(
@@ -774,7 +764,6 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void sendPrice(int price) {
-        Log.w("ttprice", String.valueOf(price));
         if (price >= 35000) {
             tExtend = 0;
             status.setText("ارسال رایگان");
