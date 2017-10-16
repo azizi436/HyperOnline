@@ -741,31 +741,35 @@ public class ShopCard extends AppCompatActivity {
     
     @Contract(pure = true)
     private int times(int hour, int minute) {
-        if (hour >= 9 && hour < 10)
-            if (minute <= 30)
-                send_time = 9;
-            else
-                send_time = 11;
-        if (hour >= 10 && hour < 11) send_time = 2;
-        if (hour >= 11 && hour < 12)
-            if (minute <= 30)
+        if (hour >= 9 && hour < 10) send_time = 11;
+        if (hour >= 10 && hour < 11)
+            if (minute <= 40)
                 send_time = 11;
             else
                 send_time = 16;
-        if (hour >= 12 && hour < 16) send_time = 3;
-        if (hour >= 16 && hour < 17)
-            if (minute <= 30)
+        
+        if (hour >= 11 && hour < 15) send_time = 16;
+        if (hour >= 15 && hour < 16)
+            if (minute <= 40)
                 send_time = 16;
             else
                 send_time = 18;
-        if (hour >= 17 && hour < 18) send_time = 4;
-        if (hour >= 18 && hour < 19)
-            if (minute <= 30)
+        
+        if (hour >= 16 && hour < 17) send_time = 18;
+        if (hour >= 17 && hour < 18)
+            if (minute <= 40)
                 send_time = 18;
             else
                 send_time = 9;
-        if (hour >= 19 && hour <= 23) send_time = 9;
-        if (hour >= 0 && hour < 9) send_time = 9;
+        
+        if (hour >= 18 && hour <= 23) send_time = 9;
+        if (hour >= 0 && hour < 8) send_time = 9;
+        if (hour >= 8 && hour < 9)
+            if (minute <= 40)
+                send_time = 9;
+            else
+                send_time = 11;
+        
         return send_time;
     }
     
