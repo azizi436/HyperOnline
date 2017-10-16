@@ -133,7 +133,7 @@ public class UserProfile extends Activity {
             public void onClick(View v) {
                 vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), EditProfile.class);
-                startActivity(i);
+                startActivityForResult(i, 100);
             }
         });
         
@@ -192,7 +192,6 @@ public class UserProfile extends Activity {
                                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                                         .into(User_Photo, new com.squareup.picasso.Callback() {
                                             @Override
-                                            
                                             public void onSuccess() {
                                                 progressBar.setVisibility(View.GONE);
                                             }
@@ -253,5 +252,13 @@ public class UserProfile extends Activity {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100)
+            if (resultCode == 1)
+                GetUser(db_user.getUserDetails().get(TAGs.UID));
     }
 }

@@ -120,18 +120,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
 
-    public void updateUser(String uid, String name, String email, String address, String phone) {
+    public void updateUser(String uid, String name, String address) {
         SQLiteDatabase db = this.getWritableDatabase();
         name = "'" + name + "'";
-        email = "'" + email + "'";
         address = "'" + address + "'";
-        phone = "'" + phone + "'";
         uid = "'" + uid + "'";
         String Query = "UPDATE " + TABLE_LOGIN + " SET "
                 + KEY_NAME + "=" + name + ", "
-                + KEY_ADDRESS + "=" + address + ", "
-                + KEY_EMAIL + "=" + email + ", "
-                + KEY_PHONE + "=" + phone
+                + KEY_ADDRESS + "=" + address
                 + " WHERE " + KEY_UID + "=" + uid;
         db.execSQL(Query);
         db.close();
