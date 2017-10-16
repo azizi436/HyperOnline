@@ -52,8 +52,7 @@
                 android:layout_height="100dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:padding="5dp"
-                android:scaleType="fitCenter"/>
+                android:scaleType="centerCrop"/>
 
             <helper.PersianTextView
                 android:id="@+id/category_name"

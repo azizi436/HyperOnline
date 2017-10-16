@@ -481,6 +481,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         title_category_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), Activity_Cat.class);
                 startActivity(i);
             }
@@ -488,6 +489,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         title_most_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
                 i.putExtra("type", "2");
                 startActivity(i);
@@ -496,6 +498,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         title_collection_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
                 i.putExtra("type", "6");
                 startActivity(i);
@@ -504,6 +507,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         title_new_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
                 i.putExtra("type", "3");
                 startActivity(i);
@@ -512,6 +516,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         title_off_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
                 i.putExtra("type", "5");
                 startActivity(i);
@@ -520,6 +525,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         title_popular_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(50);
                 Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
                 i.putExtra("type", "4");
                 startActivity(i);

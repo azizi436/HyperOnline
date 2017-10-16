@@ -347,7 +347,6 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void Check(final String CODE, final String AMOUNT) {
-        
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         try {
