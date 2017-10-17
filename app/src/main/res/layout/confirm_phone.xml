@@ -278,7 +278,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/accent"
+            android:textStyle="bold"
             app:font="iran_sans"/>
 
         <helper.PersianTextView

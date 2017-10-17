@@ -148,6 +148,7 @@ public class Confirm_Phone extends AppCompatActivity {
         
         RequestCode();
         
+        help.setVisibility(View.GONE);
         help.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -169,6 +170,7 @@ public class Confirm_Phone extends AppCompatActivity {
             }
             
             public void onFinish() {
+                help.setVisibility(View.VISIBLE);
                 time.setText("کد فعالسازی ارسال شده است. در صورت عدم دریافت کد ، پس از بررسی وضعیت تلفن همراه خود می توانید با ما در ارتباط باشید.");
                 time.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
             }

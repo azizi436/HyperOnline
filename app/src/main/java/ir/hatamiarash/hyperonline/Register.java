@@ -132,8 +132,8 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String name = inputName.getText().toString();
-                String password = FormatHelper.toEnglishNumber(inputPassword.getText().toString());
-                String password2 = FormatHelper.toEnglishNumber(inputPassword2.getText().toString());
+                String password = inputPassword.getText().toString();
+                String password2 = inputPassword2.getText().toString();
                 String address = inputAddress.getText().toString();
                 String phone = inputPhone.getText().toString();
                 

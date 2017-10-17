@@ -18,8 +18,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparent_mine">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -62,6 +61,25 @@
                     app:hint="@string/hint_phone"
                     app:iconSrc="@drawable/ic_dialpad"
                     app:isPhone="true"/>
+
+                <helper.PersianTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/address"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="5dp"
+                    android:text="کلمه عبور حداقل هشت حرف و به صورت انگلیسی وارد شود"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:font="shabnam"/>
 
                 <helper.IconEditText
                     android:id="@+id/password"

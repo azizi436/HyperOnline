@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.SingleLineTransformationMethod;
 import android.util.AttributeSet;
@@ -77,9 +78,11 @@ public class IconEditText extends LinearLayout {
         if (_editText == null) {
             _editText = new PersianEditText(this.getContext());
 
-            if (_isPassword)
+            if (_isPassword) {
                 _editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            else if (_isPhone)
+                _editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                _editText.setKeyListener(DigitsKeyListener.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"));
+            }else if (_isPhone)
                 _editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_PHONE);
             else if (_isEmail)
                 _editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);

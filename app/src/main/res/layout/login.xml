@@ -13,7 +13,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background4"
+        android:src="@drawable/background3"
         android:id="@+id/imageView3"
         android:scaleType="centerCrop"/>
 
@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@color/transparent_mine"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -84,7 +83,8 @@
             android:background="@null"
             android:text="@string/btn_link_to_resetpassword"
             android:textColor="#00B89C"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
         <helper.PersianButton
             android:id="@+id/btnLinkToRegisterScreen"
@@ -96,7 +96,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:background="@null"
             android:text="@string/btn_link_to_register"
             android:textColor="#00B89C"
