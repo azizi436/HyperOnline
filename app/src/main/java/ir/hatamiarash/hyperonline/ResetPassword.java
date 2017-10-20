@@ -9,44 +9,48 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.Helper;
-import helper.SQLiteHandler;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
-import volley.AppController;
 
 public class ResetPassword extends Activity {
     private static final String TAG = ResetPassword.class.getSimpleName();
     
-    @InjectView(R.id.email)
-    public EditText inputEmail;
     @InjectView(R.id.phone)
     public EditText inputPhone;
     @InjectView(R.id.btnSet)
     public Button btnSet;
     
     private SweetAlertDialog progressDialog;
-    private boolean CheckEmail, CheckPhone;
-    private SQLiteHandler db_user;
+    private Vibrator vibrator;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,83 +58,91 @@ public class ResetPassword extends Activity {
         setContentView(R.layout.reset_password);
         
         ButterKnife.inject(this);
-        db_user = new SQLiteHandler(getApplicationContext());
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-        CheckEmail = Helper.isValidEmail(inputEmail.getText().toString());
-        CheckPhone = Helper.isValidPhone(inputPhone.getText().toString());
+        vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!db_user.getUserDetails().get(TAGs.EMAIL).equals("NULL") ||
-                        !db_user.getUserDetails().get(TAGs.EMAIL).equals("null"))
-                    if (Helper.CheckInternet(getApplicationContext()))
-                        if (CheckEmail)
-                            if (CheckPhone)
-                                ResetUserPassword(inputEmail.getText().toString(), inputPhone.getText().toString());
-                            else
-                                Helper.MakeToast(getApplicationContext(), "شماره موبایل را بررسی نمایید", TAGs.WARNING);
-                        else
-                            Helper.MakeToast(getApplicationContext(), "ایمیل را بررسی نمایید", TAGs.WARNING);
+                vibrator.vibrate(50);
+                if (Helper.CheckInternet(getApplicationContext()))
+                    if (Helper.isValidPhone(inputPhone.getText().toString()))
+                        resetPassword(inputPhone.getText().toString());
                     else
-                        Helper.MakeToast(getApplicationContext(), "اتصال اینترنت را بررسی نمایید", TAGs.ERROR);
-                else {
-                    Helper.MakeToast(getApplicationContext(), "شما ایمیلی را در سیستم ثبت نکرده اید", TAGs.ERROR);
-                    Helper.MakeToast(getApplicationContext(), "مشخصات خود را ویرایش کنید", TAGs.WARNING);
-                }
+                        Helper.MakeToast(getApplicationContext(), "شماره موبایل را بررسی نمایید", TAGs.WARNING);
             }
         });
     }
     
-    private void ResetUserPassword(final String email, final String phone) {
-        // Tag used to cancel the request
-        String string_req = "req_reset";
+    private void resetPassword(final String phone) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.base_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Reset Response: " + response);
-                hideDialog();
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean(TAGs.ERROR);
-                    if (!error) {
-                        MakeQuestion("تعویض کلمه عبور", "کلمه عبور جدید به ایمیل شما ارسال شد");
-                    } else {
-                        // Error occurred in registration. Get the error message
-                        String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                        Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
+        
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "resetPass";
+            JSONObject params = new JSONObject();
+            params.put(TAGs.PHONE, phone);
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("resetPassword R", response);
+                    hideDialog();
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            MakeQuestion("تعویض کلمه عبور", "کلمه عبور جدید به شماره شما ارسال شد");
+                        } else {
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        hideDialog();
+                        e.printStackTrace();
+                        finish();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Fetch Error: " + error.getMessage());
-                if (error.getMessage() != null) {
-                    Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
-                } else
-                    Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() {
-                // Posting params to register url
-                java.util.Map<String, String> params = new HashMap<>();
-                params.put(TAGs.TAG, "user_reset_password");
-                params.put(TAGs.EMAIL, email);
-                params.put(TAGs.PHONE, phone);
-                return params;
-            }
-        };
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("resetPassword E", error.toString());
+                    hideDialog();
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            // add retry policy to prevent send request twice
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     
     private void showDialog() {
