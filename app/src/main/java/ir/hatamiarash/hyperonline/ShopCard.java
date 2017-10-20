@@ -404,6 +404,11 @@ public class ShopCard extends AppCompatActivity {
                     }
                 }
             };
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
