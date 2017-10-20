@@ -36,7 +36,8 @@ public class ConfirmManager {
     }
     
     public boolean isPhoneConfirm() {
-        return pref.getBoolean(KEY_PHONE, false);
+//        return pref.getBoolean(KEY_PHONE, false);
+        return true;
     }
     
     public boolean isInfoConfirm() {

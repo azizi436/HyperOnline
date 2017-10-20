@@ -150,29 +150,30 @@ public class Login extends Activity {
                                     user.getString(TAGs.CITY)
                             );
                             if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
-                                confirmManager.setPhoneConfirm(false);
-                                new MaterialStyledDialog.Builder(Login.this)
-                                        .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
-                                        .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید"))
-                                        .setStyle(Style.HEADER_WITH_TITLE)
-                                        .withDarkerOverlay(true)
-                                        .withDialogAnimation(true)
-                                        .setCancelable(true)
-                                        .setPositiveText("باشه")
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                try {
-                                                    Intent intent = new Intent(Login.this, Confirm_Phone.class);
-                                                    intent.putExtra(TAGs.PHONE, user.getString(TAGs.PHONE));
-                                                    startActivity(intent);
-                                                    finish();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        })
-                                        .show();
+                                confirmManager.setPhoneConfirm(true);
+//                                confirmManager.setPhoneConfirm(false);
+//                                new MaterialStyledDialog.Builder(Login.this)
+//                                        .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
+//                                        .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید"))
+//                                        .setStyle(Style.HEADER_WITH_TITLE)
+//                                        .withDarkerOverlay(true)
+//                                        .withDialogAnimation(true)
+//                                        .setCancelable(true)
+//                                        .setPositiveText("باشه")
+//                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                                            @Override
+//                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                                                try {
+//                                                    Intent intent = new Intent(Login.this, Confirm_Phone.class);
+//                                                    intent.putExtra(TAGs.PHONE, user.getString(TAGs.PHONE));
+//                                                    startActivity(intent);
+//                                                    finish();
+//                                                } catch (JSONException e) {
+//                                                    e.printStackTrace();
+//                                                }
+//                                            }
+//                                        })
+//                                        .show();
                             } else {
                                 confirmManager.setPhoneConfirm(true);
                                 if (Integer.valueOf(user.getString("confirmed_info")) == 0) {
