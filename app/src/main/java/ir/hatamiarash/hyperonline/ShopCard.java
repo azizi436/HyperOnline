@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -205,8 +206,8 @@ public class ShopCard extends AppCompatActivity {
                                         DESCRIPTION = edit_text.getText().toString();
                                         String tPay = total_pay.getText().toString();
                                         int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
-                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
-//                                        onPaySuccess();
+//                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+                                        onPaySuccess();
                                     }
                                 })
                                 .show();
@@ -521,6 +522,11 @@ public class ShopCard extends AppCompatActivity {
                     }
                 }
             };
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
