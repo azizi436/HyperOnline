@@ -82,7 +82,7 @@ public class ResetPassword extends Activity {
         
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URLs.base_URL + "resetPass";
+            String URL = URLs.base_URL + "resetPassword";
             JSONObject params = new JSONObject();
             params.put(TAGs.PHONE, phone);
             final String mRequestBody = params.toString();
@@ -100,7 +100,6 @@ public class ResetPassword extends Activity {
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
-                            finish();
                         }
                     } catch (JSONException e) {
                         hideDialog();
