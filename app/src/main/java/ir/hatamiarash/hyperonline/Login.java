@@ -14,10 +14,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,8 +23,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
-import com.github.javiersantos.materialstyleddialogs.enums.Style;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
@@ -39,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.ConfirmManager;
-import helper.FontHelper;
 import helper.Helper;
 import helper.IconEditText;
 import helper.SQLiteHandler;
@@ -130,7 +124,7 @@ public class Login extends Activity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.i("LOG_VOLLEY R", response);
+                    Log.i("CheckLogin R", response);
                     hideDialog();
                     try {
                         JSONObject jObj = new JSONObject(response);
@@ -149,8 +143,8 @@ public class Login extends Activity {
                                     user.getString(TAGs.STATE),
                                     user.getString(TAGs.CITY)
                             );
-                            if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
-                                confirmManager.setPhoneConfirm(true);
+//                            if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
+//                                confirmManager.setPhoneConfirm(true);
 //                                confirmManager.setPhoneConfirm(false);
 //                                new MaterialStyledDialog.Builder(Login.this)
 //                                        .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
@@ -174,21 +168,20 @@ public class Login extends Activity {
 //                                            }
 //                                        })
 //                                        .show();
-                            } else {
-                                confirmManager.setPhoneConfirm(true);
-                                if (Integer.valueOf(user.getString("confirmed_info")) == 0) {
-                                    confirmManager.setInfoConfirm(false);
-                                    Helper.MakeToast(getApplication(), "اطلاعات حساب شما هنوز تایید نشده است", TAGs.WARNING, Toast.LENGTH_LONG);
-                                } else {
-                                    confirmManager.setInfoConfirm(true);
-                                }
-                                String msg = "سلام " + user.getString(TAGs.NAME);
-                                Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
-                                Intent intent = new Intent(Login.this, Activity_Main.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
-                            }
+//                            } else {
+                            confirmManager.setPhoneConfirm(true);
+                            if (Integer.valueOf(user.getString("confirmed_info")) == 0)
+                                confirmManager.setInfoConfirm(false);
+                            else
+                                confirmManager.setInfoConfirm(true);
+                            
+                            String msg = "سلام " + user.getString(TAGs.NAME);
+                            Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
+                            Intent intent = new Intent(Login.this, Activity_Main.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+//                            }
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Login.this, errorMsg, TAGs.ERROR); // show error message
@@ -202,7 +195,7 @@ public class Login extends Activity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_VOLLEY E", error.toString());
+                    Log.e("CheckLogin E", error.toString());
                     hideDialog();
                     finish();
                 }
