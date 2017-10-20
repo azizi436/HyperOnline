@@ -739,7 +739,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                     DefaultSliderView SliderView = new DefaultSliderView(Activity_Main.this);
                                     SliderView
                                             .image(urls.get(name))
-                                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                            .setScaleType(BaseSliderView.ScaleType.CenterCrop)
                                             .setOnSliderClickListener(Activity_Main.this);
                                     slider.addSlider(SliderView);
                                 }
