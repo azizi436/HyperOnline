@@ -88,19 +88,15 @@
         <helper.PersianButton
             android:id="@+id/btnChangePassword"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/btnConfirm"
             android:layout_marginBottom="5dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:background="@null"
+            android:background="@color/btn"
             android:text="تغییر کلمه عبور"
-            android:textColor="#00B89C"
-            android:textSize="18sp"
-            android:visibility="gone"/>
+            android:textColor="@color/button_text_color"
+            android:textSize="24sp"
+            />
 
         <helper.PersianButton
             android:id="@+id/btnConfirm"

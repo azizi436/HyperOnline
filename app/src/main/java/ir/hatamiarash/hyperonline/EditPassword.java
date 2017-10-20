@@ -4,40 +4,59 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import helper.ConfirmManager;
+import helper.FontHelper;
 import helper.Helper;
 import helper.IconEditText;
 import helper.SQLiteHandler;
+import helper.SQLiteHandlerItem;
+import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
-import volley.AppController;
 
 public class EditPassword extends AppCompatActivity {
-    private static final String TAG = EditPassword.class.getSimpleName();
+    private SweetAlertDialog progressDialog;
+    private Vibrator vibrator;
+    private SQLiteHandlerItem db_item;
+    private SQLiteHandlerSupport db_support;
+    private SQLiteHandler db_user;
+    private SessionManager session;
+    private ConfirmManager confirmManager;
     
     @InjectView(R.id.current_password)
     IconEditText current_password;
@@ -48,169 +67,137 @@ public class EditPassword extends AppCompatActivity {
     @InjectView(R.id.btnConfirm)
     Button btnConfirm;
     
-    private SweetAlertDialog progressDialog;
-    private SQLiteHandler db_user;
-    private SessionManager session;
-    private String pass, phone;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_password);
-
+        
         ButterKnife.inject(this);
+        db_item = new SQLiteHandlerItem(getApplicationContext());
+        db_support = new SQLiteHandlerSupport(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());
         session = new SessionManager(getApplicationContext());
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-
-        phone = db_user.getUserDetails().get(TAGs.PHONE);
-
+        vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+        confirmManager = new ConfirmManager(getApplicationContext());
+        
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String cp = current_password.getText().toString();
                 String np = new_password.getText().toString();
                 String np2 = new_password_2.getText().toString();
-                if (cp.equals(pass))
-                    if (np.equals(np2))
-                        if (Helper.isValidPassword(np))
-                            MakeQuestion("تغییر شماره تلفن", "اطلاعات ورود شما نیز تغییر خواهد کرد", phone, np);
-                        else
-                            Helper.MakeToast(getApplicationContext(), "رمز عبور جدید معتبر نیست", TAGs.ERROR);
+                if (np.equals(np2))
+                    if (Helper.isValidPassword(np))
+                        UpdatePassword(np);
                     else
-                        Helper.MakeToast(getApplicationContext(), "رمز های عبور مطابقت ندارند", TAGs.ERROR);
+                        Helper.MakeToast(getApplicationContext(), "رمز عبور جدید معتبر نیست", TAGs.ERROR);
                 else
-                    Helper.MakeToast(getApplicationContext(), "رمز عبور وارد شده اشتباه است", TAGs.ERROR);
+                    Helper.MakeToast(getApplicationContext(), "رمز های عبور مطابقت ندارند", TAGs.ERROR);
             }
         });
-
-        GetUser(phone);
     }
-
-    private void GetUser(final String phone) {
-        String string_req = "req_get";
+    
+    private void UpdatePassword(String pass) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.base_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Fetch Response: " + response);
-                hideDialog();
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean(TAGs.ERROR);
-                    if (!error) {
-                        JSONObject user = jObj.getJSONObject(TAGs.USER);
-                        pass = user.getString(TAGs.PASSWORD);
-                    } else {
-                        String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                        Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
+        
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URLs.base_URL + "updatePassword";
+            JSONObject params = new JSONObject();
+            params.put(TAGs.PASSWORD, pass);
+            params.put(TAGs.UID, db_user.getUserDetails().get(TAGs.UID));
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("UpdatePassword R", response);
+                    hideDialog();
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean(TAGs.ERROR);
+                        if (!error) {
+                            new MaterialStyledDialog.Builder(EditPassword.this)
+                                    .setTitle(FontHelper.getSpannedString(EditPassword.this, "رمز عبور"))
+                                    .setDescription(FontHelper.getSpannedString(EditPassword.this, "رمز عبور شما با موفقیت تغییر کرد. نیاز به ورود مجدد می باشد."))
+                                    .setStyle(Style.HEADER_WITH_TITLE)
+                                    .withDarkerOverlay(true)
+                                    .withDialogAnimation(true)
+                                    .setCancelable(false)
+                                    .setPositiveText("باشه")
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            logoutUser();
+                                        }
+                                    })
+                                    .show();
+                        } else {
+                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+                            Helper.MakeToast(EditPassword.this, errorMsg, TAGs.ERROR);
+                        }
+                    } catch (JSONException e) {
+                        hideDialog();
+                        e.printStackTrace();
                         finish();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("UpdatePassword E", error.toString());
                     hideDialog();
                     finish();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Fetch Error: " + error.getMessage());
-                if (error.getMessage() != null) {
-                    Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
-                } else
-                    Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-                finish();
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() {
-                java.util.Map<String, String> params = new HashMap<>();
-                params.put(TAGs.TAG, "user_get_password");
-                params.put(TAGs.PHONE, phone);
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
-    }
-
-    private void UpdatePassword(final String pass, final String phone) {
-        String string_req = "req_update";
-        StringRequest strReq = new StringRequest(Request.Method.POST, URLs.base_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Updating Response: " + response);
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean(TAGs.ERROR);
-                    if (!error) {
-                        Helper.MakeToast(getApplicationContext(), "کلمه عبور تغییر کرد", TAGs.SUCCESS);
-                    } else {
-                        String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                        Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    hideDialog();
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Fetch Error: " + error.getMessage());
-                if (error.getMessage() != null) {
-                    Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
-                } else
-                    Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-                finish();
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() {
-                java.util.Map<String, String> params = new HashMap<>();
-                params.put(TAGs.TAG, "user_update_password");
-                params.put(TAGs.PASSWORD, pass);
-                params.put(TAGs.PHONE, phone);
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            // add retry policy to prevent send request twice
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-
-    private void MakeQuestion(String Title, String Message, final String phone, final String password) {
-        ContextThemeWrapper ctw = new ContextThemeWrapper(this, R.style.AlertDialogCustom);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(ctw);
-        dialog.setTitle(Title);
-        dialog.setMessage(Message);
-        dialog.setIcon(R.drawable.ic_alert);
-        dialog.setPositiveButton("باشه !", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                progressDialog.setTitleText("لطفا منتظر بمانید");
-                showDialog();
-                UpdatePassword(password, phone);
-                logoutUser();
-            }
-        });
-        dialog.setNegativeButton("بیخیال", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = dialog.create();
-        alert.show();
-    }
-
+    
     private void logoutUser() {
+        vibrator.vibrate(50);
+        progressDialog.setTitleText("لطفا منتظر بمانید");
+        showDialog();
         session.setLogin(false);
+        confirmManager.setPhoneConfirm(false);
+        confirmManager.setInfoConfirm(false);
         db_user.deleteUsers();
+        db_item.deleteItems();
+        db_support.deleteMessages();
         hideDialog();
-        Intent i = new Intent(getApplicationContext(), Lobby.class);
-        Activity_Main.pointer.finish();
+        Helper.MakeToast(getApplicationContext(), "با موفقیت خارج شدید", TAGs.SUCCESS);
+        Intent i = new Intent(getApplicationContext(), Activity_Main.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
     }
