@@ -4,27 +4,50 @@
 
 package ir.hatamiarash.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.PowerManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
+import helper.Helper;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.utils.TAGs;
+import ir.hatamiarash.utils.URLs;
 import models.Order;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
     private Context mContext;
     private List<Order> orderList;
+    ProgressDialog mProgressDialog;
     
     public OrderAdapter(Context mContext, List<Order> orderList) {
         this.mContext = mContext;
         this.orderList = orderList;
+        
+        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setMessage("A message");
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setCancelable(true);
     }
     
     @Override
@@ -35,7 +58,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Order order = orderList.get(position);
+        final Order order = orderList.get(position);
         holder.id.setText(order.unique_id);
 //        holder.date.setText(formatDate(order.date));
         holder.date.setText(order.date);
@@ -65,6 +88,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.purple));
                 break;
         }
+        
+        holder.download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File f = new File(Environment.getExternalStorageDirectory(), "HO-Factors");
+                if (!f.exists())
+                    f.mkdirs();
+                String url = URLs.factor_URL + order.code + ".pdf";
+                final OrderAdapter.DownloadTask downloadTask = new OrderAdapter.DownloadTask(mContext, order.code);
+                downloadTask.execute(url);
+            }
+        });
     }
     
     @Override
@@ -84,6 +119,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView id, date, stuffs, price, status, hour;
+        Button download;
         
         MyViewHolder(View view) {
             super(view);
@@ -93,11 +129,130 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             price = view.findViewById(R.id.price);
             status = view.findViewById(R.id.status);
             hour = view.findViewById(R.id.hour);
+            download = view.findViewById(R.id.download);
         }
     }
     
     private String formatDate(String Date) {
         String[] split = Date.split(":");
         return split[0] + "     " + split[1];
+    }
+    
+    private class DownloadTask extends AsyncTask<String, Integer, String> {
+        
+        private Context context;
+        private PowerManager.WakeLock mWakeLock;
+        private String code;
+        
+        private DownloadTask(Context context, String code) {
+            this.context = context;
+            this.code = code;
+        }
+        
+        @Override
+        protected String doInBackground(String... sUrl) {
+            InputStream input = null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(sUrl[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                
+                // expect HTTP 200 OK, so we don't mistakenly save error report instead of the file
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
+                    return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
+                
+                // this will be useful to display download percentage
+                // might be -1: server did not report the length
+                int fileLength = connection.getContentLength();
+                
+                // download the file
+                input = connection.getInputStream();
+                output = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + "HO-Factors" + "/" + code + ".pdf");
+                
+                byte data[] = new byte[4096];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    // allow canceling with back button
+                    if (isCancelled()) {
+                        input.close();
+                        return null;
+                    }
+                    total += count;
+                    // publishing the progress....
+                    if (fileLength > 0) // only if total length is known
+                        publishProgress((int) (total * 100 / fileLength));
+                    output.write(data, 0, count);
+                }
+            } catch (Exception e) {
+                return e.toString();
+            } finally {
+                try {
+                    if (output != null)
+                        output.close();
+                    if (input != null)
+                        input.close();
+                } catch (IOException ignored) {
+                }
+                
+                if (connection != null)
+                    connection.disconnect();
+            }
+            return null;
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // take CPU lock to prevent CPU from going off if the user
+            // presses the power button during download
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+            mWakeLock.acquire();
+            mProgressDialog.show();
+        }
+        
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            // if we get here, length is known, now set indeterminate to false
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setMax(100);
+            mProgressDialog.setProgress(progress[0]);
+        }
+        
+        @Override
+        protected void onPostExecute(String result) {
+            mWakeLock.release();
+            mProgressDialog.dismiss();
+//            vibrator.vibrate(50);
+            if (result != null)
+                Helper.MakeToast(context, "خطایی رخ داده است مجددا تلاش کنید", TAGs.ERROR);
+            else {
+                Helper.MakeToast(context, "فاکتور دانلود شد... در حال بازگشایی", TAGs.SUCCESS);
+                File file = new File(Environment.getExternalStorageDirectory() + "/" + "HO-Factors" + "/" + code + ".pdf");
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(file), "application/*");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    mContext.startActivity(intent);
+                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + "HO-Factors" + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
+//                    Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setDataAndType(selectedUri, "resource/folder");
+//                    mContext.startActivity(intent);
+                    
+                    
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    Uri mydir = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
+                    intent.setDataAndType(mydir, "application/*");    // or use */*
+                    mContext.startActivity(intent);
+                }
+            }
+        }
     }
 }

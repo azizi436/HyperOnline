@@ -15,8 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -186,7 +184,11 @@ public class ShopCard extends AppCompatActivity {
                         if (send_time == 16 || send_time == 18)
                             extend = " عصر";
                         ORDER_HOUR = time;
-                        String message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
+                        String message;
+                        if (send_time == 18)
+                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
+                        else
+                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View customView = inflater.inflate(R.layout.custom_dialog, null);
                         final TextView edit_text = customView.findViewById(R.id.edit_text);
@@ -206,8 +208,8 @@ public class ShopCard extends AppCompatActivity {
                                         DESCRIPTION = edit_text.getText().toString();
                                         String tPay = total_pay.getText().toString();
                                         int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
-//                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
-                                        onPaySuccess();
+                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+//                                        onPaySuccess();
                                     }
                                 })
                                 .show();
@@ -235,6 +237,8 @@ public class ShopCard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 vibrator.vibrate(50);
+                Intent data = new Intent();
+                setResult(CODE_STATUS, data);
                 finish();
             }
         });
@@ -549,7 +553,6 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private class Adapter_Product extends RecyclerView.Adapter<Adapter_Product.ProductViewHolder> {
-        private final String TAG = Adapter_Product.class.getSimpleName();
         private List<Product> products;
         
         Adapter_Product(List<Product> products) {
@@ -594,10 +597,9 @@ public class ShopCard extends AppCompatActivity {
             TextView product_name;
             TextView product_description;
             TextView product_price;
-            ImageView product_inc;
             TextView product_count;
             TextView product_count_original;
-            ImageView product_dec;
+            ImageView product_inc, product_dec;
             
             ProductViewHolder(View itemView) {
                 super(itemView);
@@ -640,62 +642,62 @@ public class ShopCard extends AppCompatActivity {
                             Helper.MakeToast(getApplicationContext(), "تعداد بیشتر موجود نمی باشد", TAGs.ERROR);
                     }
                 });
-                
-                product_count.addTextChangedListener(new TextWatcher() {
-                    // save old count
-                    int temp;
-                    
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (check == products.size()) {
-                            // off / old count * new count
-                            int new_off;
-                            String pCount;
-                            if (product_count.getText().toString().length() == 1)
-                                pCount = FormatHelper.toEnglishNumber2(product_count.getText().toString());
-                            else
-                                pCount = FormatHelper.toEnglishNumber(product_count.getText().toString());
-                            
-                            if (Integer.valueOf(pCount) == 0 || temp == 0)
-                                new_off = 0;
-                            else {
-                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(pCount);
-                            }
-                            
-                            product_off.setText(String.valueOf(new_off));
-                            
-                            db_item.updateItem(
-                                    product_id.getText().toString(),
-                                    pCount,
-                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(pCount)),
-                                    String.valueOf(new_off)
-                            );
-                            
-                            sendPrice(db_item.TotalPrice());
-                            String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
-                            String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
-                            total_pay.setText(price);
-                            pay.setText("پرداخت - " + price);
-                            total_off.setText(off);
-                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
-                            total_price.setText(String.valueOf(ttPrice) + " تومان");
-                            ORDER_AMOUNT = String.valueOf(ttPrice);
-                        } else
-                            check++;
-                    }
-                    
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        if (product_count.getText().toString().length() == 1)
-                            temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
-                        else
-                            temp = Integer.valueOf(FormatHelper.toEnglishNumber(product_count.getText().toString()));
-                    }
-                    
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-                });
+
+//                product_count.addTextChangedListener(new TextWatcher() {
+//                    // save old count
+//                    int temp;
+//
+//                    @Override
+//                    public void afterTextChanged(Editable s) {
+//                        if (check == products.size()) {
+//                            // off / old count * new count
+//                            int new_off;
+//                            String pCount;
+//                            if (product_count.getText().toString().length() == 1)
+//                                pCount = FormatHelper.toEnglishNumber2(product_count.getText().toString());
+//                            else
+//                                pCount = FormatHelper.toEnglishNumber(product_count.getText().toString());
+//
+//                            if (Integer.valueOf(pCount) == 0 || temp == 0)
+//                                new_off = 0;
+//                            else {
+//                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(pCount);
+//                            }
+//
+//                            product_off.setText(String.valueOf(new_off));
+//
+//                            db_item.updateItem(
+//                                    product_id.getText().toString(),
+//                                    pCount,
+//                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(pCount)),
+//                                    String.valueOf(new_off)
+//                            );
+//
+//                            sendPrice(db_item.TotalPrice());
+//                            String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
+//                            String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
+//                            total_pay.setText(price);
+//                            pay.setText("پرداخت - " + price);
+//                            total_off.setText(off);
+//                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
+//                            total_price.setText(String.valueOf(ttPrice) + " تومان");
+//                            ORDER_AMOUNT = String.valueOf(ttPrice);
+//                        } else
+//                            check++;
+//                    }
+//
+//                    @Override
+//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                        if (product_count.getText().toString().length() == 1)
+//                            temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+//                        else
+//                            temp = Integer.valueOf(FormatHelper.toEnglishNumber(product_count.getText().toString()));
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    }
+//                });
             }
             
             void removeAt(int position) {

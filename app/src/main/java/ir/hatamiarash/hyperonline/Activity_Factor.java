@@ -14,10 +14,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -34,9 +34,9 @@ import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 
 public class Activity_Factor extends Activity {
-    Button download;
+    Button download, back;
     LottieAnimationView animationView;
-    TextView pay_msg;
+    TextView pay_msg,loc_msg;
     String ORDER_CODE;
     long downloadId;
     ProgressDialog mProgressDialog;
@@ -48,9 +48,11 @@ public class Activity_Factor extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_log);
         
-        download = (Button) findViewById(R.id.pay_log_download);
-        animationView = (LottieAnimationView) findViewById(R.id.animation_view);
-        pay_msg = (TextView) findViewById(R.id.pay_msg);
+        download = findViewById(R.id.pay_log_download);
+        back = findViewById(R.id.pay_log_back);
+        animationView = findViewById(R.id.animation_view);
+        pay_msg = findViewById(R.id.pay_msg);
+        loc_msg = findViewById(R.id.loc_msg);
         
         Intent intent = getIntent();
         ORDER_CODE = intent.getStringExtra("order_code");
@@ -77,6 +79,23 @@ public class Activity_Factor extends Activity {
                 String url = URLs.factor_URL + ORDER_CODE + ".pdf";
                 final DownloadTask downloadTask = new DownloadTask(Activity_Factor.this);
                 downloadTask.execute(url);
+                back.setVisibility(View.VISIBLE);
+                download.setVisibility(View.GONE);
+                animationView.setVisibility(View.GONE);
+                pay_msg.setVisibility(View.GONE);
+                loc_msg.setVisibility(View.GONE);
+            }
+        });
+        
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vibrator.vibrate(50);
+                Intent intent = new Intent(Activity_Factor.this, Activity_Main.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
+                finish();
             }
         });
     }
@@ -175,21 +194,27 @@ public class Activity_Factor extends Activity {
                 Helper.MakeToast(context, "فاکتور دانلود شد... در حال بازگشایی", TAGs.SUCCESS);
                 File file = new File(Environment.getExternalStorageDirectory() + "/" + folder_main + "/" + ORDER_CODE + ".pdf");
                 try {
+                    Log.e("Factor", "open");
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+                    intent.setDataAndType(Uri.fromFile(file), "application/*");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
+                    startActivity(Intent.createChooser(intent, "Open"));
                 } catch (Exception e) {
+                    Log.e("Factor", "Can not open");
                     e.printStackTrace();
-                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
-                } finally {
-                    Intent intent = new Intent(Activity_Factor.this, Activity_Main.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
-                    finish();
+//                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    Uri mydir = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
+                    intent.setDataAndType(mydir, "application/*");    // or use */*
+                    startActivity(Intent.createChooser(intent, "Open"));
                 }
             }
         }
+    }
+    
+    @Override
+    public void onBackPressed() {
+        //App not allowed to go back to Parent activity until correct pin entered. comment following code
+        //super.onBackPressed();
     }
 }

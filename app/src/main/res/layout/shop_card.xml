@@ -170,7 +170,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginStart="5dp"
-                    android:text="مالیات / ارسال / بسته بندی : "
+                    android:text="ارسال / بسته بندی : "
                     android:textAlignment="center"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/accent"

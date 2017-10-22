@@ -68,4 +68,17 @@
         android:text="دانلود فاکتور"
         android:textColor="@color/white"
         android:textSize="24sp"/>
+
+    <helper.PersianButton
+        android:id="@+id/pay_log_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:text="بازگشت"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:visibility="gone"/>
 </RelativeLayout>
