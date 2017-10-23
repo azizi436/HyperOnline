@@ -208,8 +208,8 @@ public class ShopCard extends AppCompatActivity {
                                         DESCRIPTION = edit_text.getText().toString();
                                         String tPay = total_pay.getText().toString();
                                         int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
-                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
-//                                        onPaySuccess();
+//                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+                                        onPaySuccess();
                                     }
                                 })
                                 .show();
