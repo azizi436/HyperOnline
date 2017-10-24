@@ -15,10 +15,10 @@ import com.github.ybq.android.spinkit.style.Wave;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import helper.SessionManager;
 
 public class SplashScreen extends AppCompatActivity {
-    SessionManager session;
+    Thread timerThread;
+    
     @InjectView(R.id.logo)
     public ImageView logo;
     @InjectView(R.id.spinner)
@@ -30,25 +30,26 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.splash);
         ButterKnife.inject(this);
         
-        session = new SessionManager(getApplicationContext());
-        
         Wave animation = new Wave();
         spinner.setIndeterminateDrawable(animation);
         
         logo.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.logo));
         
-        Thread timerThread = new Thread() {
+        timerThread = new Thread() {
             public void run() {
                 try {
                     sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    startActivity(new Intent(SplashScreen.this, Activity_Main.class));
+                    Intent i = new Intent(SplashScreen.this, Activity_Main.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
                     finish();
                 }
             }
         };
+        
         timerThread.start();
     }
 }

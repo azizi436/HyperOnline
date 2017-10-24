@@ -97,6 +97,20 @@ public class Helper {
         return false;
     }
     
+    public static boolean CheckInternet2(Context context) { // check network connection for run from possible exceptions
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        PackageManager PM = context.getPackageManager();
+        if (PM.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+                return true;
+        } else {
+            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+                return true;
+        }
+        return false;
+    }
+    
     public static void MakeToast(Context context, String Message, String TAG) {
         if (TAG.equals(TAGs.WARNING))
             CustomToast.custom(context, Message, R.drawable.ic_alert, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.md_deep_orange_400), Toast.LENGTH_SHORT, true, true).show();

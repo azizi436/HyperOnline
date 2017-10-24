@@ -162,6 +162,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         setContentView(R.layout.main_screen);
         ButterKnife.inject(this);
         
+        Helper.CheckInternet(getApplicationContext());
+        
         Pushe.initialize(getApplicationContext(), true);
         Helper.GetPermissions(this, getApplicationContext());
         
