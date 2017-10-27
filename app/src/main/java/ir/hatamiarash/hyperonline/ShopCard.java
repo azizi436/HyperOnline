@@ -208,8 +208,8 @@ public class ShopCard extends AppCompatActivity {
                                         DESCRIPTION = edit_text.getText().toString();
                                         String tPay = total_pay.getText().toString();
                                         int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
-                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
-//                                        onPaySuccess();
+//                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+                                        onPaySuccess();
                                     }
                                 })
                                 .show();
@@ -468,15 +468,10 @@ public class ShopCard extends AppCompatActivity {
             String uid = db_user.getUserDetails().get(TAGs.UID);
             params.put("user", uid);
             params.put("code", ORDER_CODE);
-            params.put("seller", "vbkYwlL98I3F3");
             params.put("stuffs", STUFFS);
             params.put("stuffs_id", STUFFS_ID);
             params.put("stuffs_count", getCounts());
-//            params.put("price", ORDER_AMOUNT);
-            String p = total_pay.getText().toString();
-            params.put("price", FormatHelper.toEnglishNumber(p.substring(0, p.length() - 6)));
             params.put("hour", ORDER_HOUR);
-            params.put("method", "online");
             params.put("description", DESCRIPTION);
             final String mRequestBody = params.toString();
             
