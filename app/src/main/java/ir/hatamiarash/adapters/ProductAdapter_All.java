@@ -226,6 +226,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
         return position;
     }
     
+    
     @Override
     public int getItemCount() {
         return productList.size();

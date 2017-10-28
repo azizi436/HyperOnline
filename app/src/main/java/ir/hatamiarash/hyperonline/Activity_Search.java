@@ -71,13 +71,11 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
         setSupportActionBar(toolbar);
         
         productList = new ArrayList<>();
-        productAdapter = new ProductAdapter_All(this, productList);
-        productAdapter.setHasStableIds(true);
+        
         pdLoading = new ProgressDialog(Activity_Search.this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(linearLayoutManager);
         list.setItemAnimator(new DefaultItemAnimator());
-        list.setAdapter(productAdapter);
     }
     
     @Override
@@ -108,7 +106,10 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
             if (searchView != null)
                 searchView.clearFocus();
             productList.clear();
-            productAdapter.notifyDataSetChanged();
+            list.removeAllViewsInLayout();
+            productAdapter = new ProductAdapter_All(this, productList);
+            productAdapter.setHasStableIds(true);
+            list.setAdapter(productAdapter);
             loadProduct(query);
         }
     }
