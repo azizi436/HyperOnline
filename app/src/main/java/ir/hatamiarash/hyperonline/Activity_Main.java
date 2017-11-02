@@ -4,8 +4,11 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -33,6 +36,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -46,6 +51,8 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -101,7 +108,6 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public Drawer result = null;
     SessionManager session;                          // session for check user logged
     ConfirmManager confirmManager;
-    private long back_pressed;                       // for check back key pressed count
     private Vibrator vibrator;
     private CategoryAdapter categoryAdapter;
     private ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
@@ -155,6 +161,9 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     public TextView title_off;
     @InjectView(R.id.title_off_more)
     public TextView title_off_more;
+    
+    private long back_pressed;                       // for check back key pressed count
+    private int VERSION = 0;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -748,6 +757,12 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                             } else {
                                 sliderLayout.setVisibility(View.GONE);
                             }
+                            
+                            if (_opt.has("v")) {
+                                VERSION = _opt.getInt("v");
+                                checkVersion(VERSION);
+                            }
+                            
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
@@ -840,9 +855,12 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         super.onResume();
         try {
             updateCartMenu();
-            //FetchAllData();
         } catch (NullPointerException e) {
             Log.i("Badge", "Known Error");
+        }
+        
+        if (VERSION != 0) {
+            checkVersion(VERSION);
         }
     }
     
@@ -994,6 +1012,52 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                 
                 FetchAllData();
             }
+        }
+    }
+    
+    private void checkVersion(int version) {
+        try {
+            PackageInfo pInfo = getApplicationContext()
+                    .getPackageManager()
+                    .getPackageInfo(getPackageName(), 0);
+            int version2 = pInfo.versionCode;
+            if (version != version2 && version != 0) {
+                new MaterialStyledDialog.Builder(Activity_Main.this)
+                        .setTitle(FontHelper.getSpannedString(getApplicationContext(), "به روزرسانی"))
+                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "نسخه جدید هایپرآنلاین منتشر شده است. لطفا به روزرسانی کنید"))
+                        .setStyle(Style.HEADER_WITH_TITLE)
+                        .setHeaderColor(R.color.green)
+                        .withDarkerOverlay(true)
+                        .withDialogAnimation(true)
+                        .setCancelable(false)
+                        .setPositiveText("دانلود")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String appName = "org.telegram.messenger";
+                                boolean isAppInstalled = isAppAvailable(getApplicationContext(), appName);
+                                if (isAppInstalled) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=online_hyper"));
+                                    startActivity(intent);
+                                } else {
+                                    Helper.MakeToast(getApplicationContext(), "تلگرام نصب نشده است", TAGs.ERROR);
+                                }
+                            }
+                        })
+                        .show();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static boolean isAppAvailable(Context context, String appName) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(appName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 }
