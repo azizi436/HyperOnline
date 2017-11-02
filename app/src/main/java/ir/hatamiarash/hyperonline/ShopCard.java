@@ -208,8 +208,8 @@ public class ShopCard extends AppCompatActivity {
                                         DESCRIPTION = edit_text.getText().toString();
                                         String tPay = total_pay.getText().toString();
                                         int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
-//                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
-                                        onPaySuccess();
+                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+//                                        onPaySuccess();
                                     }
                                 })
                                 .show();
@@ -350,7 +350,7 @@ public class ShopCard extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, string_req);
     }
     
-    private void Check(final String CODE, final String AMOUNT) {
+    private void Check(final String CODE, final int level) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         try {
@@ -381,12 +381,15 @@ public class ShopCard extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Check E", error.toString());
-                    if (error.toString().equals("com.android.volley.ServerError"))
-                        Helper.MakeToast(ShopCard.this, "پرداخت لغو شد", TAGs.ERROR);
-                    else
-                        Helper.MakeToast(ShopCard.this, error.toString(), TAGs.ERROR);
-                    hideDialog();
+                    Log.e("Check E-" + String.valueOf(level), error.toString());
+                    if (level == 2) {
+                        if (error.toString().equals("com.android.volley.ServerError"))
+                            Helper.MakeToast(ShopCard.this, "پرداخت لغو شد", TAGs.ERROR);
+                        else
+                            Helper.MakeToast(ShopCard.this, error.toString(), TAGs.ERROR);
+                        hideDialog();
+                    } else
+                        Check(CODE, 2);
                     //finish();
                 }
             }) {
@@ -423,7 +426,7 @@ public class ShopCard extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_PAYMENT)
-            Check(ORDER_CODE, ORDER_AMOUNT);
+            Check(ORDER_CODE, 1);
     }
     
     private void onPaySuccess() {
