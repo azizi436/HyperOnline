@@ -38,6 +38,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
@@ -204,7 +205,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
             params.put(TAGs.CITY, city);
             params.put(TAGs.LOCATION_X, loc_x);
             params.put(TAGs.LOCATION_Y, loc_y);
-            params.put("pushe", Pushe.getPusheId(getApplicationContext()));
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

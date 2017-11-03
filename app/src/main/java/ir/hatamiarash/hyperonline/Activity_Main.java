@@ -53,6 +53,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -96,7 +97,10 @@ import models.Category;
 import models.Product;
 
 
-public class Activity_Main extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, CardBadge {
+public class Activity_Main extends AppCompatActivity implements
+        BaseSliderView.OnSliderClickListener,
+        ViewPagerEx.OnPageChangeListener,
+        CardBadge {
     private static final String TAG = Activity_Main.class.getSimpleName();
     public static Activity_Main pointer;             // use to finish activity from anywhere
     public static SQLiteHandler db_user;             // items database
@@ -116,6 +120,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
     private Menu menu;
     private TextView itemMessagesBadgeTextView;
     private SweetAlertDialog progressDialog;
+    RequestQueue VolleyQueue;
     
     @InjectView(R.id.category_list)
     public RecyclerView category_view;
@@ -171,9 +176,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         setContentView(R.layout.main_screen);
         ButterKnife.inject(this);
         
-        Helper.CheckInternet(getApplicationContext());
-        
         Pushe.initialize(getApplicationContext(), true);
+        Helper.CheckInternet(getApplicationContext());
         Helper.GetPermissions(this, getApplicationContext());
         
         session = new SessionManager(getApplicationContext());
@@ -189,10 +193,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+        VolleyQueue = Volley.newRequestQueue(this);
         
         SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
-        boolean isFirstTime = settings.getBoolean("my_first_time", true);
-        if (isFirstTime) {
+        if (settings.getBoolean("my_first_time", true)) {
             try {
                 db_setup.CreateTable();
                 db_item.CreateTable();
@@ -210,8 +214,10 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             startActivity(i);
             finish();
         }
-        if (session.isLoggedIn())
-            checkConfirm(db_user.getUserDetails().get(TAGs.PHONE));
+        if (session.isLoggedIn()) {
+            CheckConfirm(db_user.getUserDetails().get(TAGs.PHONE));
+            SyncServer(db_user.getUserDetails().get(TAGs.UID));
+        }
         
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         setSupportActionBar(toolbar);
@@ -239,6 +245,53 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_person);
         PrimaryDrawerItem item_inbox = new CustomPrimaryDrawerItem().withIdentifier(22).withName("صندوق پیام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_inbox);
         PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
+        PrimaryDrawerItem item_login = new CustomPrimaryDrawerItem().withIdentifier(24).withName("ورود").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
+        PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
+        
+        PrimaryDrawerItem items[] = new PrimaryDrawerItem[]{
+                item_home,
+                item_profile,
+                item_cart,
+                item_track,
+                item_categories,
+                item_collections,
+                item_most_sell,
+                item_new,
+                item_off,
+                item_event,
+                item_inbox,
+                item_comment,
+                item_website,
+                item_share,
+                item_call,
+                item_contact,
+                item_help,
+                item_terms,
+                item_about
+        };
+        
+        PrimaryDrawerItem items2[] = new PrimaryDrawerItem[]{
+                item_home,
+                item_login,
+                item_register,
+                item_cart,
+                item_track,
+                item_categories,
+                item_collections,
+                item_most_sell,
+                item_new,
+                item_off,
+                item_event,
+                item_inbox,
+                item_comment,
+                item_website,
+                item_share,
+                item_call,
+                item_contact,
+                item_help,
+                item_terms,
+                item_about
+        };
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -247,29 +300,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                         .withHeaderBackground(R.drawable.drawer_header)
                         .build())
                 .addDrawerItems(
-                        item_home,
-                        item_profile,
-                        item_cart,
-                        item_track,
-                        item_categories,
-                        item_collections,
-                        item_most_sell,
-                        item_new,
-                        //item_pop,
-                        item_off,
-                        item_event,
-                        item_inbox,
-                        item_comment,
-                        //item_social,
-                        item_website,
-                        //item_chat,
-                        item_share,
-                        item_call,
-                        item_contact,
-                        item_help,
-                        item_terms,
-                        //item_questions,
-                        item_about
+                        (IDrawerItem[]) (session.isLoggedIn() ? items : items2)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -415,6 +446,14 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                                 Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
                                 i.putExtra(TAGs.TITLE, "ارتباط با ما");
                                 i.putExtra(TAGs.ADDRESS, "contact");
+                                startActivity(i);
+                            }
+                            if (item == 24) {
+                                Intent i = new Intent(getApplicationContext(), Login.class);
+                                startActivity(i);
+                            }
+                            if (item == 25) {
+                                Intent i = new Intent(getApplicationContext(), Register.class);
                                 startActivity(i);
                             }
                         }
@@ -909,9 +948,8 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
         this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
     }
     
-    private void checkConfirm(String phone) {
+    private void CheckConfirm(String phone) {
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URLs.base_URL + "checkConfirm";
             JSONObject params = new JSONObject();
             params.put(TAGs.PHONE, phone);
@@ -920,7 +958,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.i("LOG_VOLLEY R", response);
+                    Log.i("CheckConfirm R", response);
                     try {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
@@ -945,7 +983,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_VOLLEY E", error.toString());
+                    Log.e("CheckConfirm E", error.toString());
                 }
             }) {
                 @NonNull
@@ -966,7 +1004,7 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
                     }
                 }
             };
-            requestQueue.add(stringRequest);
+            VolleyQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1058,6 +1096,57 @@ public class Activity_Main extends AppCompatActivity implements BaseSliderView.O
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
+        }
+    }
+    
+    private void SyncServer(String id) {
+        try {
+            String URL = URLs.base_URL + "sync_id";
+            JSONObject params = new JSONObject();
+            params.put("u", id);
+            params.put("p", Pushe.getPusheId(getApplicationContext()));
+            params.put("f", FirebaseInstanceId.getInstance().getToken());
+            final String mRequestBody = params.toString();
+            
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("SyncServer R", response);
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        if (jObj.getBoolean(TAGs.ERROR))
+                            Log.e("SyncServer E", jObj.getString(TAGs.ERROR_MSG));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("SyncServer E", error.toString());
+                }
+            }) {
+                @NonNull
+                @Contract(pure = true)
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                
+                @Nullable
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleyQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

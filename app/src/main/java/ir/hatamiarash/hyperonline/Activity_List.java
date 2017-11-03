@@ -171,6 +171,53 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         PrimaryDrawerItem item_profile = new CustomPrimaryDrawerItem().withIdentifier(21).withName("صفحه کاربر").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_person);
         PrimaryDrawerItem item_inbox = new CustomPrimaryDrawerItem().withIdentifier(22).withName("صندوق پیام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_inbox);
         PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
+        PrimaryDrawerItem item_login = new CustomPrimaryDrawerItem().withIdentifier(24).withName("ورود").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
+        PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
+    
+        PrimaryDrawerItem items[] = new PrimaryDrawerItem[]{
+                item_home,
+                item_profile,
+                item_cart,
+                item_track,
+                item_categories,
+                item_collections,
+                item_most_sell,
+                item_new,
+                item_off,
+                item_event,
+                item_inbox,
+                item_comment,
+                item_website,
+                item_share,
+                item_call,
+                item_contact,
+                item_help,
+                item_terms,
+                item_about
+        };
+    
+        PrimaryDrawerItem items2[] = new PrimaryDrawerItem[]{
+                item_home,
+                item_login,
+                item_register,
+                item_cart,
+                item_track,
+                item_categories,
+                item_collections,
+                item_most_sell,
+                item_new,
+                item_off,
+                item_event,
+                item_inbox,
+                item_comment,
+                item_website,
+                item_share,
+                item_call,
+                item_contact,
+                item_help,
+                item_terms,
+                item_about
+        };
         
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -179,29 +226,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                         .withHeaderBackground(R.drawable.drawer_header)
                         .build())
                 .addDrawerItems(
-                        item_home,
-                        item_profile,
-                        item_cart,
-                        item_track,
-                        item_categories,
-                        item_collections,
-                        item_most_sell,
-                        item_new,
-                        //item_pop,
-                        item_off,
-                        item_event,
-                        item_inbox,
-                        item_comment,
-                        //item_social,
-                        item_website,
-                        //item_chat,
-                        item_share,
-                        item_call,
-                        item_contact,
-                        item_help,
-                        item_terms,
-                        //item_questions,
-                        item_about
+                        (IDrawerItem[]) (session.isLoggedIn() ? items : items2)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -347,6 +372,14 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
                                 i.putExtra(TAGs.TITLE, "ارتباط با ما");
                                 i.putExtra(TAGs.ADDRESS, "contact");
+                                startActivity(i);
+                            }
+                            if (item == 24) {
+                                Intent i = new Intent(getApplicationContext(), Login.class);
+                                startActivity(i);
+                            }
+                            if (item == 25) {
+                                Intent i = new Intent(getApplicationContext(), Register.class);
                                 startActivity(i);
                             }
                         }
