@@ -48,9 +48,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -173,7 +170,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
         PrimaryDrawerItem item_login = new CustomPrimaryDrawerItem().withIdentifier(24).withName("ورود").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
         PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
-    
+        
         PrimaryDrawerItem items[] = new PrimaryDrawerItem[]{
                 item_home,
                 item_profile,
@@ -195,7 +192,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 item_terms,
                 item_about
         };
-    
+        
         PrimaryDrawerItem items2[] = new PrimaryDrawerItem[]{
                 item_home,
                 item_login,
