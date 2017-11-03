@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,7 +39,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
@@ -49,10 +49,8 @@ import java.io.UnsupportedEncodingException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import co.ronash.pushe.Pushe;
 import helper.Address;
 import helper.FontHelper;
-import helper.FormatHelper;
 import helper.Helper;
 import helper.IconEditText;
 import helper.SQLiteHandler;
@@ -254,6 +252,11 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                     }
                 }
             };
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
