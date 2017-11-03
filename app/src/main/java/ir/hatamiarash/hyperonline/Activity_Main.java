@@ -1059,7 +1059,7 @@ public class Activity_Main extends AppCompatActivity implements
                     .getPackageManager()
                     .getPackageInfo(getPackageName(), 0);
             int version2 = pInfo.versionCode;
-            if (version != version2 && version != 0) {
+            if (version > version2 && version != 0) {
                 new MaterialStyledDialog.Builder(Activity_Main.this)
                         .setTitle(FontHelper.getSpannedString(getApplicationContext(), "به روزرسانی"))
                         .setDescription(FontHelper.getSpannedString(getApplicationContext(), "نسخه جدید هایپرآنلاین منتشر شده است. لطفا به روزرسانی کنید"))

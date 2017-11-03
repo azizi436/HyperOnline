@@ -38,12 +38,14 @@ public class PusheJSONListener extends PusheListenerService {
                 } else if (message.has("logout")) {
                     JSONObject msg = message.getJSONObject("logout");
                     if (msg.getBoolean("out")) {
-                        session.setLogin(false);
-                        confirmManager.setPhoneConfirm(false);
-                        confirmManager.setInfoConfirm(false);
-                        db_user.deleteUsers();
-                        db_item.deleteItems();
-                        db_support.deleteMessages();
+                        if (session.isLoggedIn()) {
+                            session.setLogin(false);
+                            confirmManager.setPhoneConfirm(false);
+                            confirmManager.setInfoConfirm(false);
+                            db_user.deleteUsers();
+                            db_item.deleteItems();
+                            db_support.deleteMessages();
+                        }
                     }
                 }
             } catch (JSONException e) {

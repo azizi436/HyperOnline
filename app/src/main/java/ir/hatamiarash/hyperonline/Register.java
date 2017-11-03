@@ -294,18 +294,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 .show();
     }
     
-    private void MakeDialog2(String Title, String Message) {
-        new MaterialStyledDialog.Builder(this)
-                .setTitle(FontHelper.getSpannedString(this, Title))
-                .setDescription(FontHelper.getSpannedString(this, Message))
-                .setStyle(Style.HEADER_WITH_TITLE)
-                .withDarkerOverlay(true)
-                .withDialogAnimation(true)
-                .setCancelable(true)
-                .setPositiveText("باشه")
-                .show();
-    }
-    
     private void LoadCity(String province) {
         ArrayAdapter<String> adapter;
         switch (province) {
