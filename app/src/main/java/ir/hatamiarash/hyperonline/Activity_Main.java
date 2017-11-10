@@ -59,6 +59,7 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import org.jetbrains.annotations.Contract;
@@ -224,7 +225,7 @@ public class Activity_Main extends AppCompatActivity implements
         
         PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
-        PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_circle);
+        PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
         PrimaryDrawerItem item_most_sell = new CustomPrimaryDrawerItem().withIdentifier(4).withName("پرفروش ترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_euro_symbol);
         PrimaryDrawerItem item_new = new CustomPrimaryDrawerItem().withIdentifier(5).withName("جدیدترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_fiber_new);
         PrimaryDrawerItem item_pop = new CustomPrimaryDrawerItem().withIdentifier(6).withName("محبوب ترین ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_star);
@@ -247,20 +248,24 @@ public class Activity_Main extends AppCompatActivity implements
         PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
         PrimaryDrawerItem item_login = new CustomPrimaryDrawerItem().withIdentifier(24).withName("ورود").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
         PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
-        
-        PrimaryDrawerItem items[] = new PrimaryDrawerItem[]{
+        SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
+        SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
+    
+        IDrawerItem items[] = new IDrawerItem[]{
                 item_home,
                 item_profile,
                 item_cart,
                 item_track,
+                item_inbox,
+                item_comment,
+                item_section2,
                 item_categories,
                 item_collections,
                 item_most_sell,
                 item_new,
                 item_off,
                 item_event,
-                item_inbox,
-                item_comment,
+                item_section,
                 item_website,
                 item_share,
                 item_call,
@@ -269,21 +274,23 @@ public class Activity_Main extends AppCompatActivity implements
                 item_terms,
                 item_about
         };
-        
-        PrimaryDrawerItem items2[] = new PrimaryDrawerItem[]{
+    
+        IDrawerItem items2[] = new IDrawerItem[]{
                 item_home,
                 item_login,
                 item_register,
                 item_cart,
                 item_track,
+                item_inbox,
+                item_comment,
+                item_section2,
                 item_categories,
                 item_collections,
                 item_most_sell,
                 item_new,
                 item_off,
                 item_event,
-                item_inbox,
-                item_comment,
+                item_section,
                 item_website,
                 item_share,
                 item_call,
