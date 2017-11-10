@@ -23,6 +23,7 @@ import butterknife.InjectView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.FontHelper;
 import helper.SQLiteHandlerSupport;
+import helper.SharedPreferencesManager;
 import ir.hatamiarash.adapters.MessageAdapter;
 import ir.hatamiarash.interfaces.Refresh;
 import models.Message;
@@ -31,6 +32,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
     public Drawer result = null;
     SweetAlertDialog progressDialog;
     public static SQLiteHandlerSupport db_support;
+    SharedPreferencesManager SPManager;
     
     private List<Message> messageList;
     private MessageAdapter messageAdapter;
@@ -47,6 +49,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
         ButterKnife.inject(this);
         
         db_support = new SQLiteHandlerSupport(getApplicationContext());
+        SPManager = new SharedPreferencesManager(getApplicationContext());
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
@@ -82,6 +85,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
                 Collections.reverse(messageList);
                 messageAdapter.notifyDataSetChanged();
             }
+            SPManager.setUnreadMessage(false);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

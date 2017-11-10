@@ -17,6 +17,7 @@ public class PusheJSONListener extends PusheListenerService {
     SQLiteHandlerItem db_item;
     SessionManager session;
     ConfirmManager confirmManager;
+    SharedPreferencesManager SPManager;
     
     @Override
     public void onMessageReceived(final JSONObject message, JSONObject content) {
@@ -26,6 +27,7 @@ public class PusheJSONListener extends PusheListenerService {
             db_item = new SQLiteHandlerItem(getApplicationContext());
             session = new SessionManager(getApplicationContext());
             confirmManager = new ConfirmManager(getApplicationContext());
+            SPManager = new SharedPreferencesManager(getApplicationContext());
             Log.i("Pushe", "Message: " + message.toString());
             try {
                 if (message.has("msg")) {
@@ -35,6 +37,7 @@ public class PusheJSONListener extends PusheListenerService {
                             msg.getString("body"),
                             msg.getString("date")
                     );
+                    SPManager.setUnreadMessage(true);
                 } else if (message.has("logout")) {
                     JSONObject msg = message.getJSONObject("logout");
                     if (msg.getBoolean("out")) {
