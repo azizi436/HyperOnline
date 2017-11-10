@@ -26,13 +26,11 @@ public class ConfirmManager {
     public void setPhoneConfirm(boolean isConfirm) {
         editor.putBoolean(KEY_PHONE, isConfirm);
         editor.commit();
-        Log.e("PhoneConfirm", "User phone session modified!");
     }
     
     public void setInfoConfirm(boolean isConfirm) {
         editor.putBoolean(KEY_INFO, isConfirm);
         editor.commit();
-        Log.e("InfoConfirm", "User info session modified!");
     }
     
     public boolean isPhoneConfirm() {
