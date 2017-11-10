@@ -8,13 +8,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLiteHandlerSupport extends SQLiteOpenHelper {
-    private static final String TAG = SQLiteHandlerSetup.class.getSimpleName();
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "android_api";
     private static final String TABLE = "support";
@@ -74,7 +72,6 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
                 + ")";
         db.execSQL(Query);
         db.close();
-        Log.i("Support", "New MSG : " + title);
     }
     
     public List<String> GetMessages() {
@@ -96,17 +93,27 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
         return item;
     }
     
-    public void deleteMessage(String date){
+    public void deleteMessage(String date) {
         SQLiteDatabase db = this.getWritableDatabase();
         date = "'" + date + "'";
         db.delete(TABLE, KEY_DATE + "=" + date, null);
         db.close();
     }
     
-    public void deleteMessages(){
+    public void deleteMessages() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE, null, null);
         db.close();
         CreateTable();
+    }
+    
+    public int getCount() {
+        String countQuery = "SELECT  * FROM " + TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int rowCount = cursor.getCount();
+        db.close();
+        cursor.close();
+        return rowCount;
     }
 }
