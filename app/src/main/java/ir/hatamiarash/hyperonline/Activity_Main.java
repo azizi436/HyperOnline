@@ -58,6 +58,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -80,6 +81,7 @@ import co.ronash.pushe.Pushe;
 import helper.ConfirmManager;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
+import helper.FormatHelper;
 import helper.GridSpacingItemDecoration;
 import helper.Helper;
 import helper.SQLiteHandler;
@@ -88,6 +90,7 @@ import helper.SQLiteHandlerMain;
 import helper.SQLiteHandlerSetup;
 import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
+import helper.SharedPreferencesManager;
 import ir.hatamiarash.adapters.CategoryAdapter;
 import ir.hatamiarash.adapters.ProductAdapter;
 import ir.hatamiarash.interfaces.CardBadge;
@@ -113,6 +116,7 @@ public class Activity_Main extends AppCompatActivity implements
     public Drawer result = null;
     SessionManager session;                          // session for check user logged
     ConfirmManager confirmManager;
+    SharedPreferencesManager SPManager;
     private Vibrator vibrator;
     private CategoryAdapter categoryAdapter;
     private ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
@@ -183,6 +187,7 @@ public class Activity_Main extends AppCompatActivity implements
         
         session = new SessionManager(getApplicationContext());
         confirmManager = new ConfirmManager(getApplicationContext());
+        SPManager = new SharedPreferencesManager(getApplicationContext());
         pointer = this;
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
@@ -251,6 +256,15 @@ public class Activity_Main extends AppCompatActivity implements
         SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
         SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
     
+        BadgeStyle a = new BadgeStyle()
+                .withColor(ContextCompat.getColor(getApplicationContext(),R.color.red))
+                .withCorners(40)
+                .withTextColor(ContextCompat.getColor(getApplicationContext(),R.color.white));
+        if (SPManager.isUnreadMessage()) {
+            item_inbox.withBadgeStyle(a);
+            item_inbox.withBadge("جدید");
+        }
+        
         IDrawerItem items[] = new IDrawerItem[]{
                 item_home,
                 item_profile,
@@ -274,7 +288,7 @@ public class Activity_Main extends AppCompatActivity implements
                 item_terms,
                 item_about
         };
-    
+        
         IDrawerItem items2[] = new IDrawerItem[]{
                 item_home,
                 item_login,

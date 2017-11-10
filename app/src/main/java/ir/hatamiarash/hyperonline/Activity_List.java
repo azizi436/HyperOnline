@@ -38,6 +38,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -60,6 +61,7 @@ import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandlerItem;
 import helper.SessionManager;
+import helper.SharedPreferencesManager;
 import helper.SymmetricProgressBar;
 import ir.hatamiarash.adapters.CategoryAdapter_Small;
 import ir.hatamiarash.adapters.ProductAdapter_All;
@@ -78,6 +80,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     public static SQLiteHandlerItem db_item;
     SessionManager session;
     private SweetAlertDialog progressDialog;
+    SharedPreferencesManager SPManager;
     
     @InjectView(R.id.list)
     public RecyclerView list;
@@ -110,6 +113,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         ButterKnife.inject(this);
         
         session = new SessionManager(getApplicationContext());
+        SPManager = new SharedPreferencesManager(getApplicationContext());
         list_category = Integer.valueOf(getIntent().getStringExtra("cat"));
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
@@ -173,6 +177,15 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
         SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
         SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
+    
+        BadgeStyle a = new BadgeStyle()
+                .withColor(ContextCompat.getColor(getApplicationContext(),R.color.red))
+                .withCorners(40)
+                .withTextColor(ContextCompat.getColor(getApplicationContext(),R.color.white));
+        if (SPManager.isUnreadMessage()) {
+            item_inbox.withBadgeStyle(a);
+            item_inbox.withBadge("جدید");
+        }
     
         IDrawerItem items[] = new IDrawerItem[]{
                 item_home,
