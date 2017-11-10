@@ -246,8 +246,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="2dp"
-            android:background="@color/cardview_shadow_start_color"
+            android:layout_marginTop="3dp"
+            android:background="@color/btn2"
             android:text="@string/btn_link_to_login"
             android:textColor="@color/cardview_light_background"
             android:textSize="18sp"/>
