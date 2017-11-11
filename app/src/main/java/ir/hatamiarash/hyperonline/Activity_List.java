@@ -118,7 +118,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
         progressBar = new SymmetricProgressBar(this);
-        progressBar.setId(R.id.bar);
+        progressBar.setId(R.id.id);
         ViewGroup viewGroup = ((ViewGroup) this.findViewById(android.R.id.content));
         viewGroup.addView(progressBar, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
         p = viewGroup.findViewById(R.id.color_bar);
