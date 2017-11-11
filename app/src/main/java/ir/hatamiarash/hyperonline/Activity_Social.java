@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
@@ -29,6 +30,7 @@ public class Activity_Social extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.social);
+        ButterKnife.inject(this);
         
         telegram.setOnClickListener(new View.OnClickListener() {
             @Override
