@@ -4,7 +4,6 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -81,7 +80,6 @@ import co.ronash.pushe.Pushe;
 import helper.ConfirmManager;
 import helper.CustomPrimaryDrawerItem;
 import helper.FontHelper;
-import helper.FormatHelper;
 import helper.GridSpacingItemDecoration;
 import helper.Helper;
 import helper.SQLiteHandler;
@@ -99,6 +97,8 @@ import ir.hatamiarash.utils.URLs;
 import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
+
+import static helper.Helper.isAppAvailable;
 
 
 public class Activity_Main extends AppCompatActivity implements
@@ -255,11 +255,11 @@ public class Activity_Main extends AppCompatActivity implements
         PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
         SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
         SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
-    
+        
         BadgeStyle a = new BadgeStyle()
-                .withColor(ContextCompat.getColor(getApplicationContext(),R.color.red))
+                .withColor(ContextCompat.getColor(getApplicationContext(), R.color.red))
                 .withCorners(40)
-                .withTextColor(ContextCompat.getColor(getApplicationContext(),R.color.white));
+                .withTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         if (SPManager.isUnreadMessage()) {
             item_inbox.withBadgeStyle(a);
             item_inbox.withBadge("جدید");
@@ -281,6 +281,7 @@ public class Activity_Main extends AppCompatActivity implements
                 item_event,
                 item_section,
                 item_website,
+                item_social,
                 item_share,
                 item_call,
                 item_contact,
@@ -306,6 +307,7 @@ public class Activity_Main extends AppCompatActivity implements
                 item_event,
                 item_section,
                 item_website,
+                item_social,
                 item_share,
                 item_call,
                 item_contact,
@@ -398,7 +400,9 @@ public class Activity_Main extends AppCompatActivity implements
                                 }
                             }
                             if (item == 12) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_Social.class);
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 13) {
                                 Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
@@ -1107,16 +1111,6 @@ public class Activity_Main extends AppCompatActivity implements
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-    
-    public static boolean isAppAvailable(Context context, String appName) {
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(appName, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
         }
     }
     

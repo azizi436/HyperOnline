@@ -149,7 +149,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         
         setSupportActionBar(toolbar);
-    
+        
         PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
         PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
@@ -177,16 +177,16 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
         SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
         SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
-    
+        
         BadgeStyle a = new BadgeStyle()
-                .withColor(ContextCompat.getColor(getApplicationContext(),R.color.red))
+                .withColor(ContextCompat.getColor(getApplicationContext(), R.color.red))
                 .withCorners(40)
-                .withTextColor(ContextCompat.getColor(getApplicationContext(),R.color.white));
+                .withTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         if (SPManager.isUnreadMessage()) {
             item_inbox.withBadgeStyle(a);
             item_inbox.withBadge("جدید");
         }
-    
+        
         IDrawerItem items[] = new IDrawerItem[]{
                 item_home,
                 item_profile,
@@ -203,6 +203,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 item_event,
                 item_section,
                 item_website,
+                item_social,
                 item_share,
                 item_call,
                 item_contact,
@@ -210,7 +211,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 item_terms,
                 item_about
         };
-    
+        
         IDrawerItem items2[] = new IDrawerItem[]{
                 item_home,
                 item_login,
@@ -228,6 +229,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 item_event,
                 item_section,
                 item_website,
+                item_social,
                 item_share,
                 item_call,
                 item_contact,
@@ -320,7 +322,9 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 }
                             }
                             if (item == 12) {
-                                
+                                Intent i = new Intent(getApplicationContext(), Activity_Social.class);
+                                startActivity(i);
+                                result.closeDrawer();
                             }
                             if (item == 13) {
                                 Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
