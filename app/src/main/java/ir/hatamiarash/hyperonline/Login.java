@@ -32,8 +32,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.ConfirmManager;
 import helper.Helper;
 import helper.IconEditText;
@@ -45,15 +45,15 @@ import ir.hatamiarash.utils.URLs;
 public class Login extends Activity {
     private static final String TAG = Login.class.getSimpleName(); // class's tag for log
     
-    @InjectView(R.id.btnLogin)
+    @BindView(R.id.btnLogin)
     Button btnLogin;                          // login button
-    @InjectView(R.id.btnLinkToRegisterScreen)
+    @BindView(R.id.btnLinkToRegisterScreen)
     Button btnLinkToRegister;                 // register activity button
-    @InjectView(R.id.btnLinkToResetPassword)
+    @BindView(R.id.btnLinkToResetPassword)
     Button btnLinkToResetPassword;
-    @InjectView(R.id.new_password_2)
+    @BindView(R.id.new_password_2)
     IconEditText inputPhone;                      // email input
-    @InjectView(R.id.password)
+    @BindView(R.id.password)
     IconEditText inputPassword;                   // password input
     
     private SweetAlertDialog progressDialog;       // dialog window
@@ -67,7 +67,7 @@ public class Login extends Activity {
         setContentView(R.layout.login);
         
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);

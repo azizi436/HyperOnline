@@ -41,8 +41,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 import helper.ConfirmManager;
@@ -64,30 +64,30 @@ public class UserProfile extends Activity {
     private SweetAlertDialog progressDialog;
     private Vibrator vibrator;
     
-    @InjectView(R.id.btnLogout)
+    @BindView(R.id.btnLogout)
     public Button btnLogout;
-    @InjectView(R.id.btnEdit)
+    @BindView(R.id.btnEdit)
     public Button btnEdit;
-    @InjectView(R.id.profile_name)
+    @BindView(R.id.profile_name)
     public TextView User_Name;
-    @InjectView(R.id.profile_address)
+    @BindView(R.id.profile_address)
     public TextView User_Address;
-    @InjectView(R.id.profile_phone)
+    @BindView(R.id.profile_phone)
     public TextView User_Phone;
-    @InjectView(R.id.image)
+    @BindView(R.id.image)
     public ImageView User_Photo;
-    @InjectView(R.id.progress_bar)
+    @BindView(R.id.progress_bar)
     public ProgressBar progressBar;
-    @InjectView(R.id.blurView)
+    @BindView(R.id.blurView)
     public BlurView blurView;
-    @InjectView(R.id.main)
+    @BindView(R.id.main)
     public RelativeLayout main;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         progressBar.setVisibility(View.GONE);
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);

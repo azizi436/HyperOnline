@@ -14,21 +14,21 @@ import android.widget.ProgressBar;
 import com.github.ybq.android.spinkit.style.Wave;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 
 public class SplashScreen extends AppCompatActivity {
     Thread timerThread;
     
-    @InjectView(R.id.logo)
+    @BindView(R.id.logo)
     public ImageView logo;
-    @InjectView(R.id.spinner)
+    @BindView(R.id.spinner)
     public ProgressBar spinner;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         Wave animation = new Wave();
         spinner.setIndeterminateDrawable(animation);

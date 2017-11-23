@@ -47,8 +47,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.Address;
 import helper.FontHelper;
 import helper.Helper;
@@ -61,23 +61,23 @@ import ir.hatamiarash.utils.URLs;
 public class Register extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private static final String TAG = Register.class.getSimpleName();
     
-    @InjectView(R.id.btnConfirm)
+    @BindView(R.id.btnConfirm)
     Button btnRegister;
-    @InjectView(R.id.btnChangePassword)
+    @BindView(R.id.btnChangePassword)
     Button btnLinkToLogin;
-    @InjectView(R.id.current_password)
+    @BindView(R.id.current_password)
     IconEditText inputName;
-    @InjectView(R.id.password)
+    @BindView(R.id.password)
     IconEditText inputPassword;
-    @InjectView(R.id.password2)
+    @BindView(R.id.password2)
     IconEditText inputPassword2;
-    @InjectView(R.id.address)
+    @BindView(R.id.address)
     IconEditText inputAddress;
-    @InjectView(R.id.new_password_2)
+    @BindView(R.id.new_password_2)
     IconEditText inputPhone;
-    @InjectView(R.id.province)
+    @BindView(R.id.province)
     Spinner inputProvince;
-    @InjectView(R.id.city)
+    @BindView(R.id.city)
     Spinner inputCity;
     
     SessionManager session;
@@ -100,7 +100,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
         
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

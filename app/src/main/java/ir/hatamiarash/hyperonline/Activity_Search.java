@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import helper.FontHelper;
 import helper.Helper;
 import ir.hatamiarash.adapters.ProductAdapter_All;
@@ -57,14 +57,14 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
     private ProductAdapter_All productAdapter;
     ProgressDialog pdLoading;
     
-    @InjectView(R.id.list)
+    @BindView(R.id.list)
     public RecyclerView list;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));

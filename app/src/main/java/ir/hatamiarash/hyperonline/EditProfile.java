@@ -50,8 +50,8 @@ import java.net.InetAddress;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
@@ -69,19 +69,19 @@ public class EditProfile extends AppCompatActivity {
     private Vibrator vibrator;
     ConfirmManager confirmManager;
     
-    @InjectView(R.id.name)
+    @BindView(R.id.name)
     IconEditText txtName;
-    @InjectView(R.id.address)
+    @BindView(R.id.address)
     IconEditText txtAddress;
-    @InjectView(R.id.btnConfirm)
+    @BindView(R.id.btnConfirm)
     Button btnConfirm;
-    @InjectView(R.id.btnChangePassword)
+    @BindView(R.id.btnChangePassword)
     Button btnChangePassword;
-    @InjectView(R.id.image)
+    @BindView(R.id.image)
     ImageView image;
-    @InjectView(R.id.add_photo)
+    @BindView(R.id.add_photo)
     RelativeLayout add_photo;
-    @InjectView(R.id.progress_bar)
+    @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     
     private String uid, BACKUP_NAME, BACKUP_ADDRESS;
@@ -91,7 +91,7 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         progressBar.setVisibility(View.GONE);
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);

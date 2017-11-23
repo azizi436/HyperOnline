@@ -53,8 +53,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.CustomPrimaryDrawerItem;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
@@ -82,15 +82,15 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     private SweetAlertDialog progressDialog;
     SharedPreferencesManager SPManager;
     
-    @InjectView(R.id.list)
+    @BindView(R.id.list)
     public RecyclerView list;
-    @InjectView(R.id.category_list)
+    @BindView(R.id.category_list)
     public RecyclerView category_list;
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     public Toolbar toolbar;
-    @InjectView(R.id.title_product)
+    @BindView(R.id.title_product)
     public TextView title_product;
-    @InjectView(R.id.title_category)
+    @BindView(R.id.title_category)
     public TextView title_category;
     private TextView itemMessagesBadgeTextView;
     
@@ -110,7 +110,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_complex);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         session = new SessionManager(getApplicationContext());
         SPManager = new SharedPreferencesManager(getApplicationContext());

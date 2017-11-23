@@ -42,8 +42,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandler;
@@ -52,11 +52,11 @@ import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 
 public class Activity_Comment extends AppCompatActivity {
-    @InjectView(R.id.comment_body)
+    @BindView(R.id.comment_body)
     public EditText body;
-    @InjectView(R.id.comment_send)
+    @BindView(R.id.comment_send)
     public Button send;
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     public Toolbar toolbar;
     
     private Vibrator vibrator;
@@ -68,7 +68,7 @@ public class Activity_Comment extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comment);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         session = new SessionManager(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());

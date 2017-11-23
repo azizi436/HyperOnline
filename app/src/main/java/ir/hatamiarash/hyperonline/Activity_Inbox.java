@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.FontHelper;
 import helper.SQLiteHandlerSupport;
 import helper.SharedPreferencesManager;
@@ -37,16 +37,16 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
     private List<Message> messageList;
     private MessageAdapter messageAdapter;
     
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     public Toolbar toolbar;
-    @InjectView(R.id.list)
+    @BindView(R.id.list)
     public RecyclerView list;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_simple);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         db_support = new SQLiteHandlerSupport(getApplicationContext());
         SPManager = new SharedPreferencesManager(getApplicationContext());

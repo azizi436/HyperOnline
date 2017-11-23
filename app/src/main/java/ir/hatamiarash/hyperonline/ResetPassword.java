@@ -35,8 +35,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
@@ -44,9 +44,9 @@ import ir.hatamiarash.utils.URLs;
 public class ResetPassword extends Activity {
     private static final String TAG = ResetPassword.class.getSimpleName();
     
-    @InjectView(R.id.phone)
+    @BindView(R.id.phone)
     public EditText inputPhone;
-    @InjectView(R.id.btnSet)
+    @BindView(R.id.btnSet)
     public Button btnSet;
     
     private SweetAlertDialog progressDialog;
@@ -57,7 +57,7 @@ public class ResetPassword extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reset_password);
         
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
         progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));

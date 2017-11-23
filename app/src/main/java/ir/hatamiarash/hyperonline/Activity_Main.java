@@ -74,8 +74,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import co.ronash.pushe.Pushe;
 import helper.ConfirmManager;
 import helper.CustomPrimaryDrawerItem;
@@ -127,49 +127,49 @@ public class Activity_Main extends AppCompatActivity implements
     private SweetAlertDialog progressDialog;
     RequestQueue VolleyQueue;
     
-    @InjectView(R.id.category_list)
+    @BindView(R.id.category_list)
     public RecyclerView category_view;
-    @InjectView(R.id.most_list)
+    @BindView(R.id.most_list)
     public RecyclerView most_view;
-    @InjectView(R.id.new_list)
+    @BindView(R.id.new_list)
     public RecyclerView new_view;
-    @InjectView(R.id.off_list)
+    @BindView(R.id.off_list)
     public RecyclerView off_view;
-    @InjectView(R.id.collection_list)
+    @BindView(R.id.collection_list)
     public RecyclerView collection_view;
-    @InjectView(R.id.popular_list)
+    @BindView(R.id.popular_list)
     public RecyclerView popular_view;
-    @InjectView(R.id.slider)
+    @BindView(R.id.slider)
     public SliderLayout slider;
-    @InjectView(R.id.slider_layout)
+    @BindView(R.id.slider_layout)
     public LinearLayout sliderLayout;
-    @InjectView(R.id.scroll)
+    @BindView(R.id.scroll)
     public NestedScrollView scroll;
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     public Toolbar toolbar;
-    @InjectView(R.id.title_category)
+    @BindView(R.id.title_category)
     public TextView title_category;
-    @InjectView(R.id.title_category_more)
+    @BindView(R.id.title_category_more)
     public TextView title_category_more;
-    @InjectView(R.id.title_collection)
+    @BindView(R.id.title_collection)
     public TextView title_collection;
-    @InjectView(R.id.title_collection_more)
+    @BindView(R.id.title_collection_more)
     public TextView title_collection_more;
-    @InjectView(R.id.title_most)
+    @BindView(R.id.title_most)
     public TextView title_most;
-    @InjectView(R.id.title_most_more)
+    @BindView(R.id.title_most_more)
     public TextView title_most_more;
-    @InjectView(R.id.title_new)
+    @BindView(R.id.title_new)
     public TextView title_new;
-    @InjectView(R.id.title_new_more)
+    @BindView(R.id.title_new_more)
     public TextView title_new_more;
-    @InjectView(R.id.title_popular)
+    @BindView(R.id.title_popular)
     public TextView title_popular;
-    @InjectView(R.id.title_popular_more)
+    @BindView(R.id.title_popular_more)
     public TextView title_popular_more;
-    @InjectView(R.id.title_off)
+    @BindView(R.id.title_off)
     public TextView title_off;
-    @InjectView(R.id.title_off_more)
+    @BindView(R.id.title_off_more)
     public TextView title_off_more;
     
     private long back_pressed;                       // for check back key pressed count
@@ -179,7 +179,7 @@ public class Activity_Main extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         Pushe.initialize(getApplicationContext(), true);
         Helper.CheckInternet(getApplicationContext());

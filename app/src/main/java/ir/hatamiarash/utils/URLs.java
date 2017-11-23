@@ -3,7 +3,7 @@
  */
 
 package ir.hatamiarash.utils;
-
+ 
 public class URLs {
     private static final String HOST = "hyper-online.ir";
 //        private static final String HOST = "192.168.1.104";

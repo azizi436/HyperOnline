@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
 
@@ -21,16 +21,16 @@ import static helper.Helper.isAppAvailable;
 
 public class Activity_Social extends AppCompatActivity {
     
-    @InjectView(R.id.telegram)
+    @BindView(R.id.telegram)
     public ImageView telegram;
-    @InjectView(R.id.instagram)
+    @BindView(R.id.instagram)
     public ImageView instagram;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.social);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         telegram.setOnClickListener(new View.OnClickListener() {
             @Override

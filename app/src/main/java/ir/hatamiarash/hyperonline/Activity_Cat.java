@@ -34,6 +34,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mikepenz.materialdrawer.Drawer;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
@@ -45,8 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
@@ -67,16 +67,16 @@ public class Activity_Cat extends AppCompatActivity implements CardBadge {
     private List<Category> categoryList;
     private CategoryAdapter_All categoryAdapter;
     
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     public Toolbar toolbar;
-    @InjectView(R.id.list)
+    @BindView(R.id.list)
     public RecyclerView list;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_simple);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         db_user = new SQLiteHandler(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);

@@ -50,8 +50,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.FormatHelper;
@@ -75,28 +75,28 @@ public class ShopCard extends AppCompatActivity {
     SweetAlertDialog progressDialog;
     Vibrator vibrator;
     
-    @InjectView(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     public RecyclerView list;
-    @InjectView(R.id.CardPrice)
+    @BindView(R.id.CardPrice)
     public TextView total_price;
-    @InjectView(R.id.CardDiscount)
+    @BindView(R.id.CardDiscount)
     public TextView total_off;
-    @InjectView(R.id.CardExtend)
+    @BindView(R.id.CardExtend)
     public TextView total_extend;
-    @InjectView(R.id.CardTotalPrice)
+    @BindView(R.id.CardTotalPrice)
     public TextView total_pay;
-    @InjectView(R.id.status)
+    @BindView(R.id.status)
     public TextView status;
-    @InjectView(R.id.btnPay)
+    @BindView(R.id.btnPay)
     public Button pay;
-    @InjectView(R.id.btnClear)
+    @BindView(R.id.btnClear)
     public Button clear;
     
-    @InjectView(R.id.btnBack)
+    @BindView(R.id.btnBack)
     public Button back;
-    @InjectView(R.id.empty)
+    @BindView(R.id.empty)
     public RelativeLayout empty;
-    @InjectView(R.id.origin)
+    @BindView(R.id.origin)
     public RelativeLayout origin;
     
     final static private int CODE_PAYMENT = 100;
@@ -120,7 +120,7 @@ public class ShopCard extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_card);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         db_main = new SQLiteHandlerMain(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
@@ -314,6 +314,7 @@ public class ShopCard extends AppCompatActivity {
                         String Address = "https://pay.ir/payment/gateway/" + jObj.getString("transId");
                         ORDER_CODE = jObj.getString("transId");
                         ORDER_AMOUNT = AMOUNT;
+//                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
                         Intent i = new Intent(getApplicationContext(), Web.class);
                         i.putExtra(TAGs.ADDRESS, Address);
                         startActivityForResult(i, CODE_PAYMENT);

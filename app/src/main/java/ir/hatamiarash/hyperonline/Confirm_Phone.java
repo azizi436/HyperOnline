@@ -45,8 +45,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
@@ -58,33 +58,33 @@ public class Confirm_Phone extends AppCompatActivity {
     private SweetAlertDialog progressDialog;
     private ConfirmManager confirmManager;
     
-    @InjectView(R.id.button0)
+    @BindView(R.id.button0)
     Button button0;
-    @InjectView(R.id.button1)
+    @BindView(R.id.button1)
     Button button1;
-    @InjectView(R.id.button2)
+    @BindView(R.id.button2)
     Button button2;
-    @InjectView(R.id.button3)
+    @BindView(R.id.button3)
     Button button3;
-    @InjectView(R.id.button4)
+    @BindView(R.id.button4)
     Button button4;
-    @InjectView(R.id.button5)
+    @BindView(R.id.button5)
     Button button5;
-    @InjectView(R.id.button6)
+    @BindView(R.id.button6)
     Button button6;
-    @InjectView(R.id.button7)
+    @BindView(R.id.button7)
     Button button7;
-    @InjectView(R.id.button8)
+    @BindView(R.id.button8)
     Button button8;
-    @InjectView(R.id.button9)
+    @BindView(R.id.button9)
     Button button9;
-    @InjectView(R.id.editText)
+    @BindView(R.id.editText)
     EditText passwordInput;
-    @InjectView(R.id.time)
+    @BindView(R.id.time)
     TextView time;
-    @InjectView(R.id.help)
+    @BindView(R.id.help)
     TextView help;
-    @InjectView(R.id.phone)
+    @BindView(R.id.phone)
     TextView phone;
     
     
@@ -101,7 +101,7 @@ public class Confirm_Phone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_phone);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         confirmManager = new ConfirmManager(this);
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);

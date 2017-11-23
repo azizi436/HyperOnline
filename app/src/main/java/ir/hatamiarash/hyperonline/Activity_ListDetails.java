@@ -45,8 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
@@ -67,16 +67,16 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
     private List<Product> productList;
     private ProductAdapter_All productAdapter;
     
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     public Toolbar toolbar;
-    @InjectView(R.id.list)
+    @BindView(R.id.list)
     public RecyclerView list;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_simple);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         
         db_user = new SQLiteHandler(getApplicationContext());
         vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);

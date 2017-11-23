@@ -36,8 +36,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
@@ -58,13 +58,13 @@ public class EditPassword extends AppCompatActivity {
     private SessionManager session;
     private ConfirmManager confirmManager;
     
-    @InjectView(R.id.current_password)
+    @BindView(R.id.current_password)
     IconEditText current_password;
-    @InjectView(R.id.new_password)
+    @BindView(R.id.new_password)
     IconEditText new_password;
-    @InjectView(R.id.new_password_2)
+    @BindView(R.id.new_password_2)
     IconEditText new_password_2;
-    @InjectView(R.id.btnConfirm)
+    @BindView(R.id.btnConfirm)
     Button btnConfirm;
     
     @Override
@@ -72,7 +72,7 @@ public class EditPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_password);
         
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_support = new SQLiteHandlerSupport(getApplicationContext());
         db_user = new SQLiteHandler(getApplicationContext());
