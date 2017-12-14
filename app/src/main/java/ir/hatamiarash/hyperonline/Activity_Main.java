@@ -61,6 +61,7 @@ import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
@@ -73,9 +74,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.ButterKnife;
 import co.ronash.pushe.Pushe;
 import helper.ConfirmManager;
 import helper.CustomPrimaryDrawerItem;
@@ -630,203 +630,249 @@ public class Activity_Main extends AppCompatActivity implements
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            db_main.addItem(jObj.getString("send_price"));
+                            JSONObject status = jObj.getJSONObject("status");
                             
-                            JSONObject _opt = jObj.getJSONObject("options");
-                            
-                            JSONArray _cat = jObj.getJSONArray("category");
-                            for (int i = 0; i < _cat.length(); i++) {
-                                JSONObject category = _cat.getJSONObject(i);
-                                
-                                categoryList.add(new Category(
-                                        category.getString("unique_id"),
-                                        category.getString("name"),
-                                        category.getString("image"),
-                                        category.getDouble("point"),
-                                        category.getInt("point_count"),
-                                        category.getInt("off"),
-                                        category.getInt("level")
-                                ));
-                            }
-                            categoryAdapter.notifyDataSetChanged();
-                            
-                            if (_opt.getString("c").equals("1")) {
-                                JSONArray _col = jObj.getJSONArray("collection");
-                                if (_col.length() == 0) {
-                                    title_collection.setVisibility(View.GONE);
-                                    title_collection_more.setVisibility(View.GONE);
-                                }
-                                for (int i = 0; i < _col.length(); i++) {
-                                    JSONObject collection = _col.getJSONObject(i);
-                                    collectionList.add(new Product(
-                                                    collection.getString("unique_id"),
-                                                    collection.getString("name"),
-                                                    collection.getString("image"),
-                                                    collection.getString("price"),
-                                                    collection.getInt("off"),
-                                                    collection.getInt("count"),
-                                                    collection.getDouble("point"),
-                                                    collection.getInt("point_count"),
-                                                    collection.getString("description")
-                                            )
-                                    );
-                                }
-                                Collections.reverse(collectionList);
-                                collectionAdapter.notifyDataSetChanged();
-                            } else {
+                            if (status.getInt("offline_S") == 1) {
+                                title_category.setVisibility(View.GONE);
+                                title_category_more.setVisibility(View.GONE);
+                                category_view.setVisibility(View.GONE);
+                                //
                                 title_collection.setVisibility(View.GONE);
                                 title_collection_more.setVisibility(View.GONE);
                                 collection_view.setVisibility(View.GONE);
-                            }
-                            
-                            if (_opt.getString("m").equals("1")) {
-                                JSONArray _most = jObj.getJSONArray("most");
-                                if (_most.length() == 0) {
-                                    title_most.setVisibility(View.GONE);
-                                    title_most_more.setVisibility(View.GONE);
-                                }
-                                for (int i = 0; i < _most.length(); i++) {
-                                    JSONObject product = _most.getJSONObject(i);
-                                    mostList.add(new Product(
-                                                    product.getString("unique_id"),
-                                                    product.getString("name"),
-                                                    product.getString("image"),
-                                                    product.getString("price"),
-                                                    product.getInt("off"),
-                                                    product.getInt("count"),
-                                                    product.getDouble("point"),
-                                                    product.getInt("point_count"),
-                                                    product.getString("description")
-                                            )
-                                    );
-                                }
-                                Collections.reverse(mostList);
-                                mostAdapter.notifyDataSetChanged();
-                            } else {
+                                //
                                 title_most.setVisibility(View.GONE);
                                 title_most_more.setVisibility(View.GONE);
                                 most_view.setVisibility(View.GONE);
-                            }
-                            
-                            if (_opt.getString("n").equals("1")) {
-                                JSONArray _new = jObj.getJSONArray("new");
-                                if (_new.length() == 0) {
-                                    title_new.setVisibility(View.GONE);
-                                    title_new_more.setVisibility(View.GONE);
-                                }
-                                for (int i = 0; i < _new.length(); i++) {
-                                    JSONObject product = _new.getJSONObject(i);
-                                    newList.add(new Product(
-                                                    product.getString("unique_id"),
-                                                    product.getString("name"),
-                                                    product.getString("image"),
-                                                    product.getString("price"),
-                                                    product.getInt("off"),
-                                                    product.getInt("count"),
-                                                    product.getDouble("point"),
-                                                    product.getInt("point_count"),
-                                                    product.getString("description")
-                                            )
-                                    );
-                                }
-                                Collections.reverse(newList);
-                                newAdapter.notifyDataSetChanged();
-                            } else {
+                                //
                                 title_new.setVisibility(View.GONE);
                                 title_new_more.setVisibility(View.GONE);
                                 new_view.setVisibility(View.GONE);
-                            }
-                            
-                            if (_opt.getString("p").equals("1")) {
-                                JSONArray _pop = jObj.getJSONArray("popular");
-                                if (_pop.length() == 0) {
-                                    title_popular.setVisibility(View.GONE);
-                                    title_popular_more.setVisibility(View.GONE);
-                                }
-                                for (int i = 0; i < _pop.length(); i++) {
-                                    JSONObject product = _pop.getJSONObject(i);
-                                    popularList.add(new Product(
-                                                    product.getString("unique_id"),
-                                                    product.getString("name"),
-                                                    product.getString("image"),
-                                                    product.getString("price"),
-                                                    product.getInt("off"),
-                                                    product.getInt("count"),
-                                                    product.getDouble("point"),
-                                                    product.getInt("point_count"),
-                                                    product.getString("description")
-                                            )
-                                    );
-                                }
-                                Collections.reverse(popularList);
-                                popularAdapter.notifyDataSetChanged();
-                            } else {
+                                //
                                 title_popular.setVisibility(View.GONE);
                                 title_popular_more.setVisibility(View.GONE);
                                 popular_view.setVisibility(View.GONE);
-                            }
-                            
-                            if (_opt.getString("o").equals("1")) {
-                                JSONArray _off = jObj.getJSONArray("off");
-                                if (_off.length() == 0) {
-                                    title_off.setVisibility(View.GONE);
-                                    title_off_more.setVisibility(View.GONE);
-                                }
-                                for (int i = 0; i < _off.length(); i++) {
-                                    JSONObject product = _off.getJSONObject(i);
-                                    offList.add(new Product(
-                                                    product.getString("unique_id"),
-                                                    product.getString("name"),
-                                                    product.getString("image"),
-                                                    product.getString("price"),
-                                                    product.getInt("off"),
-                                                    product.getInt("count"),
-                                                    product.getDouble("point"),
-                                                    product.getInt("point_count"),
-                                                    product.getString("description")
-                                            )
-                                    );
-                                }
-                                Collections.reverse(offList);
-                                offAdapter.notifyDataSetChanged();
-                            } else {
+                                //
                                 title_off.setVisibility(View.GONE);
                                 title_off_more.setVisibility(View.GONE);
                                 off_view.setVisibility(View.GONE);
-                            }
-                            
-                            if (_opt.getString("b").equals("1")) {
-                                HashMap<String, String> urls = new HashMap<>();
-                                JSONArray _banner = jObj.getJSONArray("banner");
-                                for (int i = 0; i < _banner.length(); i++) {
-                                    JSONObject banner = _banner.getJSONObject(i);
-                                    urls.put(
-                                            banner.getString("title"),
-                                            URLs.image_URL + banner.getString("image")
-                                    );
-                                }
-                                
-                                slider.setPresetTransformer(SliderLayout.Transformer.Default);
-                                slider.setDuration(2500);
-                                slider.setCustomAnimation(new DescriptionAnimation());
-                                
-                                for (String name : urls.keySet()) {
-                                    DefaultSliderView SliderView = new DefaultSliderView(Activity_Main.this);
-                                    SliderView
-                                            .image(urls.get(name))
-                                            .setScaleType(BaseSliderView.ScaleType.CenterCrop)
-                                            .setOnSliderClickListener(Activity_Main.this);
-                                    slider.addSlider(SliderView);
-                                }
-                            } else {
+                                //
                                 sliderLayout.setVisibility(View.GONE);
+                                String msg = "در حال حاضر به دلیل \" " + status.getString("offline") + " \" امکان سرویس دهی وجود ندارد. به زودی با شما خواهیم بود.";
+                                new MaterialStyledDialog.Builder(Activity_Main.this)
+                                        .setTitle(FontHelper.getSpannedString(getApplicationContext(), "هایپرآنلاین"))
+                                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), msg))
+                                        .setStyle(Style.HEADER_WITH_TITLE)
+                                        .setHeaderColor(R.color.green)
+                                        .withDarkerOverlay(true)
+                                        .withDialogAnimation(true)
+                                        .setCancelable(false)
+                                        .setPositiveText("باشه")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                android.os.Process.killProcess(android.os.Process.myPid());
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                db_main.addItem(jObj.getString("send_price"));
+                                
+                                JSONObject _opt = jObj.getJSONObject("options");
+                                
+                                JSONArray _cat = jObj.getJSONArray("category");
+                                for (int i = 0; i < _cat.length(); i++) {
+                                    JSONObject category = _cat.getJSONObject(i);
+                                    
+                                    categoryList.add(new Category(
+                                            category.getString("unique_id"),
+                                            category.getString("name"),
+                                            category.getString("image"),
+                                            category.getDouble("point"),
+                                            category.getInt("point_count"),
+                                            category.getInt("off"),
+                                            category.getInt("level")
+                                    ));
+                                }
+                                categoryAdapter.notifyDataSetChanged();
+                                
+                                if (_opt.getString("c").equals("1")) {
+                                    JSONArray _col = jObj.getJSONArray("collection");
+                                    if (_col.length() == 0) {
+                                        title_collection.setVisibility(View.GONE);
+                                        title_collection_more.setVisibility(View.GONE);
+                                    }
+                                    for (int i = 0; i < _col.length(); i++) {
+                                        JSONObject collection = _col.getJSONObject(i);
+                                        collectionList.add(new Product(
+                                                        collection.getString("unique_id"),
+                                                        collection.getString("name"),
+                                                        collection.getString("image"),
+                                                        collection.getString("price"),
+                                                        collection.getInt("off"),
+                                                        collection.getInt("count"),
+                                                        collection.getDouble("point"),
+                                                        collection.getInt("point_count"),
+                                                        collection.getString("description")
+                                                )
+                                        );
+                                    }
+                                    Collections.reverse(collectionList);
+                                    collectionAdapter.notifyDataSetChanged();
+                                } else {
+                                    title_collection.setVisibility(View.GONE);
+                                    title_collection_more.setVisibility(View.GONE);
+                                    collection_view.setVisibility(View.GONE);
+                                }
+                                
+                                if (_opt.getString("m").equals("1")) {
+                                    JSONArray _most = jObj.getJSONArray("most");
+                                    if (_most.length() == 0) {
+                                        title_most.setVisibility(View.GONE);
+                                        title_most_more.setVisibility(View.GONE);
+                                    }
+                                    for (int i = 0; i < _most.length(); i++) {
+                                        JSONObject product = _most.getJSONObject(i);
+                                        mostList.add(new Product(
+                                                        product.getString("unique_id"),
+                                                        product.getString("name"),
+                                                        product.getString("image"),
+                                                        product.getString("price"),
+                                                        product.getInt("off"),
+                                                        product.getInt("count"),
+                                                        product.getDouble("point"),
+                                                        product.getInt("point_count"),
+                                                        product.getString("description")
+                                                )
+                                        );
+                                    }
+                                    Collections.reverse(mostList);
+                                    mostAdapter.notifyDataSetChanged();
+                                } else {
+                                    title_most.setVisibility(View.GONE);
+                                    title_most_more.setVisibility(View.GONE);
+                                    most_view.setVisibility(View.GONE);
+                                }
+                                
+                                if (_opt.getString("n").equals("1")) {
+                                    JSONArray _new = jObj.getJSONArray("new");
+                                    if (_new.length() == 0) {
+                                        title_new.setVisibility(View.GONE);
+                                        title_new_more.setVisibility(View.GONE);
+                                    }
+                                    for (int i = 0; i < _new.length(); i++) {
+                                        JSONObject product = _new.getJSONObject(i);
+                                        newList.add(new Product(
+                                                        product.getString("unique_id"),
+                                                        product.getString("name"),
+                                                        product.getString("image"),
+                                                        product.getString("price"),
+                                                        product.getInt("off"),
+                                                        product.getInt("count"),
+                                                        product.getDouble("point"),
+                                                        product.getInt("point_count"),
+                                                        product.getString("description")
+                                                )
+                                        );
+                                    }
+                                    Collections.reverse(newList);
+                                    newAdapter.notifyDataSetChanged();
+                                } else {
+                                    title_new.setVisibility(View.GONE);
+                                    title_new_more.setVisibility(View.GONE);
+                                    new_view.setVisibility(View.GONE);
+                                }
+                                
+                                if (_opt.getString("p").equals("1")) {
+                                    JSONArray _pop = jObj.getJSONArray("popular");
+                                    if (_pop.length() == 0) {
+                                        title_popular.setVisibility(View.GONE);
+                                        title_popular_more.setVisibility(View.GONE);
+                                    }
+                                    for (int i = 0; i < _pop.length(); i++) {
+                                        JSONObject product = _pop.getJSONObject(i);
+                                        popularList.add(new Product(
+                                                        product.getString("unique_id"),
+                                                        product.getString("name"),
+                                                        product.getString("image"),
+                                                        product.getString("price"),
+                                                        product.getInt("off"),
+                                                        product.getInt("count"),
+                                                        product.getDouble("point"),
+                                                        product.getInt("point_count"),
+                                                        product.getString("description")
+                                                )
+                                        );
+                                    }
+                                    Collections.reverse(popularList);
+                                    popularAdapter.notifyDataSetChanged();
+                                } else {
+                                    title_popular.setVisibility(View.GONE);
+                                    title_popular_more.setVisibility(View.GONE);
+                                    popular_view.setVisibility(View.GONE);
+                                }
+                                
+                                if (_opt.getString("o").equals("1")) {
+                                    JSONArray _off = jObj.getJSONArray("off");
+                                    if (_off.length() == 0) {
+                                        title_off.setVisibility(View.GONE);
+                                        title_off_more.setVisibility(View.GONE);
+                                    }
+                                    for (int i = 0; i < _off.length(); i++) {
+                                        JSONObject product = _off.getJSONObject(i);
+                                        offList.add(new Product(
+                                                        product.getString("unique_id"),
+                                                        product.getString("name"),
+                                                        product.getString("image"),
+                                                        product.getString("price"),
+                                                        product.getInt("off"),
+                                                        product.getInt("count"),
+                                                        product.getDouble("point"),
+                                                        product.getInt("point_count"),
+                                                        product.getString("description")
+                                                )
+                                        );
+                                    }
+                                    Collections.reverse(offList);
+                                    offAdapter.notifyDataSetChanged();
+                                } else {
+                                    title_off.setVisibility(View.GONE);
+                                    title_off_more.setVisibility(View.GONE);
+                                    off_view.setVisibility(View.GONE);
+                                }
+                                
+                                if (_opt.getString("b").equals("1")) {
+                                    HashMap<String, String> urls = new HashMap<>();
+                                    JSONArray _banner = jObj.getJSONArray("banner");
+                                    for (int i = 0; i < _banner.length(); i++) {
+                                        JSONObject banner = _banner.getJSONObject(i);
+                                        urls.put(
+                                                banner.getString("title"),
+                                                URLs.image_URL + banner.getString("image")
+                                        );
+                                    }
+                                    
+                                    slider.setPresetTransformer(SliderLayout.Transformer.Default);
+                                    slider.setDuration(2500);
+                                    slider.setCustomAnimation(new DescriptionAnimation());
+                                    
+                                    for (String name : urls.keySet()) {
+                                        DefaultSliderView SliderView = new DefaultSliderView(Activity_Main.this);
+                                        SliderView
+                                                .image(urls.get(name))
+                                                .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                                                .setOnSliderClickListener(Activity_Main.this);
+                                        slider.addSlider(SliderView);
+                                    }
+                                } else {
+                                    sliderLayout.setVisibility(View.GONE);
+                                }
+                                
+                                if (_opt.has("v")) {
+                                    VERSION = _opt.getInt("v");
+                                    checkVersion(VERSION);
+                                }
                             }
-                            
-                            if (_opt.has("v")) {
-                                VERSION = _opt.getInt("v");
-                                checkVersion(VERSION);
-                            }
-                            
                         } else {
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
                             Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);

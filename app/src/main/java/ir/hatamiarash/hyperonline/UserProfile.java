@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -40,9 +41,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.ButterKnife;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 import helper.ConfirmManager;
