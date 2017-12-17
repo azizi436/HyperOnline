@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,6 +39,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
@@ -49,9 +52,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.ButterKnife;
+import co.ronash.pushe.Pushe;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.FormatHelper;
@@ -103,7 +106,7 @@ public class ShopCard extends AppCompatActivity {
     private int CODE_STATUS = 0;
     private int tOff = 0;
     private int tPrice = 0;
-    private int tExtend = 5000;
+    private int tExtend = 4000;
     List<String> Item;
     List<Product> Products_List;
     Adapter_Product adapter;
@@ -181,17 +184,18 @@ public class ShopCard extends AppCompatActivity {
                         String extend = "";
                         if (send_time == 9 || send_time == 11)
                             extend = " صبح";
-                        if (send_time == 16 || send_time == 18)
+                        if (send_time == 16 || send_time == 18 || send_time == 19)
                             extend = " عصر";
                         ORDER_HOUR = time;
                         String message;
-                        if (send_time == 18)
-                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
+                        if (send_time == 19)
+                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد.";
                         else
-                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
+                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد.";
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View customView = inflater.inflate(R.layout.custom_dialog, null);
+                        final View customView = inflater.inflate(R.layout.custom_dialog, null);
                         final TextView edit_text = customView.findViewById(R.id.edit_text);
+                        final RadioGroup payMethod = customView.findViewById(R.id.payMethod);
                         new MaterialStyledDialog.Builder(ShopCard.this)
                                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
                                 .setDescription(FontHelper.getSpannedString(getApplicationContext(), message))
@@ -206,9 +210,14 @@ public class ShopCard extends AppCompatActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         DESCRIPTION = edit_text.getText().toString();
+                                        RadioButton rb = customView.findViewById(payMethod.getCheckedRadioButtonId());
                                         String tPay = total_pay.getText().toString();
                                         int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
-                                        Pay(TAGs.API_KEY, String.valueOf(final_price));
+                                        if (rb.getText().toString().equals("آنلاین")) {
+                                            Pay(TAGs.API_KEY, String.valueOf(final_price));
+                                        } else if (rb.getText().toString().equals("حضوری")) {
+                                            SetOrder(Pushe.getPusheId(getApplicationContext()), 0);
+                                        }
 //                                        onPaySuccess();
                                     }
                                 })
@@ -443,7 +452,7 @@ public class ShopCard extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SetOrder();
+                        SetOrder(ORDER_CODE, 1);
                     }
                 })
                 .show();
@@ -461,7 +470,7 @@ public class ShopCard extends AppCompatActivity {
                 .show();
     }
     
-    private void SetOrder() {
+    private void SetOrder(String CODE, final int payMethod) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         
@@ -471,12 +480,13 @@ public class ShopCard extends AppCompatActivity {
             JSONObject params = new JSONObject();
             String uid = db_user.getUserDetails().get(TAGs.UID);
             params.put("user", uid);
-            params.put("code", ORDER_CODE);
+            params.put("code", CODE);
             params.put("stuffs", STUFFS);
             params.put("stuffs_id", STUFFS_ID);
             params.put("stuffs_count", getCounts());
             params.put("hour", ORDER_HOUR);
             params.put("description", DESCRIPTION);
+            params.put("method", payMethod);
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -489,10 +499,33 @@ public class ShopCard extends AppCompatActivity {
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
                             db_item.deleteItems();
-                            Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
-                            i.putExtra("order_code", ORDER_CODE);
-                            startActivity(i);
-                            finish();
+                            if (payMethod == 1) {
+                                Intent intent = new Intent(getApplicationContext(), Activity_Factor.class);
+                                intent.putExtra("order_code", ORDER_CODE);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                new MaterialStyledDialog.Builder(ShopCard.this)
+                                        .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت حضوری"))
+                                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "با تشکر از انتخاب شما... سبد خرید ثبت شد !!"))
+                                        .setStyle(Style.HEADER_WITH_TITLE)
+                                        .setHeaderColor(R.color.green)
+                                        .withDarkerOverlay(true)
+                                        .withDialogAnimation(true)
+                                        .setCancelable(false)
+                                        .setPositiveText("باشه")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                startActivity(intent);
+                                                startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
                         } else {
                             Log.e("SetOrder E", jObj.getString(TAGs.ERROR_MSG));
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
@@ -740,6 +773,7 @@ public class ShopCard extends AppCompatActivity {
     
     @Contract(pure = true)
     private int times(int hour, int minute) {
+        // 9 - 11 - 16 - 18 - 19:30
         if (hour >= 9 && hour < 10) send_time = 11;
         if (hour >= 10 && hour < 11)
             if (minute <= 40)
@@ -759,9 +793,15 @@ public class ShopCard extends AppCompatActivity {
             if (minute <= 40)
                 send_time = 18;
             else
+                send_time = 19;
+        
+        if (hour >= 18 && hour < 19)
+            if (minute <= 50)
+                send_time = 19;
+            else
                 send_time = 9;
         
-        if (hour >= 18 && hour <= 23) send_time = 9;
+        if (hour >= 19 && hour <= 23) send_time = 9;
         if (hour >= 0 && hour < 8) send_time = 9;
         if (hour >= 8 && hour < 9)
             if (minute <= 40)
@@ -773,13 +813,13 @@ public class ShopCard extends AppCompatActivity {
     }
     
     private void sendPrice(int price) {
-        if (price >= 35000) {
+        if (price >= 30000) {
             tExtend = 0;
             status.setText("ارسال رایگان");
             total_extend.setText(String.valueOf(tExtend) + " تومان");
         } else {
-            tExtend = 5000;
-            status.setText("خرید های کمتر از 35 هزار تومان با هزینه ارسال می شوند");
+            tExtend = 4000;
+            status.setText("خرید های کمتر از 30 هزار تومان با هزینه ارسال می شوند");
             total_extend.setText(String.valueOf(tExtend) + " تومان");
         }
         String p = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
