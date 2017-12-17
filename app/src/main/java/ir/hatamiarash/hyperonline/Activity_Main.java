@@ -100,7 +100,6 @@ import models.Product;
 
 import static helper.Helper.isAppAvailable;
 
-
 public class Activity_Main extends AppCompatActivity implements
         BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener,
@@ -185,10 +184,10 @@ public class Activity_Main extends AppCompatActivity implements
         Helper.CheckInternet(getApplicationContext());
         Helper.GetPermissions(this, getApplicationContext());
         
+        pointer = this;
         session = new SessionManager(getApplicationContext());
         confirmManager = new ConfirmManager(getApplicationContext());
         SPManager = new SharedPreferencesManager(getApplicationContext());
-        pointer = this;
         db_user = new SQLiteHandler(getApplicationContext());
         db_item = new SQLiteHandlerItem(getApplicationContext());
         db_setup = new SQLiteHandlerSetup(getApplicationContext());
@@ -927,6 +926,7 @@ public class Activity_Main extends AppCompatActivity implements
         (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 vibrator.vibrate(50);
+                //TODO : change activity
                 Intent i = new Intent(getApplicationContext(), ShopCard.class);
                 startActivityForResult(i, 100);
             }
