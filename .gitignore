@@ -1,8 +1,8 @@
 *.iml
 *.apk
 /.gradle/
-/.idea/
 /build/
 /local.properties
 /build.gradle
 /app/build.gradle
+/.idea/

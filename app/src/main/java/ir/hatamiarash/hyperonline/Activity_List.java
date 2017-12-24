@@ -42,6 +42,7 @@ import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
@@ -52,9 +53,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.ButterKnife;
 import helper.CustomPrimaryDrawerItem;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
@@ -149,7 +149,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
         
         setSupportActionBar(toolbar);
-        
+    
         PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
         PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
         PrimaryDrawerItem item_collections = new CustomPrimaryDrawerItem().withIdentifier(3).withName("سبد غذایی پیشنهادی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_shopping_cart);
@@ -177,7 +177,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
         SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
         SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
-        
+    
         BadgeStyle a = new BadgeStyle()
                 .withColor(ContextCompat.getColor(getApplicationContext(), R.color.red))
                 .withCorners(40)
@@ -186,7 +186,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
             item_inbox.withBadgeStyle(a);
             item_inbox.withBadge("جدید");
         }
-        
+    
         IDrawerItem items[] = new IDrawerItem[]{
                 item_home,
                 item_profile,
@@ -211,7 +211,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 item_terms,
                 item_about
         };
-        
+    
         IDrawerItem items2[] = new IDrawerItem[]{
                 item_home,
                 item_login,
@@ -237,7 +237,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                 item_terms,
                 item_about
         };
-        
+    
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -337,7 +337,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 startActivity(i);
                             }
                             if (item == 15) {
-                                
+                            
                             }
                             if (item == 16) {
                                 try {
@@ -345,7 +345,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                     i.setType("text/plain");
                                     i.putExtra(Intent.EXTRA_SUBJECT, "Hyper Online");
                                     String sAux = "\nتا حالا با هایپرآنلاین کار کردی ؟\nیه نگاه بنداز\n\n";
-                                    sAux = sAux + "https://cafebazaar.ir/app/ir.hatamiarash.hyperonline/?l=fa \n\n";
+                                    sAux = sAux + URLs.Share_App + "\n\n";
                                     i.putExtra(Intent.EXTRA_TEXT, sAux);
                                     startActivity(Intent.createChooser(i, "یک گزینه انتخاب کنید"));
                                 } catch (Exception e) {
@@ -364,7 +364,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 startActivity(i);
                             }
                             if (item == 19) {
-                                
+                            
                             }
                             if (item == 20) {
                                 Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);

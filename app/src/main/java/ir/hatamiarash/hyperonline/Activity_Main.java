@@ -422,7 +422,7 @@ public class Activity_Main extends AppCompatActivity implements
                                     i.setType("text/plain");
                                     i.putExtra(Intent.EXTRA_SUBJECT, "Hyper Online");
                                     String sAux = "\nتا حالا با هایپرآنلاین کار کردی ؟\nیه نگاه بنداز\n\n";
-                                    sAux = sAux + "https://cafebazaar.ir/app/ir.hatamiarash.hyperonline/?l=fa \n\n";
+                                    sAux = sAux + URLs.Share_App + "\n\n";
                                     i.putExtra(Intent.EXTRA_TEXT, sAux);
                                     startActivity(Intent.createChooser(i, "یک گزینه انتخاب کنید"));
                                 } catch (Exception e) {
@@ -927,7 +927,7 @@ public class Activity_Main extends AppCompatActivity implements
             public void onClick(View view) {
                 vibrator.vibrate(50);
                 //TODO : change activity
-                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
                 startActivityForResult(i, 100);
             }
         });
