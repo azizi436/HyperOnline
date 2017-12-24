@@ -927,7 +927,7 @@ public class Activity_Main extends AppCompatActivity implements
             public void onClick(View view) {
                 vibrator.vibrate(50);
                 //TODO : change activity
-                Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
+                Intent i = new Intent(getApplicationContext(), ShopCard.class);
                 startActivityForResult(i, 100);
             }
         });
@@ -983,6 +983,11 @@ public class Activity_Main extends AppCompatActivity implements
     protected void onStop() {
         slider.stopAutoCycle();
         super.onStop();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
     
     @Override
