@@ -45,7 +45,7 @@
             android:text="لطفا با مراجعه به صندوق پستی خود ، ایمیل را تایید نمایید"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black"
-            app:font="iran_sans"/>
+            app:my_font="iran_sans"/>
 
 
     </RelativeLayout>

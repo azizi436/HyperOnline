@@ -65,7 +65,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/album_title"
                 android:textSize="15sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

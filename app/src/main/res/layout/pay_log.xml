@@ -25,7 +25,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="28sp"
-        app:font="iran_sans"/>
+        app:my_font="iran_sans"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
@@ -54,7 +54,7 @@
         android:textColor="@color/black"
         android:textDirection="rtl"
         android:textSize="16sp"
-        app:font="shabnam"/>
+        app:my_font="shabnam"/>
 
     <helper.PersianButton
         android:id="@+id/pay_log_download"

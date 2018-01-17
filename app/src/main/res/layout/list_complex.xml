@@ -44,7 +44,7 @@
         android:text="دسته بندی ها"
         android:textAlignment="textStart"
         android:textSize="20sp"
-        app:font="iran_sans"/>
+        app:my_font="iran_sans"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/category_list"
@@ -73,7 +73,7 @@
         android:text="محصولات"
         android:textAlignment="textStart"
         android:textSize="20sp"
-        app:font="iran_sans"/>
+        app:my_font="iran_sans"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"

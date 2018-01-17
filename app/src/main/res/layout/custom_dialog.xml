@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        app:font="shabnam"
+        app:my_font="shabnam"
         android:gravity="center"
         android:hint="توضیحات سفارش"
         android:textColor="@color/black"/>
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:text="نوع پرداخت"
         android:textAlignment="center"
-        app:font="shabnam"/>
+        app:my_font="shabnam"/>
 
     <RadioGroup
         android:id="@+id/payMethod"

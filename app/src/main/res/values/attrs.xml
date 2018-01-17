@@ -15,7 +15,7 @@
     </declare-styleable>
 
     <declare-styleable name="PersianTextView">
-        <attr name="font" format="string"/>
+        <attr name="my_font" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="SymmetricProgressBar">

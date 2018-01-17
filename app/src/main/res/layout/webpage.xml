@@ -25,7 +25,7 @@
         android:textColor="@color/accent"
         android:textSize="28sp"
         android:textStyle="normal|bold"
-        app:font="shabnam"/>
+        app:my_font="shabnam"/>
 
     <WebView
         android:id="@+id/page_content"

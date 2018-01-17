@@ -43,7 +43,7 @@
                 android:text="تاریخ"
                 android:textAlignment="center"
                 android:textDirection="anyRtl"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <View
                 android:id="@+id/line2"
@@ -67,7 +67,7 @@
                 android:layout_margin="10dp"
                 android:text="محصولات :"
                 android:textStyle="bold"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/stuffs"
@@ -78,7 +78,7 @@
                 android:layout_toLeftOf="@+id/stuffsTitle"
                 android:layout_toStartOf="@+id/stuffsTitle"
                 android:text="لیست"
-                app:font="shabnam"/>
+                app:my_font="shabnam"/>
 
             <helper.PersianTextView
                 android:id="@+id/priceTitle"
@@ -90,7 +90,7 @@
                 android:layout_margin="10dp"
                 android:text="قیمت سبد خرید :"
                 android:textStyle="bold"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/price"
@@ -101,7 +101,7 @@
                 android:layout_toLeftOf="@+id/priceTitle"
                 android:layout_toStartOf="@+id/priceTitle"
                 android:text="قیمت"
-                app:font="shabnam"/>
+                app:my_font="shabnam"/>
 
             <helper.PersianTextView
                 android:id="@+id/statusTitle"
@@ -113,7 +113,7 @@
                 android:layout_margin="10dp"
                 android:text="وضعیت سفارش :"
                 android:textStyle="bold"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/status"
@@ -124,7 +124,7 @@
                 android:layout_toLeftOf="@+id/statusTitle"
                 android:layout_toStartOf="@+id/statusTitle"
                 android:text="وضعیت"
-                app:font="shabnam"/>
+                app:my_font="shabnam"/>
 
             <helper.PersianTextView
                 android:id="@+id/hourTitle"
@@ -136,7 +136,7 @@
                 android:layout_margin="10dp"
                 android:text="ساعت ارسال :"
                 android:textStyle="bold"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/hour"
@@ -147,7 +147,7 @@
                 android:layout_toLeftOf="@+id/hourTitle"
                 android:layout_toStartOf="@+id/hourTitle"
                 android:text="ساعت"
-                app:font="shabnam"/>
+                app:my_font="shabnam"/>
 
             <Button
                 android:id="@+id/download"

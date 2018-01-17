@@ -30,7 +30,7 @@
         android:textColorLink="@android:color/white"
         android:textSize="35sp"
         android:textStyle="normal|bold"
-        app:font="shabnam"/>
+        app:my_font="shabnam"/>
 
     <helper.PersianTextView
         android:id="@+id/contact_text"
@@ -47,7 +47,7 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="normal|bold"
-        app:font="iran_sans"/>
+        app:my_font="iran_sans"/>
 
     <LinearLayout
         android:id="@+id/contacts"
@@ -224,7 +224,7 @@
                 android:text="ارسال مستقیم پیام"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
         </LinearLayout>
 
         <LinearLayout
@@ -257,7 +257,7 @@
                 android:gravity="center"
                 android:text="خیابان شهید رجایی / مجتمع پردیس / طبقه چهارم"
                 android:textColor="@color/black"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
         </LinearLayout>
 
     </LinearLayout>

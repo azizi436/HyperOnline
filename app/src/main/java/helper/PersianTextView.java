@@ -40,7 +40,7 @@ public class PersianTextView extends TextView {
             return;
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PersianTextView, 0, 0);
         try {
-            _font = a.getString(R.styleable.PersianTextView_font);
+            _font = a.getString(R.styleable.PersianTextView_my_font);
         } catch (Exception e) {
             Log.w(TAG, "Unable to parse attributes due to: " + e.getMessage());
             e.printStackTrace();

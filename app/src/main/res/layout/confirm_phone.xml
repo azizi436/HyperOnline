@@ -47,7 +47,7 @@
             android:text="کد ارسال شده به شماره تلفن خود را در کادر زیر وارد نمایید"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black"
-            app:font="iran_sans"/>
+            app:my_font="iran_sans"/>
 
         <helper.PersianTextView
             android:id="@+id/phone"
@@ -58,7 +58,7 @@
             android:layout_marginTop="10dp"
             android:text="+98 918 218 0519"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            app:font="iran_sans"/>
+            app:my_font="iran_sans"/>
 
         <RelativeLayout
             android:id="@+id/content"
@@ -279,7 +279,7 @@
             android:gravity="center"
             android:textColor="@color/accent"
             android:textStyle="bold"
-            app:font="iran_sans"/>
+            app:my_font="iran_sans"/>
 
         <helper.PersianTextView
             android:id="@+id/help"
@@ -297,7 +297,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/accent"
             android:textSize="20sp"
-            app:font="iran_sans"/>
+            app:my_font="iran_sans"/>
 
     </RelativeLayout>
 </RelativeLayout>

@@ -78,7 +78,7 @@
                 android:text="دسته بندی ها"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/title_category_more"
@@ -98,7 +98,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/Blue"
                 android:textSize="16sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/category_list"
@@ -126,7 +126,7 @@
                 android:text="مناسبتی ها"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/title_collection_more"
@@ -146,7 +146,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/Blue"
                 android:textSize="16sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/collection_list"
@@ -174,7 +174,7 @@
                 android:text="پرفروش ترین ها"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/title_most_more"
@@ -194,7 +194,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/Blue"
                 android:textSize="16sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/most_list"
@@ -222,7 +222,7 @@
                 android:text="جدیدترین ها"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/title_new_more"
@@ -242,7 +242,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/Blue"
                 android:textSize="16sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/new_list"
@@ -270,7 +270,7 @@
                 android:text="محبوب ترین ها"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/title_popular_more"
@@ -290,7 +290,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/Blue"
                 android:textSize="16sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/popular_list"
@@ -318,7 +318,7 @@
                 android:text="تخفیف خورده ها"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <helper.PersianTextView
                 android:id="@+id/title_off_more"
@@ -338,7 +338,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="@color/Blue"
                 android:textSize="16sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/off_list"

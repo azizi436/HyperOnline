@@ -37,7 +37,7 @@
             android:gravity="center"
             android:text=""
             android:textAlignment="center"
-            app:font="shabnam"/>
+            app:my_font="shabnam"/>
 
         <View
             android:id="@+id/line2"
@@ -80,7 +80,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/md_black_1000"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
                 <helper.PersianTextView
                     android:id="@+id/CardPriceTitle"
@@ -95,7 +95,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/accent"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/md_black_1000"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
                 <helper.PersianTextView
                     android:id="@+id/CardDiscountTitle"
@@ -135,7 +135,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/accent"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
             </LinearLayout>
 
@@ -160,7 +160,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/md_black_1000"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
                 <helper.PersianTextView
                     android:id="@+id/CardExtendTitle"
@@ -175,7 +175,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/accent"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
             </LinearLayout>
 
@@ -200,7 +200,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/md_black_1000"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
                 <helper.PersianTextView
                     android:id="@+id/CardTotalPriceTitle"
@@ -215,7 +215,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/accent"
                     android:textSize="14sp"
-                    app:font="shabnam"/>
+                    app:my_font="shabnam"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -267,7 +267,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/accent"
             android:textSize="18sp"
-            app:font="shabnam"/>
+            app:my_font="shabnam"/>
 
         <helper.PersianButton
             android:id="@+id/btnBack"

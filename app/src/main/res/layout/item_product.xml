@@ -76,7 +76,7 @@
                     android:text="55"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:font="iran_sans"/>
+                    app:my_font="iran_sans"/>
 
                 <ImageView
                     android:id="@+id/dec"
@@ -149,7 +149,7 @@
                 android:text="نام محصول"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <TextView
                 android:id="@+id/product_status"
@@ -188,7 +188,7 @@
                     android:textAlignment="center"
                     android:textColor="#FF146A"
                     android:textSize="16sp"
-                    app:font="iran_sans"/>
+                    app:my_font="iran_sans"/>
 
                 <helper.PersianTextView
                     android:id="@+id/product_price"
@@ -200,7 +200,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    app:font="iran_sans"/>
+                    app:my_font="iran_sans"/>
 
             </LinearLayout>
 
@@ -221,7 +221,7 @@
                 android:text="توضیحات"
                 android:textColor="@color/gray"
                 android:textSize="12sp"
-                app:font="iran_sans"/>
+                app:my_font="iran_sans"/>
 
             <ImageView
                 android:id="@+id/info"
