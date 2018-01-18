@@ -1,3 +1,6 @@
+![travis-ci](https://travis-ci.org/hatamiarash7/HyperOnline.svg?branch=master)
+[![CircleCI](https://circleci.com/gh/hatamiarash7/HyperOnline/tree/master.svg?style=svg)](https://circleci.com/gh/hatamiarash7/HyperOnline/tree/master)
+
 # HyperOnline
 Stuff Delivery System
 

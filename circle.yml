@@ -22,4 +22,3 @@ dependencies:
 test:
     override:
         - ./gradlew build
-        - cp -r app/build/outputs $CIRCLE_ARTIFACTS
