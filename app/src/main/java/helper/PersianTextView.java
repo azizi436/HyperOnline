@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import ir.hatamiarash.hyperonline.R;
 
-public class PersianTextView extends TextView {
+public class PersianTextView extends android.support.v7.widget.AppCompatTextView {
     private static final String TAG = PersianTextView.class.getSimpleName();
     private String _font = "null";
 
