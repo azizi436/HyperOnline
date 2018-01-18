@@ -21,7 +21,7 @@ before_install:
 
 script:
  - cd $TRAVIS_BUILD_DIR/
- - ./gradlew assembleDebug
+ - ./gradlew build
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
