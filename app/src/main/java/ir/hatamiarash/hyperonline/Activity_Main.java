@@ -45,6 +45,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -52,6 +53,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -89,6 +91,7 @@ import helper.SQLiteHandlerSetup;
 import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import helper.SharedPreferencesManager;
+import io.fabric.sdk.android.Fabric;
 import ir.hatamiarash.adapters.CategoryAdapter;
 import ir.hatamiarash.adapters.ProductAdapter;
 import ir.hatamiarash.interfaces.CardBadge;
@@ -181,6 +184,8 @@ public class Activity_Main extends AppCompatActivity implements
         ButterKnife.bind(this);
         
         Pushe.initialize(getApplicationContext(), true);
+        Fabric.with(this, new Crashlytics());
+        
         Helper.CheckInternet(getApplicationContext());
         Helper.GetPermissions(this, getApplicationContext());
         
@@ -927,7 +932,7 @@ public class Activity_Main extends AppCompatActivity implements
             public void onClick(View view) {
                 vibrator.vibrate(50);
                 //TODO : change activity
-                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
                 startActivityForResult(i, 100);
             }
         });
