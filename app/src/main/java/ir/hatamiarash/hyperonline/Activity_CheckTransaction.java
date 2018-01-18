@@ -48,7 +48,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-    
+        
         db_item = new SQLiteHandlerItem(getApplicationContext());
         progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setCancelable(false);
@@ -85,6 +85,12 @@ public class Activity_CheckTransaction extends AppCompatActivity {
                         .withDialogAnimation(true)
                         .setCancelable(true)
                         .setPositiveText("باشه")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                finish();
+                            }
+                        })
                         .show();
             }
         } catch (NullPointerException ignored) {
@@ -173,5 +179,4 @@ public class Activity_CheckTransaction extends AppCompatActivity {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
     }
-    
 }
