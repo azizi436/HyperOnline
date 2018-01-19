@@ -306,7 +306,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
                                 result.closeDrawer();
                             }
                             if (item == 10) {
-                                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                                Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
                                 startActivityForResult(i, 100);
                                 result.closeDrawer();
                             }
@@ -634,7 +634,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
         (badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 vibrator.vibrate(50);
-                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
                 startActivityForResult(i, 100);
             }
         });

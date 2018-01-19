@@ -387,7 +387,7 @@ public class Activity_Main extends AppCompatActivity implements
                                 result.closeDrawer();
                             }
                             if (item == 10) {
-                                Intent i = new Intent(getApplicationContext(), ShopCard.class);
+                                Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
                                 startActivityForResult(i, 100);
                                 result.closeDrawer();
                             }
