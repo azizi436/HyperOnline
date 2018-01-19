@@ -6,6 +6,7 @@ package ir.hatamiarash.hyperonline;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -21,9 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,11 +50,11 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.ronash.pushe.Pushe;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.FormatHelper;
@@ -64,7 +66,6 @@ import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 import models.Product;
-import volley.AppController;
 
 public class Activity_ShopCard extends AppCompatActivity {
     private static final String TAG = Activity_ShopCard.class.getSimpleName(); // class tag for log
@@ -182,17 +183,18 @@ public class Activity_ShopCard extends AppCompatActivity {
                         String extend = "";
                         if (send_time == 9 || send_time == 11)
                             extend = " صبح";
-                        if (send_time == 16 || send_time == 18)
+                        if (send_time == 16 || send_time == 18 || send_time == 19)
                             extend = " عصر";
                         ORDER_HOUR = time;
                         String message;
-                        if (send_time == 18)
-                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
+                        if (send_time == 19)
+                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد.";
                         else
-                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد. توضیحات سفارش : ";
+                            message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد.";
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View customView = inflater.inflate(R.layout.custom_dialog, null);
+                        final View customView = inflater.inflate(R.layout.custom_dialog, null);
                         final TextView edit_text = customView.findViewById(R.id.edit_text);
+                        final RadioGroup payMethod = customView.findViewById(R.id.payMethod);
                         new MaterialStyledDialog.Builder(Activity_ShopCard.this)
                                 .setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
                                 .setDescription(FontHelper.getSpannedString(getApplicationContext(), message))
@@ -207,7 +209,13 @@ public class Activity_ShopCard extends AppCompatActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         DESCRIPTION = edit_text.getText().toString();
-                                        sendOrder();
+                                        RadioButton rb = customView.findViewById(payMethod.getCheckedRadioButtonId());
+                                        int payMethod;
+                                        if (rb.getText().toString().equals("آنلاین"))
+                                            payMethod = 1;
+                                        else
+                                            payMethod = 0;
+                                        sendOrder(payMethod);
                                     }
                                 })
                                 .show();
@@ -283,17 +291,18 @@ public class Activity_ShopCard extends AppCompatActivity {
         }
     }
     
+    @NonNull
     private String getCounts() {
         Item = db_item.getItemsDetails();
-        String c = "";
+        StringBuilder c = new StringBuilder();
         for (int i = 0; i < (Item.size() / 8); i++) {
             String count = FormatHelper.toEnglishNumber2(Item.get(i * 8 + 6));
-            c += count + ",";
+            c.append(count).append(",");
         }
-        return c;
+        return c.toString();
     }
     
-    private void sendOrder() {
+    private void sendOrder(final int payMethod) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         
@@ -303,11 +312,12 @@ public class Activity_ShopCard extends AppCompatActivity {
             JSONObject params = new JSONObject();
             String uid = db_user.getUserDetails().get(TAGs.UID);
             params.put("user", uid);
-            params.put("code", ORDER_CODE);
+            params.put("code", Pushe.getPusheId(getApplicationContext()));
             params.put("stuffs", STUFFS);
             params.put("stuffs_id", STUFFS_ID);
             params.put("stuffs_count", getCounts());
             params.put("hour", ORDER_HOUR);
+            params.put("method", payMethod);
             params.put("description", DESCRIPTION);
             final String mRequestBody = params.toString();
             
@@ -320,7 +330,7 @@ public class Activity_ShopCard extends AppCompatActivity {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+                            Pay(jObj.getString("code"));
                         } else {
                             Log.e("sendOrder E", jObj.getString(TAGs.ERROR_MSG));
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
@@ -369,56 +379,10 @@ public class Activity_ShopCard extends AppCompatActivity {
         }
     }
     
-    private void Pay(final String API_KEY, final String AMOUNT) {
-        String string_req = "req_fetch";
-        progressDialog.setTitleText("لطفا منتظر بمانید");
-        showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("Pay R", response);
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    int status = jObj.getInt("status");
-                    if (status == 1) {
-                        String Address = "https://pay.ir/payment/gateway/" + jObj.getString("transId");
-                        ORDER_CODE = jObj.getString("transId");
-                        ORDER_AMOUNT = AMOUNT;
-//                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
-                        Intent i = new Intent(getApplicationContext(), Web.class);
-                        i.putExtra(TAGs.ADDRESS, Address);
-                        startActivityForResult(i, CODE_PAYMENT);
-                    } else
-                        Helper.MakeToast(getApplicationContext(), jObj.getString("errorMessage"), TAGs.ERROR);
-                    hideDialog();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    hideDialog();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Pay E", error.getMessage());
-                if (error.getMessage() != null)
-                    Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
-                else
-                    Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
-                hideDialog();
-                finish();
-            }
-        }) {
-            @Override
-            protected java.util.Map<String, String> getParams() {
-                java.util.Map<String, String> params = new HashMap<>();
-                params.put("api", API_KEY);
-                params.put("amount", AMOUNT);
-                params.put("factorNumber", "1");
-                params.put("redirect", "http://hyper-online.ir/api/callback");
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, string_req);
+    private void Pay(String ID) {
+        String Address = URLs.pay_URL + ID;
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
+        startActivityForResult(i, 200);
     }
     
     private void Check(final String CODE, final int level) {
@@ -498,6 +462,10 @@ public class Activity_ShopCard extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_PAYMENT)
             Check(ORDER_CODE, 1);
+        if (requestCode == 200) {
+            //TODO
+            Log.w("PAY", "DONE");
+        }
     }
     
     private void onPaySuccess() {
@@ -711,62 +679,6 @@ public class Activity_ShopCard extends AppCompatActivity {
                             Helper.MakeToast(getApplicationContext(), "تعداد بیشتر موجود نمی باشد", TAGs.ERROR);
                     }
                 });
-
-//                product_count.addTextChangedListener(new TextWatcher() {
-//                    // save old count
-//                    int temp;
-//
-//                    @Override
-//                    public void afterTextChanged(Editable s) {
-//                        if (check == products.size()) {
-//                            // off / old count * new count
-//                            int new_off;
-//                            String pCount;
-//                            if (product_count.getText().toString().length() == 1)
-//                                pCount = FormatHelper.toEnglishNumber2(product_count.getText().toString());
-//                            else
-//                                pCount = FormatHelper.toEnglishNumber(product_count.getText().toString());
-//
-//                            if (Integer.valueOf(pCount) == 0 || temp == 0)
-//                                new_off = 0;
-//                            else {
-//                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(pCount);
-//                            }
-//
-//                            product_off.setText(String.valueOf(new_off));
-//
-//                            db_item.updateItem(
-//                                    product_id.getText().toString(),
-//                                    pCount,
-//                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(pCount)),
-//                                    String.valueOf(new_off)
-//                            );
-//
-//                            sendPrice(db_item.TotalPrice());
-//                            String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
-//                            String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
-//                            total_pay.setText(price);
-//                            pay.setText("پرداخت - " + price);
-//                            total_off.setText(off);
-//                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
-//                            total_price.setText(String.valueOf(ttPrice) + " تومان");
-//                            ORDER_AMOUNT = String.valueOf(ttPrice);
-//                        } else
-//                            check++;
-//                    }
-//
-//                    @Override
-//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                        if (product_count.getText().toString().length() == 1)
-//                            temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
-//                        else
-//                            temp = Integer.valueOf(FormatHelper.toEnglishNumber(product_count.getText().toString()));
-//                    }
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    }
-//                });
             }
             
             void removeAt(int position) {
@@ -780,21 +692,6 @@ public class Activity_ShopCard extends AppCompatActivity {
             }
         }
     }
-
-//    private class TouchListener implements View.OnTouchListener {
-//        public boolean onTouch(View view, MotionEvent motionEvent) {
-//            switch (motionEvent.getAction()) {
-//                case MotionEvent.ACTION_DOWN:
-//                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-//                    break;
-//                case MotionEvent.ACTION_CANCEL:
-//                case MotionEvent.ACTION_UP:
-//                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
-//                    break;
-//            }
-//            return false;
-//        }
-//    }
     
     private int getTime(int type) {
         Date date = new Date();
@@ -810,6 +707,7 @@ public class Activity_ShopCard extends AppCompatActivity {
     
     @Contract(pure = true)
     private int times(int hour, int minute) {
+        // 9 - 11 - 16 - 18 - 19:30
         if (hour >= 9 && hour < 10) send_time = 11;
         if (hour >= 10 && hour < 11)
             if (minute <= 40)
@@ -829,9 +727,15 @@ public class Activity_ShopCard extends AppCompatActivity {
             if (minute <= 40)
                 send_time = 18;
             else
+                send_time = 19;
+        
+        if (hour >= 18 && hour < 19)
+            if (minute <= 50)
+                send_time = 19;
+            else
                 send_time = 9;
         
-        if (hour >= 18 && hour <= 23) send_time = 9;
+        if (hour >= 19 && hour <= 23) send_time = 9;
         if (hour >= 0 && hour < 8) send_time = 9;
         if (hour >= 8 && hour < 9)
             if (minute <= 40)
@@ -843,13 +747,13 @@ public class Activity_ShopCard extends AppCompatActivity {
     }
     
     private void sendPrice(int price) {
-        if (price >= 35000) {
+        if (price >= 30000) {
             tExtend = 0;
             status.setText("ارسال رایگان");
             total_extend.setText(String.valueOf(tExtend) + " تومان");
         } else {
-            tExtend = 5000;
-            status.setText("خرید های کمتر از 35 هزار تومان با هزینه ارسال می شوند");
+            tExtend = Integer.valueOf(db_main.getItemsDetails().get(0));
+            status.setText("خرید های کمتر از 30 هزار تومان با هزینه ارسال می شوند");
             total_extend.setText(String.valueOf(tExtend) + " تومان");
         }
         String p = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
