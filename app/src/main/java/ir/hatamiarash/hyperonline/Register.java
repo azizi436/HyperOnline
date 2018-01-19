@@ -4,17 +4,12 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,10 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
@@ -46,9 +38,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.ButterKnife;
 import helper.Address;
 import helper.FontHelper;
 import helper.Helper;
@@ -58,7 +49,7 @@ import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 
-public class Register extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class Register extends AppCompatActivity {
     private static final String TAG = Register.class.getSimpleName();
     
     @BindView(R.id.btnConfirm)
@@ -84,30 +75,12 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
     SweetAlertDialog progressDialog;
     SQLiteHandler db;
     
-    GoogleApiClient mGoogleApiClient;
-    Location mLocation;
-    LocationManager locationManager;
-    LocationRequest mLocationRequest;
-    private static final int MILLISECONDS_PER_SECOND = 1000;
-    public static final int UPDATE_INTERVAL_IN_SECONDS = 5;
-    private static final long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
-    private static final int FASTEST_INTERVAL_IN_SECONDS = 1;
-    private static final long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
-    public double latitude = 0, longitude = 0;
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
         
         ButterKnife.bind(this);
-        
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         
         inputPhone.setError(Register.this, "همانند نمونه 09123456789");
         inputPassword.setError(Register.this, "حداقل 8 حرف");
@@ -149,9 +122,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                                                     address,
                                                     phone,
                                                     inputProvince.getSelectedItem().toString(),
-                                                    inputCity.getSelectedItem().toString(),
-                                                    String.valueOf(latitude),
-                                                    String.valueOf(longitude)
+                                                    inputCity.getSelectedItem().toString()
                                             );
                                         else
                                             Helper.MakeToast(Register.this, "شهر را انتخاب نمایید", TAGs.ERROR);
@@ -187,7 +158,7 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
         });
     }
     
-    private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city, final String loc_x, final String loc_y) {
+    private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city) {
         progressDialog.setTitleText("لطفا منتظر بمانید");
         showDialog();
         
@@ -201,8 +172,6 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
             params.put(TAGs.PASSWORD, password);
             params.put(TAGs.STATE, state);
             params.put(TAGs.CITY, city);
-            params.put(TAGs.LOCATION_X, loc_x);
-            params.put(TAGs.LOCATION_Y, loc_y);
             final String mRequestBody = params.toString();
             
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -426,61 +395,5 @@ public class Register extends Activity implements GoogleApiClient.ConnectionCall
                 inputCity.setAdapter(adapter);
                 break;
         }
-    }
-    
-    @Override
-    public void onConnected(Bundle bundle) {
-        startLocationUpdates();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            return;
-        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLocation == null)
-            startLocationUpdates();
-        if (mLocation != null) {
-            latitude = mLocation.getLatitude();
-            longitude = mLocation.getLongitude();
-            Log.e("Location Service", "Location Detected (" + String.valueOf(latitude) + ", " + String.valueOf(longitude) + ")");
-        } else
-            Log.e("Location Service", "Location not Detected");
-    }
-    
-    protected void startLocationUpdates() {
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            return;
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-    }
-    
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Connection Suspended");
-        mGoogleApiClient.connect();
-    }
-    
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode());
-    }
-    
-    @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-    
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected())
-            mGoogleApiClient.disconnect();
-    }
-    
-    @Override
-    public void onLocationChanged(Location location) {
     }
 }
