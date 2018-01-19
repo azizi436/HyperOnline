@@ -83,7 +83,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
                         .setStyle(Style.HEADER_WITH_TITLE)
                         .withDarkerOverlay(true)
                         .withDialogAnimation(true)
-                        .setCancelable(true)
+                        .setCancelable(false)
                         .setPositiveText("باشه")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -94,6 +94,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
                         .show();
             }
         } catch (NullPointerException ignored) {
+            finish();
         }
     }
     
