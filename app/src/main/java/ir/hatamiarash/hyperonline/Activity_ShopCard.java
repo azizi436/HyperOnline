@@ -345,6 +345,7 @@ public class Activity_ShopCard extends AppCompatActivity {
                                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                                             @Override
                                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                db_item.deleteItems();
                                                 Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 startActivity(intent);
