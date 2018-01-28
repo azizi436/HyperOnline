@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import helper.Helper;
@@ -63,7 +65,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 //        holder.date.setText(formatDate(order.date));
         holder.date.setText(order.date);
         holder.stuffs.setText(order.stuffs);
-        holder.price.setText(order.price);
+        holder.price.setText(formatCurrency(order.price) + " تومان");
         holder.hour.setText(String.valueOf(order.hour) + " الی " + String.valueOf(order.hour + 1));
         
         switch (order.status) {
@@ -133,6 +135,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         }
     }
     
+    @NonNull
     private String formatDate(String Date) {
         String[] split = Date.split(":");
         return split[0] + "     " + split[1];
@@ -254,5 +257,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 }
             }
         }
+    }
+    
+    private static String formatCurrency(String value) {
+        String pattern = "###,###";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        return myFormatter.format(Double.valueOf(value));
     }
 }
