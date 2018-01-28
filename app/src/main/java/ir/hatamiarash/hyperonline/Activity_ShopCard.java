@@ -330,7 +330,30 @@ public class Activity_ShopCard extends AppCompatActivity {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean(TAGs.ERROR);
                         if (!error) {
-                            Pay(jObj.getString("code"));
+                            if (payMethod == 1)
+                                Pay(jObj.getString("code"));
+                            else {
+                                new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+                                        .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت حضوری"))
+                                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "با تشکر از انتخاب شما... سبد خرید ثبت شد !!"))
+                                        .setStyle(Style.HEADER_WITH_TITLE)
+                                        .setHeaderColor(R.color.green)
+                                        .withDarkerOverlay(true)
+                                        .withDialogAnimation(true)
+                                        .setCancelable(false)
+                                        .setPositiveText("باشه")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                startActivity(intent);
+                                                startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
                         } else {
                             Log.e("sendOrder E", jObj.getString(TAGs.ERROR_MSG));
                             String errorMsg = jObj.getString(TAGs.ERROR_MSG);
