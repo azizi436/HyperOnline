@@ -46,11 +46,15 @@ public class Activity_Splash extends AppCompatActivity {
         spinner.setIndeterminateDrawable(animation);
         logo.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.logo));
         CheckConnection();
+//        Intent i = new Intent(Activity_Splash.this, Activity_Main.class);
+//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(i);
+//        finish();
     }
     
     private void CheckConnection() {
         if (Helper.CheckInternet2(getApplicationContext())) {
-            new CheckInternet().execute("https://httpstat.us/200");
+            new CheckInternet().execute("http://httpstat.us/200");
         } else {
             new MaterialStyledDialog.Builder(Activity_Splash.this)
                     .setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))
@@ -105,7 +109,7 @@ public class Activity_Splash extends AppCompatActivity {
             } else {
                 new MaterialStyledDialog.Builder(Activity_Splash.this)
                         .setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))
-                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "اتصال به اینترنت را بررسی نمایید."))
+                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "اتصال به اینترنت را بررسی نمایید"))
                         .setStyle(Style.HEADER_WITH_TITLE)
                         .setHeaderColor(R.color.Red)
                         .withDarkerOverlay(true)
