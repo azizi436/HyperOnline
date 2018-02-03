@@ -16,6 +16,6 @@ public class URLs {
     private static final String Share_IranApps = "http://iranapps.ir/app/ir.hatamiarash.hyperonline";
     private static final String Share_Myket = "http://myket.ir/app/ir.hatamiarash.hyperonline";
     private static final String Share_Normal = "http://hyper-online.ir/HyperOnline.apk";
-    public static final String Share_App = Share_Normal;
+    public static final String Share_App = Share_Myket;
     
 }
