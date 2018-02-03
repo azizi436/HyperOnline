@@ -54,7 +54,7 @@ public class Activity_Splash extends AppCompatActivity {
     
     private void CheckConnection() {
         if (Helper.CheckInternet2(getApplicationContext())) {
-            new CheckInternet().execute("http://httpstat.us/200");
+            new CheckInternet().execute("http://hyper-online.ir/api/200");
         } else {
             new MaterialStyledDialog.Builder(Activity_Splash.this)
                     .setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))
