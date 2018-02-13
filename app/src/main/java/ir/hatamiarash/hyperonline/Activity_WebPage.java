@@ -15,22 +15,22 @@ import helper.FontHelper;
 import ir.hatamiarash.utils.TAGs;
 
 public class Activity_WebPage extends AppCompatActivity {
-    WebView page_content;
-    TextView page_title;
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.webpage);
-        Intent i = getIntent();
-        String title = i.getStringExtra(TAGs.TITLE);
-        String address = i.getStringExtra(TAGs.ADDRESS);
-        page_content = (WebView) findViewById(R.id.page_content);
-        page_title = (TextView) findViewById(R.id.page_title);
-        WebSettings webSettings = page_content.getSettings();
-        webSettings.setJavaScriptEnabled(false);
-        webSettings.setSupportZoom(false);
-        page_content.loadUrl("file:///android_asset/" + address + ".html");
-        page_title.setText(FontHelper.getSpannedString(this, title));
-    }
+	WebView page_content;
+	TextView page_title;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.webpage);
+		Intent i = getIntent();
+		String title = i.getStringExtra(TAGs.TITLE);
+		String address = i.getStringExtra(TAGs.ADDRESS);
+		page_content = (WebView) findViewById(R.id.page_content);
+		page_title = (TextView) findViewById(R.id.page_title);
+		WebSettings webSettings = page_content.getSettings();
+		webSettings.setJavaScriptEnabled(false);
+		webSettings.setSupportZoom(false);
+		page_content.loadUrl("file:///android_asset/" + address + ".html");
+		page_title.setText(FontHelper.getSpannedString(this, title));
+	}
 }
