@@ -5,5 +5,5 @@
 package ir.hatamiarash.interfaces;
 
 public interface CardBadge {
-    void updateBadge();
+	void updateBadge();
 }

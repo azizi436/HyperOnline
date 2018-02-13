@@ -41,143 +41,143 @@ import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.URLs;
 
 public class Activity_CheckTransaction extends AppCompatActivity {
-    public static SQLiteHandlerItem db_item;
-    SweetAlertDialog progressDialog;
-    Uri uri;
-    
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        
-        db_item = new SQLiteHandlerItem(getApplicationContext());
-        progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        progressDialog.setCancelable(false);
-        progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-        
-        Intent intent = getIntent();
-        uri = intent.getData();
-        try {
-            assert uri != null;
-            int error = Integer.valueOf(uri.getQueryParameter("error"));
-            if (error == 0) {
-                new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
-                        .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت موفقیت آمیز بود. با تشکر از انتخاب شما."))
-                        .setStyle(Style.HEADER_WITH_TITLE)
-                        .setHeaderColor(R.color.green)
-                        .withDarkerOverlay(true)
-                        .withDialogAnimation(true)
-                        .setCancelable(false)
-                        .setPositiveText("باشه")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                CompleteOrder(uri.getQueryParameter("code"));
-                            }
-                        })
-                        .show();
-            } else if (error == 1) {
-                new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
-                        .setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-                        .setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید. کد خطا : " + uri.getQueryParameter("er_code")))
-                        .setStyle(Style.HEADER_WITH_TITLE)
-                        .withDarkerOverlay(true)
-                        .withDialogAnimation(true)
-                        .setCancelable(false)
-                        .setPositiveText("باشه")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                finish();
-                            }
-                        })
-                        .show();
-            }
-        } catch (NullPointerException ignored) {
-            finish();
-        }
-    }
-    
-    private void CompleteOrder(final String id) {
-        progressDialog.setTitleText("لطفا منتظر بمانید");
-        showDialog();
-        
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URLs.base_URL + "complete_order";
-            JSONObject params = new JSONObject();
-            params.put("id", id);
-            final String mRequestBody = params.toString();
-            
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("CompleteOrder R", response);
-                    hideDialog();
-                    try {
-                        JSONObject jObj = new JSONObject(response);
-                        boolean error = jObj.getBoolean(TAGs.ERROR);
-                        if (!error) {
-                            db_item.deleteItems();
-                            Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
-                            i.putExtra("order_code", id);
-                            startActivity(i);
-                            finish();
-                        } else {
-                            Log.e("CompleteOrder E", jObj.getString(TAGs.ERROR_MSG));
-                            String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-                            Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
-                        }
-                    } catch (JSONException e) {
-                        hideDialog();
-                        e.printStackTrace();
-                        finish();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("CompleteOrder E", error.toString());
-                    hideDialog();
-                    finish();
-                }
-            }) {
-                @NonNull
-                @Contract(pure = true)
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-                
-                @Nullable
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    0,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-            ));
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void showDialog() {
-        if (!progressDialog.isShowing())
-            progressDialog.show();
-    }
-    
-    private void hideDialog() {
-        if (progressDialog.isShowing())
-            progressDialog.dismiss();
-    }
+	public static SQLiteHandlerItem db_item;
+	SweetAlertDialog progressDialog;
+	Uri uri;
+	
+	@Override
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		
+		db_item = new SQLiteHandlerItem(getApplicationContext());
+		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+		progressDialog.setCancelable(false);
+		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		
+		Intent intent = getIntent();
+		uri = intent.getData();
+		try {
+			assert uri != null;
+			int error = Integer.valueOf(uri.getQueryParameter("error"));
+			if (error == 0) {
+				new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
+						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
+						.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت موفقیت آمیز بود. با تشکر از انتخاب شما."))
+						.setStyle(Style.HEADER_WITH_TITLE)
+						.setHeaderColor(R.color.green)
+						.withDarkerOverlay(true)
+						.withDialogAnimation(true)
+						.setCancelable(false)
+						.setPositiveText("باشه")
+						.onPositive(new MaterialDialog.SingleButtonCallback() {
+							@Override
+							public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+								CompleteOrder(uri.getQueryParameter("code"));
+							}
+						})
+						.show();
+			} else if (error == 1) {
+				new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
+						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
+						.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید. کد خطا : " + uri.getQueryParameter("er_code")))
+						.setStyle(Style.HEADER_WITH_TITLE)
+						.withDarkerOverlay(true)
+						.withDialogAnimation(true)
+						.setCancelable(false)
+						.setPositiveText("باشه")
+						.onPositive(new MaterialDialog.SingleButtonCallback() {
+							@Override
+							public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+								finish();
+							}
+						})
+						.show();
+			}
+		} catch (NullPointerException ignored) {
+			finish();
+		}
+	}
+	
+	private void CompleteOrder(final String id) {
+		progressDialog.setTitleText("لطفا منتظر بمانید");
+		showDialog();
+		
+		try {
+			RequestQueue requestQueue = Volley.newRequestQueue(this);
+			String URL = URLs.base_URL + "complete_order";
+			JSONObject params = new JSONObject();
+			params.put("id", id);
+			final String mRequestBody = params.toString();
+			
+			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+				@Override
+				public void onResponse(String response) {
+					Log.i("CompleteOrder R", response);
+					hideDialog();
+					try {
+						JSONObject jObj = new JSONObject(response);
+						boolean error = jObj.getBoolean(TAGs.ERROR);
+						if (!error) {
+							db_item.deleteItems();
+							Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
+							i.putExtra("order_code", id);
+							startActivity(i);
+							finish();
+						} else {
+							Log.e("CompleteOrder E", jObj.getString(TAGs.ERROR_MSG));
+							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+							Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
+						}
+					} catch (JSONException e) {
+						hideDialog();
+						e.printStackTrace();
+						finish();
+					}
+				}
+			}, new Response.ErrorListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					Log.e("CompleteOrder E", error.toString());
+					hideDialog();
+					finish();
+				}
+			}) {
+				@NonNull
+				@Contract(pure = true)
+				@Override
+				public String getBodyContentType() {
+					return "application/json; charset=utf-8";
+				}
+				
+				@Nullable
+				@Override
+				public byte[] getBody() throws AuthFailureError {
+					try {
+						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+					} catch (UnsupportedEncodingException uee) {
+						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						return null;
+					}
+				}
+			};
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
+			requestQueue.add(stringRequest);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void showDialog() {
+		if (!progressDialog.isShowing())
+			progressDialog.show();
+	}
+	
+	private void hideDialog() {
+		if (progressDialog.isShowing())
+			progressDialog.dismiss();
+	}
 }
