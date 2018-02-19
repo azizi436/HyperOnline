@@ -16,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -62,6 +64,8 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 	public Toolbar toolbar;
 	@BindView(R.id.list)
 	public RecyclerView list;
+	@BindView(R.id.title)
+	public TextView title;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,9 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 		list.setAdapter(orderAdapter);
 		
 		loadOrders();
+		
+		title.setVisibility(View.VISIBLE);
+		title.setText(getString(R.string.order_list_title));
 	}
 	
 	private void loadOrders() {
