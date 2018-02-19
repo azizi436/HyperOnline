@@ -661,6 +661,8 @@ public class Activity_Main extends AppCompatActivity implements
 								off_view.setVisibility(View.GONE);
 								//
 								sliderLayout.setVisibility(View.GONE);
+								//
+								toolbar.setVisibility(View.GONE);
 								String msg = "در حال حاضر به دلیل \" " + status.getString("offline") + " \" امکان سرویس دهی وجود ندارد. به زودی با شما خواهیم بود.";
 								new MaterialStyledDialog.Builder(Activity_Main.this)
 										.setTitle(FontHelper.getSpannedString(getApplicationContext(), "هایپرآنلاین"))
