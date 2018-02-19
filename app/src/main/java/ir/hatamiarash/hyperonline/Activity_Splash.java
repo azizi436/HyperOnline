@@ -62,7 +62,7 @@ public class Activity_Splash extends AppCompatActivity {
 					.withDialogAnimation(true)
 					.setCancelable(false)
 					.setPositiveText("باشه")
-					.setNegativeText("باشه")
+					.setNegativeText("خروج")
 					.onPositive(new MaterialDialog.SingleButtonCallback() {
 						@Override
 						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
