@@ -32,5 +32,19 @@
   public *;
 }
 
-# for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+-dontwarn com.squareup.**
+
+-keep class cn.pedant.SweetAlert.Rotate3dAnimation {
+public <init>(...);
+}
+
+-keep class com.ontbee.legacyforks.cn.pedant.SweetAlert.Rotate3dAnimation {
+public <init>(...);
+}
+
+-dontwarn org.json.**
+-dontwarn co.ronash.**
+
+#-keep class !ir.hatamiarash.** { *; }
+
+-keep class android.support.** { *; }
