@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,7 +47,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		this.orderList = orderList;
 		
 		mProgressDialog = new ProgressDialog(mContext);
-		mProgressDialog.setMessage("A message");
+		mProgressDialog.setMessage("دانلود");
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		mProgressDialog.setCancelable(true);
@@ -236,24 +237,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 			else {
 				Helper.MakeToast(context, "فاکتور دانلود شد... در حال بازگشایی", TAGs.SUCCESS);
 				File file = new File(Environment.getExternalStorageDirectory() + "/" + "HO-Factors" + "/" + code + ".pdf");
+				
+				Intent target = new Intent(Intent.ACTION_VIEW);
+				target.setDataAndType(Uri.fromFile(file), "application/pdf");
+				target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				
+				Intent intent = Intent.createChooser(target, "Open File");
 				try {
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setDataAndType(Uri.fromFile(file), "application/*");
-					intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					mContext.startActivity(intent);
 				} catch (Exception e) {
-//                    e.printStackTrace();
-//                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + "HO-Factors" + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
-//                    Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setDataAndType(selectedUri, "resource/folder");
-//                    mContext.startActivity(intent);
-					
-					
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					Uri mydir = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
-					intent.setDataAndType(mydir, "application/*");    // or use */*
-					mContext.startActivity(intent);
+					Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + "HO-Factors" + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
 				}
 			}
 		}
