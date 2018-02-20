@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -494,9 +495,6 @@ public class Activity_Main extends AppCompatActivity implements
 				.build();
 		
 		Helper.GetPermissions(this, getApplicationContext());
-	    
-        /*Logger log = new Logger();
-        log.execute();*/
 		
 		FetchAllData();
 		
@@ -1178,6 +1176,7 @@ public class Activity_Main extends AppCompatActivity implements
 			params.put("u", id);
 			params.put("p", Pushe.getPusheId(getApplicationContext()));
 			params.put("f", FirebaseInstanceId.getInstance().getToken());
+			params.put("v", Build.VERSION.SDK_INT);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
