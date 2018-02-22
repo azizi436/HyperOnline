@@ -20,10 +20,11 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.github.ybq.android.spinkit.style.Wave;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +52,7 @@ public class Activity_Splash extends AppCompatActivity {
 	
 	private void CheckConnection() {
 		if (Helper.CheckInternet2(getApplicationContext())) {
-			new CheckInternet().execute("http://" + URLs.IP + "/api/200");
+			new CheckInternet().execute(URLs.check_URL);
 		} else {
 			new MaterialStyledDialog.Builder(Activity_Splash.this)
 					.setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))
@@ -83,9 +84,9 @@ public class Activity_Splash extends AppCompatActivity {
 		@Override
 		protected Boolean doInBackground(String... strings) {
 			try {
-				HttpURLConnection connection = (HttpURLConnection) new URL(strings[0]).openConnection();
+				HttpsURLConnection connection = (HttpsURLConnection) new URL(strings[0]).openConnection();
 				connection.setConnectTimeout(2000);
-				return connection.getResponseCode() == HttpURLConnection.HTTP_OK;
+				return connection.getResponseCode() == HttpsURLConnection.HTTP_OK;
 			} catch (SocketTimeoutException | MalformedURLException e) {
 				return false;
 			} catch (IOException e) {
