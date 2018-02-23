@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -229,8 +231,22 @@ public class Activity_Main extends AppCompatActivity implements
 			SyncServer(db_user.getUserDetails().get(TAGs.UID));
 		}
 		
-		toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
+		Drawable logo = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_logo_wide);
+		toolbar.setLogo(logo);
+		for (int i = 0; i < toolbar.getChildCount(); i++) {
+			View child = toolbar.getChildAt(i);
+			if (child != null)
+				if (child.getClass() == ImageView.class) {
+					ImageView iv2 = (ImageView) child;
+					if (iv2.getDrawable() == logo) {
+						iv2.setAdjustViewBounds(true);
+					}
+				}
+		}
 		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		
+		
 		
 		PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
 		PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);

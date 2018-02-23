@@ -6,6 +6,7 @@ package ir.hatamiarash.hyperonline;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -24,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -143,12 +145,20 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		}
 		
 		_CAT_ID = category_id = getIntent().getStringExtra("cat_id");
-		if (list_category == 1 || list_category == 2) {
-			toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getIntent().getStringExtra("title")));
-		} else
-			toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
-		
+		Drawable logo = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_logo_wide);
+		toolbar.setLogo(logo);
+		for (int i = 0; i < toolbar.getChildCount(); i++) {
+			View child = toolbar.getChildAt(i);
+			if (child != null)
+				if (child.getClass() == ImageView.class) {
+					ImageView iv2 = (ImageView) child;
+					if (iv2.getDrawable() == logo) {
+						iv2.setAdjustViewBounds(true);
+					}
+				}
+		}
 		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		
 		PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
 		PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
