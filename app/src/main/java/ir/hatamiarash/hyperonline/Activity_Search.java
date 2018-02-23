@@ -66,7 +66,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 		setContentView(R.layout.search);
 		ButterKnife.bind(this);
 		
-		final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		final Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
 		setSupportActionBar(toolbar);
 		
@@ -86,6 +86,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 		if (searchItem != null)
 			searchView = (SearchView) searchItem.getActionView();
 		if (searchView != null) {
+			assert searchManager != null;
 			searchView.setSearchableInfo(searchManager.getSearchableInfo(Activity_Search.this.getComponentName()));
 			searchView.setIconified(false);
 		}
@@ -121,7 +122,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 			JSONObject params = new JSONObject();
 			params.put("word", word);
 			final String mRequestBody = params.toString();
-			pdLoading.setMessage("\tLoading...");
+			pdLoading.setMessage("\tلطفا صبر کنید ...");
 			pdLoading.setCancelable(false);
 			pdLoading.show();
 			
