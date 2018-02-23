@@ -4,69 +4,69 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/app"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
-        android:elevation="5dp"
-        app:cardCornerRadius="4dp">
+	<android.support.v7.widget.CardView
+		android:id="@+id/app"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_gravity="center"
+		android:layout_margin="@dimen/card_margin"
+		android:elevation="5dp"
+		app:cardCornerRadius="4dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/category_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/category_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_point"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/category_point_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_point_count"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/category_off"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_off"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <ImageView
-                android:id="@+id/category_image"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:scaleType="centerCrop"/>
+			<ImageView
+				android:id="@+id/category_image"
+				android:layout_width="match_parent"
+				android:layout_height="100dp"
+				android:background="?attr/selectableItemBackgroundBorderless"
+				android:clickable="true"
+				android:scaleType="centerCrop"/>
 
-            <helper.PersianTextView
-                android:id="@+id/category_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/category_image"
-                android:layout_margin="5dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textAlignment="center"
-                android:textColor="@color/album_title"
-                android:textSize="15sp"
-                app:my_font="iran_sans"/>
+			<helper.PersianTextView
+				android:id="@+id/category_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/category_image"
+				android:layout_margin="5dp"
+				android:gravity="center"
+				android:padding="5dp"
+				android:textAlignment="center"
+				android:textColor="@color/album_title"
+				android:textSize="15sp"
+				app:my_font="iran_sans"/>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+		</RelativeLayout>
+	</android.support.v7.widget.CardView>
 </LinearLayout>

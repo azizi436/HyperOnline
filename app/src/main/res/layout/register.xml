@@ -12,7 +12,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background3"
+        android:src="@color/primary_dark"
         android:id="@+id/imageView3"
         android:scaleType="centerCrop"/>
 

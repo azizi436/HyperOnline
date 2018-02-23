@@ -4,60 +4,60 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-    <helper.PersianEditText
-        android:id="@+id/edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        app:my_font="shabnam"
-        android:gravity="center"
-        android:hint="توضیحات سفارش"
-        android:textColor="@color/black"/>
+	<helper.PersianEditText
+		android:id="@+id/edit_text"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:gravity="center"
+		android:hint="توضیحات سفارش"
+		android:textColor="@color/black"
+		app:my_font="shabnam"/>
 
-    <helper.PersianTextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="2dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="نوع پرداخت"
-        android:textAlignment="center"
-        app:my_font="shabnam"/>
+	<helper.PersianTextView
+		android:id="@+id/textView2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="4dp"
+		android:layout_marginTop="2dp"
+		android:layout_weight="1"
+		android:gravity="center"
+		android:text="نوع پرداخت"
+		android:textAlignment="center"
+		app:my_font="shabnam"/>
 
-    <RadioGroup
-        android:id="@+id/payMethod"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+	<RadioGroup
+		android:id="@+id/payMethod"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/offline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="حضوری"/>
+		<RadioButton
+			android:id="@+id/offline"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="حضوری"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+		<Space
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"/>
 
-        <RadioButton
-            android:id="@+id/online"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="آنلاین"/>
-    </RadioGroup>
+		<RadioButton
+			android:id="@+id/online"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:checked="true"
+			android:text="آنلاین"/>
+	</RadioGroup>
 
 </LinearLayout>

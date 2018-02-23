@@ -4,87 +4,87 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="2dp"
-    android:paddingEnd="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingStart="5dp"
-    android:paddingTop="2dp">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingBottom="2dp"
+	android:paddingEnd="5dp"
+	android:paddingLeft="5dp"
+	android:paddingRight="5dp"
+	android:paddingStart="5dp"
+	android:paddingTop="2dp">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/category"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="2dp"
-        card_view:cardUseCompatPadding="true">
+	<android.support.v7.widget.CardView
+		xmlns:card_view="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/category"
+		android:layout_width="match_parent"
+		android:layout_height="90dp"
+		card_view:cardCornerRadius="5dp"
+		card_view:cardElevation="2dp"
+		card_view:cardUseCompatPadding="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/category_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/category_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_point"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/category_point_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_point_count"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/category_off"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+			<TextView
+				android:id="@+id/category_off"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"/>
 
-            <ImageView
-                android:id="@+id/category_image"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:padding="5dp"
-                android:scaleType="fitCenter"/>
+			<ImageView
+				android:id="@+id/category_image"
+				android:layout_width="90dp"
+				android:layout_height="90dp"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="10dp"
+				android:layout_marginStart="10dp"
+				android:padding="5dp"
+				android:scaleType="fitCenter"/>
 
-            <helper.PersianTextView
-                android:id="@+id/category_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/category_image"
-                android:layout_alignTop="@+id/category_image"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="2.5dp"
-                android:layout_toEndOf="@+id/info"
-                android:layout_toLeftOf="@+id/category_image"
-                android:layout_toRightOf="@+id/info"
-                android:layout_toStartOf="@+id/category_image"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:text="نام محصول"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:my_font="iran_sans"/>
+			<helper.PersianTextView
+				android:id="@+id/category_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_alignBottom="@+id/category_image"
+				android:layout_alignTop="@+id/category_image"
+				android:layout_marginLeft="5dp"
+				android:layout_marginStart="5dp"
+				android:layout_marginTop="2.5dp"
+				android:layout_toEndOf="@+id/info"
+				android:layout_toLeftOf="@+id/category_image"
+				android:layout_toRightOf="@+id/info"
+				android:layout_toStartOf="@+id/category_image"
+				android:ellipsize="end"
+				android:gravity="center_vertical"
+				android:maxLines="1"
+				android:text="نام محصول"
+				android:textColor="@color/black"
+				android:textSize="20sp"
+				app:my_font="iran_sans"/>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+		</RelativeLayout>
+	</android.support.v7.widget.CardView>
 </LinearLayout>

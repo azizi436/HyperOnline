@@ -5,33 +5,33 @@
   -->
 
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/web_page"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:weightSum="10">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/web_page"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/white"
+	android:orientation="vertical"
+	android:weightSum="10">
 
-    <helper.PersianTextView
-        android:id="@+id/page_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center_vertical|center_horizontal|center"
-        android:text="عنوان"
-        android:textAlignment="center"
-        android:textColor="@color/accent"
-        android:textSize="28sp"
-        android:textStyle="normal|bold"
-        app:my_font="shabnam"/>
+	<helper.PersianTextView
+		android:id="@+id/page_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="10dp"
+		android:gravity="center_vertical|center_horizontal|center"
+		android:text="عنوان"
+		android:textAlignment="center"
+		android:textColor="@color/accent"
+		android:textSize="28sp"
+		android:textStyle="normal|bold"
+		app:my_font="shabnam"/>
 
-    <WebView
-        android:id="@+id/page_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/page_title"
-        android:layout_margin="10dp"/>
+	<WebView
+		android:id="@+id/page_content"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@+id/page_title"
+		android:layout_margin="10dp"/>
 
 </RelativeLayout>
