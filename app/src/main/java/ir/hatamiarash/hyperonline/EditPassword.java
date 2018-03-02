@@ -47,17 +47,9 @@ import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
 public class EditPassword extends AppCompatActivity {
-	private SweetAlertDialog progressDialog;
-	private Vibrator vibrator;
-	private SQLiteHandlerItem db_item;
-	private SQLiteHandlerSupport db_support;
-	private SQLiteHandler db_user;
-	private SessionManager session;
-	private ConfirmManager confirmManager;
-	
+	private static String HOST;
 	@BindView(R.id.current_password)
 	IconEditText current_password;
 	@BindView(R.id.new_password)
@@ -66,6 +58,13 @@ public class EditPassword extends AppCompatActivity {
 	IconEditText new_password_2;
 	@BindView(R.id.btnConfirm)
 	Button btnConfirm;
+	private SweetAlertDialog progressDialog;
+	private Vibrator vibrator;
+	private SQLiteHandlerItem db_item;
+	private SQLiteHandlerSupport db_support;
+	private SQLiteHandler db_user;
+	private SessionManager session;
+	private ConfirmManager confirmManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +81,8 @@ public class EditPassword extends AppCompatActivity {
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		confirmManager = new ConfirmManager(getApplicationContext());
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		btnConfirm.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -106,7 +107,7 @@ public class EditPassword extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "updatePassword";
+			String URL = getResources().getString(R.string.url_api, HOST) + "updatePassword";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PASSWORD, pass);
 			params.put(TAGs.UID, db_user.getUserDetails().get(TAGs.UID));

@@ -64,19 +64,15 @@ import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerMain;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Product;
 
 public class Activity_ShopCard extends AppCompatActivity {
 	private static final String TAG = Activity_ShopCard.class.getSimpleName(); // class tag for log
+	final static private int CODE_PAYMENT = 100;
 	public static SQLiteHandlerItem db_item;
 	public static SQLiteHandlerMain db_main;
 	public static SQLiteHandler db_user;
-	SessionManager session;
-	ConfirmManager confirmManager;
-	SweetAlertDialog progressDialog;
-	Vibrator vibrator;
-	
+	private static String HOST;
 	@BindView(R.id.recyclerView)
 	public RecyclerView list;
 	@BindView(R.id.CardPrice)
@@ -93,22 +89,23 @@ public class Activity_ShopCard extends AppCompatActivity {
 	public Button pay;
 	@BindView(R.id.btnClear)
 	public Button clear;
-	
 	@BindView(R.id.btnBack)
 	public Button back;
 	@BindView(R.id.empty)
 	public RelativeLayout empty;
 	@BindView(R.id.origin)
 	public RelativeLayout origin;
-	
-	final static private int CODE_PAYMENT = 100;
+	SessionManager session;
+	ConfirmManager confirmManager;
+	SweetAlertDialog progressDialog;
+	Vibrator vibrator;
+	List<String> Item;
+	List<Product> Products_List;
+	Adapter_Product adapter;
 	private int CODE_STATUS = 0;
 	private int tOff = 0;
 	private int tPrice = 0;
 	private int tExtend = 5000;
-	List<String> Item;
-	List<Product> Products_List;
-	Adapter_Product adapter;
 	private int check = 0;
 	private int send_time;
 	private String ORDER_CODE = "-1";
@@ -139,6 +136,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		pay.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -308,7 +307,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "temp_order";
+			String URL = getResources().getString(R.string.url_api, HOST) + "temp_order";
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
 			params.put("user", uid);
@@ -404,7 +403,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	}
 	
 	private void Pay(String ID) {
-		String Address = URLs.pay_URL + ID;
+		String Address = getResources().getString(R.string.url_pay, HOST) + ID;
 		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
 		startActivityForResult(i, 200);
 	}
@@ -529,7 +528,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "orders";
+			String URL = getResources().getString(R.string.url_api, HOST) + "orders";
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
 			params.put("user", uid);
@@ -611,6 +610,81 @@ public class Activity_ShopCard extends AppCompatActivity {
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
+	}
+	
+	private int getTime(int type) {
+		Date date = new Date();
+		SimpleDateFormat simpleDateFormat;
+		if (type == 1) {
+			simpleDateFormat = new SimpleDateFormat("HH");
+			return Integer.valueOf(simpleDateFormat.format(date));
+		} else {
+			simpleDateFormat = new SimpleDateFormat("mm");
+			return Integer.valueOf(simpleDateFormat.format(date));
+		}
+	}
+	
+	@Contract(pure = true)
+	private int times(int hour, int minute) {
+		// 9 - 11 - 16 - 18 - 19:30
+		if (hour >= 9 && hour < 10) send_time = 11;
+		if (hour >= 10 && hour < 11)
+			if (minute <= 40)
+				send_time = 11;
+			else
+				send_time = 16;
+		
+		if (hour >= 11 && hour < 15) send_time = 16;
+		if (hour >= 15 && hour < 16)
+			if (minute <= 40)
+				send_time = 16;
+			else
+				send_time = 18;
+		
+		if (hour >= 16 && hour < 17) send_time = 18;
+		if (hour >= 17 && hour < 18)
+			if (minute <= 40)
+				send_time = 18;
+			else
+				send_time = 19;
+		
+		if (hour >= 18 && hour < 19)
+			if (minute <= 50)
+				send_time = 19;
+			else
+				send_time = 9;
+		
+		if (hour >= 19 && hour <= 23) send_time = 9;
+		if (hour >= 0 && hour < 8) send_time = 9;
+		if (hour >= 8 && hour < 9)
+			if (minute <= 40)
+				send_time = 9;
+			else
+				send_time = 11;
+		
+		return send_time;
+	}
+	
+	private void sendPrice(int price) {
+		if (price >= 30000) {
+			tExtend = 0;
+			status.setText("ارسال رایگان");
+			total_extend.setText(String.valueOf(tExtend) + " تومان");
+		} else {
+			tExtend = Integer.valueOf(db_main.getItemsDetails().get(0));
+			status.setText("خرید های کمتر از 30 هزار تومان با هزینه ارسال می شوند");
+			total_extend.setText(String.valueOf(tExtend) + " تومان");
+		}
+		String p = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
+		pay.setText("پرداخت - " + p);
+		total_pay.setText(String.valueOf(tPrice + tExtend) + " تومان");
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent data = new Intent();
+		setResult(CODE_STATUS, data);
+		super.onBackPressed();
 	}
 	
 	private class Adapter_Product extends RecyclerView.Adapter<Adapter_Product.ProductViewHolder> {
@@ -715,80 +789,5 @@ public class Activity_ShopCard extends AppCompatActivity {
 				}
 			}
 		}
-	}
-	
-	private int getTime(int type) {
-		Date date = new Date();
-		SimpleDateFormat simpleDateFormat;
-		if (type == 1) {
-			simpleDateFormat = new SimpleDateFormat("HH");
-			return Integer.valueOf(simpleDateFormat.format(date));
-		} else {
-			simpleDateFormat = new SimpleDateFormat("mm");
-			return Integer.valueOf(simpleDateFormat.format(date));
-		}
-	}
-	
-	@Contract(pure = true)
-	private int times(int hour, int minute) {
-		// 9 - 11 - 16 - 18 - 19:30
-		if (hour >= 9 && hour < 10) send_time = 11;
-		if (hour >= 10 && hour < 11)
-			if (minute <= 40)
-				send_time = 11;
-			else
-				send_time = 16;
-		
-		if (hour >= 11 && hour < 15) send_time = 16;
-		if (hour >= 15 && hour < 16)
-			if (minute <= 40)
-				send_time = 16;
-			else
-				send_time = 18;
-		
-		if (hour >= 16 && hour < 17) send_time = 18;
-		if (hour >= 17 && hour < 18)
-			if (minute <= 40)
-				send_time = 18;
-			else
-				send_time = 19;
-		
-		if (hour >= 18 && hour < 19)
-			if (minute <= 50)
-				send_time = 19;
-			else
-				send_time = 9;
-		
-		if (hour >= 19 && hour <= 23) send_time = 9;
-		if (hour >= 0 && hour < 8) send_time = 9;
-		if (hour >= 8 && hour < 9)
-			if (minute <= 40)
-				send_time = 9;
-			else
-				send_time = 11;
-		
-		return send_time;
-	}
-	
-	private void sendPrice(int price) {
-		if (price >= 30000) {
-			tExtend = 0;
-			status.setText("ارسال رایگان");
-			total_extend.setText(String.valueOf(tExtend) + " تومان");
-		} else {
-			tExtend = Integer.valueOf(db_main.getItemsDetails().get(0));
-			status.setText("خرید های کمتر از 30 هزار تومان با هزینه ارسال می شوند");
-			total_extend.setText(String.valueOf(tExtend) + " تومان");
-		}
-		String p = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
-		pay.setText("پرداخت - " + p);
-		total_pay.setText(String.valueOf(tPrice + tExtend) + " تومان");
-	}
-	
-	@Override
-	public void onBackPressed() {
-		Intent data = new Intent();
-		setResult(CODE_STATUS, data);
-		super.onBackPressed();
 	}
 }

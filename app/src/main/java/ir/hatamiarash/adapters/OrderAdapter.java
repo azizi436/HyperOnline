@@ -34,13 +34,13 @@ import java.util.List;
 import helper.Helper;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Order;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
+	private static String HOST;
+	ProgressDialog mProgressDialog;
 	private Context mContext;
 	private List<Order> orderList;
-	ProgressDialog mProgressDialog;
 	
 	public OrderAdapter(Context mContext, List<Order> orderList) {
 		this.mContext = mContext;
@@ -51,6 +51,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		mProgressDialog.setCancelable(true);
+		
+		HOST = mContext.getResources().getString(R.string.url_host);
+	}
+	
+	private static String formatCurrency(String value) {
+		String pattern = "###,###";
+		DecimalFormat myFormatter = new DecimalFormat(pattern);
+		return myFormatter.format(Double.valueOf(value));
 	}
 	
 	@Override
@@ -98,7 +106,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 				File f = new File(Environment.getExternalStorageDirectory(), "HO-Factors");
 				if (!f.exists())
 					f.mkdirs();
-				String url = URLs.factor_URL + order.code + ".pdf";
+				String url = mContext.getResources().getString(R.string.url_factor, HOST) + order.code + ".pdf";
 				final OrderAdapter.DownloadTask downloadTask = new OrderAdapter.DownloadTask(mContext, order.code);
 				downloadTask.execute(url);
 			}
@@ -120,6 +128,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		return orderList.size();
 	}
 	
+	@NonNull
+	private String formatDate(String Date) {
+		String[] split = Date.split(":");
+		return split[0] + "     " + split[1];
+	}
+	
 	class MyViewHolder extends RecyclerView.ViewHolder {
 		TextView id, date, stuffs, price, status, hour;
 		Button download;
@@ -134,12 +148,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 			hour = view.findViewById(R.id.hour);
 			download = view.findViewById(R.id.download);
 		}
-	}
-	
-	@NonNull
-	private String formatDate(String Date) {
-		String[] split = Date.split(":");
-		return split[0] + "     " + split[1];
 	}
 	
 	private class DownloadTask extends AsyncTask<String, Integer, String> {
@@ -250,11 +258,5 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 				}
 			}
 		}
-	}
-	
-	private static String formatCurrency(String value) {
-		String pattern = "###,###";
-		DecimalFormat myFormatter = new DecimalFormat(pattern);
-		return myFormatter.format(Double.valueOf(value));
 	}
 }

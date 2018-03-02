@@ -48,17 +48,16 @@ import helper.Helper;
 import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Product;
 
 public class Activity_Search extends AppCompatActivity implements CardBadge {
-	SearchView searchView = null;
-	private List<Product> productList;
-	private ProductAdapter_All productAdapter;
-	ProgressDialog pdLoading;
-	
+	private static String HOST;
 	@BindView(R.id.list)
 	public RecyclerView list;
+	SearchView searchView = null;
+	ProgressDialog pdLoading;
+	private List<Product> productList;
+	private ProductAdapter_All productAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,8 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 		final Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), getResources().getString(R.string.app_name_fa)));
 		setSupportActionBar(toolbar);
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		productList = new ArrayList<>();
 		
@@ -118,7 +119,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 	private void loadProduct(String word) {
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "search";
+			String URL = getResources().getString(R.string.url_api, HOST) + "search";
 			JSONObject params = new JSONObject();
 			params.put("word", word);
 			final String mRequestBody = params.toString();

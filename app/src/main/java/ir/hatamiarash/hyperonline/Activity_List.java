@@ -75,15 +75,14 @@ import models.Category;
 import models.Product;
 
 public class Activity_List extends AppCompatActivity implements CardBadge {
-	private Vibrator vibrator;
-	static Typeface persianTypeface;
-	public Drawer result = null;
-	SymmetricProgressBar progressBar, p;
 	public static SQLiteHandlerItem db_item;
-	SessionManager session;
-	private SweetAlertDialog progressDialog;
-	SharedPreferencesManager SPManager;
-	
+	static Typeface persianTypeface;
+	private static String _CAT;
+	private static String _CAT_ID;
+	private static String _TITLE;
+	private static String _LEVEL;
+	private static String HOST;
+	public Drawer result = null;
 	@BindView(R.id.list)
 	public RecyclerView list;
 	@BindView(R.id.category_list)
@@ -94,19 +93,18 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	public TextView title_product;
 	@BindView(R.id.title_category)
 	public TextView title_category;
-	private TextView itemMessagesBadgeTextView;
-	
-	private String url, category_id, parent_id;
 	public int list_category;
+	SymmetricProgressBar progressBar, p;
+	SessionManager session;
+	SharedPreferencesManager SPManager;
+	private Vibrator vibrator;
+	private SweetAlertDialog progressDialog;
+	private TextView itemMessagesBadgeTextView;
+	private String url, category_id, parent_id;
 	private List<Product> productList;
 	private List<Category> categoryList;
 	private ProductAdapter_All productAdapter;
 	private CategoryAdapter_Small categoryAdapter;
-	
-	private static String _CAT;
-	private static String _CAT_ID;
-	private static String _TITLE;
-	private static String _LEVEL;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,7 +119,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
 		progressBar = new SymmetricProgressBar(this);
 		progressBar.setId(R.id.id);
-		ViewGroup viewGroup = ((ViewGroup) this.findViewById(android.R.id.content));
+		ViewGroup viewGroup = this.findViewById(android.R.id.content);
 		viewGroup.addView(progressBar, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
 		p = viewGroup.findViewById(R.id.color_bar);
 		p.setVisibility(View.INVISIBLE);
@@ -129,6 +127,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		db_item = new SQLiteHandlerItem(getApplicationContext());
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
@@ -456,7 +456,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	private void loadProduct(int page) {
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "products_all";
+			String URL = getResources().getString(R.string.url_api, HOST) + "products_all";
 			JSONObject params = new JSONObject();
 			params.put("index", page);
 			params.put("cat", category_id);
@@ -535,7 +535,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		p.setVisibility(View.VISIBLE);
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "categories_all";
+			String URL = getResources().getString(R.string.url_api, HOST) + "categories_all";
 			JSONObject params = new JSONObject();
 			params.put("index", page);
 			params.put("level", level);

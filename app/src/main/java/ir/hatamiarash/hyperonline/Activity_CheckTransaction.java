@@ -38,10 +38,10 @@ import helper.FontHelper;
 import helper.Helper;
 import helper.SQLiteHandlerItem;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
 public class Activity_CheckTransaction extends AppCompatActivity {
 	public static SQLiteHandlerItem db_item;
+	private static String HOST;
 	SweetAlertDialog progressDialog;
 	Uri uri;
 	
@@ -53,6 +53,8 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		Intent intent = getIntent();
 		uri = intent.getData();
@@ -104,7 +106,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "complete_order";
+			String URL = getResources().getString(R.string.url_api, HOST) + "complete_order";
 			JSONObject params = new JSONObject();
 			params.put("id", id);
 			final String mRequestBody = params.toString();

@@ -4,7 +4,6 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,16 +39,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
-public class ResetPassword extends Activity {
-	private static final String TAG = ResetPassword.class.getSimpleName();
-	
+public class ResetPassword extends AppCompatActivity {
+	private static String HOST;
 	@BindView(R.id.phone)
 	public EditText inputPhone;
 	@BindView(R.id.btnSet)
 	public Button btnSet;
-	
 	private SweetAlertDialog progressDialog;
 	private Vibrator vibrator;
 	
@@ -62,6 +59,8 @@ public class ResetPassword extends Activity {
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		btnSet.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -82,7 +81,7 @@ public class ResetPassword extends Activity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "resetPassword";
+			String URL = getResources().getString(R.string.url_api, HOST) + "resetPassword";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phone);
 			final String mRequestBody = params.toString();

@@ -54,23 +54,21 @@ import helper.SQLiteHandler;
 import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Product;
 
 public class Activity_ListDetails extends AppCompatActivity implements CardBadge {
-	private Vibrator vibrator;
-	static Typeface persianTypeface;
-	public Drawer result = null;
-	SweetAlertDialog progressDialog;
 	public static SQLiteHandler db_user;
-	
-	private List<Product> productList;
-	private ProductAdapter_All productAdapter;
-	
+	static Typeface persianTypeface;
+	private static String HOST;
+	public Drawer result = null;
 	@BindView(R.id.toolbar)
 	public Toolbar toolbar;
 	@BindView(R.id.list)
 	public RecyclerView list;
+	SweetAlertDialog progressDialog;
+	private Vibrator vibrator;
+	private List<Product> productList;
+	private ProductAdapter_All productAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +83,8 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText("لطفا منتظر بمانید");
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		Intent i = getIntent();
 		final int type = Integer.valueOf(i.getStringExtra("type"));
@@ -112,7 +112,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 	private void loadProducts(int type, int page) {
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "products_detail";
+			String URL = getResources().getString(R.string.url_api, HOST) + "products_detail";
 			JSONObject params = new JSONObject();
 			params.put("type", String.valueOf(type));
 			params.put("index", String.valueOf(page));

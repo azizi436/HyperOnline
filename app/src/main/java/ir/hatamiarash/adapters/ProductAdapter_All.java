@@ -27,7 +27,6 @@ import helper.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Product;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -35,6 +34,7 @@ import static com.github.florent37.viewtooltip.ViewTooltip.ALIGN.CENTER;
 import static com.github.florent37.viewtooltip.ViewTooltip.Position.BOTTOM;
 
 public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.MyViewHolder> {
+	private static String HOST;
 	private CardBadge cardBadge;
 	private Context mContext;
 	private List<Product> productList;
@@ -51,6 +51,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
 			throw new ClassCastException("Activity must implement AdapterCallback.");
 		}
 		vibrator = (Vibrator) mContext.getSystemService(VIBRATOR_SERVICE);
+		HOST = mContext.getResources().getString(R.string.url_host);
 	}
 	
 	@Override
@@ -74,7 +75,7 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
 		if (String.valueOf(product.image).equals("null"))
 			Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
 		else
-			Glide.with(mContext).load(URLs.image_URL + String.valueOf(product.image)).into(holder.image);
+			Glide.with(mContext).load(mContext.getResources().getString(R.string.url_image, HOST) + String.valueOf(product.image)).into(holder.image);
 		
 		if (!product.description.equals("null"))
 			holder.info.setText(product.description);

@@ -47,11 +47,12 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
 public class Register extends AppCompatActivity {
-	private static final String TAG = Register.class.getSimpleName();
-	
+	private static String HOST;
+	SessionManager session;
+	SweetAlertDialog progressDialog;
+	SQLiteHandler db;
 	@BindView(R.id.btnConfirm)
 	Button btnRegister;
 	@BindView(R.id.btnChangePassword)
@@ -71,10 +72,6 @@ public class Register extends AppCompatActivity {
 	@BindView(R.id.city)
 	Spinner inputCity;
 	
-	SessionManager session;
-	SweetAlertDialog progressDialog;
-	SQLiteHandler db;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,6 +85,8 @@ public class Register extends AppCompatActivity {
 		inputProvince.setAdapter(adapter);
 		inputProvince.setEnabled(false);
 		inputName.requestFocus();
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
@@ -164,7 +163,7 @@ public class Register extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "users";
+			String URL = getResources().getString(R.string.url_api, HOST) + "users";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.NAME, name);
 			params.put(TAGs.ADDRESS, address);

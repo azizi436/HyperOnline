@@ -27,8 +27,8 @@ public class Web extends AppCompatActivity {
 		setContentView(R.layout.web);
 		Intent i = getIntent();
 		String address = i.getStringExtra(TAGs.ADDRESS);
-		page_content = (WebView) findViewById(R.id.web_view);
-		progressBar = (ProgressBar) findViewById(R.id.pbar);
+		page_content = findViewById(R.id.web_view);
+		progressBar = findViewById(R.id.pbar);
 		WebSettings webSettings = page_content.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setSupportZoom(false);

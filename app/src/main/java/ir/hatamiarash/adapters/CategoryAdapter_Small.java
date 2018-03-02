@@ -20,10 +20,10 @@ import java.util.List;
 
 import ir.hatamiarash.hyperonline.Activity_List;
 import ir.hatamiarash.hyperonline.R;
-import ir.hatamiarash.utils.URLs;
 import models.Category;
 
 public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_Small.MyViewHolder> {
+	private static String HOST;
 	private Context mContext;
 	private List<Category> categoryList;
 	private Vibrator vibrator;
@@ -32,6 +32,7 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
 		this.mContext = mContext;
 		this.categoryList = categoryList;
 		vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+		HOST = mContext.getResources().getString(R.string.url_host);
 	}
 	
 	@Override
@@ -51,7 +52,7 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
 		if (String.valueOf(category.image).equals("null"))
 			Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
 		else
-			Glide.with(mContext).load(URLs.image_URL + String.valueOf(category.image)).into(holder.image);
+			Glide.with(mContext).load(mContext.getResources().getString(R.string.url_image, HOST) + String.valueOf(category.image)).into(holder.image);
 		
 		holder.name.setOnClickListener(new MyClickListener(category.unique_id, category.name, category.level));
 		holder.image.setOnClickListener(new MyClickListener(category.unique_id, category.name, category.level));

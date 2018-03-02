@@ -4,12 +4,12 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
@@ -40,11 +40,14 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
-public class Login extends Activity {
-	private static final String TAG = Login.class.getSimpleName(); // class's tag for log
+public class Login extends AppCompatActivity {
+	private static String HOST;
 	
+	static {
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+	}
+
 	@BindView(R.id.btnLogin)
 	Button btnLogin;                          // login button
 	@BindView(R.id.btnLinkToRegisterScreen)
@@ -55,7 +58,6 @@ public class Login extends Activity {
 	IconEditText inputPhone;                      // email input
 	@BindView(R.id.password)
 	IconEditText inputPassword;                   // password input
-	
 	private SweetAlertDialog progressDialog;       // dialog window
 	private SessionManager session;           // session for check user logged status
 	private SQLiteHandler db;                 // users database
@@ -76,6 +78,8 @@ public class Login extends Activity {
 		db.CreateTable();                                                        // create users table
 		session = new SessionManager(getApplicationContext());
 		confirmManager = new ConfirmManager(getApplicationContext());
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		if (session.isLoggedIn()) {                                              // Check if user is already logged in or not
 			Intent i = new Intent(Login.this, Activity_Main.class);
@@ -116,7 +120,7 @@ public class Login extends Activity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "login";
+			String URL = getResources().getString(R.string.url_api, HOST) + "login";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phone);
 			params.put(TAGs.PASSWORD, password);
@@ -238,9 +242,5 @@ public class Login extends Activity {
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
-	}
-	
-	static {
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
 }

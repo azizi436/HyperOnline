@@ -30,9 +30,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import helper.FontHelper;
 import helper.Helper;
-import ir.hatamiarash.utils.URLs;
 
 public class Activity_Splash extends AppCompatActivity {
+	private static String HOST;
 	@BindView(R.id.logo)
 	public ImageView logo;
 	@BindView(R.id.spinner)
@@ -44,6 +44,8 @@ public class Activity_Splash extends AppCompatActivity {
 		setContentView(R.layout.splash);
 		ButterKnife.bind(this);
 		
+		HOST = getResources().getString(R.string.url_host);
+		
 		Wave animation = new Wave();
 		spinner.setIndeterminateDrawable(animation);
 		logo.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.logo));
@@ -52,7 +54,7 @@ public class Activity_Splash extends AppCompatActivity {
 	
 	private void CheckConnection() {
 		if (Helper.CheckInternet2(getApplicationContext())) {
-			new CheckInternet().execute(URLs.check_URL);
+			new CheckInternet().execute(getResources().getString(R.string.url_check, HOST));
 		} else {
 			new MaterialStyledDialog.Builder(Activity_Splash.this)
 					.setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))

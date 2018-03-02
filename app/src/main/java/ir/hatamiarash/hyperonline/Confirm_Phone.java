@@ -51,13 +51,12 @@ import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import ir.hatamiarash.utils.Values;
 
 public class Confirm_Phone extends AppCompatActivity {
-	private SweetAlertDialog progressDialog;
-	private ConfirmManager confirmManager;
-	
+	private static final String FORMAT = "%01d:%02d";
+	private static final int PIN_LENGTH = 4;
+	private static String HOST;
 	@BindView(R.id.button0)
 	Button button0;
 	@BindView(R.id.button1)
@@ -86,16 +85,38 @@ public class Confirm_Phone extends AppCompatActivity {
 	TextView help;
 	@BindView(R.id.phone)
 	TextView phone;
-	
-	
+	boolean keyPadLockedFlag = false;
+	boolean WaitFlag = false;
+	private SweetAlertDialog progressDialog;
+	private ConfirmManager confirmManager;
 	private String userEntered;
 	private String phoneNumber;
 	private String confirmCode;
-	boolean keyPadLockedFlag = false;
-	boolean WaitFlag = false;
-	private static final String FORMAT = "%01d:%02d";
-	private static final int PIN_LENGTH = 4;
 	private int count = 0;
+	private View.OnClickListener pinButtonHandler = new View.OnClickListener() {
+		public void onClick(View v) {
+			if (keyPadLockedFlag)
+				return;
+			Button pressedButton = (Button) v;
+			if (userEntered.length() < PIN_LENGTH) {
+				userEntered = userEntered + pressedButton.getText();
+				passwordInput.setText(userEntered);
+				passwordInput.setSelection(passwordInput.getText().toString().length());
+				if (userEntered.length() == PIN_LENGTH)
+					if (userEntered.equals(confirmCode)) {
+						syncServer();
+					} else {
+						Helper.MakeToast(getApplicationContext(), "کد وارد شده اشتباه است", TAGs.ERROR);
+						new LockKeyPadOperation().execute("");
+					}
+			} else {
+				passwordInput.setText("");
+				userEntered = "";
+				userEntered = userEntered + pressedButton.getText();
+				passwordInput.setText("8");
+			}
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +131,9 @@ public class Confirm_Phone extends AppCompatActivity {
 		phoneNumber = getIntent().getStringExtra(TAGs.PHONE);
 		phone.setText(phoneNumber);
 		
-		final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		HOST = getResources().getString(R.string.url_host);
+		
+		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		try {
 			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -178,66 +201,10 @@ public class Confirm_Phone extends AppCompatActivity {
 		}.start();
 	}
 	
-	private View.OnClickListener pinButtonHandler = new View.OnClickListener() {
-		public void onClick(View v) {
-			if (keyPadLockedFlag)
-				return;
-			Button pressedButton = (Button) v;
-			if (userEntered.length() < PIN_LENGTH) {
-				userEntered = userEntered + pressedButton.getText();
-				passwordInput.setText(userEntered);
-				passwordInput.setSelection(passwordInput.getText().toString().length());
-				if (userEntered.length() == PIN_LENGTH)
-					if (userEntered.equals(confirmCode)) {
-						syncServer();
-					} else {
-						Helper.MakeToast(getApplicationContext(), "کد وارد شده اشتباه است", TAGs.ERROR);
-						new LockKeyPadOperation().execute("");
-					}
-			} else {
-				passwordInput.setText("");
-				userEntered = "";
-				userEntered = userEntered + pressedButton.getText();
-				passwordInput.setText("8");
-			}
-		}
-	};
-	
 	@Override
 	public void onBackPressed() {
 		//App not allowed to go back to Parent activity until correct pin entered. comment following code
 		//super.onBackPressed();
-	}
-	
-	private class LockKeyPadOperation extends AsyncTask<String, Void, String> {
-		@Override
-		protected String doInBackground(String... params) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			return "Executed";
-		}
-		
-		@Override
-		protected void onPostExecute(String result) {
-			hideDialog();
-			passwordInput.setText("");
-			userEntered = "";
-			keyPadLockedFlag = false;
-			if (WaitFlag) {
-				time.setVisibility(View.VISIBLE);
-				Timer();
-				WaitFlag = false;
-			}
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			progressDialog.setTitleText("لطفا منتظر بمانید");
-			showDialog();
-		}
 	}
 	
 	private void showDialog() {
@@ -256,7 +223,7 @@ public class Confirm_Phone extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "verifyPhone";
+			String URL = getResources().getString(R.string.url_api, HOST) + "verifyPhone";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phoneNumber);
 			final String mRequestBody = params.toString();
@@ -327,7 +294,7 @@ public class Confirm_Phone extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "verifyPhoneOK";
+			String URL = getResources().getString(R.string.url_api, HOST) + "verifyPhoneOK";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phoneNumber);
 			final String mRequestBody = params.toString();
@@ -384,6 +351,37 @@ public class Confirm_Phone extends AppCompatActivity {
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private class LockKeyPadOperation extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return "Executed";
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			hideDialog();
+			passwordInput.setText("");
+			userEntered = "";
+			keyPadLockedFlag = false;
+			if (WaitFlag) {
+				time.setVisibility(View.VISIBLE);
+				Timer();
+				WaitFlag = false;
+			}
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			progressDialog.setTitleText("لطفا منتظر بمانید");
+			showDialog();
 		}
 	}
 }

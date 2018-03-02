@@ -47,25 +47,23 @@ import helper.SQLiteHandler;
 import ir.hatamiarash.adapters.OrderAdapter;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Order;
 
 public class Activity_UserOrders extends AppCompatActivity implements CardBadge {
-	private Vibrator vibrator;
-	static Typeface persianTypeface;
-	public Drawer result = null;
-	SweetAlertDialog progressDialog;
 	public static SQLiteHandler db_user;
-	
-	private List<Order> orderList;
-	private OrderAdapter orderAdapter;
-	
+	static Typeface persianTypeface;
+	private static String HOST;
+	public Drawer result = null;
 	@BindView(R.id.toolbar)
 	public Toolbar toolbar;
 	@BindView(R.id.list)
 	public RecyclerView list;
 	@BindView(R.id.title)
 	public TextView title;
+	SweetAlertDialog progressDialog;
+	private Vibrator vibrator;
+	private List<Order> orderList;
+	private OrderAdapter orderAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +77,8 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "لیست سفارشات"));
 		setSupportActionBar(toolbar);
@@ -100,7 +100,7 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 	private void loadOrders() {
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "user_orders";
+			String URL = getResources().getString(R.string.url_api, HOST) + "user_orders";
 			JSONObject params = new JSONObject();
 			params.put("unique_id", db_user.getUserDetails().get(TAGs.UID));
 			final String mRequestBody = params.toString();

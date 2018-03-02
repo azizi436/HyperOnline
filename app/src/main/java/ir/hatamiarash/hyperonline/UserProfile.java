@@ -4,7 +4,6 @@
 
 package ir.hatamiarash.hyperonline;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -13,6 +12,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,18 +52,9 @@ import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
-public class UserProfile extends Activity {
-	private static final String TAG = UserProfile.class.getSimpleName();
-	private SQLiteHandler db_user;
-	private SQLiteHandlerItem db_item;
-	private SQLiteHandlerSupport db_support;
-	private SessionManager session;
-	private ConfirmManager confirmManager;
-	private SweetAlertDialog progressDialog;
-	private Vibrator vibrator;
-	
+public class UserProfile extends AppCompatActivity {
+	private static String HOST;
 	@BindView(R.id.btnLogout)
 	public Button btnLogout;
 	@BindView(R.id.btnEdit)
@@ -82,6 +73,13 @@ public class UserProfile extends Activity {
 	public BlurView blurView;
 	@BindView(R.id.main)
 	public RelativeLayout main;
+	private SQLiteHandler db_user;
+	private SQLiteHandlerItem db_item;
+	private SQLiteHandlerSupport db_support;
+	private SessionManager session;
+	private ConfirmManager confirmManager;
+	private SweetAlertDialog progressDialog;
+	private Vibrator vibrator;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +97,8 @@ public class UserProfile extends Activity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		if (!session.isLoggedIn()) logoutUser();
 		
@@ -164,7 +164,7 @@ public class UserProfile extends Activity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "users/" + uid;
+			String URL = getResources().getString(R.string.url_api, HOST) + "users/" + uid;
 			JSONObject params = new JSONObject();
 			params.put(TAGs.UNIQUE_ID, uid);
 			final String mRequestBody = params.toString();
@@ -187,7 +187,7 @@ public class UserProfile extends Activity {
 								progressBar.setVisibility(View.VISIBLE);
 								Picasso
 										.with(getApplicationContext())
-										.load(URLs.image_URL + user.getString(TAGs.IMAGE))
+										.load(getResources().getString(R.string.url_image, HOST) + user.getString(TAGs.IMAGE))
 										.networkPolicy(NetworkPolicy.NO_CACHE)
 										.memoryPolicy(MemoryPolicy.NO_CACHE)
 										.into(User_Photo, new com.squareup.picasso.Callback() {

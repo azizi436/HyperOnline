@@ -59,16 +59,12 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import ir.hatamiarash.Image.PickerBuilder;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import volley.AppController;
 
 public class EditProfile extends AppCompatActivity {
 	private static final String TAG = EditProfile.class.getSimpleName();
-	private SweetAlertDialog progressDialog;
-	private SQLiteHandler db_user;
-	private Vibrator vibrator;
+	private static String HOST;
 	ConfirmManager confirmManager;
-	
 	@BindView(R.id.name)
 	IconEditText txtName;
 	@BindView(R.id.address)
@@ -83,7 +79,9 @@ public class EditProfile extends AppCompatActivity {
 	RelativeLayout add_photo;
 	@BindView(R.id.progress_bar)
 	ProgressBar progressBar;
-	
+	private SweetAlertDialog progressDialog;
+	private SQLiteHandler db_user;
+	private Vibrator vibrator;
 	private String uid, BACKUP_NAME, BACKUP_ADDRESS;
 	private Uri filePath;
 	
@@ -102,6 +100,8 @@ public class EditProfile extends AppCompatActivity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		if (Helper.CheckInternet(getApplicationContext()))
 			GetUser(db_user.getUserDetails().get(TAGs.UID));
@@ -148,7 +148,7 @@ public class EditProfile extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "users/" + unique_id;
+			String URL = getResources().getString(R.string.url_api, HOST) + "users/" + unique_id;
 			JSONObject params = new JSONObject();
 			params.put(TAGs.UNIQUE_ID, unique_id);
 			final String mRequestBody = params.toString();
@@ -172,7 +172,7 @@ public class EditProfile extends AppCompatActivity {
 								progressBar.setVisibility(View.VISIBLE);
 								Picasso
 										.with(getApplicationContext())
-										.load(URLs.image_URL + user.getString(TAGs.IMAGE))
+										.load(getResources().getString(R.string.url_image, HOST) + user.getString(TAGs.IMAGE))
 										.networkPolicy(NetworkPolicy.NO_CACHE)
 										.memoryPolicy(MemoryPolicy.NO_CACHE)
 										.into(image, new com.squareup.picasso.Callback() {
@@ -242,7 +242,7 @@ public class EditProfile extends AppCompatActivity {
 		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "user_update";
+			String URL = getResources().getString(R.string.url_api, HOST) + "user_update";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.NAME, name);
 			params.put(TAGs.ADDRESS, address);
@@ -331,7 +331,7 @@ public class EditProfile extends AppCompatActivity {
 		String string_req = "req_update";
 		progressDialog.setTitleText("لطفا منتظر بمانید");
 		showDialog();
-		StringRequest strReq = new StringRequest(Request.Method.POST, URLs.base_URL, new Response.Listener<String>() {
+		StringRequest strReq = new StringRequest(Request.Method.POST, getResources().getString(R.string.url_api, HOST), new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
 				Log.d(TAG, "Update Response: " + response);

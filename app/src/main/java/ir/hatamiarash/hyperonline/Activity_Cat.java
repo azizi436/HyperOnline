@@ -53,23 +53,21 @@ import helper.SQLiteHandler;
 import ir.hatamiarash.adapters.CategoryAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 import models.Category;
 
 public class Activity_Cat extends AppCompatActivity implements CardBadge {
-	private Vibrator vibrator;
-	static Typeface persianTypeface;
-	public Drawer result = null;
-	SweetAlertDialog progressDialog;
 	public static SQLiteHandler db_user;
-	
-	private List<Category> categoryList;
-	private CategoryAdapter_All categoryAdapter;
-	
+	static Typeface persianTypeface;
+	private static String HOST;
+	public Drawer result = null;
 	@BindView(R.id.toolbar)
 	public Toolbar toolbar;
 	@BindView(R.id.list)
 	public RecyclerView list;
+	SweetAlertDialog progressDialog;
+	private Vibrator vibrator;
+	private List<Category> categoryList;
+	private CategoryAdapter_All categoryAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +82,8 @@ public class Activity_Cat extends AppCompatActivity implements CardBadge {
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText("لطفا منتظر بمانید");
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		setSupportActionBar(toolbar);
 		try {
@@ -122,7 +122,7 @@ public class Activity_Cat extends AppCompatActivity implements CardBadge {
 	private void loadCategories(int page) {
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "categories";
+			String URL = getResources().getString(R.string.url_api, HOST) + "categories";
 			JSONObject params = new JSONObject();
 			params.put("index", String.valueOf(page));
 			final String mRequestBody = params.toString();

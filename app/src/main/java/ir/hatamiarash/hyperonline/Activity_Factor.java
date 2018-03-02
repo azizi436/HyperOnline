@@ -31,17 +31,17 @@ import java.net.URL;
 
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
 public class Activity_Factor extends Activity {
+	private static String HOST;
 	Button download, back;
 	LottieAnimationView animationView;
 	TextView pay_msg, loc_msg;
 	String ORDER_CODE;
 	long downloadId;
 	ProgressDialog mProgressDialog;
-	private Vibrator vibrator;
 	String folder_main = "HO-Factors";
+	private Vibrator vibrator;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,8 @@ public class Activity_Factor extends Activity {
 		mProgressDialog.setCancelable(true);
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		
+		HOST = getResources().getString(R.string.url_host);
+		
 		pay_msg.setText("از خرید شما متشکریم");
 		
 		animationView.setAnimation("heart.json");
@@ -76,7 +78,7 @@ public class Activity_Factor extends Activity {
 				File f = new File(Environment.getExternalStorageDirectory(), folder_main);
 				if (!f.exists())
 					f.mkdirs();
-				String url = URLs.factor_URL + ORDER_CODE + ".pdf";
+				String url = getResources().getString(R.string.url_factor, HOST) + ORDER_CODE + ".pdf";
 				final DownloadTask downloadTask = new DownloadTask(Activity_Factor.this);
 				downloadTask.execute(url);
 				back.setVisibility(View.VISIBLE);
@@ -98,6 +100,12 @@ public class Activity_Factor extends Activity {
 				finish();
 			}
 		});
+	}
+	
+	@Override
+	public void onBackPressed() {
+		//App not allowed to go back to Parent activity until correct pin entered. comment following code
+		//super.onBackPressed();
 	}
 	
 	private class DownloadTask extends AsyncTask<String, Integer, String> {
@@ -210,11 +218,5 @@ public class Activity_Factor extends Activity {
 				}
 			}
 		}
-	}
-	
-	@Override
-	public void onBackPressed() {
-		//App not allowed to go back to Parent activity until correct pin entered. comment following code
-		//super.onBackPressed();
 	}
 }

@@ -49,19 +49,18 @@ import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import ir.hatamiarash.utils.URLs;
 
 public class Activity_Comment extends AppCompatActivity {
+	public static SQLiteHandler db_user;
+	private static String HOST;
 	@BindView(R.id.comment_body)
 	public EditText body;
 	@BindView(R.id.comment_send)
 	public Button send;
 	@BindView(R.id.toolbar)
 	public Toolbar toolbar;
-	
 	private Vibrator vibrator;
 	private SessionManager session;
-	public static SQLiteHandler db_user;
 	private SweetAlertDialog progressDialog;
 	
 	@Override
@@ -76,6 +75,8 @@ public class Activity_Comment extends AppCompatActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+		
+		HOST = getResources().getString(R.string.url_host);
 		
 		setSupportActionBar(toolbar);
 		try {
@@ -126,7 +127,7 @@ public class Activity_Comment extends AppCompatActivity {
 	private void Send(final String body, final String sender) {
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = URLs.base_URL + "comments";
+			String URL = getResources().getString(R.string.url_api, HOST) + "comments";
 			JSONObject params = new JSONObject();
 			params.put("body", body);
 			params.put("sender", sender);
