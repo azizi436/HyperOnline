@@ -53,7 +53,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		
 		toolbar.setTitle(FontHelper.getSpannedString(getApplicationContext(), "صندوق پیام"));
 		setSupportActionBar(toolbar);

@@ -101,7 +101,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 	}
 	
 	private void CompleteOrder(final String id) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

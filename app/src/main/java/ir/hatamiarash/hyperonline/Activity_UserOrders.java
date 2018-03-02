@@ -104,7 +104,7 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 			JSONObject params = new JSONObject();
 			params.put("unique_id", db_user.getUserDetails().get(TAGs.UID));
 			final String mRequestBody = params.toString();
-			progressDialog.setTitleText("لطفا منتظر بمانید");
+			progressDialog.setTitleText(getResources().getString(R.string.wait));
 			showDialog();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

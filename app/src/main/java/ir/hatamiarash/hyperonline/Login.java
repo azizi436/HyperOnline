@@ -115,7 +115,7 @@ public class Login extends AppCompatActivity {
 	}
 	
 	private void CheckLogin(final String phone, final String password) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

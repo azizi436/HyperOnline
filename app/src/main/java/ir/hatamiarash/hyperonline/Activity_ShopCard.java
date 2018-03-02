@@ -302,7 +302,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	}
 	
 	private void sendOrder(final int payMethod) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -409,7 +409,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	}
 	
 	private void Check(final String CODE, final int level) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -523,7 +523,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	}
 	
 	private void SetOrder() {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

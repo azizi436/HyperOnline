@@ -308,7 +308,7 @@ public class ShopCard extends AppCompatActivity {
 	
 	private void Pay(final String API_KEY, final String AMOUNT) {
 		String string_req = "req_fetch";
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send", new Response.Listener<String>() {
 			@Override
@@ -359,7 +359,7 @@ public class ShopCard extends AppCompatActivity {
 	}
 	
 	private void Check(final String CODE, final int level) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -469,7 +469,7 @@ public class ShopCard extends AppCompatActivity {
 	}
 	
 	private void SetOrder(String CODE, final int payMethod) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

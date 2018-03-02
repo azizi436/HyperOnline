@@ -142,7 +142,7 @@ public class UserProfile extends AppCompatActivity {
 	
 	private void logoutUser() {
 		vibrator.vibrate(50);
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		session.setLogin(false);
 		confirmManager.setPhoneConfirm(false);
@@ -159,7 +159,7 @@ public class UserProfile extends AppCompatActivity {
 	}
 	
 	private void GetUser(final String uid) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

@@ -76,7 +76,7 @@ public class ResetPassword extends AppCompatActivity {
 	}
 	
 	private void resetPassword(final String phone) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

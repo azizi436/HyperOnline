@@ -218,7 +218,7 @@ public class Confirm_Phone extends AppCompatActivity {
 	}
 	
 	private void RequestCode() {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -289,7 +289,7 @@ public class Confirm_Phone extends AppCompatActivity {
 	}
 	
 	private void syncServer() {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -380,7 +380,7 @@ public class Confirm_Phone extends AppCompatActivity {
 		
 		@Override
 		protected void onPreExecute() {
-			progressDialog.setTitleText("لطفا منتظر بمانید");
+			progressDialog.setTitleText(getResources().getString(R.string.wait));
 			showDialog();
 		}
 	}

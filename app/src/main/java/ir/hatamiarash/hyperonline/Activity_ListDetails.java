@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -59,16 +58,17 @@ import models.Product;
 public class Activity_ListDetails extends AppCompatActivity implements CardBadge {
 	public static SQLiteHandler db_user;
 	static Typeface persianTypeface;
-	private static String HOST;
 	public Drawer result = null;
+	SweetAlertDialog progressDialog;
+	private List<Product> productList;
+	private ProductAdapter_All productAdapter;
+	
 	@BindView(R.id.toolbar)
 	public Toolbar toolbar;
 	@BindView(R.id.list)
 	public RecyclerView list;
-	SweetAlertDialog progressDialog;
-	private Vibrator vibrator;
-	private List<Product> productList;
-	private ProductAdapter_All productAdapter;
+	
+	private static String HOST;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,12 +77,11 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 		ButterKnife.bind(this);
 		
 		db_user = new SQLiteHandler(getApplicationContext());
-		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		
 		HOST = getResources().getString(R.string.url_host);
 		

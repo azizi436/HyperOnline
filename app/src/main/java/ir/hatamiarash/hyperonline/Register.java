@@ -158,7 +158,7 @@ public class Register extends AppCompatActivity {
 	}
 	
 	private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {

@@ -102,7 +102,7 @@ public class EditPassword extends AppCompatActivity {
 	}
 	
 	private void UpdatePassword(String pass) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -187,7 +187,7 @@ public class EditPassword extends AppCompatActivity {
 	
 	private void logoutUser() {
 		vibrator.vibrate(50);
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		session.setLogin(false);
 		confirmManager.setPhoneConfirm(false);

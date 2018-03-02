@@ -204,6 +204,7 @@ public class Activity_Main extends AppCompatActivity implements
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		VolleyQueue = Volley.newRequestQueue(this);
 		
 		HOST = getResources().getString(R.string.url_host);
@@ -631,7 +632,6 @@ public class Activity_Main extends AppCompatActivity implements
 	}
 	
 	private void FetchAllData() {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
 		showDialog();
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);

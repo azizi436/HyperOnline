@@ -132,7 +132,7 @@ public class Activity_Comment extends AppCompatActivity {
 			params.put("body", body);
 			params.put("sender", sender);
 			final String mRequestBody = params.toString();
-			progressDialog.setTitleText("لطفا منتظر بمانید");
+			progressDialog.setTitleText(getResources().getString(R.string.wait));
 			showDialog();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

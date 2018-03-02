@@ -143,7 +143,7 @@ public class EditProfile extends AppCompatActivity {
 	}
 	
 	private void GetUser(final String unique_id) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -237,7 +237,7 @@ public class EditProfile extends AppCompatActivity {
 	}
 	
 	private void UpdateUser(final String name, final String address) {
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -329,7 +329,7 @@ public class EditProfile extends AppCompatActivity {
 	private void UpdateUserWithPicture(final String name, final String address, final Uri filePath) {
 		// Tag used to cancel the request
 		String string_req = "req_update";
-		progressDialog.setTitleText("لطفا منتظر بمانید");
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		StringRequest strReq = new StringRequest(Request.Method.POST, getResources().getString(R.string.url_api, HOST), new Response.Listener<String>() {
 			@Override
