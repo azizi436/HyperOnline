@@ -109,7 +109,6 @@ public class Activity_Main extends AppCompatActivity implements
 		BaseSliderView.OnSliderClickListener,
 		ViewPagerEx.OnPageChangeListener,
 		CardBadge {
-	private static final String TAG = Activity_Main.class.getSimpleName();
 	public static Activity_Main pointer;             // use to finish activity from anywhere
 	public static SQLiteHandler db_user;             // items database
 	public static SQLiteHandlerItem db_item;         // items database
@@ -172,7 +171,6 @@ public class Activity_Main extends AppCompatActivity implements
 	private ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
 	private List<Category> categoryList;
 	private List<Product> newList, mostList, popularList, offList, collectionList;
-	private Menu menu;
 	private TextView itemMessagesBadgeTextView;
 	private SweetAlertDialog progressDialog;
 	private long back_pressed;                       // for check back key pressed count
@@ -245,9 +243,9 @@ public class Activity_Main extends AppCompatActivity implements
 					}
 				}
 		}
+		
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
-		
 		
 		PrimaryDrawerItem item_home = new CustomPrimaryDrawerItem().withIdentifier(1).withName("صفحه اصلی").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_home);
 		PrimaryDrawerItem item_categories = new CustomPrimaryDrawerItem().withIdentifier(2).withName("دسته بندی ها").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_grid_on);
@@ -579,6 +577,7 @@ public class Activity_Main extends AppCompatActivity implements
 				startActivity(i);
 			}
 		});
+		
 		title_most_more.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -588,6 +587,7 @@ public class Activity_Main extends AppCompatActivity implements
 				startActivity(i);
 			}
 		});
+		
 		title_collection_more.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -597,6 +597,7 @@ public class Activity_Main extends AppCompatActivity implements
 				startActivity(i);
 			}
 		});
+		
 		title_new_more.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -606,6 +607,7 @@ public class Activity_Main extends AppCompatActivity implements
 				startActivity(i);
 			}
 		});
+		
 		title_off_more.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -615,6 +617,7 @@ public class Activity_Main extends AppCompatActivity implements
 				startActivity(i);
 			}
 		});
+		
 		title_popular_more.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -946,7 +949,6 @@ public class Activity_Main extends AppCompatActivity implements
 		(badgeLayout.findViewById(R.id.badge_icon_button)).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				vibrator.vibrate(50);
-				//TODO : change activity
 				Intent i = new Intent(getApplicationContext(), Activity_ShopCard.class);
 				startActivityForResult(i, 100);
 			}

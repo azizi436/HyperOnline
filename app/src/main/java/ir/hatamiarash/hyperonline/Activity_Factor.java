@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,30 +28,33 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import butterknife.BindView;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
 
 public class Activity_Factor extends Activity {
-	private static String HOST;
-	Button download, back;
-	LottieAnimationView animationView;
-	TextView pay_msg, loc_msg;
-	String ORDER_CODE;
-	long downloadId;
 	ProgressDialog mProgressDialog;
-	String folder_main = "HO-Factors";
 	private Vibrator vibrator;
+	
+	@BindView(R.id.pay_log_download)
+	public Button download;
+	@BindView(R.id.pay_log_back)
+	public Button back;
+	@BindView(R.id.animation_view)
+	public LottieAnimationView animationView;
+	@BindView(R.id.pay_msg)
+	public TextView pay_msg;
+	@BindView(R.id.loc_msg)
+	public TextView loc_msg;
+	
+	private static String HOST;
+	String ORDER_CODE;
+	String folder_main = "HO-Factors";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pay_log);
-		
-		download = findViewById(R.id.pay_log_download);
-		back = findViewById(R.id.pay_log_back);
-		animationView = findViewById(R.id.animation_view);
-		pay_msg = findViewById(R.id.pay_msg);
-		loc_msg = findViewById(R.id.loc_msg);
 		
 		Intent intent = getIntent();
 		ORDER_CODE = intent.getStringExtra("order_code");
@@ -176,10 +178,14 @@ public class Activity_Factor extends Activity {
 			super.onPreExecute();
 			// take CPU lock to prevent CPU from going off if the user
 			// presses the power button during download
-			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-			mWakeLock.acquire();
-			mProgressDialog.show();
+			try {
+				PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+				assert pm != null;
+				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+				mWakeLock.acquire(2 * 60 * 1000L);
+				mProgressDialog.show();
+			} catch (NullPointerException ignore) {
+			}
 		}
 		
 		@Override
@@ -202,15 +208,11 @@ public class Activity_Factor extends Activity {
 				Helper.MakeToast(context, "فاکتور دانلود شد... در حال بازگشایی", TAGs.SUCCESS);
 				File file = new File(Environment.getExternalStorageDirectory() + "/" + folder_main + "/" + ORDER_CODE + ".pdf");
 				try {
-					Log.e("Factor", "open");
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					intent.setDataAndType(Uri.fromFile(file), "application/*");
 					intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					startActivity(Intent.createChooser(intent, "Open"));
 				} catch (Exception e) {
-					Log.e("Factor", "Can not open");
-					e.printStackTrace();
-//                    Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + folder_main + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					Uri mydir = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
 					intent.setDataAndType(mydir, "application/*");    // or use */*
