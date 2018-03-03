@@ -344,6 +344,7 @@ public class Helper {
 	}
 	
 	public static void uploadFile(Context context, final String selectedFilePath) {
+		int serverResponseCode = 0;
 		HttpURLConnection connection;
 		DataOutputStream dataOutputStream;
 		String lineEnd = "\r\n";
@@ -373,7 +374,6 @@ public class Helper {
 				dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
 				dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
 						+ selectedFilePath + "\"" + lineEnd);
-				
 				dataOutputStream.writeBytes(lineEnd);
 				bytesAvailable = fileInputStream.available();
 				bufferSize = Math.min(bytesAvailable, maxBufferSize);
@@ -385,9 +385,13 @@ public class Helper {
 					bufferSize = Math.min(bytesAvailable, maxBufferSize);
 					bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 				}
-				
 				dataOutputStream.writeBytes(lineEnd);
 				dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+				serverResponseCode = connection.getResponseCode();
+				String serverResponseMessage = connection.getResponseMessage();
+				Log.i("D", "SRI: " + serverResponseMessage + ": " + serverResponseCode);
+				if (serverResponseCode == 200)
+					Log.w("D", "O");
 				fileInputStream.close();
 				dataOutputStream.flush();
 				dataOutputStream.close();
