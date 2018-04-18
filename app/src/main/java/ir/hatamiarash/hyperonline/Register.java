@@ -49,10 +49,10 @@ import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 
 public class Register extends AppCompatActivity {
-	private static String HOST;
 	SessionManager session;
 	SweetAlertDialog progressDialog;
 	SQLiteHandler db;
+	
 	@BindView(R.id.btnConfirm)
 	Button btnRegister;
 	@BindView(R.id.btnChangePassword)
@@ -72,6 +72,8 @@ public class Register extends AppCompatActivity {
 	@BindView(R.id.city)
 	Spinner inputCity;
 	
+	private static String HOST;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,9 +83,12 @@ public class Register extends AppCompatActivity {
 		
 		inputPhone.setError(Register.this, "همانند نمونه 09123456789");
 		inputPassword.setError(Register.this, "حداقل 8 حرف");
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.provinces);
-		inputProvince.setAdapter(adapter);
+		
+		ArrayAdapter<String> provinceAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.provinces);
+		ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.cities);
+		inputProvince.setAdapter(provinceAdapter);
 		inputProvince.setEnabled(false);
+		inputCity.setAdapter(cityAdapter);
 		inputName.requestFocus();
 		
 		HOST = getResources().getString(R.string.url_host);
@@ -143,16 +148,6 @@ public class Register extends AppCompatActivity {
 				Intent i = new Intent(getApplicationContext(), Login.class);
 				startActivity(i);
 				finish();
-			}
-		});
-		inputProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-				LoadCity(inputProvince.getSelectedItem().toString());
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
 			}
 		});
 	}
@@ -260,139 +255,5 @@ public class Register extends AppCompatActivity {
 					}
 				})
 				.show();
-	}
-	
-	private void LoadCity(String province) {
-		ArrayAdapter<String> adapter;
-		switch (province) {
-			case "":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province0);
-				inputCity.setAdapter(adapter);
-				break;
-			case "آذربایجان شرقی":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province1);
-				inputCity.setAdapter(adapter);
-				break;
-			case "آذربایجان غربی":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province2);
-				inputCity.setAdapter(adapter);
-				break;
-			case "اردبیل":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province3);
-				inputCity.setAdapter(adapter);
-				break;
-			case "اصفهان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province4);
-				inputCity.setAdapter(adapter);
-				break;
-			case "البرز":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province5);
-				inputCity.setAdapter(adapter);
-				break;
-			case "ایلام":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province6);
-				inputCity.setAdapter(adapter);
-				break;
-			case "بوشهر":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province7);
-				inputCity.setAdapter(adapter);
-				break;
-			case "تهران":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province8);
-				inputCity.setAdapter(adapter);
-				break;
-			case "چهارمحال و بختیاری":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province9);
-				inputCity.setAdapter(adapter);
-				break;
-			case "خراسان جنوبی":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province10);
-				inputCity.setAdapter(adapter);
-				break;
-			case "خراسان رضوی":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province11);
-				inputCity.setAdapter(adapter);
-				break;
-			case "خراسان شمالی":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province12);
-				inputCity.setAdapter(adapter);
-				break;
-			case "خوزستان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province13);
-				inputCity.setAdapter(adapter);
-				break;
-			case "زنجان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province14);
-				inputCity.setAdapter(adapter);
-				break;
-			case "سمنان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province15);
-				inputCity.setAdapter(adapter);
-				break;
-			case "سیستان و بلوچستان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province16);
-				inputCity.setAdapter(adapter);
-				break;
-			case "فارس":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province17);
-				inputCity.setAdapter(adapter);
-				break;
-			case "قزوین":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province18);
-				inputCity.setAdapter(adapter);
-				break;
-			case "قم":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province19);
-				inputCity.setAdapter(adapter);
-				break;
-			case "کردستان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province20);
-				inputCity.setAdapter(adapter);
-				break;
-			case "کرمان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province21);
-				inputCity.setAdapter(adapter);
-				break;
-			case "کرمانشاه":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province22);
-				inputCity.setAdapter(adapter);
-				break;
-			case "کهگیلویه و بویراحمد":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province23);
-				inputCity.setAdapter(adapter);
-				break;
-			case "گلستان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province24);
-				inputCity.setAdapter(adapter);
-				break;
-			case "گیلان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province25);
-				inputCity.setAdapter(adapter);
-				break;
-			case "لرستان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province26);
-				inputCity.setAdapter(adapter);
-				break;
-			case "مازندران":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province27);
-				inputCity.setAdapter(adapter);
-				break;
-			case "مرکزی":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province28);
-				inputCity.setAdapter(adapter);
-				break;
-			case "هرمزگان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province29);
-				inputCity.setAdapter(adapter);
-				break;
-			case "همدان":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province30);
-				inputCity.setAdapter(adapter);
-				break;
-			case "یزد":
-				adapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.province31);
-				inputCity.setAdapter(adapter);
-				break;
-		}
 	}
 }
