@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.multidex.MultiDex;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -180,8 +181,9 @@ public class Activity_Main extends AppCompatActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_screen);
-		ButterKnife.bind(this);
 		
+		MultiDex.install(this);
+		ButterKnife.bind(this);
 		Pushe.initialize(getApplicationContext(), true);
 		Fabric.with(this, new Crashlytics());
 		
