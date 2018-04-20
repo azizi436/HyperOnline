@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -67,6 +66,8 @@ public class Register extends AppCompatActivity {
 	IconEditText inputAddress;
 	@BindView(R.id.new_password_2)
 	IconEditText inputPhone;
+	@BindView(R.id.presenter)
+	IconEditText inputPresenter;
 	@BindView(R.id.province)
 	Spinner inputProvince;
 	@BindView(R.id.city)
@@ -112,6 +113,8 @@ public class Register extends AppCompatActivity {
 				String password2 = inputPassword2.getText().toString();
 				String address = inputAddress.getText().toString();
 				String phone = inputPhone.getText().toString();
+				String presenter = inputPresenter.getText().toString();
+				presenter = (presenter.isEmpty()) ? "" : presenter;
 				
 				if (Helper.CheckInternet(Register.this))
 					if (!name.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !address.isEmpty() && !phone.isEmpty())
@@ -126,7 +129,8 @@ public class Register extends AppCompatActivity {
 													address,
 													phone,
 													inputProvince.getSelectedItem().toString(),
-													inputCity.getSelectedItem().toString()
+													inputCity.getSelectedItem().toString(),
+													presenter
 											);
 										else
 											Helper.MakeToast(Register.this, "شهر را انتخاب نمایید", TAGs.ERROR);
@@ -152,7 +156,7 @@ public class Register extends AppCompatActivity {
 		});
 	}
 	
-	private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city) {
+	private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city, final String presenter) {
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
@@ -166,6 +170,7 @@ public class Register extends AppCompatActivity {
 			params.put(TAGs.PASSWORD, password);
 			params.put(TAGs.STATE, state);
 			params.put(TAGs.CITY, city);
+			params.put("presenter", presenter);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

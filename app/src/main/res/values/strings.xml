@@ -32,6 +32,7 @@
 	<string name="hint_phone">شماره تلفن</string>
 	<string name="hint_desc">توضیحات</string>
 	<string name="hint_count">تعداد</string>
+	<string name="hint_presenter">معرف ( اختیاری )</string>
 
 	<string name="btn_logout">خروج</string>
 	<string name="btn_edit">ویرایش</string>
