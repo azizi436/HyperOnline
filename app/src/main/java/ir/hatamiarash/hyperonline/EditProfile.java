@@ -156,7 +156,6 @@ public class EditProfile extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("LOG_VOLLEY R", response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);

@@ -155,7 +155,6 @@ public class UserProfile extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("LOG_VOLLEY R", response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);
@@ -201,7 +200,7 @@ public class UserProfile extends AppCompatActivity {
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Log.e("LOG_VOLLEY E", error.toString());
+					Log.e("UserProfile E", error.toString());
 					hideDialog();
 					finish();
 				}

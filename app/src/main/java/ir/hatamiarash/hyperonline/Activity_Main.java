@@ -644,7 +644,6 @@ public class Activity_Main extends AppCompatActivity implements
 			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("LOG_VOLLEY R", response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);
@@ -987,8 +986,7 @@ public class Activity_Main extends AppCompatActivity implements
 		super.onResume();
 		try {
 			updateCartMenu();
-		} catch (NullPointerException e) {
-			Log.i("Badge", "Known Error");
+		} catch (NullPointerException ignore) {
 		}
 		
 		if (VERSION != 0) {
@@ -1056,7 +1054,6 @@ public class Activity_Main extends AppCompatActivity implements
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("CheckConfirm R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
@@ -1194,7 +1191,6 @@ public class Activity_Main extends AppCompatActivity implements
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("SyncServer R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						if (jObj.getBoolean(TAGs.ERROR))

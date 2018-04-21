@@ -116,7 +116,6 @@ public class EditPassword extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("UpdatePassword R", response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);

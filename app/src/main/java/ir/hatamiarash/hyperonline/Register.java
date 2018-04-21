@@ -176,7 +176,6 @@ public class Register extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);

@@ -131,7 +131,6 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 				@Override
 				public void onResponse(String response) {
 					pdLoading.dismiss();
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);

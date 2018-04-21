@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -111,7 +112,6 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 				@Override
 				public void onResponse(String response) {
 					hideDialog();
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
@@ -170,6 +170,11 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 					}
 				}
 			};
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
 			hideDialog();

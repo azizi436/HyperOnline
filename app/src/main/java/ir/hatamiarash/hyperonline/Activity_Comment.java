@@ -139,7 +139,6 @@ public class Activity_Comment extends AppCompatActivity {
 				@Override
 				public void onResponse(String response) {
 					hideDialog();
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
@@ -160,7 +159,7 @@ public class Activity_Comment extends AppCompatActivity {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					hideDialog();
-					Log.e("LOG_VOLLEY E", error.toString());
+					Log.e("Comment E", error.toString());
 				}
 			}) {
 				@NonNull

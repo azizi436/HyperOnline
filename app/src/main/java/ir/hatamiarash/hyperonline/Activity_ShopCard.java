@@ -422,7 +422,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("Check R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						int status = jObj.getInt("status");
@@ -543,7 +542,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
-					Log.i("SetOrder R", response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);

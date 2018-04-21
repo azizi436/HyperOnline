@@ -122,7 +122,6 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 				@Override
 				public void onResponse(String response) {
 					hideDialog();
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);

@@ -466,7 +466,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				@Override
 				public void onResponse(String response) {
 					p.setVisibility(View.INVISIBLE);
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
@@ -546,7 +545,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				@Override
 				public void onResponse(String response) {
 					p.setVisibility(View.INVISIBLE);
-					Log.i("LOG_VOLLEY R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
