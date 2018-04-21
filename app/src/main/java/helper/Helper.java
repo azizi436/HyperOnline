@@ -53,17 +53,18 @@ public class Helper {
 	}
 	
 	public static boolean CheckInternet2(Context context) {
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		PackageManager PM = context.getPackageManager();
-		if (PM.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
-			if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-					connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
-				return true;
-		} else {
-			if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
-				return true;
+		try {
+			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			PackageManager PM = context.getPackageManager();
+			if (PM.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+				return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+						connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+			} else {
+				return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+			}
+		} catch (NullPointerException ignore) {
+			return false;
 		}
-		return false;
 	}
 	
 	public static void MakeToast(Context context, String Message, String TAG) {
