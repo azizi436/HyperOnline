@@ -27,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -54,9 +53,9 @@ import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.Values;
 
 public class Confirm_Phone extends AppCompatActivity {
-	private static final String FORMAT = "%01d:%02d";
-	private static final int PIN_LENGTH = 4;
-	private static String HOST;
+	private SweetAlertDialog progressDialog;
+	private ConfirmManager confirmManager;
+	
 	@BindView(R.id.button0)
 	Button button0;
 	@BindView(R.id.button1)
@@ -85,14 +84,16 @@ public class Confirm_Phone extends AppCompatActivity {
 	TextView help;
 	@BindView(R.id.phone)
 	TextView phone;
-	boolean keyPadLockedFlag = false;
-	boolean WaitFlag = false;
-	private SweetAlertDialog progressDialog;
-	private ConfirmManager confirmManager;
+	
+	private boolean keyPadLockedFlag = false;
+	private boolean WaitFlag = false;
 	private String userEntered;
 	private String phoneNumber;
 	private String confirmCode;
-	private int count = 0;
+	private static final String FORMAT = "%01d:%02d";
+	private static final int PIN_LENGTH = 4;
+	private static String HOST;
+	
 	private View.OnClickListener pinButtonHandler = new View.OnClickListener() {
 		public void onClick(View v) {
 			if (keyPadLockedFlag)
@@ -128,6 +129,8 @@ public class Confirm_Phone extends AppCompatActivity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
+		
 		phoneNumber = getIntent().getStringExtra(TAGs.PHONE);
 		phone.setText(phoneNumber);
 		
@@ -183,7 +186,7 @@ public class Confirm_Phone extends AppCompatActivity {
 	}
 	
 	private void Timer() {
-		new CountDownTimer(60000, 1000) {
+		new CountDownTimer(90000, 1000) {
 			public void onTick(long millisUntilFinished) {
 				time.setText("" + String.format(
 						FORMAT,
@@ -195,7 +198,7 @@ public class Confirm_Phone extends AppCompatActivity {
 			
 			public void onFinish() {
 				help.setVisibility(View.VISIBLE);
-				time.setText("کد فعالسازی ارسال شده است. در صورت عدم دریافت کد ، پس از بررسی وضعیت تلفن همراه خود می توانید با ما در ارتباط باشید.");
+				time.setText("کد فعالسازی ارسال شده است. در صورت عدم دریافت کد ، پس از بررسی وضعیت تلفن همراه خود با ما در تماس باشید.");
 				time.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 			}
 		}.start();
@@ -218,7 +221,6 @@ public class Confirm_Phone extends AppCompatActivity {
 	}
 	
 	private void RequestCode() {
-		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -238,7 +240,7 @@ public class Confirm_Phone extends AppCompatActivity {
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
 							String code = jObj.getString("code");
-							confirmCode = String.valueOf(Integer.valueOf(code) - 4611);
+							confirmCode = String.valueOf(Integer.valueOf(code) - getResources().getInteger(R.integer.SMSCODE));
 							Timer();
 						} else {
 							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
@@ -267,7 +269,7 @@ public class Confirm_Phone extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
 						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
@@ -289,7 +291,6 @@ public class Confirm_Phone extends AppCompatActivity {
 	}
 	
 	private void syncServer() {
-		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -339,7 +340,7 @@ public class Confirm_Phone extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
 						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
@@ -348,6 +349,12 @@ public class Confirm_Phone extends AppCompatActivity {
 					}
 				}
 			};
+			// add retry policy to prevent send request twice
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -376,12 +383,6 @@ public class Confirm_Phone extends AppCompatActivity {
 				Timer();
 				WaitFlag = false;
 			}
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			progressDialog.setTitleText(getResources().getString(R.string.wait));
-			showDialog();
 		}
 	}
 }

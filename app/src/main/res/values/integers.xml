@@ -12,4 +12,5 @@
         <item>#f0b1ad</item>
     </array>
     <integer name="SymmetricProgressBar_duration">4000</integer>
+    <integer name="SMSCODE">4611</integer>
 </resources>
