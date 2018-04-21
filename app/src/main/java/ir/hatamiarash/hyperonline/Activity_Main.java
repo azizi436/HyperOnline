@@ -104,8 +104,6 @@ import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
 
-import static helper.Helper.isAppAvailable;
-
 public class Activity_Main extends AppCompatActivity implements
 		BaseSliderView.OnSliderClickListener,
 		ViewPagerEx.OnPageChangeListener,
@@ -1172,14 +1170,8 @@ public class Activity_Main extends AppCompatActivity implements
 						.onPositive(new MaterialDialog.SingleButtonCallback() {
 							@Override
 							public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-								String appName = "org.telegram.messenger";
-								boolean isAppInstalled = isAppAvailable(getApplicationContext(), appName);
-								if (isAppInstalled) {
-									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=online_hyper"));
-									startActivity(intent);
-								} else {
-									Helper.MakeToast(getApplicationContext(), "تلگرام نصب نشده است", TAGs.ERROR);
-								}
+								Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLs.Update_App));
+								startActivity(intent);
 							}
 						})
 						.show();
