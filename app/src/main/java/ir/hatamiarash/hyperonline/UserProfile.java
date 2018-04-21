@@ -5,8 +5,6 @@
 package ir.hatamiarash.hyperonline;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -15,14 +13,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -43,8 +39,6 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import eightbitlab.com.blurview.BlurView;
-import eightbitlab.com.blurview.RenderScriptBlur;
 import helper.ConfirmManager;
 import helper.Helper;
 import helper.SQLiteHandler;
@@ -52,27 +46,9 @@ import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 public class UserProfile extends AppCompatActivity {
-	private static String HOST;
-	@BindView(R.id.btnLogout)
-	public Button btnLogout;
-	@BindView(R.id.btnEdit)
-	public Button btnEdit;
-	@BindView(R.id.profile_name)
-	public TextView User_Name;
-	@BindView(R.id.profile_address)
-	public TextView User_Address;
-	@BindView(R.id.profile_phone)
-	public TextView User_Phone;
-	@BindView(R.id.image)
-	public ImageView User_Photo;
-	@BindView(R.id.progress_bar)
-	public ProgressBar progressBar;
-	@BindView(R.id.blurView)
-	public BlurView blurView;
-	@BindView(R.id.main)
-	public RelativeLayout main;
 	private SQLiteHandler db_user;
 	private SQLiteHandlerItem db_item;
 	private SQLiteHandlerSupport db_support;
@@ -80,6 +56,27 @@ public class UserProfile extends AppCompatActivity {
 	private ConfirmManager confirmManager;
 	private SweetAlertDialog progressDialog;
 	private Vibrator vibrator;
+	
+	@BindView(R.id.btnLogout)
+	public FancyButton btnLogout;
+	@BindView(R.id.btnEdit)
+	public FancyButton btnEdit;
+	@BindView(R.id.name)
+	public TextView User_Name;
+	@BindView(R.id.address)
+	public TextView User_Address;
+	@BindView(R.id.phone)
+	public TextView User_Phone;
+	@BindView(R.id.image)
+	public ImageView User_Photo;
+	@BindView(R.id.progress_bar)
+	public ProgressBar progressBar;
+	@BindView(R.id.user_info)
+	public RelativeLayout user_info;
+	@BindView(R.id.order_info)
+	public RelativeLayout order_info;
+	
+	private static String HOST;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,27 +96,15 @@ public class UserProfile extends AppCompatActivity {
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		
 		HOST = getResources().getString(R.string.url_host);
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		
 		if (!session.isLoggedIn()) logoutUser();
 		
-		final View decorView = getWindow().getDecorView();
-		//Activity's root View. Can also be root View of your layout (preferably)
-		final ViewGroup rootView = decorView.findViewById(android.R.id.content);
-		//set background, if your root layout doesn't have one
-		final Drawable windowBackground = decorView.getBackground();
+		user_info.setVisibility(View.INVISIBLE);
+		order_info.setVisibility(View.INVISIBLE);
 		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			blurView.setupWith(rootView)
-					.windowBackground(windowBackground)
-					.blurAlgorithm(new RenderScriptBlur(this))
-					.blurRadius(15);
-		} else
-			main.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.background));
-		
-		User_Name.setText("");
-		User_Address.setText("");
-		User_Phone.setText("");
-		blurView.setVisibility(View.INVISIBLE);
+		btnEdit.setCustomTextFont("sans.ttf");
+		btnLogout.setCustomTextFont("sans.ttf");
 		
 		btnLogout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -142,7 +127,6 @@ public class UserProfile extends AppCompatActivity {
 	
 	private void logoutUser() {
 		vibrator.vibrate(50);
-		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		session.setLogin(false);
 		confirmManager.setPhoneConfirm(false);
@@ -159,7 +143,6 @@ public class UserProfile extends AppCompatActivity {
 	}
 	
 	private void GetUser(final String uid) {
-		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		
 		try {
@@ -178,7 +161,9 @@ public class UserProfile extends AppCompatActivity {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
-							blurView.setVisibility(View.VISIBLE);
+							user_info.setVisibility(View.VISIBLE);
+							order_info.setVisibility(View.VISIBLE);
+							
 							JSONObject user = jObj.getJSONObject(TAGs.USER);
 							User_Name.setText(user.getString(TAGs.NAME));
 							User_Address.setText(user.getString(TAGs.ADDRESS));
@@ -218,6 +203,7 @@ public class UserProfile extends AppCompatActivity {
 				public void onErrorResponse(VolleyError error) {
 					Log.e("LOG_VOLLEY E", error.toString());
 					hideDialog();
+					finish();
 				}
 			}) {
 				@NonNull
@@ -229,7 +215,7 @@ public class UserProfile extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
 						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
@@ -238,6 +224,11 @@ public class UserProfile extends AppCompatActivity {
 					}
 				}
 			};
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
 			e.printStackTrace();
