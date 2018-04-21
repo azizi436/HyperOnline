@@ -15,7 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.android.volley.AuthFailureError;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +25,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -35,6 +38,7 @@ import java.io.UnsupportedEncodingException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import helper.ConfirmManager;
+import helper.FontHelper;
 import helper.Helper;
 import helper.IconEditText;
 import helper.SQLiteHandler;
@@ -47,7 +51,7 @@ public class Login extends AppCompatActivity {
 	static {
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
-
+	
 	@BindView(R.id.btnLogin)
 	Button btnLogin;                          // login button
 	@BindView(R.id.btnLinkToRegisterScreen)
@@ -147,45 +151,46 @@ public class Login extends AppCompatActivity {
 									user.getString(TAGs.STATE),
 									user.getString(TAGs.CITY)
 							);
-//                            if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
-//                                confirmManager.setPhoneConfirm(true);
-//                                confirmManager.setPhoneConfirm(false);
-//                                new MaterialStyledDialog.Builder(Login.this)
-//                                        .setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
-//                                        .setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید"))
-//                                        .setStyle(Style.HEADER_WITH_TITLE)
-//                                        .withDarkerOverlay(true)
-//                                        .withDialogAnimation(true)
-//                                        .setCancelable(true)
-//                                        .setPositiveText("باشه")
-//                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                                            @Override
-//                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                                                try {
-//                                                    Intent intent = new Intent(Login.this, Confirm_Phone.class);
-//                                                    intent.putExtra(TAGs.PHONE, user.getString(TAGs.PHONE));
-//                                                    startActivity(intent);
-//                                                    finish();
-//                                                } catch (JSONException e) {
-//                                                    e.printStackTrace();
-//                                                }
-//                                            }
-//                                        })
-//                                        .show();
-//                            } else {
-							confirmManager.setPhoneConfirm(true);
-							if (Integer.valueOf(user.getString("confirmed_info")) == 0)
-								confirmManager.setInfoConfirm(false);
-							else
-								confirmManager.setInfoConfirm(true);
-							
-							String msg = "سلام " + user.getString(TAGs.NAME);
-							Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
-							Intent intent = new Intent(Login.this, Activity_Main.class);
-							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-							startActivity(intent);
-							finish();
-//                            }
+							if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
+								confirmManager.setPhoneConfirm(true);
+								confirmManager.setPhoneConfirm(false);
+								new MaterialStyledDialog.Builder(Login.this)
+										.setTitle(FontHelper.getSpannedString(Login.this, "تایید حساب"))
+										.setDescription(FontHelper.getSpannedString(Login.this, "لطفا شماره تلفن خود را تایید کنید"))
+										.setStyle(Style.HEADER_WITH_TITLE)
+										.withDarkerOverlay(true)
+										.withDialogAnimation(true)
+										.setCancelable(false)
+										.setPositiveText("باشه")
+										.onPositive(new MaterialDialog.SingleButtonCallback() {
+											@Override
+											public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+												try {
+													Intent intent = new Intent(Login.this, Confirm_Phone.class);
+													intent.putExtra(TAGs.PHONE, user.getString(TAGs.PHONE));
+													startActivity(intent);
+													finish();
+												} catch (JSONException e) {
+													e.printStackTrace();
+												}
+											}
+										})
+										.show();
+							} else {
+								confirmManager.setPhoneConfirm(true);
+								
+								if (Integer.valueOf(user.getString("confirmed_info")) == 0)
+									confirmManager.setInfoConfirm(false);
+								else
+									confirmManager.setInfoConfirm(true);
+								
+								String msg = "سلام " + user.getString(TAGs.NAME);
+								Helper.MakeToast(Login.this, msg, TAGs.SUCCESS);
+								Intent intent = new Intent(Login.this, Activity_Main.class);
+								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								startActivity(intent);
+								finish();
+							}
 						} else {
 							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
 							Helper.MakeToast(Login.this, errorMsg, TAGs.ERROR); // show error message
@@ -213,7 +218,7 @@ public class Login extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
 						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {

@@ -227,7 +227,7 @@ public class Activity_Main extends AppCompatActivity implements
 			finish();
 		}
 		if (session.isLoggedIn()) {
-			CheckConfirm(db_user.getUserDetails().get(TAGs.PHONE));
+			CheckInfoConfirm(db_user.getUserDetails().get(TAGs.PHONE));
 			SyncServer(db_user.getUserDetails().get(TAGs.UID));
 		}
 		
@@ -1044,7 +1044,7 @@ public class Activity_Main extends AppCompatActivity implements
 		this.itemMessagesBadgeTextView.setVisibility(View.VISIBLE);
 	}
 	
-	private void CheckConfirm(String phone) {
+	private void CheckInfoConfirm(final String phone) {
 		try {
 			String URL = getResources().getString(R.string.url_api, HOST) + "checkConfirm";
 			JSONObject params = new JSONObject();
@@ -1058,14 +1058,37 @@ public class Activity_Main extends AppCompatActivity implements
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
-							String check = jObj.getString("c");
-							if (check.equals("OK")) {
+							String info_check = jObj.getString("c");
+							String phone_check = jObj.getString("p");
+							if (info_check.equals("OK")) {
 								if (!confirmManager.isInfoConfirm())
 									Helper.MakeToast(getApplicationContext(), "حساب شما تایید شد", TAGs.SUCCESS, Toast.LENGTH_LONG);
 								confirmManager.setInfoConfirm(true);
 							} else {
 								Helper.MakeToast(getApplicationContext(), "حساب شما تایید نشده است", TAGs.WARNING, Toast.LENGTH_LONG);
 								confirmManager.setInfoConfirm(false);
+							}
+							if (phone_check.equals("0")) {
+								confirmManager.setPhoneConfirm(true);
+								confirmManager.setPhoneConfirm(false);
+								new MaterialStyledDialog.Builder(Activity_Main.this)
+										.setTitle(FontHelper.getSpannedString(Activity_Main.this, "تایید حساب"))
+										.setDescription(FontHelper.getSpannedString(Activity_Main.this, "لطفا شماره تلفن خود را تایید کنید"))
+										.setStyle(Style.HEADER_WITH_TITLE)
+										.withDarkerOverlay(true)
+										.withDialogAnimation(true)
+										.setCancelable(false)
+										.setPositiveText("باشه")
+										.onPositive(new MaterialDialog.SingleButtonCallback() {
+											@Override
+											public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+												Intent intent = new Intent(Activity_Main.this, Confirm_Phone.class);
+												intent.putExtra(TAGs.PHONE, phone);
+												startActivity(intent);
+												finish();
+											}
+										})
+										.show();
 							}
 						} else {
 							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
