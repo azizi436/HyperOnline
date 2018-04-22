@@ -1069,7 +1069,6 @@ public class Activity_Main extends AppCompatActivity implements
 								confirmManager.setInfoConfirm(false);
 							}
 							if (phone_check.equals("0")) {
-								confirmManager.setPhoneConfirm(true);
 								confirmManager.setPhoneConfirm(false);
 								new MaterialStyledDialog.Builder(Activity_Main.this)
 										.setTitle(FontHelper.getSpannedString(Activity_Main.this, "تایید حساب"))
