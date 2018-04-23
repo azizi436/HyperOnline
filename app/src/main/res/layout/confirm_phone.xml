@@ -5,6 +5,7 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:fancy="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:fitsSystemWindows="true">
@@ -279,23 +280,52 @@
 			android:textStyle="bold"
 			app:my_font="iran_sans"/>
 
-		<helper.PersianTextView
-			android:id="@+id/help"
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
 			android:layout_marginBottom="30dp"
-			android:layout_marginEnd="10dp"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:layout_marginStart="10dp"
-			android:gravity="center_horizontal"
-			android:text="تماس با ما"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textColor="@color/accent"
-			android:textSize="20sp"
-			app:my_font="iran_sans"/>
+			android:orientation="horizontal"
+			android:paddingBottom="5dp"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:paddingTop="5dp">
+
+			<mehdi.sakout.fancybuttons.FancyButton
+				android:id="@+id/help"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="5dp"
+				android:layout_marginEnd="5dp"
+				android:layout_weight="1"
+				android:padding="12dp"
+				fancy:fb_borderColor="#FFFFFF"
+				fancy:fb_borderWidth="1dp"
+				fancy:fb_defaultColor="@color/accent"
+				fancy:fb_focusColor="@color/colorPrimaryDark"
+				fancy:fb_radius="30dp"
+				fancy:fb_text="تماس با ما"
+				fancy:fb_textColor="#FFFFFF"
+				fancy:fb_textSize="20sp"/>
+
+			<mehdi.sakout.fancybuttons.FancyButton
+				android:id="@+id/logout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="5dp"
+				android:layout_marginStart="5dp"
+				android:layout_weight="1"
+				android:padding="12dp"
+				fancy:fb_borderColor="@color/accent"
+				fancy:fb_borderWidth="1dp"
+				fancy:fb_defaultColor="@color/white"
+				fancy:fb_focusColor="@color/white"
+				fancy:fb_radius="30dp"
+				fancy:fb_text="خروج"
+				fancy:fb_textColor="@color/accent"
+				fancy:fb_textSize="20sp"/>
+
+		</LinearLayout>
 
 	</RelativeLayout>
 </RelativeLayout>
