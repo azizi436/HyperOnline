@@ -4,8 +4,12 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,6 +17,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +32,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,6 +42,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -49,12 +58,15 @@ import butterknife.ButterKnife;
 import helper.ConfirmManager;
 import helper.FontHelper;
 import helper.Helper;
+import ir.hatamiarash.interfaces.SmsListener;
+import ir.hatamiarash.receivers.SmsReceiver;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.Values;
 
-public class Confirm_Phone extends AppCompatActivity {
+public class Confirm_Phone extends AppCompatActivity implements SmsListener {
 	private SweetAlertDialog progressDialog;
 	private ConfirmManager confirmManager;
+	SmsReceiver receiver;
 	
 	@BindView(R.id.button0)
 	Button button0;
@@ -172,10 +184,13 @@ public class Confirm_Phone extends AppCompatActivity {
 		button9.setOnClickListener(pinButtonHandler);
 		
 		time.setVisibility(View.VISIBLE);
-		
-		RequestCode();
-		
 		help.setVisibility(View.GONE);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+			getPermission(Confirm_Phone.this);
+		else
+			RequestCode();
+		
 		help.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -382,6 +397,73 @@ public class Confirm_Phone extends AppCompatActivity {
 				time.setVisibility(View.VISIBLE);
 				Timer();
 				WaitFlag = false;
+			}
+		}
+	}
+	
+	public void getPermission(final Activity activity) {
+		if (Helper.checkSMSPermission(Confirm_Phone.this))
+			new MaterialStyledDialog.Builder(activity)
+					.setTitle(FontHelper.getSpannedString(activity, "تایید پیامکی"))
+					.setDescription(FontHelper.getSpannedString(activity, "جهت تایید خودکار شماره تلفن هایپرآنلاین نیاز به دسترسی دارد"))
+					.setStyle(Style.HEADER_WITH_TITLE)
+					.withDarkerOverlay(true)
+					.withDialogAnimation(true)
+					.setCancelable(false)
+					.setPositiveText("باشه")
+					.setNegativeText("خیر")
+					.onPositive(new MaterialDialog.SingleButtonCallback() {
+						@Override
+						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+							getPermission();
+						}
+					})
+					.onNegative(new MaterialDialog.SingleButtonCallback() {
+						@Override
+						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+							RequestCode();
+						}
+					})
+					.show();
+		else {
+			registerSmsListener();
+			RequestCode();
+		}
+	}
+	
+	@Override
+	public void handleSms(String sender, String message) {
+		String sms_code = message.replaceAll("[^0-9]", "");
+		if (sms_code.equals(confirmCode)) {
+			syncServer();
+			unregisterReceiver(receiver);
+		}
+	}
+	
+	private void registerSmsListener() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+		filter.setPriority(2147483647);
+		receiver = new SmsReceiver(this);
+		registerReceiver(receiver, filter);
+	}
+	
+	private void getPermission() {
+		if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS}, 4621);
+		}
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case 4621: {
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					registerSmsListener();
+					RequestCode();
+				} else {
+					RequestCode();
+				}
 			}
 		}
 	}
