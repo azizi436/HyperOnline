@@ -85,7 +85,7 @@ public class Helper {
 			CustomToast.custom(context, Message, R.drawable.ic_error, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.red), DURATION, true, true).show();
 	}
 	
-	static public void GetPermissions(Activity activity, Context context) {
+	static public void getPermissions(Activity activity, Context context) {
 		final int REQUEST_ID_MULTIPLE_PERMISSIONS = 4611;
 		
 		int location2 = ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -119,6 +119,30 @@ public class Helper {
 		if (!listPermissionsNeeded.isEmpty())
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
 					(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
+	}
+	
+	static public void getSMSPermission(Activity activity) {
+		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
+		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
+		List<String> listPermissionsNeeded = new ArrayList<>();
+		
+		if (sms != PackageManager.PERMISSION_GRANTED)
+			listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+		
+		if (sms2 != PackageManager.PERMISSION_GRANTED)
+			listPermissionsNeeded.add(Manifest.permission.BROADCAST_SMS);
+		
+		if (!listPermissionsNeeded.isEmpty())
+			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 4611);
+	}
+	
+	static public boolean checkSMSPermission(Activity activity){
+		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
+		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
+		int count = 0;
+		if (sms != PackageManager.PERMISSION_GRANTED) count++;
+		if (sms2 != PackageManager.PERMISSION_GRANTED) count++;
+		return count == 2;
 	}
 	
 	@NonNull

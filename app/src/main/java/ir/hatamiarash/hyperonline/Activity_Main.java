@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -186,7 +187,9 @@ public class Activity_Main extends AppCompatActivity implements
 		Fabric.with(this, new Crashlytics());
 		
 		Helper.CheckInternet(getApplicationContext());
-		Helper.GetPermissions(this, getApplicationContext());
+		Helper.getPermissions(this, getApplicationContext());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+			getPermission(this);
 		
 		pointer = this;
 		session = new SessionManager(getApplicationContext());
@@ -508,8 +511,6 @@ public class Activity_Main extends AppCompatActivity implements
 				.withSavedInstance(savedInstanceState)
 				.withDrawerGravity(Gravity.END)
 				.build();
-		
-		Helper.GetPermissions(this, getApplicationContext());
 		
 		FetchAllData();
 		
@@ -1249,5 +1250,24 @@ public class Activity_Main extends AppCompatActivity implements
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void getPermission(final Activity activity) {
+		if (Helper.checkSMSPermission(activity))
+			new MaterialStyledDialog.Builder(activity)
+					.setTitle(FontHelper.getSpannedString(activity, "تایید پیامکی"))
+					.setDescription(FontHelper.getSpannedString(activity, "جهت تایید خودکار شماره تلفن هایپرآنلاین نیاز به دسترسی دارد"))
+					.setStyle(Style.HEADER_WITH_TITLE)
+					.withDarkerOverlay(true)
+					.withDialogAnimation(true)
+					.setCancelable(false)
+					.setPositiveText("باشه")
+					.onPositive(new MaterialDialog.SingleButtonCallback() {
+						@Override
+						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+							Helper.getSMSPermission(activity);
+						}
+					})
+					.show();
 	}
 }
