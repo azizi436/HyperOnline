@@ -5,6 +5,7 @@
 package ir.hatamiarash.hyperonline;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -104,6 +105,8 @@ import ir.hatamiarash.utils.URLs;
 import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Main extends AppCompatActivity implements
 		BaseSliderView.OnSliderClickListener,
@@ -185,6 +188,11 @@ public class Activity_Main extends AppCompatActivity implements
 		ButterKnife.bind(this);
 		Pushe.initialize(getApplicationContext(), true);
 		Fabric.with(this, new Crashlytics());
+		CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+				.setDefaultFontPath("fonts/sans.ttf")
+				.setFontAttrId(R.attr.fontPath)
+				.build()
+		);
 		
 		Helper.CheckInternet(getApplicationContext());
 		Helper.getPermissions(this, getApplicationContext());
@@ -1269,5 +1277,10 @@ public class Activity_Main extends AppCompatActivity implements
 						}
 					})
 					.show();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

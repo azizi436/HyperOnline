@@ -68,6 +68,7 @@ import ir.hatamiarash.receivers.SmsReceiver;
 import ir.hatamiarash.utils.TAGs;
 import ir.hatamiarash.utils.Values;
 import mehdi.sakout.fancybuttons.FancyButton;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Confirm_Phone extends AppCompatActivity implements SmsListener {
 	private SweetAlertDialog progressDialog;
@@ -510,5 +511,10 @@ public class Confirm_Phone extends AppCompatActivity implements SmsListener {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }
