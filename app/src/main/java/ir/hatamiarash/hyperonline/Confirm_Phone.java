@@ -123,6 +123,7 @@ public class Confirm_Phone extends AppCompatActivity implements SmsListener {
 	
 	private View.OnClickListener pinButtonHandler = new View.OnClickListener() {
 		public void onClick(View v) {
+			vibrator.vibrate(50);
 			if (keyPadLockedFlag)
 				return;
 			Button pressedButton = (Button) v;
