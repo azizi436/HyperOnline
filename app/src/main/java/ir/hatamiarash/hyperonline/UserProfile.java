@@ -41,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import helper.ConfirmManager;
 import helper.Helper;
+import helper.PriceHelper;
 import helper.SQLiteHandler;
 import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerSupport;
@@ -67,6 +68,10 @@ public class UserProfile extends AppCompatActivity {
 	public TextView User_Address;
 	@BindView(R.id.phone)
 	public TextView User_Phone;
+	@BindView(R.id.tPrice)
+	public TextView tPrice;
+	@BindView(R.id.tCount)
+	public TextView tCount;
 	@BindView(R.id.image)
 	public ImageView User_Photo;
 	@BindView(R.id.progress_bar)
@@ -186,6 +191,10 @@ public class UserProfile extends AppCompatActivity {
 											}
 										});
 							}
+							
+							JSONObject orders = jObj.getJSONObject("orders");
+							tCount.setText(orders.getString("count"));
+							tPrice.setText(PriceHelper.formatPrice(orders.getString("price")));
 						} else {
 							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
 							Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
