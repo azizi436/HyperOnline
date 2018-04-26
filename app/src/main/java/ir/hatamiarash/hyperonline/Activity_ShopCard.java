@@ -182,11 +182,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 						String extend = "";
 						if (send_time == 9 || send_time == 11)
 							extend = " صبح";
-						if (send_time == 16 || send_time == 18 || send_time == 19)
+						if (send_time == 16 || send_time == 18 || send_time == 20)
 							extend = " عصر";
 						ORDER_HOUR = time;
 						String message;
-						if (send_time == 19)
+						if (send_time == 20)
 							message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد.";
 						else
 							message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد.";
@@ -625,6 +625,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	@Contract(pure = true)
 	private int times(int hour, int minute) {
 		// 9 - 11 - 16 - 18 - 19:30
+		// 9 - 11 - 16 - 18 - 20:30
 		if (hour >= 9 && hour < 10) send_time = 11;
 		if (hour >= 10 && hour < 11)
 			if (minute <= 40)
@@ -644,11 +645,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 			if (minute <= 40)
 				send_time = 18;
 			else
-				send_time = 19;
+				send_time = 20;
 		
-		if (hour >= 18 && hour < 19)
+		if (hour >= 18 && hour < 20)
 			if (minute <= 50)
-				send_time = 19;
+				send_time = 20;
 			else
 				send_time = 9;
 		
