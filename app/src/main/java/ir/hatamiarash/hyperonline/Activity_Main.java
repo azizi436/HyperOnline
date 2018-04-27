@@ -57,6 +57,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.flurry.android.FlurryAgent;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -190,6 +191,9 @@ public class Activity_Main extends AppCompatActivity implements
 		ButterKnife.bind(this);
 		Pushe.initialize(getApplicationContext(), true);
 		Fabric.with(this, new Crashlytics());
+		new FlurryAgent.Builder()
+				.withLogEnabled(true)
+				.build(this, "4WKBBTSJTHP7P8RBTDTH");
 		CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
 				.setDefaultFontPath("fonts/sans.ttf")
 				.setFontAttrId(R.attr.fontPath)
