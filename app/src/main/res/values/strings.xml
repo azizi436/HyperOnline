@@ -84,5 +84,4 @@
 	<string name="url_factor">https://%1$s/ftp/factors/</string>
 	<string name="url_pay">https://%1$s/android/pay/</string>
 	<string name="url_check">https://%1$s/api/200</string>
-	<string name="url_dcim">https://%1$s/api/dcim</string>
 </resources>
