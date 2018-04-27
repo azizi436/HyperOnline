@@ -1121,7 +1121,7 @@ public class Activity_Main extends AppCompatActivity implements
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
 						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
