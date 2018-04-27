@@ -28,12 +28,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -44,7 +42,6 @@ import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
@@ -75,36 +72,40 @@ import models.Category;
 import models.Product;
 
 public class Activity_List extends AppCompatActivity implements CardBadge {
-	public static SQLiteHandlerItem db_item;
-	static Typeface persianTypeface;
-	private static String _CAT;
-	private static String _CAT_ID;
-	private static String _TITLE;
-	private static String _LEVEL;
-	private static String HOST;
-	public Drawer result = null;
-	@BindView(R.id.list)
-	public RecyclerView list;
-	@BindView(R.id.category_list)
-	public RecyclerView category_list;
-	@BindView(R.id.toolbar)
-	public Toolbar toolbar;
-	@BindView(R.id.title_product)
-	public TextView title_product;
-	@BindView(R.id.title_category)
-	public TextView title_category;
-	public int list_category;
+	SQLiteHandlerItem db_item;
+	Typeface persianTypeface;
+	Drawer result = null;
 	SymmetricProgressBar progressBar, p;
 	SessionManager session;
 	SharedPreferencesManager SPManager;
-	private Vibrator vibrator;
-	private SweetAlertDialog progressDialog;
-	private TextView itemMessagesBadgeTextView;
-	private String url, category_id, parent_id;
-	private List<Product> productList;
-	private List<Category> categoryList;
-	private ProductAdapter_All productAdapter;
-	private CategoryAdapter_Small categoryAdapter;
+	Vibrator vibrator;
+	TextView itemMessagesBadgeTextView;
+	List<Product> productList;
+	List<Category> categoryList;
+	ProductAdapter_All productAdapter;
+	CategoryAdapter_Small categoryAdapter;
+	Response.Listener<String> productListener;
+	Response.Listener<String> categoryListener;
+	Response.ErrorListener errorListener;
+	
+	@BindView(R.id.list)
+	RecyclerView list;
+	@BindView(R.id.category_list)
+	RecyclerView category_list;
+	@BindView(R.id.toolbar)
+	Toolbar toolbar;
+	@BindView(R.id.title_product)
+	TextView title_product;
+	@BindView(R.id.title_category)
+	TextView title_category;
+	
+	int list_category;
+	String category_id;
+	String _CAT;
+	String _CAT_ID;
+	String _TITLE;
+	String _LEVEL;
+	String HOST;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,30 +114,31 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		ButterKnife.bind(this);
 		
 		session = new SessionManager(getApplicationContext());
+		db_item = new SQLiteHandlerItem(getApplicationContext());
 		SPManager = new SharedPreferencesManager(getApplicationContext());
-		list_category = Integer.valueOf(getIntent().getStringExtra("cat"));
+		list_category = Integer.valueOf(getIntent().getStringExtra(TAGs.CATEGORY));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
+		
 		progressBar = new SymmetricProgressBar(this);
 		progressBar.setId(R.id.id);
 		ViewGroup viewGroup = this.findViewById(android.R.id.content);
 		viewGroup.addView(progressBar, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
 		p = viewGroup.findViewById(R.id.color_bar);
 		p.setVisibility(View.INVISIBLE);
-		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-		progressDialog.setCancelable(false);
-		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-		db_item = new SQLiteHandlerItem(getApplicationContext());
 		
 		HOST = getResources().getString(R.string.url_host);
 		
-		Intent intent = getIntent();
-		Bundle extras = intent.getExtras();
+		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			if (extras.containsKey("cat")) _CAT = extras.getString("cat", "");
-			if (extras.containsKey("cat_id")) _CAT_ID = extras.getString("cat_id", "");
-			if (extras.containsKey("title")) _TITLE = extras.getString("title", "");
-			if (extras.containsKey("level")) _LEVEL = extras.getString("level", "");
+			if (extras.containsKey(TAGs.CATEGORY))
+				_CAT = extras.getString(TAGs.CATEGORY, TAGs.EMPTY);
+			if (extras.containsKey(TAGs.CATEGORY_ID))
+				_CAT_ID = extras.getString(TAGs.CATEGORY_ID, TAGs.EMPTY);
+			if (extras.containsKey(TAGs.TITLE))
+				_TITLE = extras.getString(TAGs.TITLE, TAGs.EMPTY);
+			if (extras.containsKey(TAGs.LEVEL))
+				_LEVEL = extras.getString(TAGs.LEVEL, TAGs.EMPTY);
 		}
 		
 		if (list_category == 1) {
@@ -144,7 +146,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			title_category.setVisibility(View.GONE);
 		}
 		
-		_CAT_ID = category_id = getIntent().getStringExtra("cat_id");
+		_CAT_ID = category_id = getIntent().getStringExtra(TAGs.CATEGORY_ID);
 		Drawable logo = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_logo_wide);
 		toolbar.setLogo(logo);
 		for (int i = 0; i < toolbar.getChildCount(); i++) {
@@ -276,37 +278,37 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 							}
 							if (item == 3) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "1");
+								i.putExtra(TAGs.TYPE, "1");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 4) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "2");
+								i.putExtra(TAGs.TYPE, "2");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 5) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "3");
+								i.putExtra(TAGs.TYPE, "3");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 6) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "4");
+								i.putExtra(TAGs.TYPE, "4");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 7) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "5");
+								i.putExtra(TAGs.TYPE, "5");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 8) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "6");
+								i.putExtra(TAGs.TYPE, "6");
 								startActivity(i);
 								result.closeDrawer();
 							}
@@ -327,7 +329,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 									result.closeDrawer();
 								} else {
 									Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
-									Intent i = new Intent(getApplicationContext(), Login.class);
+									Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 									startActivity(i);
 								}
 							}
@@ -345,9 +347,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 							if (item == 14) {
 								Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hyper-online.ir"));
 								startActivity(i);
-							}
-							if (item == 15) {
-							
 							}
 							if (item == 16) {
 								try {
@@ -373,9 +372,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 								i.putExtra(TAGs.ADDRESS, "help");
 								startActivity(i);
 							}
-							if (item == 19) {
-							
-							}
 							if (item == 20) {
 								Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
 								i.putExtra(TAGs.TITLE, "درباره ما");
@@ -385,11 +381,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 							if (item == 21) {
 								if (Helper.CheckInternet(getApplicationContext())) {
 									if (session.isLoggedIn()) {
-										Intent i = new Intent(getApplicationContext(), UserProfile.class);
+										Intent i = new Intent(getApplicationContext(), Activity_UserProfile.class);
 										startActivity(i);
 									} else {
 										Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
-										Intent i = new Intent(getApplicationContext(), Login.class);
+										Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 										startActivity(i);
 									}
 								} else
@@ -406,11 +402,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 								startActivity(i);
 							}
 							if (item == 24) {
-								Intent i = new Intent(getApplicationContext(), Login.class);
+								Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 								startActivity(i);
 							}
 							if (item == 25) {
-								Intent i = new Intent(getApplicationContext(), Register.class);
+								Intent i = new Intent(getApplicationContext(), Activity_Register.class);
 								startActivity(i);
 							}
 						}
@@ -421,6 +417,106 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				.withSavedInstance(savedInstanceState)
 				.withDrawerGravity(Gravity.END)
 				.build();
+		
+		productListener = new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				p.setVisibility(View.INVISIBLE);
+				try {
+					JSONObject jObj = new JSONObject(response);
+					boolean error = jObj.getBoolean(TAGs.ERROR);
+					if (!error) {
+						JSONArray products = jObj.getJSONArray("product");
+						
+						for (int i = 0; i < products.length(); i++) {
+							JSONObject product = products.getJSONObject(i);
+							
+							productList.add(new Product(
+											product.getString(TAGs.UNIQUE_ID),
+											product.getString(TAGs.NAME),
+											product.getString(TAGs.IMAGE),
+											product.getString(TAGs.PRICE),
+											product.getInt("off"),
+											product.getInt("count"),
+											product.getDouble("point"),
+											product.getInt("point_count"),
+											product.getString(TAGs.DESCRIPTION)
+									)
+							);
+						}
+						
+						productAdapter.notifyDataSetChanged();
+					} else {
+						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+						Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
+					}
+				} catch (JSONException ignore) {
+				}
+			}
+		};
+		
+		categoryListener = new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				p.setVisibility(View.INVISIBLE);
+				try {
+					JSONObject jObj = new JSONObject(response);
+					boolean error = jObj.getBoolean(TAGs.ERROR);
+					if (!error) {
+						JSONArray categories = jObj.getJSONArray("category");
+						JSONArray products = jObj.getJSONArray("product");
+						
+						for (int i = 0; i < categories.length(); i++) {
+							JSONObject category = categories.getJSONObject(i);
+							
+							categoryList.add(new Category(
+											category.getString(TAGs.UNIQUE_ID),
+											category.getString(TAGs.NAME),
+											category.getString(TAGs.IMAGE),
+											category.getDouble("point"),
+											category.getInt("point_count"),
+											category.getInt("off"),
+											category.getInt(TAGs.LEVEL)
+									)
+							);
+						}
+						for (int i = 0; i < products.length(); i++) {
+							JSONObject product = products.getJSONObject(i);
+							
+							Product p = new Product(
+									product.getString(TAGs.UNIQUE_ID),
+									product.getString(TAGs.NAME),
+									product.getString(TAGs.IMAGE),
+									product.getString(TAGs.PRICE),
+									product.getInt("off"),
+									product.getInt(TAGs.COUNT),
+									product.getDouble("point"),
+									product.getInt("point_count"),
+									product.getString(TAGs.DESCRIPTION)
+							);
+							
+							if (!productList.contains(p))
+								productList.add(p);
+						}
+						
+						categoryAdapter.notifyDataSetChanged();
+						productAdapter.notifyDataSetChanged();
+					} else {
+						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+						Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
+						finish();
+					}
+				} catch (JSONException ignore) {
+				}
+			}
+		};
+		
+		errorListener = new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				p.setVisibility(View.INVISIBLE);
+			}
+		};
 		
 		productList = new ArrayList<>();
 		productAdapter = new ProductAdapter_All(this, productList);
@@ -449,7 +545,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			category_list.setLayoutManager(horizontalLayoutManager);
 			category_list.setItemAnimator(new DefaultItemAnimator());
 			category_list.setAdapter(categoryAdapter);
-			loadCategory(1, getIntent().getStringExtra("level"));
+			loadCategory(getIntent().getStringExtra(TAGs.LEVEL));
 		}
 	}
 	
@@ -458,53 +554,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "products_all";
 			JSONObject params = new JSONObject();
-			params.put("index", page);
-			params.put("cat", category_id);
+			params.put(TAGs.INDEX, page);
+			params.put(TAGs.CATEGORY, category_id);
 			final String mRequestBody = params.toString();
 			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					p.setVisibility(View.INVISIBLE);
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							JSONArray products = jObj.getJSONArray("product");
-							
-							for (int i = 0; i < products.length(); i++) {
-								JSONObject product = products.getJSONObject(i);
-								
-								productList.add(new Product(
-												product.getString("unique_id"),
-												product.getString("name"),
-												product.getString("image"),
-												product.getString("price"),
-												product.getInt("off"),
-												product.getInt("count"),
-												product.getDouble("point"),
-												product.getInt("point_count"),
-												product.getString("description")
-										)
-								);
-							}
-							
-							productAdapter.notifyDataSetChanged();
-						} else {
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					p.setVisibility(View.INVISIBLE);
-					Log.e("LOG_VOLLEY E", error.toString());
-				}
-			}) {
+			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, productListener, errorListener) {
 				@NonNull
 				@Contract(pure = true)
 				@Override
@@ -514,11 +568,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						p.setVisibility(View.INVISIBLE);
 						return null;
 					}
 				}
@@ -526,83 +580,21 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
 			p.setVisibility(View.INVISIBLE);
-			e.printStackTrace();
 		}
 	}
 	
-	private void loadCategory(int page, String level) {
+	private void loadCategory(String level) {
 		p.setVisibility(View.VISIBLE);
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "categories_all";
 			JSONObject params = new JSONObject();
-			params.put("index", page);
-			params.put("level", level);
-			params.put("parent", category_id);
+			params.put(TAGs.INDEX, 1);
+			params.put(TAGs.LEVEL, level);
+			params.put(TAGs.PARENT, category_id);
 			final String mRequestBody = params.toString();
 			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					p.setVisibility(View.INVISIBLE);
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							JSONArray categories = jObj.getJSONArray("category");
-							JSONArray products = jObj.getJSONArray("product");
-							
-							for (int i = 0; i < categories.length(); i++) {
-								JSONObject category = categories.getJSONObject(i);
-								
-								categoryList.add(new Category(
-												category.getString("unique_id"),
-												category.getString("name"),
-												category.getString("image"),
-												category.getDouble("point"),
-												category.getInt("point_count"),
-												category.getInt("off"),
-												category.getInt("level")
-										)
-								);
-							}
-							for (int i = 0; i < products.length(); i++) {
-								JSONObject product = products.getJSONObject(i);
-								
-								Product p = new Product(
-										product.getString("unique_id"),
-										product.getString("name"),
-										product.getString("image"),
-										product.getString("price"),
-										product.getInt("off"),
-										product.getInt("count"),
-										product.getDouble("point"),
-										product.getInt("point_count"),
-										product.getString("description")
-								);
-								
-								if (!productList.contains(p))
-									productList.add(p);
-							}
-							
-							categoryAdapter.notifyDataSetChanged();
-							productAdapter.notifyDataSetChanged();
-						} else {
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
-							finish();
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					p.setVisibility(View.INVISIBLE);
-					Log.e("LOG_VOLLEY E", error.toString());
-				}
-			}) {
+			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, categoryListener, errorListener) {
 				@NonNull
 				@Contract(pure = true)
 				@Override
@@ -612,11 +604,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						p.setVisibility(View.INVISIBLE);
 						return null;
 					}
 				}
@@ -624,7 +616,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
 			p.setVisibility(View.INVISIBLE);
-			e.printStackTrace();
 		}
 	}
 	
@@ -684,8 +675,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		super.onResume();
 		try {
 			updateCartMenu();
-		} catch (NullPointerException e) {
-			Log.i("Badge", "Known Error");
+		} catch (NullPointerException ignore) {
 		}
 	}
 	
@@ -695,10 +685,10 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		if (requestCode == 100) {
 			if (resultCode == 1) {
 				Intent intent = new Intent(getApplicationContext(), Activity_List.class);
-				intent.putExtra("cat", _CAT);
-				intent.putExtra("level", _LEVEL);
-				intent.putExtra("cat_id", _CAT_ID);
-				intent.putExtra("title", _TITLE);
+				intent.putExtra(TAGs.CATEGORY, _CAT);
+				intent.putExtra(TAGs.LEVEL, _LEVEL);
+				intent.putExtra(TAGs.CATEGORY_ID, _CAT_ID);
+				intent.putExtra(TAGs.TITLE, _TITLE);
 				startActivity(intent);
 				finish();
 			}
@@ -706,10 +696,12 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	}
 }
 
-/* for search a new data we should clear view
-// 1. First, clear the array of data
-listOfItems.clear();
-// 2. Notify the adapter of the update
+/*
+for search a new data we should clear view
+	1. First, clear the array of data
+		listOfItems.clear();
+	2. Notify the adapter of the update
         recyclerAdapterOfItems.notifyDataSetChanged(); // or notifyItemRangeRemoved
-// 3. Reset endless scroll listener when performing a new search
-        scrollListener.resetState();*/
+	3. Reset endless scroll listener when performing a new search
+        scrollListener.resetState();
+*/

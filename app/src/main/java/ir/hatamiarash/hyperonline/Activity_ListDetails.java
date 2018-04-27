@@ -5,8 +5,6 @@
 package ir.hatamiarash.hyperonline;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,22 +15,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.mikepenz.materialdrawer.Drawer;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -49,24 +43,22 @@ import butterknife.ButterKnife;
 import helper.EndlessScrollListener;
 import helper.FontHelper;
 import helper.Helper;
-import helper.SQLiteHandler;
 import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import models.Product;
 
 public class Activity_ListDetails extends AppCompatActivity implements CardBadge {
-	public static SQLiteHandler db_user;
-	static Typeface persianTypeface;
-	public Drawer result = null;
 	SweetAlertDialog progressDialog;
-	private List<Product> productList;
-	private ProductAdapter_All productAdapter;
+	List<Product> productList;
+	ProductAdapter_All productAdapter;
+	Response.Listener<String> listener;
+	Response.ErrorListener errorListener;
 	
 	@BindView(R.id.toolbar)
-	public Toolbar toolbar;
+	Toolbar toolbar;
 	@BindView(R.id.list)
-	public RecyclerView list;
+	RecyclerView list;
 	
 	private static String HOST;
 	
@@ -76,8 +68,6 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 		setContentView(R.layout.list_simple);
 		ButterKnife.bind(this);
 		
-		db_user = new SQLiteHandler(getApplicationContext());
-		persianTypeface = Typeface.createFromAsset(getAssets(), FontHelper.FontPath);
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
@@ -85,9 +75,52 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 		
 		HOST = getResources().getString(R.string.url_host);
 		
-		Intent i = getIntent();
-		final int type = Integer.valueOf(i.getStringExtra("type"));
+		final int type = Integer.valueOf(getIntent().getStringExtra(TAGs.TYPE));
 		setToolbarTitle(type);
+		
+		listener = new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				hideDialog();
+				try {
+					JSONObject jObj = new JSONObject(response);
+					boolean error = jObj.getBoolean(TAGs.ERROR);
+					if (!error) {
+						JSONArray products = jObj.getJSONArray("products");
+						
+						for (int i = 0; i < products.length(); i++) {
+							JSONObject product = products.getJSONObject(i);
+							
+							productList.add(new Product(
+											product.getString(TAGs.UNIQUE_ID),
+											product.getString(TAGs.NAME),
+											product.getString(TAGs.IMAGE),
+											product.getString(TAGs.PRICE),
+											product.getInt("off"),
+											product.getInt("count"),
+											product.getDouble("point"),
+											product.getInt("point_count"),
+											product.getString(TAGs.DESCRIPTION)
+									)
+							);
+						}
+						
+						productAdapter.notifyDataSetChanged();
+					} else {
+						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+						Helper.MakeToast(Activity_ListDetails.this, errorMsg, TAGs.ERROR);
+					}
+				} catch (JSONException ignore) {
+				}
+			}
+		};
+		
+		errorListener = new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				hideDialog();
+			}
+		};
 		
 		productList = new ArrayList<>();
 		productAdapter = new ProductAdapter_All(this, productList);
@@ -113,54 +146,12 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "products_detail";
 			JSONObject params = new JSONObject();
-			params.put("type", String.valueOf(type));
-			params.put("index", String.valueOf(page));
+			params.put(TAGs.TYPE, String.valueOf(type));
+			params.put(TAGs.INDEX, String.valueOf(page));
 			final String mRequestBody = params.toString();
 			showDialog();
 			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					hideDialog();
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							JSONArray products = jObj.getJSONArray("products");
-							
-							for (int i = 0; i < products.length(); i++) {
-								JSONObject product = products.getJSONObject(i);
-								
-								productList.add(new Product(
-												product.getString("unique_id"),
-												product.getString("name"),
-												product.getString("image"),
-												product.getString("price"),
-												product.getInt("off"),
-												product.getInt("count"),
-												product.getDouble("point"),
-												product.getInt("point_count"),
-												product.getString("description")
-										)
-								);
-							}
-							
-							productAdapter.notifyDataSetChanged();
-						} else {
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_ListDetails.this, errorMsg, TAGs.ERROR);
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					hideDialog();
-					Log.e("LOG_VOLLEY E", error.toString());
-				}
-			}) {
+			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, listener, errorListener) {
 				@NonNull
 				@Contract(pure = true)
 				@Override
@@ -170,11 +161,11 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						hideDialog();
 						return null;
 					}
 				}
@@ -182,7 +173,6 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
 			hideDialog();
-			e.printStackTrace();
 		}
 	}
 	

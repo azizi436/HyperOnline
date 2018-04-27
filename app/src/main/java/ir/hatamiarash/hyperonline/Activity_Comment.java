@@ -15,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +24,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -51,17 +48,21 @@ import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 
 public class Activity_Comment extends AppCompatActivity {
-	public static SQLiteHandler db_user;
-	private static String HOST;
+	static SQLiteHandler db_user;
+	Vibrator vibrator;
+	SessionManager session;
+	SweetAlertDialog progressDialog;
+	Response.Listener<String> listener;
+	Response.ErrorListener errorListener;
+	
 	@BindView(R.id.comment_body)
-	public EditText body;
+	EditText body;
 	@BindView(R.id.comment_send)
-	public Button send;
+	Button send;
 	@BindView(R.id.toolbar)
-	public Toolbar toolbar;
-	private Vibrator vibrator;
-	private SessionManager session;
-	private SweetAlertDialog progressDialog;
+	Toolbar toolbar;
+	
+	private static String HOST;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class Activity_Comment extends AppCompatActivity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		
 		HOST = getResources().getString(R.string.url_host);
@@ -89,8 +91,7 @@ public class Activity_Comment extends AppCompatActivity {
 			((TextView) v.findViewById(R.id.title_text)).setText(FontHelper.getSpannedString(getApplicationContext(), "ارسال نظر"));
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
+		} catch (NullPointerException ignore) {
 		}
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -115,53 +116,56 @@ public class Activity_Comment extends AppCompatActivity {
 							Helper.MakeToast(getApplicationContext(), "لطفا متن پیام را وادر نمایید", TAGs.WARNING);
 					} else {
 						Helper.MakeToast(getApplicationContext(), "لطفا برای ارسال نظر ، وارد شوید", TAGs.WARNING);
-						Intent i = new Intent(getApplicationContext(), Login.class);
+						Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 						startActivity(i);
 						finish();
 					}
 				}
 			}
 		});
+		
+		listener = new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				hideDialog();
+				try {
+					JSONObject jObj = new JSONObject(response);
+					boolean error = jObj.getBoolean(TAGs.ERROR);
+					if (!error) {
+						Helper.MakeToast(getApplicationContext(), "پیام شما با موفقیت ارسال شد ، متشکریم !", TAGs.SUCCESS);
+						Intent i = new Intent(getApplicationContext(), Activity_Main.class);
+						startActivity(i);
+						finish();
+					} else {
+						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+						Helper.MakeToast(Activity_Comment.this, errorMsg, TAGs.ERROR);
+					}
+				} catch (JSONException e) {
+					finish();
+				}
+			}
+		};
+		
+		errorListener = new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				hideDialog();
+				finish();
+			}
+		};
 	}
 	
 	private void Send(final String body, final String sender) {
+		showDialog();
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "comments";
 			JSONObject params = new JSONObject();
-			params.put("body", body);
-			params.put("sender", sender);
+			params.put(TAGs.BODY, body);
+			params.put(TAGs.SENDER, sender);
 			final String mRequestBody = params.toString();
-			progressDialog.setTitleText(getResources().getString(R.string.wait));
-			showDialog();
 			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					hideDialog();
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							Helper.MakeToast(getApplicationContext(), "پیام شما با موفقیت ارسال شد ، متشکریم !", TAGs.SUCCESS);
-							Intent i = new Intent(getApplicationContext(), Activity_Main.class);
-							startActivity(i);
-							finish();
-						} else {
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_Comment.this, errorMsg, TAGs.ERROR);
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					hideDialog();
-					Log.e("Comment E", error.toString());
-				}
-			}) {
+			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, listener, errorListener) {
 				@NonNull
 				@Contract(pure = true)
 				@Override
@@ -171,11 +175,11 @@ public class Activity_Comment extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						hideDialog();
 						return null;
 					}
 				}
@@ -188,7 +192,6 @@ public class Activity_Comment extends AppCompatActivity {
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
 			hideDialog();
-			e.printStackTrace();
 		}
 	}
 	

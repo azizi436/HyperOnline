@@ -6,7 +6,6 @@ package ir.hatamiarash.hyperonline;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -29,11 +28,13 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
@@ -48,6 +49,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,19 +65,14 @@ import helper.SQLiteHandlerMain;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import models.Product;
+import volley.AppController;
 
-public class Activity_ShopCard extends AppCompatActivity {
-	SQLiteHandlerItem db_item;
-	SQLiteHandlerMain db_main;
-	SQLiteHandler db_user;
-	SessionManager session;
-	ConfirmManager confirmManager;
-	SweetAlertDialog progressDialog;
-	Vibrator vibrator;
-	List<String> Item;
-	List<Product> Products_List;
-	Adapter_Product adapter;
-	
+public class Activity_ShopCardOld extends AppCompatActivity {
+	final static private int CODE_PAYMENT = 100;
+	public static SQLiteHandlerItem db_item;
+	public static SQLiteHandlerMain db_main;
+	public static SQLiteHandler db_user;
+	private static String HOST;
 	@BindView(R.id.recyclerView)
 	public RecyclerView list;
 	@BindView(R.id.CardPrice)
@@ -98,21 +95,25 @@ public class Activity_ShopCard extends AppCompatActivity {
 	public RelativeLayout empty;
 	@BindView(R.id.origin)
 	public RelativeLayout origin;
-	
-	int CODE_PAYMENT = 100;
-	int CODE_STATUS = 0;
-	int tOff = 0;
-	int tPrice = 0;
-	int tExtend = 5000;
-	int check = 0;
-	int send_time;
-	String HOST;
-	String ORDER_CODE = "-1";
-	String ORDER_AMOUNT = "1000";
-	String ORDER_HOUR;
-	String STUFFS = "";
-	String STUFFS_ID = "";
-	String DESCRIPTION = "";
+	SessionManager session;
+	ConfirmManager confirmManager;
+	SweetAlertDialog progressDialog;
+	Vibrator vibrator;
+	List<String> Item;
+	List<Product> Products_List;
+	Adapter_Product adapter;
+	private int CODE_STATUS = 0;
+	private int tOff = 0;
+	private int tPrice = 0;
+	private int tExtend = 4000;
+	private int check = 0;
+	private int send_time;
+	private String ORDER_CODE = "-1";
+	private String ORDER_AMOUNT = "1000";
+	private String ORDER_HOUR;
+	private String STUFFS = "";
+	private String STUFFS_ID = "";
+	private String DESCRIPTION = "";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -135,7 +136,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		
 		HOST = getResources().getString(R.string.url_host);
 		
@@ -144,11 +144,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 			public void onClick(View view) {
 				if (!session.isLoggedIn()) {
 					Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
-					startActivity(new Intent(Activity_ShopCard.this, Activity_Login.class));
+					startActivity(new Intent(Activity_ShopCardOld.this, Activity_Login.class));
 				} else if (!confirmManager.isPhoneConfirm()) {
-					new MaterialStyledDialog.Builder(Activity_ShopCard.this)
-							.setTitle(FontHelper.getSpannedString(Activity_ShopCard.this, "تایید حساب"))
-							.setDescription(FontHelper.getSpannedString(Activity_ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))
+					new MaterialStyledDialog.Builder(Activity_ShopCardOld.this)
+							.setTitle(FontHelper.getSpannedString(Activity_ShopCardOld.this, "تایید حساب"))
+							.setDescription(FontHelper.getSpannedString(Activity_ShopCardOld.this, "لطفا شماره تلفن خود را تایید کنید."))
 							.setStyle(Style.HEADER_WITH_TITLE)
 							.withDarkerOverlay(true)
 							.withDialogAnimation(true)
@@ -157,7 +157,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 							.onPositive(new MaterialDialog.SingleButtonCallback() {
 								@Override
 								public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-									Intent intent = new Intent(Activity_ShopCard.this, Activity_ConfirmPhone.class);
+									Intent intent = new Intent(Activity_ShopCardOld.this, Activity_ConfirmPhone.class);
 									intent.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
 									startActivity(intent);
 									finish();
@@ -165,9 +165,9 @@ public class Activity_ShopCard extends AppCompatActivity {
 							})
 							.show();
 				} else if (!confirmManager.isInfoConfirm()) {
-					new MaterialStyledDialog.Builder(Activity_ShopCard.this)
-							.setTitle(FontHelper.getSpannedString(Activity_ShopCard.this, "تایید حساب"))
-							.setDescription(FontHelper.getSpannedString(Activity_ShopCard.this, "متاسفانه اطلاعات حساب شما هنوز تایید نشده است. جهت اطلاعات بیشتر صندوق پیام را بررسی کرده و در صورت هر گونه سوال با ما تماس بگیرید"))
+					new MaterialStyledDialog.Builder(Activity_ShopCardOld.this)
+							.setTitle(FontHelper.getSpannedString(Activity_ShopCardOld.this, "تایید حساب"))
+							.setDescription(FontHelper.getSpannedString(Activity_ShopCardOld.this, "متاسفانه اطلاعات حساب شما تایید نشده است. جهت اطلاعات بیشتر صندوق پیام را بررسی کرده و در صورت هر گونه سوال با ما تماس بگیرید"))
 							.setStyle(Style.HEADER_WITH_TITLE)
 							.withDarkerOverlay(true)
 							.withDialogAnimation(true)
@@ -182,11 +182,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 						String extend = "";
 						if (send_time == 9 || send_time == 11)
 							extend = " صبح";
-						if (send_time == 16 || send_time == 18 || send_time == 20)
+						if (send_time == 16 || send_time == 18 || send_time == 19)
 							extend = " عصر";
 						ORDER_HOUR = time;
 						String message;
-						if (send_time == 20)
+						if (send_time == 19)
 							message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + ":30 الی" + time2 + ":30 " + extend + " برای شما ارسال خواهد شد.";
 						else
 							message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد.";
@@ -194,7 +194,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 						final View customView = inflater.inflate(R.layout.custom_dialog, null);
 						final TextView edit_text = customView.findViewById(R.id.edit_text);
 						final RadioGroup payMethod = customView.findViewById(R.id.payMethod);
-						new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+						new MaterialStyledDialog.Builder(Activity_ShopCardOld.this)
 								.setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
 								.setDescription(FontHelper.getSpannedString(getApplicationContext(), message))
 								.setStyle(Style.HEADER_WITH_TITLE)
@@ -209,12 +209,14 @@ public class Activity_ShopCard extends AppCompatActivity {
 									public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 										DESCRIPTION = edit_text.getText().toString();
 										RadioButton rb = customView.findViewById(payMethod.getCheckedRadioButtonId());
-										int payMethod;
-										if (rb.getText().toString().equals("آنلاین"))
-											payMethod = 1;
-										else
-											payMethod = 0;
-										sendOrder(payMethod);
+										String tPay = total_pay.getText().toString();
+										int final_price = Integer.valueOf(FormatHelper.toEnglishNumber(tPay.substring(0, tPay.length() - 6))) * 10;
+										if (rb.getText().toString().equals("آنلاین")) {
+											Pay(TAGs.API_KEY, String.valueOf(final_price));
+										} else if (rb.getText().toString().equals("حضوری")) {
+											SetOrder(Pushe.getPusheId(getApplicationContext()), 0);
+										}
+//                                        onPaySuccess();
 									}
 								})
 								.show();
@@ -290,119 +292,74 @@ public class Activity_ShopCard extends AppCompatActivity {
 		}
 	}
 	
-	@NonNull
 	private String getCounts() {
 		Item = db_item.getItemsDetails();
-		StringBuilder c = new StringBuilder();
+		String c = "";
 		for (int i = 0; i < (Item.size() / 8); i++) {
 			String count = FormatHelper.toEnglishNumber2(Item.get(i * 8 + 6));
-			c.append(count).append(",");
+			c += count + ",";
 		}
-		return c.toString();
+		return c;
 	}
 	
-	private void sendOrder(final int payMethod) {
+	private int ConvertToInteger(TextView text) {
+		return Integer.valueOf(FormatHelper.toEnglishNumber(text.getText().toString().substring(0, text.getText().toString().length() - 6)));
+	}
+	
+	private void Pay(final String API_KEY, final String AMOUNT) {
+		String string_req = "req_fetch";
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
-		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = getResources().getString(R.string.url_api, HOST) + "temp_order";
-			JSONObject params = new JSONObject();
-			String uid = db_user.getUserDetails().get(TAGs.UID);
-			params.put("user", uid);
-			params.put("code", Pushe.getPusheId(getApplicationContext()));
-			params.put("stuffs", STUFFS);
-			params.put("stuffs_id", STUFFS_ID);
-			params.put("stuffs_count", getCounts());
-			params.put("hour", ORDER_HOUR);
-			params.put("method", payMethod);
-			params.put("description", DESCRIPTION);
-			final String mRequestBody = params.toString();
-			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
+		StringRequest strReq = new StringRequest(Request.Method.POST, "https://pay.ir/payment/send", new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				Log.e("Pay R", response);
+				try {
+					JSONObject jObj = new JSONObject(response);
+					int status = jObj.getInt("status");
+					if (status == 1) {
+						String Address = "https://pay.ir/payment/gateway/" + jObj.getString("transId");
+						ORDER_CODE = jObj.getString("transId");
+						ORDER_AMOUNT = AMOUNT;
+//                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
+						Intent i = new Intent(getApplicationContext(), Activity_Web.class);
+						i.putExtra(TAGs.ADDRESS, Address);
+						startActivityForResult(i, CODE_PAYMENT);
+					} else
+						Helper.MakeToast(getApplicationContext(), jObj.getString("errorMessage"), TAGs.ERROR);
 					hideDialog();
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							if (payMethod == 1)
-								Pay(jObj.getString("code"));
-							else {
-								new MaterialStyledDialog.Builder(Activity_ShopCard.this)
-										.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت حضوری"))
-										.setDescription(FontHelper.getSpannedString(getApplicationContext(), "با تشکر از انتخاب شما... سبد خرید ثبت شد !!"))
-										.setStyle(Style.HEADER_WITH_TITLE)
-										.setHeaderColor(R.color.green)
-										.withDarkerOverlay(true)
-										.withDialogAnimation(true)
-										.setCancelable(false)
-										.setPositiveText("باشه")
-										.onPositive(new MaterialDialog.SingleButtonCallback() {
-											@Override
-											public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-												db_item.deleteItems();
-												Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
-												intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-												startActivity(intent);
-												startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
-												finish();
-											}
-										})
-										.show();
-							}
-						} else {
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_ShopCard.this, errorMsg, TAGs.ERROR);
-						}
-					} catch (JSONException e) {
-						hideDialog();
-						finish();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
+				} catch (JSONException e) {
+					e.printStackTrace();
 					hideDialog();
-					finish();
 				}
-			}) {
-				@NonNull
-				@Contract(pure = true)
-				@Override
-				public String getBodyContentType() {
-					return "application/json; charset=utf-8";
-				}
-				
-				@Nullable
-				@Override
-				public byte[] getBody() {
-					try {
-						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
-						hideDialog();
-						return null;
-					}
-				}
-			};
-			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-					0,
-					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-			));
-			requestQueue.add(stringRequest);
-		} catch (JSONException e) {
-			hideDialog();
-		}
-	}
-	
-	private void Pay(String ID) {
-		String Address = getResources().getString(R.string.url_pay, HOST) + ID;
-		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
-		startActivityForResult(i, 200);
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				Log.e("Pay E", error.getMessage());
+				if (error.getMessage() != null)
+					Helper.MakeToast(getApplicationContext(), error.getMessage(), TAGs.ERROR);
+				else
+					Helper.MakeToast(getApplicationContext(), "خطایی رخ داده است - اتصال به اینترنت را بررسی نمایید", TAGs.ERROR);
+				hideDialog();
+				finish();
+			}
+		}) {
+			@Override
+			protected java.util.Map<String, String> getParams() {
+				java.util.Map<String, String> params = new HashMap<>();
+				params.put("api", API_KEY);
+				params.put("amount", AMOUNT);
+				params.put("factorNumber", "1");
+				params.put("redirect", "http://hyper-online.ir/api/callback");
+				return params;
+			}
+		};
+		AppController.getInstance().addToRequestQueue(strReq, string_req);
 	}
 	
 	private void Check(final String CODE, final int level) {
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -415,6 +372,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					Log.i("Check R", response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						int status = jObj.getInt("status");
@@ -424,20 +382,23 @@ public class Activity_ShopCard extends AppCompatActivity {
 							onPayCanceled();
 					} catch (JSONException e) {
 						hideDialog();
+						e.printStackTrace();
 						finish();
 					}
 				}
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					Log.e("Check E-" + String.valueOf(level), error.toString());
 					if (level == 2) {
 						if (error.toString().equals("com.android.volley.ServerError"))
-							Helper.MakeToast(Activity_ShopCard.this, "پرداخت لغو شد", TAGs.ERROR);
+							Helper.MakeToast(Activity_ShopCardOld.this, "پرداخت لغو شد", TAGs.ERROR);
 						else
-							Helper.MakeToast(Activity_ShopCard.this, error.toString(), TAGs.ERROR);
+							Helper.MakeToast(Activity_ShopCardOld.this, error.toString(), TAGs.ERROR);
 						hideDialog();
 					} else
 						Check(CODE, 2);
+					//finish();
 				}
 			}) {
 				@NonNull
@@ -449,10 +410,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() {
+				public byte[] getBody() throws AuthFailureError {
 					try {
-						return mRequestBody.getBytes("utf-8");
+						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
+						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
 						return null;
 					}
 				}
@@ -463,7 +425,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
 			requestQueue.add(stringRequest);
-		} catch (JSONException ignore) {
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -472,14 +435,10 @@ public class Activity_ShopCard extends AppCompatActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == CODE_PAYMENT)
 			Check(ORDER_CODE, 1);
-		if (requestCode == 200) {
-			//TODO
-			Log.w("PAY", "DONE");
-		}
 	}
 	
 	private void onPaySuccess() {
-		new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+		new MaterialStyledDialog.Builder(Activity_ShopCardOld.this)
 				.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
 				.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت موفقیت آمیز بود. با تشکر از انتخاب شما."))
 				.setStyle(Style.HEADER_WITH_TITLE)
@@ -491,14 +450,14 @@ public class Activity_ShopCard extends AppCompatActivity {
 				.onPositive(new MaterialDialog.SingleButtonCallback() {
 					@Override
 					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						SetOrder();
+						SetOrder(ORDER_CODE, 1);
 					}
 				})
 				.show();
 	}
 	
 	private void onPayCanceled() {
-		new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+		new MaterialStyledDialog.Builder(Activity_ShopCardOld.this)
 				.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
 				.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید."))
 				.setStyle(Style.HEADER_WITH_TITLE)
@@ -509,47 +468,77 @@ public class Activity_ShopCard extends AppCompatActivity {
 				.show();
 	}
 	
-	private void SetOrder() {
+	private void SetOrder(String CODE, final int payMethod) {
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		showDialog();
+		
 		try {
 			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "orders";
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
 			params.put("user", uid);
-			params.put("code", ORDER_CODE);
+			params.put("code", CODE);
 			params.put("stuffs", STUFFS);
 			params.put("stuffs_id", STUFFS_ID);
 			params.put("stuffs_count", getCounts());
 			params.put("hour", ORDER_HOUR);
 			params.put("description", DESCRIPTION);
+			params.put("method", payMethod);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					Log.i("SetOrder R", response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
 							db_item.deleteItems();
-							Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
-							i.putExtra("order_code", ORDER_CODE);
-							startActivity(i);
-							finish();
+							if (payMethod == 1) {
+								Intent intent = new Intent(getApplicationContext(), Activity_Factor.class);
+								intent.putExtra("order_code", ORDER_CODE);
+								startActivity(intent);
+								finish();
+							} else {
+								new MaterialStyledDialog.Builder(Activity_ShopCardOld.this)
+										.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت حضوری"))
+										.setDescription(FontHelper.getSpannedString(getApplicationContext(), "با تشکر از انتخاب شما... سبد خرید ثبت شد !!"))
+										.setStyle(Style.HEADER_WITH_TITLE)
+										.setHeaderColor(R.color.green)
+										.withDarkerOverlay(true)
+										.withDialogAnimation(true)
+										.setCancelable(false)
+										.setPositiveText("باشه")
+										.onPositive(new MaterialDialog.SingleButtonCallback() {
+											@Override
+											public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+												Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
+												intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+												startActivity(intent);
+												startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
+												finish();
+											}
+										})
+										.show();
+							}
 						} else {
+							Log.e("SetOrder E", jObj.getString(TAGs.ERROR_MSG));
 							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_ShopCard.this, errorMsg, TAGs.ERROR);
+							Helper.MakeToast(Activity_ShopCardOld.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
 						hideDialog();
+						e.printStackTrace();
 						finish();
 					}
 				}
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					Log.e("SetOrder E", error.toString());
 					hideDialog();
 					finish();
 				}
@@ -563,11 +552,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 				
 				@Nullable
 				@Override
-				public byte[] getBody() {
+				public byte[] getBody() throws AuthFailureError {
 					try {
-						return mRequestBody.getBytes("utf-8");
+						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException uee) {
-						hideDialog();
+						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
 						return null;
 					}
 				}
@@ -579,7 +568,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
-			hideDialog();
+			e.printStackTrace();
 		}
 	}
 	
@@ -604,11 +593,25 @@ public class Activity_ShopCard extends AppCompatActivity {
 			return Integer.valueOf(simpleDateFormat.format(date));
 		}
 	}
+
+//    private class TouchListener implements View.OnTouchListener {
+//        public boolean onTouch(View view, MotionEvent motionEvent) {
+//            switch (motionEvent.getAction()) {
+//                case MotionEvent.ACTION_DOWN:
+//                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
+//                    break;
+//                case MotionEvent.ACTION_CANCEL:
+//                case MotionEvent.ACTION_UP:
+//                    ((TextView) view).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+//                    break;
+//            }
+//            return false;
+//        }
+//    }
 	
 	@Contract(pure = true)
 	private int times(int hour, int minute) {
 		// 9 - 11 - 16 - 18 - 19:30
-		// 9 - 11 - 16 - 18 - 20:30
 		if (hour >= 9 && hour < 10) send_time = 11;
 		if (hour >= 10 && hour < 11)
 			if (minute <= 40)
@@ -628,11 +631,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 			if (minute <= 40)
 				send_time = 18;
 			else
-				send_time = 20;
+				send_time = 19;
 		
-		if (hour >= 18 && hour < 20)
+		if (hour >= 18 && hour < 19)
 			if (minute <= 50)
-				send_time = 20;
+				send_time = 19;
 			else
 				send_time = 9;
 		
@@ -653,7 +656,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			status.setText("ارسال رایگان");
 			total_extend.setText(String.valueOf(tExtend) + " تومان");
 		} else {
-			tExtend = Integer.valueOf(db_main.getItemsDetails().get(0));
+			tExtend = 4000;
 			status.setText("خرید های کمتر از 30 هزار تومان با هزینه ارسال می شوند");
 			total_extend.setText(String.valueOf(tExtend) + " تومان");
 		}
@@ -759,6 +762,62 @@ public class Activity_ShopCard extends AppCompatActivity {
 							Helper.MakeToast(getApplicationContext(), "تعداد بیشتر موجود نمی باشد", TAGs.ERROR);
 					}
 				});
+
+//                product_count.addTextChangedListener(new TextWatcher() {
+//                    // save old count
+//                    int temp;
+//
+//                    @Override
+//                    public void afterTextChanged(Editable s) {
+//                        if (check == products.size()) {
+//                            // off / old count * new count
+//                            int new_off;
+//                            String pCount;
+//                            if (product_count.getText().toString().length() == 1)
+//                                pCount = FormatHelper.toEnglishNumber2(product_count.getText().toString());
+//                            else
+//                                pCount = FormatHelper.toEnglishNumber(product_count.getText().toString());
+//
+//                            if (Integer.valueOf(pCount) == 0 || temp == 0)
+//                                new_off = 0;
+//                            else {
+//                                new_off = (Integer.valueOf(product_off.getText().toString()) / temp) * Integer.valueOf(pCount);
+//                            }
+//
+//                            product_off.setText(String.valueOf(new_off));
+//
+//                            db_item.updateItem(
+//                                    product_id.getText().toString(),
+//                                    pCount,
+//                                    String.valueOf(ConvertToInteger(product_price) * Integer.valueOf(pCount)),
+//                                    String.valueOf(new_off)
+//                            );
+//
+//                            sendPrice(db_item.TotalPrice());
+//                            String price = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalPrice() + tExtend)) + " تومان";
+//                            String off = FormatHelper.toPersianNumber(String.valueOf(db_item.TotalOff())) + " تومان";
+//                            total_pay.setText(price);
+//                            pay.setText("پرداخت - " + price);
+//                            total_off.setText(off);
+//                            int ttPrice = ConvertToInteger(total_pay) - ConvertToInteger(total_extend) + ConvertToInteger(total_off);
+//                            total_price.setText(String.valueOf(ttPrice) + " تومان");
+//                            ORDER_AMOUNT = String.valueOf(ttPrice);
+//                        } else
+//                            check++;
+//                    }
+//
+//                    @Override
+//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                        if (product_count.getText().toString().length() == 1)
+//                            temp = Integer.valueOf(FormatHelper.toEnglishNumber2(product_count.getText().toString()));
+//                        else
+//                            temp = Integer.valueOf(FormatHelper.toEnglishNumber(product_count.getText().toString()));
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    }
+//                });
 			}
 			
 			void removeAt(int position) {

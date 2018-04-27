@@ -34,18 +34,18 @@ import ir.hatamiarash.utils.TAGs;
 
 public class Activity_Factor extends Activity {
 	ProgressDialog mProgressDialog;
-	private Vibrator vibrator;
+	Vibrator vibrator;
 	
 	@BindView(R.id.pay_log_download)
-	public Button download;
+	Button download;
 	@BindView(R.id.pay_log_back)
-	public Button back;
+	Button back;
 	@BindView(R.id.animation_view)
-	public LottieAnimationView animationView;
+	LottieAnimationView animationView;
 	@BindView(R.id.pay_msg)
-	public TextView pay_msg;
+	TextView pay_msg;
 	@BindView(R.id.loc_msg)
-	public TextView loc_msg;
+	TextView loc_msg;
 	
 	private static String HOST;
 	String ORDER_CODE;
@@ -56,15 +56,14 @@ public class Activity_Factor extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pay_log);
 		
-		Intent intent = getIntent();
-		ORDER_CODE = intent.getStringExtra("order_code");
 		mProgressDialog = new ProgressDialog(Activity_Factor.this);
-		mProgressDialog.setMessage("A message");
+		mProgressDialog.setMessage("");
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgressDialog.setCancelable(true);
+		mProgressDialog.setCancelable(false);
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		
+		ORDER_CODE = getIntent().getStringExtra("order_code");
 		HOST = getResources().getString(R.string.url_host);
 		
 		pay_msg.setText("از خرید شما متشکریم");

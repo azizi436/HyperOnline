@@ -121,50 +121,52 @@ public class Activity_Main extends AppCompatActivity implements
 	static Typeface persianTypeface;                 // persian font typeface
 	private static String HOST;
 	public Drawer result = null;
+	
 	@BindView(R.id.category_list)
-	public RecyclerView category_view;
+	RecyclerView category_view;
 	@BindView(R.id.most_list)
-	public RecyclerView most_view;
+	RecyclerView most_view;
 	@BindView(R.id.new_list)
-	public RecyclerView new_view;
+	RecyclerView new_view;
 	@BindView(R.id.off_list)
-	public RecyclerView off_view;
+	RecyclerView off_view;
 	@BindView(R.id.collection_list)
-	public RecyclerView collection_view;
+	RecyclerView collection_view;
 	@BindView(R.id.popular_list)
-	public RecyclerView popular_view;
+	RecyclerView popular_view;
 	@BindView(R.id.slider)
-	public SliderLayout slider;
+	SliderLayout slider;
 	@BindView(R.id.slider_layout)
-	public LinearLayout sliderLayout;
+	LinearLayout sliderLayout;
 	@BindView(R.id.scroll)
-	public NestedScrollView scroll;
+	NestedScrollView scroll;
 	@BindView(R.id.toolbar)
-	public Toolbar toolbar;
+	Toolbar toolbar;
 	@BindView(R.id.title_category)
-	public TextView title_category;
+	TextView title_category;
 	@BindView(R.id.title_category_more)
-	public TextView title_category_more;
+	TextView title_category_more;
 	@BindView(R.id.title_collection)
-	public TextView title_collection;
+	TextView title_collection;
 	@BindView(R.id.title_collection_more)
-	public TextView title_collection_more;
+	TextView title_collection_more;
 	@BindView(R.id.title_most)
-	public TextView title_most;
+	TextView title_most;
 	@BindView(R.id.title_most_more)
-	public TextView title_most_more;
+	TextView title_most_more;
 	@BindView(R.id.title_new)
-	public TextView title_new;
+	TextView title_new;
 	@BindView(R.id.title_new_more)
-	public TextView title_new_more;
+	TextView title_new_more;
 	@BindView(R.id.title_popular)
-	public TextView title_popular;
+	TextView title_popular;
 	@BindView(R.id.title_popular_more)
-	public TextView title_popular_more;
+	TextView title_popular_more;
 	@BindView(R.id.title_off)
-	public TextView title_off;
+	TextView title_off;
 	@BindView(R.id.title_off_more)
-	public TextView title_off_more;
+	TextView title_off_more;
+	
 	SessionManager session;                          // session for check user logged
 	ConfirmManager confirmManager;
 	SharedPreferencesManager SPManager;
@@ -232,7 +234,7 @@ public class Activity_Main extends AppCompatActivity implements
 		}
 		
 		if (!confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
-			Intent i = new Intent(getApplicationContext(), Confirm_Phone.class);
+			Intent i = new Intent(getApplicationContext(), Activity_ConfirmPhone.class);
 			i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
 			startActivity(i);
 			finish();
@@ -374,37 +376,37 @@ public class Activity_Main extends AppCompatActivity implements
 							}
 							if (item == 3) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "1");
+								i.putExtra(TAGs.TYPE, "1");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 4) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "2");
+								i.putExtra(TAGs.TYPE, "2");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 5) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "3");
+								i.putExtra(TAGs.TYPE, "3");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 6) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "4");
+								i.putExtra(TAGs.TYPE, "4");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 7) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "5");
+								i.putExtra(TAGs.TYPE, "5");
 								startActivity(i);
 								result.closeDrawer();
 							}
 							if (item == 8) {
 								Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-								i.putExtra("type", "6");
+								i.putExtra(TAGs.TYPE, "6");
 								startActivity(i);
 								result.closeDrawer();
 							}
@@ -425,7 +427,7 @@ public class Activity_Main extends AppCompatActivity implements
 									result.closeDrawer();
 								} else {
 									Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
-									Intent i = new Intent(getApplicationContext(), Login.class);
+									Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 									startActivity(i);
 								}
 							}
@@ -443,9 +445,6 @@ public class Activity_Main extends AppCompatActivity implements
 							if (item == 14) {
 								Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hyper-online.ir"));
 								startActivity(i);
-							}
-							if (item == 15) {
-							
 							}
 							if (item == 16) {
 								try {
@@ -471,9 +470,6 @@ public class Activity_Main extends AppCompatActivity implements
 								i.putExtra(TAGs.ADDRESS, "help");
 								startActivity(i);
 							}
-							if (item == 19) {
-							
-							}
 							if (item == 20) {
 								Intent i = new Intent(getApplicationContext(), Activity_WebPage.class);
 								i.putExtra(TAGs.TITLE, "درباره ما");
@@ -483,11 +479,11 @@ public class Activity_Main extends AppCompatActivity implements
 							if (item == 21) {
 								if (Helper.CheckInternet(getApplicationContext())) {
 									if (session.isLoggedIn()) {
-										Intent i = new Intent(getApplicationContext(), UserProfile.class);
+										Intent i = new Intent(getApplicationContext(), Activity_UserProfile.class);
 										startActivity(i);
 									} else {
 										Helper.MakeToast(getApplicationContext(), "ابتدا وارد شوید", TAGs.WARNING);
-										Intent i = new Intent(getApplicationContext(), Login.class);
+										Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 										startActivity(i);
 									}
 								} else
@@ -504,11 +500,11 @@ public class Activity_Main extends AppCompatActivity implements
 								startActivity(i);
 							}
 							if (item == 24) {
-								Intent i = new Intent(getApplicationContext(), Login.class);
+								Intent i = new Intent(getApplicationContext(), Activity_Login.class);
 								startActivity(i);
 							}
 							if (item == 25) {
-								Intent i = new Intent(getApplicationContext(), Register.class);
+								Intent i = new Intent(getApplicationContext(), Activity_Register.class);
 								startActivity(i);
 							}
 						}
@@ -592,7 +588,7 @@ public class Activity_Main extends AppCompatActivity implements
 			public void onClick(View view) {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-				i.putExtra("type", "2");
+				i.putExtra(TAGs.TYPE, "2");
 				startActivity(i);
 			}
 		});
@@ -602,7 +598,7 @@ public class Activity_Main extends AppCompatActivity implements
 			public void onClick(View view) {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-				i.putExtra("type", "6");
+				i.putExtra(TAGs.TYPE, "6");
 				startActivity(i);
 			}
 		});
@@ -612,7 +608,7 @@ public class Activity_Main extends AppCompatActivity implements
 			public void onClick(View view) {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-				i.putExtra("type", "3");
+				i.putExtra(TAGs.TYPE, "3");
 				startActivity(i);
 			}
 		});
@@ -622,7 +618,7 @@ public class Activity_Main extends AppCompatActivity implements
 			public void onClick(View view) {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-				i.putExtra("type", "5");
+				i.putExtra(TAGs.TYPE, "5");
 				startActivity(i);
 			}
 		});
@@ -632,7 +628,7 @@ public class Activity_Main extends AppCompatActivity implements
 			public void onClick(View view) {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_ListDetails.class);
-				i.putExtra("type", "4");
+				i.putExtra(TAGs.TYPE, "4");
 				startActivity(i);
 			}
 		});
@@ -1090,7 +1086,7 @@ public class Activity_Main extends AppCompatActivity implements
 										.onPositive(new MaterialDialog.SingleButtonCallback() {
 											@Override
 											public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-												Intent intent = new Intent(Activity_Main.this, Confirm_Phone.class);
+												Intent intent = new Intent(Activity_Main.this, Activity_ConfirmPhone.class);
 												intent.putExtra(TAGs.PHONE, phone);
 												startActivity(intent);
 												finish();
