@@ -25,8 +25,8 @@ public class Activity_WebPage extends AppCompatActivity {
 		Intent i = getIntent();
 		String title = i.getStringExtra(TAGs.TITLE);
 		String address = i.getStringExtra(TAGs.ADDRESS);
-		page_content = (WebView) findViewById(R.id.page_content);
-		page_title = (TextView) findViewById(R.id.page_title);
+		page_content = findViewById(R.id.page_content);
+		page_title = findViewById(R.id.page_title);
 		WebSettings webSettings = page_content.getSettings();
 		webSettings.setJavaScriptEnabled(false);
 		webSettings.setSupportZoom(false);
