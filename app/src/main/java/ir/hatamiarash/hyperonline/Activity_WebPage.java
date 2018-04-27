@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import helper.FontHelper;
 import ir.hatamiarash.utils.TAGs;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_WebPage extends AppCompatActivity {
 	WebView page_content;
@@ -32,5 +34,10 @@ public class Activity_WebPage extends AppCompatActivity {
 		webSettings.setSupportZoom(false);
 		page_content.loadUrl("file:///android_asset/" + address + ".html");
 		page_title.setText(FontHelper.getSpannedString(this, title));
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

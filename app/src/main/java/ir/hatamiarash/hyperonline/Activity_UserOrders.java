@@ -48,6 +48,7 @@ import ir.hatamiarash.adapters.OrderAdapter;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import models.Order;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_UserOrders extends AppCompatActivity implements CardBadge {
 	SQLiteHandler db_user;
@@ -204,5 +205,10 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

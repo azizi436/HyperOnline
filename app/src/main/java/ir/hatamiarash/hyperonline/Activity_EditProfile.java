@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import ir.hatamiarash.Image.PickerBuilder;
 import ir.hatamiarash.utils.TAGs;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import volley.AppController;
 
 public class Activity_EditProfile extends AppCompatActivity {
@@ -412,5 +414,10 @@ public class Activity_EditProfile extends AppCompatActivity {
 			hideDialog();
 		}
 		hideDialog();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

@@ -48,6 +48,7 @@ import ir.hatamiarash.adapters.CategoryAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import models.Category;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Cat extends AppCompatActivity implements CardBadge {
 	SweetAlertDialog progressDialog;
@@ -204,5 +205,10 @@ public class Activity_Cat extends AppCompatActivity implements CardBadge {
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

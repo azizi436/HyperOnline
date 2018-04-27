@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -46,6 +47,7 @@ import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_UserProfile extends AppCompatActivity {
 	SQLiteHandler db_user;
@@ -260,5 +262,10 @@ public class Activity_UserProfile extends AppCompatActivity {
 		if (requestCode == 100)
 			if (resultCode == 1)
 				GetUser(db_user.getUserDetails().get(TAGs.UID));
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

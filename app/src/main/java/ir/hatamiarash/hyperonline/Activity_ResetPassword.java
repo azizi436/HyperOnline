@@ -5,6 +5,7 @@
 package ir.hatamiarash.hyperonline;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_ResetPassword extends AppCompatActivity {
 	SweetAlertDialog progressDialog;
@@ -169,5 +171,10 @@ public class Activity_ResetPassword extends AppCompatActivity {
 		});
 		AlertDialog alert = dialog.create();
 		alert.show();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

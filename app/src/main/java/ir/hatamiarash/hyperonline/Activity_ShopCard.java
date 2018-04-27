@@ -63,6 +63,7 @@ import helper.SQLiteHandlerMain;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import models.Product;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_ShopCard extends AppCompatActivity {
 	SQLiteHandlerItem db_item;
@@ -771,5 +772,10 @@ public class Activity_ShopCard extends AppCompatActivity {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

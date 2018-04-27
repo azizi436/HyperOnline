@@ -33,6 +33,7 @@ import helper.SharedPreferencesManager;
 import ir.hatamiarash.adapters.MessageAdapter;
 import ir.hatamiarash.interfaces.Refresh;
 import models.Message;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Inbox extends AppCompatActivity implements Refresh {
 	SweetAlertDialog progressDialog;
@@ -123,5 +124,10 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 		messageList.clear();
 		messageAdapter.notifyDataSetChanged();
 		loadMessages();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

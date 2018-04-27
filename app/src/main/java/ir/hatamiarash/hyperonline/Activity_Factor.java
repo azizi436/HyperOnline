@@ -31,6 +31,7 @@ import java.net.URL;
 import butterknife.BindView;
 import helper.Helper;
 import ir.hatamiarash.utils.TAGs;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Factor extends Activity {
 	ProgressDialog mProgressDialog;
@@ -219,5 +220,10 @@ public class Activity_Factor extends Activity {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

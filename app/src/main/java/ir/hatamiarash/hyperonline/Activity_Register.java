@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,6 +46,7 @@ import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
 import tgio.rncryptor.RNCryptorNative;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Register extends AppCompatActivity {
 	static {
@@ -276,5 +278,10 @@ public class Activity_Register extends AppCompatActivity {
 					}
 				})
 				.show();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

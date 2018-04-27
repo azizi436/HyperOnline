@@ -47,6 +47,7 @@ import ir.hatamiarash.adapters.ProductAdapter_All;
 import ir.hatamiarash.interfaces.CardBadge;
 import ir.hatamiarash.utils.TAGs;
 import models.Product;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Search extends AppCompatActivity implements CardBadge {
 	SearchView searchView;
@@ -216,5 +217,10 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

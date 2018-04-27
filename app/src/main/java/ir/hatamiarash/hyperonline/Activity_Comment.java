@@ -46,6 +46,7 @@ import helper.Helper;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Comment extends AppCompatActivity {
 	static SQLiteHandler db_user;
@@ -203,5 +204,10 @@ public class Activity_Comment extends AppCompatActivity {
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

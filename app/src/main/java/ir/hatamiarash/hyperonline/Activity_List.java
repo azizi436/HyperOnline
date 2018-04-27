@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -70,6 +71,7 @@ import ir.hatamiarash.utils.URLs;
 import ir.hatamiarash.utils.Values;
 import models.Category;
 import models.Product;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_List extends AppCompatActivity implements CardBadge {
 	SQLiteHandlerItem db_item;
@@ -693,6 +695,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				finish();
 			}
 		}
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }
 

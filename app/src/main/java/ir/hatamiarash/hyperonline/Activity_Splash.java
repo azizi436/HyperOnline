@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import helper.FontHelper;
 import helper.Helper;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Splash extends AppCompatActivity {
 	private static String HOST;
@@ -125,5 +127,10 @@ public class Activity_Splash extends AppCompatActivity {
 						.show();
 			}
 		}
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }

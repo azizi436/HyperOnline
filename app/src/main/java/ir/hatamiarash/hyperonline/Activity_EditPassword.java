@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -44,6 +45,7 @@ import helper.SQLiteHandlerItem;
 import helper.SQLiteHandlerSupport;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_EditPassword extends AppCompatActivity {
 	SweetAlertDialog progressDialog;
@@ -209,5 +211,10 @@ public class Activity_EditPassword extends AppCompatActivity {
 	private void hideDialog() {
 		if (progressDialog.isShowing())
 			progressDialog.dismiss();
+	}
+	
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 }
