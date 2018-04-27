@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,13 +18,11 @@ import android.widget.Spinner;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
@@ -46,11 +44,19 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
+import tgio.rncryptor.RNCryptorNative;
 
 public class Register extends AppCompatActivity {
+	static {
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+	}
+	
 	SessionManager session;
-	SweetAlertDialog progressDialog;
 	SQLiteHandler db;
+	SweetAlertDialog progressDialog;
+	Response.Listener<String> listener;
+	Response.ErrorListener errorListener;
+	RequestQueue requestQueue;
 	
 	@BindView(R.id.btnConfirm)
 	Button btnRegister;
@@ -92,20 +98,22 @@ public class Register extends AppCompatActivity {
 		inputCity.setAdapter(cityAdapter);
 		inputName.requestFocus();
 		
+		requestQueue = Volley.newRequestQueue(this);
 		HOST = getResources().getString(R.string.url_host);
 		
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
-		session = new SessionManager(getApplicationContext());// Session manager
-		db = new SQLiteHandler(getApplicationContext());      // SQLite database handler
-		if (session.isLoggedIn()) { // Check if user is already logged in or not
-			// User is already logged in. Take him to main activity
+		progressDialog.setTitleText(getResources().getString(R.string.wait));
+		session = new SessionManager(getApplicationContext());
+		db = new SQLiteHandler(getApplicationContext());
+		
+		if (session.isLoggedIn()) {
 			Helper.MakeToast(getApplicationContext(), "شما قبلا وارد شده اید", TAGs.WARNING);
 			startActivity(new Intent(getApplicationContext(), Activity_Main.class));
 			finish();
 		}
-		// Register Button Click event
+		
 		btnRegister.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				String name = inputName.getText().toString();
@@ -123,7 +131,7 @@ public class Register extends AppCompatActivity {
 								if (password.equals(password2))
 									if (inputProvince.getSelectedItem() != null && !inputProvince.getSelectedItem().toString().equals(""))
 										if (inputCity.getSelectedItem() != null && !inputCity.getSelectedItem().toString().equals("انتخاب کنید"))
-											registerUser(
+											prepareRequest(
 													name,
 													password,
 													address,
@@ -146,7 +154,7 @@ public class Register extends AppCompatActivity {
 						Helper.MakeToast(Register.this, "تمامی کادر ها را پر نمایید", TAGs.ERROR);
 			}
 		});
-		// Link to Login Screen
+		
 		btnLinkToLogin.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				Intent i = new Intent(getApplicationContext(), Login.class);
@@ -154,15 +162,46 @@ public class Register extends AppCompatActivity {
 				finish();
 			}
 		});
+		
+		listener = new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				try {
+					JSONObject jObj = new JSONObject(response);
+					boolean error = jObj.getBoolean(TAGs.ERROR);
+					if (!error) {
+						MakeDialog();
+					} else {
+						hideDialog();
+						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
+						Helper.MakeToast(Register.this, errorMsg, TAGs.ERROR); // show error message
+					}
+				} catch (JSONException e) {
+					hideDialog();
+					e.printStackTrace();
+					finish();
+				}
+			}
+		};
+		
+		errorListener = new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				Helper.MakeToast(Register.this, error.toString(), TAGs.ERROR);
+				hideDialog();
+			}
+		};
 	}
 	
-	private void registerUser(final String name, final String password, final String address, final String phone, final String state, final String city, final String presenter) {
-		progressDialog.setTitleText(getResources().getString(R.string.wait));
+	private void prepareRequest(final String name,
+	                            final String password,
+	                            final String address,
+	                            final String phone,
+	                            final String state,
+	                            final String city,
+	                            final String presenter) {
 		showDialog();
-		
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
-			String URL = getResources().getString(R.string.url_api, HOST) + "users";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.NAME, name);
 			params.put(TAGs.ADDRESS, address);
@@ -171,64 +210,43 @@ public class Register extends AppCompatActivity {
 			params.put(TAGs.STATE, state);
 			params.put(TAGs.CITY, city);
 			params.put("presenter", presenter);
-			final String mRequestBody = params.toString();
-			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+			final String body = params.toString();
+			RNCryptorNative.encryptAsync(body, BuildConfig.ENCRIPTION_KEY, new RNCryptorNative.RNCryptorNativeCallback() {
 				@Override
-				public void onResponse(String response) {
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							MakeDialog("ثبت نام انجام شد", "نام کاربری شما تلفن همراهتان می باشد ، اکنون می توانید وارد شوید");
-						} else {
-							hideDialog();
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Register.this, errorMsg, TAGs.ERROR); // show error message
-						}
-					} catch (JSONException e) {
-						hideDialog();
-						e.printStackTrace();
-						finish();
-					}
+				public void done(String encrypted, Exception e) {
+					registerUser(encrypted);
 				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					Log.e("LOG_VOLLEY E", error.toString());
-					Helper.MakeToast(Register.this, error.toString(), TAGs.ERROR);
-					hideDialog();
-					//finish();
-				}
-			}) {
-				@NonNull
-				@Contract(pure = true)
-				@Override
-				public String getBodyContentType() {
-					return "application/json; charset=utf-8";
-				}
-				
-				@Nullable
-				@Override
-				public byte[] getBody() throws AuthFailureError {
-					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-						return null;
-					}
-				}
-			};
-			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-					0,
-					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-			));
-			requestQueue.add(stringRequest);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			hideDialog();
+			});
+		} catch (Exception ignore) {
 		}
+	}
+	
+	private void registerUser(final String body) {
+		String URL = getResources().getString(R.string.url_api, HOST) + "users";
+		StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, listener, errorListener) {
+			@NonNull
+			@Contract(pure = true)
+			@Override
+			public String getBodyContentType() {
+				return "charset=utf-8";
+			}
+			
+			@Nullable
+			@Override
+			public byte[] getBody() {
+				try {
+					return body.getBytes("utf-8");
+				} catch (UnsupportedEncodingException uee) {
+					return null;
+				}
+			}
+		};
+		stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+				0,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+		));
+		requestQueue.add(stringRequest);
 	}
 	
 	private void showDialog() {
@@ -241,10 +259,10 @@ public class Register extends AppCompatActivity {
 			progressDialog.dismiss();
 	}
 	
-	private void MakeDialog(String Title, String Message) {
+	private void MakeDialog() {
 		new MaterialStyledDialog.Builder(this)
-				.setTitle(FontHelper.getSpannedString(this, Title))
-				.setDescription(FontHelper.getSpannedString(this, Message))
+				.setTitle(FontHelper.getSpannedString(this, "ثبت نام انجام شد"))
+				.setDescription(FontHelper.getSpannedString(this, "نام کاربری شما تلفن همراهتان می باشد ، اکنون می توانید وارد شوید"))
 				.setStyle(Style.HEADER_WITH_TITLE)
 				.withDarkerOverlay(true)
 				.withDialogAnimation(true)
