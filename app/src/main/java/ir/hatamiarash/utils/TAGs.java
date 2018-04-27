@@ -22,6 +22,18 @@ public class TAGs {
 	public static final String STATE;
 	public static final String CITY;
 	public static final String NULL;
+	public static final String INDEX;
+	public static final String BODY;
+	public static final String SENDER;
+	public static final String CATEGORY;
+	public static final String CATEGORY_ID;
+	public static final String LEVEL;
+	public static final String PARENT;
+	public static final String PRICE;
+	public static final String DESCRIPTION;
+	public static final String COUNT;
+	public static final String EMPTY;
+	public static final String TYPE;
 	
 	public static final String API_KEY;
 	
@@ -43,6 +55,18 @@ public class TAGs {
 		STATE = "state";
 		CITY = "city";
 		NULL = "null";
+		INDEX = "index";
+		BODY = "body";
+		SENDER = "sender";
+		CATEGORY = "cat";
+		CATEGORY_ID = "cat_id";
+		LEVEL = "level";
+		PARENT = "parent";
+		PRICE = "price";
+		DESCRIPTION = "description";
+		COUNT = "count";
+		EMPTY = "";
+		TYPE = "type";
 		
 		API_KEY = "4d0d3be84eae7fbe5c317bf318c77e83";
 	}
