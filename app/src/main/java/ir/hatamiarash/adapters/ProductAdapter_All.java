@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.github.florent37.viewtooltip.ViewTooltip;
 
 import java.util.List;
 
@@ -30,8 +29,6 @@ import ir.hatamiarash.utils.TAGs;
 import models.Product;
 
 import static android.content.Context.VIBRATOR_SERVICE;
-import static com.github.florent37.viewtooltip.ViewTooltip.ALIGN.CENTER;
-import static com.github.florent37.viewtooltip.ViewTooltip.Position.BOTTOM;
 
 public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.MyViewHolder> {
 	private static String HOST;
@@ -109,21 +106,6 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
 			holder.status.setText("در سبد خرید موجود است");
 			holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
 		}
-		
-		holder.info.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				ViewTooltip
-						.on(holder.info)
-						.autoHide(false, 5000)
-						.clickToHide(true)
-						.align(CENTER)
-						.position(BOTTOM)
-						.text("The text")
-						.corner(10)
-						.show();
-			}
-		});
 		
 		holder.add_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
