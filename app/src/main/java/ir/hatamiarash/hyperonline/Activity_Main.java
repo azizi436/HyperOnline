@@ -43,12 +43,11 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -233,7 +232,7 @@ public class Activity_Main extends AppCompatActivity implements
 				db_support.CreateTable();
 				settings.edit().putBoolean("my_first_time", false).apply();
 			} catch (Exception e) {
-				e.printStackTrace();
+				Crashlytics.logException(e);
 			}
 		}
 		
@@ -908,7 +907,7 @@ public class Activity_Main extends AppCompatActivity implements
 							Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
-						e.printStackTrace();
+						Crashlytics.logException(e);
 						hideDialog();
 					}
 				}
@@ -928,18 +927,23 @@ public class Activity_Main extends AppCompatActivity implements
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						return mRequestBody.getBytes("utf-8");
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						return null;
 					}
 				}
 			};
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 	
@@ -995,7 +999,8 @@ public class Activity_Main extends AppCompatActivity implements
 		super.onResume();
 		try {
 			updateCartMenu();
-		} catch (NullPointerException ignore) {
+		} catch (NullPointerException e) {
+			Crashlytics.logException(e);
 		}
 		
 		if (VERSION != 0) {
@@ -1105,7 +1110,7 @@ public class Activity_Main extends AppCompatActivity implements
 							Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
-						e.printStackTrace();
+						Crashlytics.logException(e);
 					}
 				}
 			}, new Response.ErrorListener() {
@@ -1125,16 +1130,21 @@ public class Activity_Main extends AppCompatActivity implements
 				@Override
 				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						return mRequestBody.getBytes("utf-8");
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						return null;
 					}
 				}
 			};
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
 			VolleyQueue.add(stringRequest);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 	
@@ -1207,7 +1217,7 @@ public class Activity_Main extends AppCompatActivity implements
 						.show();
 			}
 		} catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 	
@@ -1247,18 +1257,23 @@ public class Activity_Main extends AppCompatActivity implements
 				
 				@Nullable
 				@Override
-				public byte[] getBody() throws AuthFailureError {
+				public byte[] getBody() {
 					try {
-						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
-						VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+						return mRequestBody.getBytes("utf-8");
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						return null;
 					}
 				}
 			};
+			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+					0,
+					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+			));
 			VolleyQueue.add(stringRequest);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 	
