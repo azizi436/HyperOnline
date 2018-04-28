@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -133,13 +134,15 @@ public class Activity_Login extends AppCompatActivity {
 					if (!error) {                          // Check for error node in json
 						session.setLogin(true);            // set login status true
 						final JSONObject user = jObj.getJSONObject(TAGs.USER);
+						String uid = user.getString(TAGs.UNIQUE_ID);
+						Crashlytics.setUserIdentifier(uid);
 						
 						db.addUser(
 								user.getString(TAGs.NAME),
 								"test@gmail.com",
 								user.getString(TAGs.ADDRESS),
 								user.getString(TAGs.PHONE),
-								user.getString(TAGs.UNIQUE_ID),
+								uid,
 								"Iran",
 								user.getString(TAGs.STATE),
 								user.getString(TAGs.CITY)
