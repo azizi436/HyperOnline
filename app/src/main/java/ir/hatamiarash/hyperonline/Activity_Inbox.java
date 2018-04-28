@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.util.ArrayList;
@@ -72,7 +73,8 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 			((TextView) v.findViewById(R.id.title_text)).setText(FontHelper.getSpannedString(getApplicationContext(), "صندوق پیام"));
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
-		} catch (NullPointerException ignore) {
+		} catch (NullPointerException e) {
+			Crashlytics.logException(e);
 		}
 		
 		messageList = new ArrayList<>();
@@ -105,6 +107,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 			SPManager.setUnreadMessage(false);
 			hideDialog();
 		} catch (Exception e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}

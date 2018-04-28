@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -92,7 +93,8 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 			((TextView) v.findViewById(R.id.title_text)).setText(FontHelper.getSpannedString(getApplicationContext(), "لیست سفارشات"));
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
-		} catch (NullPointerException ignore) {
+		} catch (NullPointerException e) {
+			Crashlytics.logException(e);
 		}
 		
 		orderList = new ArrayList<>();
@@ -139,6 +141,7 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 						Helper.MakeToast(Activity_UserOrders.this, errorMsg, TAGs.ERROR);
 					}
 				} catch (JSONException e) {
+					Crashlytics.logException(e);
 					hideDialog();
 				}
 			}
@@ -176,7 +179,8 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 				public byte[] getBody() {
 					try {
 						return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						return null;
 					}
@@ -189,6 +193,7 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 			));
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}

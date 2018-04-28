@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.github.ybq.android.spinkit.style.Wave;
@@ -92,10 +93,13 @@ public class Activity_Splash extends AppCompatActivity {
 				connection.setConnectTimeout(2000);
 				return connection.getResponseCode() == HttpsURLConnection.HTTP_OK;
 			} catch (SocketTimeoutException | MalformedURLException e) {
+				Crashlytics.logException(e);
 				return false;
 			} catch (IOException e) {
+				Crashlytics.logException(e);
 				return false;
 			} catch (Exception e) {
+				Crashlytics.logException(e);
 				return false;
 			}
 		}

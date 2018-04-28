@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -111,7 +112,8 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(Activity_ListDetails.this, errorMsg, TAGs.ERROR);
 					}
-				} catch (JSONException ignore) {
+				} catch (JSONException e) {
+					Crashlytics.logException(e);
 				}
 			}
 		};
@@ -165,7 +167,8 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						return null;
 					}
@@ -173,6 +176,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 			};
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}
@@ -211,7 +215,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 	

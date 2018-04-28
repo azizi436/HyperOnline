@@ -192,6 +192,7 @@ public class Activity_Login extends AppCompatActivity {
 						Helper.MakeToast(Activity_Login.this, errorMsg, TAGs.ERROR); // show error message
 					}
 				} catch (JSONException e) {
+					Crashlytics.logException(e);
 					hideDialog();
 					finish();
 				}
@@ -222,7 +223,8 @@ public class Activity_Login extends AppCompatActivity {
 					CheckLogin(encrypted);
 				}
 			});
-		} catch (Exception ignore) {
+		} catch (Exception e) {
+			Crashlytics.logException(e);
 		}
 	}
 	
@@ -241,7 +243,8 @@ public class Activity_Login extends AppCompatActivity {
 			public byte[] getBody() {
 				try {
 					return body.getBytes("utf-8");
-				} catch (UnsupportedEncodingException ignore) {
+				} catch (UnsupportedEncodingException e) {
+					Crashlytics.logException(e);
 					return null;
 				}
 			}

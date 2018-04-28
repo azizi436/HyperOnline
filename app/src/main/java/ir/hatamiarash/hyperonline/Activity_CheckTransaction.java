@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -79,6 +80,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
 					}
 				} catch (JSONException e) {
+					Crashlytics.logException(e);
 					finish();
 				}
 			}
@@ -128,7 +130,8 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 						})
 						.show();
 			}
-		} catch (NullPointerException ignored) {
+		} catch (NullPointerException e) {
+			Crashlytics.logException(e);
 			finish();
 		}
 	}
@@ -155,7 +158,8 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						return null;
 					}
@@ -168,6 +172,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}

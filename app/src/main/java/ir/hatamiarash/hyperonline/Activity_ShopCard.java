@@ -36,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -357,6 +358,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 							Helper.MakeToast(Activity_ShopCard.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						finish();
 					}
@@ -380,7 +382,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						return null;
 					}
@@ -393,6 +396,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}
@@ -424,6 +428,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 						else
 							onPayCanceled();
 					} catch (JSONException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						finish();
 					}
@@ -453,7 +458,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						return null;
 					}
 				}
@@ -464,7 +470,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
 			requestQueue.add(stringRequest);
-		} catch (JSONException ignore) {
+		} catch (JSONException e) {
+			Crashlytics.logException(e);
 		}
 	}
 	
@@ -544,6 +551,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 							Helper.MakeToast(Activity_ShopCard.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						finish();
 					}
@@ -567,7 +575,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						return null;
 					}
@@ -580,6 +589,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}
@@ -768,7 +778,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 					notifyItemRemoved(position);
 					notifyItemRangeChanged(position, products.size());
 				} catch (Exception e) {
-					Log.e("Arash", "Known Error RemoveAt");
+					Crashlytics.logException(e);
 				}
 			}
 		}

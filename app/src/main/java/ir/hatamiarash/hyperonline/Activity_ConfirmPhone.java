@@ -41,6 +41,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -156,7 +157,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -199,6 +200,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 						finish();
 					}
 				} catch (JSONException e) {
+					Crashlytics.logException(e);
 					hideDialog();
 					finish();
 				}
@@ -224,6 +226,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
 					}
 				} catch (JSONException e) {
+					Crashlytics.logException(e);
 					hideDialog();
 				}
 			}
@@ -335,6 +338,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}
@@ -361,7 +365,8 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						hideDialog();
 						return null;
 					}
@@ -375,6 +380,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			));
 			requestQueue.add(stringRequest);
 		} catch (JSONException e) {
+			Crashlytics.logException(e);
 			hideDialog();
 		}
 	}
@@ -385,7 +391,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Crashlytics.logException(e);
 			}
 			return "Executed";
 		}

@@ -12,6 +12,8 @@ import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +38,8 @@ public class SmsReceiver extends BroadcastReceiver {
 			SmsMessage[] rawSmsChunks;
 			try {
 				rawSmsChunks = Telephony.Sms.Intents.getMessagesFromIntent(intent);
-			} catch (NullPointerException ignored) {
+			} catch (NullPointerException e) {
+				Crashlytics.logException(e);
 				return;
 			}
 			/* Gather all sms chunks for each sender separately */
@@ -65,7 +68,8 @@ public class SmsReceiver extends BroadcastReceiver {
 					StringBuilder smsBuilder = smsThread.getValue();
 					String message = smsBuilder.toString();
 					handler.handleSms(sender, message);
-				} catch (Exception ignore) {
+				} catch (Exception e) {
+					Crashlytics.logException(e);
 				}
 			}
 		}

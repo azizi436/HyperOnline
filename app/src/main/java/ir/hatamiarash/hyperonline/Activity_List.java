@@ -35,6 +35,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -452,7 +453,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
 					}
-				} catch (JSONException ignore) {
+				} catch (JSONException e) {
+					Crashlytics.logException(e);
 				}
 			}
 		};
@@ -508,7 +510,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 						Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
 						finish();
 					}
-				} catch (JSONException ignore) {
+				} catch (JSONException e) {
+					Crashlytics.logException(e);
 				}
 			}
 		};
@@ -573,7 +576,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						p.setVisibility(View.INVISIBLE);
 						return null;
 					}
@@ -581,6 +585,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			};
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
+			Crashlytics.logException(e);
 			p.setVisibility(View.INVISIBLE);
 		}
 	}
@@ -609,7 +614,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 				public byte[] getBody() {
 					try {
 						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException uee) {
+					} catch (UnsupportedEncodingException e) {
+						Crashlytics.logException(e);
 						p.setVisibility(View.INVISIBLE);
 						return null;
 					}
@@ -617,6 +623,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			};
 			requestQueue.add(stringRequest);
 		} catch (Exception e) {
+			Crashlytics.logException(e);
 			p.setVisibility(View.INVISIBLE);
 		}
 	}
@@ -677,7 +684,8 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		super.onResume();
 		try {
 			updateCartMenu();
-		} catch (NullPointerException ignore) {
+		} catch (NullPointerException e) {
+			Crashlytics.logException(e);
 		}
 	}
 	

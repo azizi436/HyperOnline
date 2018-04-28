@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 		try {
 			this.cardBadge = ((CardBadge) mContext);
 		} catch (ClassCastException e) {
+			Crashlytics.logException(e);
 			throw new ClassCastException("Activity must implement AdapterCallback.");
 		}
 		vibrator = (Vibrator) mContext.getSystemService(VIBRATOR_SERVICE);
@@ -121,7 +123,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 				try {
 					cardBadge.updateBadge();
 				} catch (ClassCastException e) {
-					Log.w("CallBack", e.getMessage());
+					Crashlytics.logException(e);
 				}
 				holder.count_cart.setText("1");
 			}
@@ -146,7 +148,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 					try {
 						cardBadge.updateBadge();
 					} catch (ClassCastException e) {
-						Log.w("CallBack", e.getMessage());
+						Crashlytics.logException(e);
 					}
 					holder.count_cart.setText(String.valueOf(count));
 				} else
@@ -190,7 +192,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 				try {
 					cardBadge.updateBadge();
 				} catch (ClassCastException e) {
-					Log.w("CallBack", e.getMessage());
+					Crashlytics.logException(e);
 				}
 			}
 		});

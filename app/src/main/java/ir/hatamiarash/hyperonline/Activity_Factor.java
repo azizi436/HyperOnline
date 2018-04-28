@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -157,6 +158,7 @@ public class Activity_Factor extends Activity {
 					output.write(data, 0, count);
 				}
 			} catch (Exception e) {
+				Crashlytics.logException(e);
 				return e.toString();
 			} finally {
 				try {
@@ -184,7 +186,8 @@ public class Activity_Factor extends Activity {
 				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 				mWakeLock.acquire(2 * 60 * 1000L);
 				mProgressDialog.show();
-			} catch (NullPointerException ignore) {
+			} catch (NullPointerException e) {
+				Crashlytics.logException(e);
 			}
 		}
 		
@@ -213,6 +216,7 @@ public class Activity_Factor extends Activity {
 					intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					startActivity(Intent.createChooser(intent, "Open"));
 				} catch (Exception e) {
+					Crashlytics.logException(e);
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					Uri mydir = Uri.parse(Environment.getExternalStorageDirectory() + "/HO-Factors/");
 					intent.setDataAndType(mydir, "application/*");    // or use */*

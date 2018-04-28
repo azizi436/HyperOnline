@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -199,6 +201,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 					output.write(data, 0, count);
 				}
 			} catch (Exception e) {
+				Crashlytics.logException(e);
 				return e.toString();
 			} finally {
 				try {
@@ -206,7 +209,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 						output.close();
 					if (input != null)
 						input.close();
-				} catch (IOException ignored) {
+				} catch (IOException e) {
+					Crashlytics.logException(e);
 				}
 				
 				if (connection != null)
@@ -254,6 +258,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 				try {
 					mContext.startActivity(intent);
 				} catch (Exception e) {
+					Crashlytics.logException(e);
 					Helper.MakeToast(context, "نرم افزار مربوطه پیدا نشد. فاکتور در پوشه " + "HO-Factors" + " ذخیره شده است", TAGs.ERROR, Toast.LENGTH_LONG);
 				}
 			}
