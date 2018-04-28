@@ -122,3 +122,10 @@ public <init>(...);
 
 -keep class uk.co.chrisjenx.calligraphy.* { *; }
 -keep class uk.co.chrisjenx.calligraphy.*$* { *; }
+
+# crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
