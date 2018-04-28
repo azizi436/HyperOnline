@@ -1006,12 +1006,14 @@ public class Activity_Main extends AppCompatActivity implements
 	@Override
 	public void onStart() {
 		super.onStart();
+		FlurryAgent.onStartSession(getApplicationContext());
 	}
 	
 	@Override
 	protected void onStop() {
 		slider.stopAutoCycle();
 		super.onStop();
+		FlurryAgent.onEndSession(getApplicationContext());
 	}
 	
 	@Override
