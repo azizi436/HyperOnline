@@ -20,6 +20,7 @@ import java.util.List;
 
 import ir.hatamiarash.hyperonline.Activity_List;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.utils.TAGs;
 import models.Category;
 
 public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_Small.MyViewHolder> {
@@ -49,7 +50,7 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
 		holder.point.setText(String.valueOf(category.point));
 		holder.point_count.setText(String.valueOf(category.point_count));
 		holder.off.setText(String.valueOf(category.off));
-		if (String.valueOf(category.image).equals("null"))
+		if (String.valueOf(category.image).equals(TAGs.NULL))
 			Glide.with(mContext).load(R.drawable.nnull).into(holder.image);
 		else
 			Glide.with(mContext).load(mContext.getResources().getString(R.string.url_image, HOST) + String.valueOf(category.image)).into(holder.image);
@@ -105,14 +106,14 @@ public class CategoryAdapter_Small extends RecyclerView.Adapter<CategoryAdapter_
 			Intent i = new Intent(mContext, Activity_List.class);
 			// we are in level 3 and we want products
 			if (level == 3)
-				i.putExtra("cat", "1");
+				i.putExtra(TAGs.CATEGORY, "1");
 			else {
-				i.putExtra("cat", "2");
+				i.putExtra(TAGs.CATEGORY, "2");
 				// go to next level category
-				i.putExtra("level", String.valueOf(level + 1));
+				i.putExtra(TAGs.LEVEL, String.valueOf(level + 1));
 			}
-			i.putExtra("cat_id", id);
-			i.putExtra("title", name);
+			i.putExtra(TAGs.CATEGORY_ID, id);
+			i.putExtra(TAGs.TITLE, name);
 			mContext.startActivity(i);
 		}
 	}
