@@ -46,7 +46,6 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import tgio.rncryptor.RNCryptorNative;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Register extends AppCompatActivity {
@@ -214,12 +213,7 @@ public class Activity_Register extends AppCompatActivity {
 			params.put(TAGs.CITY, city);
 			params.put("presenter", presenter);
 			final String body = params.toString();
-			RNCryptorNative.encryptAsync(body, BuildConfig.ENCRIPTION_KEY, new RNCryptorNative.RNCryptorNativeCallback() {
-				@Override
-				public void done(String encrypted, Exception e) {
-					registerUser(encrypted);
-				}
-			});
+			registerUser(body);
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 		}

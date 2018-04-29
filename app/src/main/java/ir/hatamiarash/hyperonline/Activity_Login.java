@@ -44,7 +44,6 @@ import helper.IconEditText;
 import helper.SQLiteHandler;
 import helper.SessionManager;
 import ir.hatamiarash.utils.TAGs;
-import tgio.rncryptor.RNCryptorNative;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Activity_Login extends AppCompatActivity {
@@ -217,12 +216,7 @@ public class Activity_Login extends AppCompatActivity {
 			params.put(TAGs.PHONE, phone);
 			params.put(TAGs.PASSWORD, password);
 			final String body = params.toString();
-			RNCryptorNative.encryptAsync(body, BuildConfig.ENCRIPTION_KEY, new RNCryptorNative.RNCryptorNativeCallback() {
-				@Override
-				public void done(String encrypted, Exception e) {
-					CheckLogin(encrypted);
-				}
-			});
+			CheckLogin(body);
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 		}
