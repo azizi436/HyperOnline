@@ -229,7 +229,7 @@ public class Activity_Login extends AppCompatActivity {
 			@Contract(pure = true)
 			@Override
 			public String getBodyContentType() {
-				return "charset=utf-8";
+				return "application/json; charset=utf-8";
 			}
 			
 			@Nullable
