@@ -17,7 +17,7 @@
 		android:layout_marginBottom="10dp"
 		android:layout_marginTop="60dp">
 
-		<helper.PersianEditText
+		<ir.hatamiarash.hyperonline.libraries.PersianEditText
 			android:id="@+id/comment_body"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
@@ -45,7 +45,7 @@
 			android:layout_marginTop="5dp"
 			android:orientation="horizontal">
 
-			<helper.PersianButton
+			<ir.hatamiarash.hyperonline.libraries.PersianButton
 				android:id="@+id/comment_send"
 				android:layout_width="120dp"
 				android:layout_height="wrap_content"

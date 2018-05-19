@@ -10,7 +10,7 @@
 	android:layout_height="match_parent"
 	android:background="@color/accent">
 
-	<helper.PersianTextView
+	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/pay_msg"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
 		app:lottie_autoPlay="true"
 		app:lottie_loop="true"/>
 
-	<helper.PersianTextView
+	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/loc_msg"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 		android:textSize="16sp"
 		app:my_font="shabnam"/>
 
-	<helper.PersianButton
+	<ir.hatamiarash.hyperonline.libraries.PersianButton
 		android:id="@+id/pay_log_download"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
 		android:textColor="@color/white"
 		android:textSize="24sp"/>
 
-	<helper.PersianButton
+	<ir.hatamiarash.hyperonline.libraries.PersianButton
 		android:id="@+id/pay_log_back"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

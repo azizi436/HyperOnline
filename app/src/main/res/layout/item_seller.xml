@@ -40,7 +40,7 @@
 				android:background="@drawable/selector_ic_label_g"
 				android:orientation="vertical">
 
-				<helper.PersianTextView
+				<ir.hatamiarash.hyperonline.libraries.PersianTextView
 					android:id="@+id/point"
 					android:layout_width="wrap_content"
 					android:layout_height="16dp"
@@ -58,7 +58,7 @@
 				android:layout_height="match_parent"
 				android:visibility="gone"/>
 
-			<helper.RoundedImageView
+			<ir.hatamiarash.hyperonline.libraries.RoundedImageView
 				android:id="@+id/seller_photo"
 				android:layout_width="80dp"
 				android:layout_height="80dp"
@@ -73,7 +73,7 @@
 				android:layout_marginTop="5dp"
 				android:scaleType="centerCrop"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/seller_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
 				android:textSize="20sp"
 				app:my_font="shabnam"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/seller_address"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
 				android:textSize="12sp"
 				app:my_font="shabnam"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/seller_info"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

@@ -32,7 +32,7 @@
 		android:gravity="center_horizontal"
 		android:paddingTop="70dp">
 
-		<helper.PersianTextView
+		<ir.hatamiarash.hyperonline.libraries.PersianTextView
 			android:id="@+id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
 			android:textColor="@color/black"
 			app:my_font="iran_sans"/>
 
-		<helper.PersianTextView
+		<ir.hatamiarash.hyperonline.libraries.PersianTextView
 			android:id="@+id/phone"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content">
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button1"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -117,7 +117,7 @@
 						android:textColor="@color/black"
 						android:textSize="20sp"/>
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button2"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -131,7 +131,7 @@
 						android:textColor="@color/black"
 						android:textSize="20sp"/>
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button3"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -152,7 +152,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content">
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button4"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -166,7 +166,7 @@
 						android:textColor="@color/black"
 						android:textSize="20sp"/>
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button5"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -180,7 +180,7 @@
 						android:textColor="@color/black"
 						android:textSize="20sp"/>
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button6"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -201,7 +201,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content">
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button7"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -215,7 +215,7 @@
 						android:textColor="@color/black"
 						android:textSize="20sp"/>
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button8"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -229,7 +229,7 @@
 						android:textColor="@color/black"
 						android:textSize="20sp"/>
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button9"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -250,7 +250,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content">
 
-					<helper.PersianButton
+					<ir.hatamiarash.hyperonline.libraries.PersianButton
 						android:id="@+id/button0"
 						style="?android:attr/buttonBarButtonStyle"
 						android:layout_width="0dp"
@@ -268,7 +268,7 @@
 			</TableLayout>
 		</RelativeLayout>
 
-		<helper.PersianTextView
+		<ir.hatamiarash.hyperonline.libraries.PersianTextView
 			android:id="@+id/time"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

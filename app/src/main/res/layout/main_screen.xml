@@ -10,7 +10,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/md_grey_100"
-	tools:context="ir.hatamiarash.hyperonline.Activity_Main">
+	tools:context="ir.hatamiarash.hyperonline.activities.Activity_Main">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/app_bar"
@@ -61,7 +61,7 @@
 					android:gravity="center"/>
 			</LinearLayout>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_category"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 				android:textSize="20sp"
 				app:my_font="iran_sans"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_category_more"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
 				android:nestedScrollingEnabled="false"
 				android:scrollbars="none"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_collection"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
 				android:textSize="20sp"
 				app:my_font="iran_sans"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_collection_more"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -157,7 +157,7 @@
 				android:nestedScrollingEnabled="false"
 				android:scrollbars="none"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_most"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
 				android:textSize="20sp"
 				app:my_font="iran_sans"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_most_more"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
 				android:nestedScrollingEnabled="false"
 				android:scrollbars="none"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_new"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
 				android:textSize="20sp"
 				app:my_font="iran_sans"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_new_more"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
 				android:nestedScrollingEnabled="false"
 				android:scrollbars="none"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_popular"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -272,7 +272,7 @@
 				android:textSize="20sp"
 				app:my_font="iran_sans"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_popular_more"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
 				android:nestedScrollingEnabled="false"
 				android:scrollbars="none"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_off"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -320,7 +320,7 @@
 				android:textSize="20sp"
 				app:my_font="iran_sans"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/title_off_more"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"

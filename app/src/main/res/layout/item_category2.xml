@@ -64,7 +64,7 @@
 				android:padding="5dp"
 				android:scaleType="fitCenter"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/category_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

@@ -66,7 +66,7 @@
 					android:layout_weight="3"
 					card_view:srcCompat="@drawable/ic_add"/>
 
-				<helper.PersianTextView
+				<ir.hatamiarash.hyperonline.libraries.PersianTextView
 					android:id="@+id/product_count_cart"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
 				android:layout_marginStart="10dp"
 				android:scaleType="fitCenter"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/product_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
 				android:orientation="horizontal"
 				android:visibility="visible">
 
-				<helper.PersianTextView
+				<ir.hatamiarash.hyperonline.libraries.PersianTextView
 					android:id="@+id/product_price_off"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
@@ -190,7 +190,7 @@
 					android:textSize="16sp"
 					app:my_font="iran_sans"/>
 
-				<helper.PersianTextView
+				<ir.hatamiarash.hyperonline.libraries.PersianTextView
 					android:id="@+id/product_price"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
@@ -204,7 +204,7 @@
 
 			</LinearLayout>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/product_info"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

@@ -10,7 +10,7 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<helper.PersianEditText
+	<ir.hatamiarash.hyperonline.libraries.PersianEditText
 		android:id="@+id/edit_text"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
@@ -20,7 +20,7 @@
 		android:textColor="@color/black"
 		app:my_font="shabnam"/>
 
-	<helper.PersianTextView
+	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/textView2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

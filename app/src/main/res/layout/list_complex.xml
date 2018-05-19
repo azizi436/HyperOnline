@@ -10,7 +10,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/md_grey_100"
-	tools:context="ir.hatamiarash.hyperonline.Activity_Main">
+	tools:context="ir.hatamiarash.hyperonline.activities.Activity_Main">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/app_bar"
@@ -27,7 +27,7 @@
 
 	</android.support.design.widget.AppBarLayout>
 
-	<helper.PersianTextView
+	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/title_category"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 		android:nestedScrollingEnabled="false"
 		android:scrollbars="none"/>
 
-	<helper.PersianTextView
+	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/title_product"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
 		android:layout_below="@+id/title_product"
 		android:paddingBottom="10dp"/>
 
-	<helper.SymmetricProgressBar
+	<ir.hatamiarash.hyperonline.libraries.SymmetricProgressBar
 		android:id="@+id/color_bar"
 		android:layout_width="match_parent"
 		android:layout_height="5dp"

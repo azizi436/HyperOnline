@@ -32,7 +32,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
 
-				<helper.IconEditText
+				<ir.hatamiarash.hyperonline.libraries.IconEditText
 					android:id="@+id/current_password"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
 					app:iconSrc="@drawable/ic_person"
 					app:isName="true"/>
 
-				<helper.IconEditText
+				<ir.hatamiarash.hyperonline.libraries.IconEditText
 					android:id="@+id/new_password_2"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
 					app:iconSrc="@drawable/ic_dialpad"
 					app:isPhone="true"/>
 
-				<helper.PersianTextView
+				<ir.hatamiarash.hyperonline.libraries.PersianTextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_below="@id/address"
@@ -81,7 +81,7 @@
 					android:textSize="16sp"
 					app:my_font="shabnam"/>
 
-				<helper.IconEditText
+				<ir.hatamiarash.hyperonline.libraries.IconEditText
 					android:id="@+id/password"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
 					app:iconSrc="@drawable/ic_lock"
 					app:isPassword="true"/>
 
-				<helper.IconEditText
+				<ir.hatamiarash.hyperonline.libraries.IconEditText
 					android:id="@+id/password2"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
 						android:layout_toStartOf="@+id/tit"
 						android:popupBackground="@color/common_google_signin_btn_text_light_default"/>
 
-					<helper.PersianTextView
+					<ir.hatamiarash.hyperonline.libraries.PersianTextView
 						android:id="@+id/tit"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
 						android:layout_toStartOf="@+id/tit2"
 						android:popupBackground="@color/common_google_signin_btn_text_light_default"/>
 
-					<helper.PersianTextView
+					<ir.hatamiarash.hyperonline.libraries.PersianTextView
 						android:id="@+id/tit2"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
@@ -193,7 +193,7 @@
 						app:my_font="shabnam"/>
 				</RelativeLayout>
 
-				<helper.PersianTextView
+				<ir.hatamiarash.hyperonline.libraries.PersianTextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_below="@id/address"
@@ -212,7 +212,7 @@
 					android:textSize="16sp"
 					app:my_font="shabnam"/>
 
-				<helper.IconEditText
+				<ir.hatamiarash.hyperonline.libraries.IconEditText
 					android:id="@+id/address"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
 					app:iconSrc="@drawable/ic_location"
 					app:isAddress="true"/>
 
-				<helper.IconEditText
+				<ir.hatamiarash.hyperonline.libraries.IconEditText
 					android:id="@+id/presenter"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
 			</LinearLayout>
 		</ScrollView>
 
-		<helper.PersianButton
+		<ir.hatamiarash.hyperonline.libraries.PersianButton
 			android:id="@+id/btnConfirm"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -256,7 +256,7 @@
 			android:textColor="@color/white"
 			android:textSize="24sp"/>
 
-		<helper.PersianButton
+		<ir.hatamiarash.hyperonline.libraries.PersianButton
 			android:id="@+id/btnChangePassword"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

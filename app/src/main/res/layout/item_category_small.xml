@@ -54,7 +54,7 @@
 				android:clickable="true"
 				android:scaleType="centerCrop"/>
 
-			<helper.PersianTextView
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
 				android:id="@+id/category_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

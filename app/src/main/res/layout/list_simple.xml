@@ -10,9 +10,9 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/md_grey_100"
-	tools:context="ir.hatamiarash.hyperonline.Activity_Main">
+	tools:context="ir.hatamiarash.hyperonline.activities.Activity_Main">
 
-	<helper.PersianTextView
+	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
