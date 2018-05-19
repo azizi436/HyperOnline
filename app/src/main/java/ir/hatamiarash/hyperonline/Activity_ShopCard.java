@@ -42,6 +42,7 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -325,6 +326,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 				public void onResponse(String response) {
 					hideDialog();
 					try {
+						response = fixResponse(response);
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
@@ -787,5 +789,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 	@Override
 	protected void attachBaseContext(Context newBase) {
 		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+	}
+	
+	@Contract(pure = true)
+	@NotNull
+	private String fixResponse(@NotNull String response) {
+		return "{\"" + response.substring(response.indexOf("error"));
 	}
 }
