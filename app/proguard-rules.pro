@@ -138,3 +138,6 @@ public <init>(...);
 #msgpack
 -dontwarn org.msgpack.**
 -keep class org.msgpack.** { *; }
+
+-keep class com.google.android.gms.ads.** { *; }
+    -dontwarn okio.**

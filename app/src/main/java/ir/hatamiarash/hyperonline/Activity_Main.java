@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.amplitude.api.Amplitude;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -186,18 +187,7 @@ public class Activity_Main extends AppCompatActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_screen);
 		
-		MultiDex.install(this);
-		ButterKnife.bind(this);
-		Pushe.initialize(getApplicationContext(), true);
-		Fabric.with(this, new Crashlytics());
-		new FlurryAgent.Builder()
-				.withLogEnabled(true)
-				.build(this, "4WKBBTSJTHP7P8RBTDTH");
-		CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-				.setDefaultFontPath("fonts/sans.ttf")
-				.setFontAttrId(R.attr.fontPath)
-				.build()
-		);
+		configureLibraries();
 		
 		Helper.CheckInternet(getApplicationContext());
 		Helper.getPermissions(this, getApplicationContext());
@@ -1299,5 +1289,28 @@ public class Activity_Main extends AppCompatActivity implements
 	@Override
 	protected void attachBaseContext(Context newBase) {
 		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+	}
+	
+	private void configureLibraries(){
+		MultiDex.install(this);
+		
+		ButterKnife.bind(this);
+		
+		Pushe.initialize(getApplicationContext(), true);
+		
+		Fabric.with(this, new Crashlytics());
+		
+		new FlurryAgent.Builder()
+				.withLogEnabled(true)
+				.build(this, "4WKBBTSJTHP7P8RBTDTH");
+		
+		Amplitude.getInstance().initialize(this, "37d111e62e3ec73db8327c61d6215006")
+				.enableForegroundTracking(getApplication());
+		
+		CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+				.setDefaultFontPath("fonts/sans.ttf")
+				.setFontAttrId(R.attr.fontPath)
+				.build()
+		);
 	}
 }
