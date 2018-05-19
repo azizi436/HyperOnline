@@ -134,3 +134,7 @@ public <init>(...);
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
+
+#msgpack
+-dontwarn org.msgpack.**
+-keep class org.msgpack.** { *; }
