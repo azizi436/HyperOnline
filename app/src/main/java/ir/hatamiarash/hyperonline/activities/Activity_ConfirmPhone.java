@@ -55,15 +55,15 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
+import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.SmsListener;
 import ir.hatamiarash.hyperonline.receivers.SmsReceiver;
@@ -73,6 +73,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
+import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 
 public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListener {
 	private static final String CLASS = Activity_ConfirmPhone.class.getSimpleName();
@@ -197,6 +198,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			public void onResponse(String response) {
 				hideDialog();
 				try {
+					response = fixResponse(response);
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
@@ -221,6 +223,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			public void onResponse(String response) {
 				hideDialog();
 				try {
+					response = fixResponse(response);
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {

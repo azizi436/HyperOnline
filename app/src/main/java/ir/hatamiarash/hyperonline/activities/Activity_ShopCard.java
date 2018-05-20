@@ -42,7 +42,6 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,22 +54,23 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.ronash.pushe.Pushe;
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerMain;
 import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.FormatHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerMain;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.models.Product;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
+import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 
 public class Activity_ShopCard extends AppCompatActivity {
 	private static final String CLASS = Activity_ShopCard.class.getSimpleName();
@@ -800,12 +800,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 	@Override
 	protected void attachBaseContext(Context newBase) {
 		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-	}
-	
-	@Contract(pure = true)
-	@NotNull
-	private String fixResponse(@NotNull String response) {
-		return "{\"" + response.substring(response.indexOf("error"));
 	}
 	
 	private void analyticsReport() {
