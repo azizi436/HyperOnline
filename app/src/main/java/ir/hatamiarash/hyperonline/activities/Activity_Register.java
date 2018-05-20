@@ -52,6 +52,7 @@ import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
+import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 
 public class Activity_Register extends AppCompatActivity {
 	private static final String CLASS = Activity_Register.class.getSimpleName();
@@ -176,6 +177,7 @@ public class Activity_Register extends AppCompatActivity {
 		listener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
+				response = fixResponse(response);
 				try {
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);

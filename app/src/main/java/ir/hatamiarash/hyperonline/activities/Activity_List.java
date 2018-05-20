@@ -78,6 +78,7 @@ import ir.hatamiarash.hyperonline.utils.Values;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
+import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 
 public class Activity_List extends AppCompatActivity implements CardBadge {
 	private static final String CLASS = Activity_List.class.getSimpleName();
@@ -433,6 +434,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		productListener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
+				response = fixResponse(response);
 				p.setVisibility(View.INVISIBLE);
 				try {
 					JSONObject jObj = new JSONObject(response);
@@ -471,6 +473,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		categoryListener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
+				response = fixResponse(response);
 				p.setVisibility(View.INVISIBLE);
 				try {
 					JSONObject jObj = new JSONObject(response);

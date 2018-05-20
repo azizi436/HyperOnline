@@ -335,6 +335,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					response = fixResponse(response);
 					hideDialog();
 					try {
 						response = fixResponse(response);
@@ -433,6 +434,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					response = fixResponse(response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						int status = jObj.getInt("status");
@@ -549,6 +551,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					response = fixResponse(response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);

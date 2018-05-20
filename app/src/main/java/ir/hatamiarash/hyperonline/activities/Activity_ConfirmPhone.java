@@ -196,9 +196,9 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 		requestListener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
+				response = fixResponse(response);
 				hideDialog();
 				try {
-					response = fixResponse(response);
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
@@ -221,9 +221,9 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 		syncListener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
+				response = fixResponse(response);
 				hideDialog();
 				try {
-					response = fixResponse(response);
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {

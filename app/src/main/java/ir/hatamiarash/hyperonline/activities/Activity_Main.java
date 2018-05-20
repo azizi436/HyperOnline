@@ -109,6 +109,7 @@ import ir.hatamiarash.hyperonline.utils.Values;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
+import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 
 public class Activity_Main extends AppCompatActivity implements
 		BaseSliderView.OnSliderClickListener,
@@ -648,6 +649,7 @@ public class Activity_Main extends AppCompatActivity implements
 			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					response = fixResponse(response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);
@@ -1066,6 +1068,7 @@ public class Activity_Main extends AppCompatActivity implements
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					response = fixResponse(response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
@@ -1230,6 +1233,7 @@ public class Activity_Main extends AppCompatActivity implements
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 				@Override
 				public void onResponse(String response) {
+					response = fixResponse(response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						if (jObj.getBoolean(TAGs.ERROR))
