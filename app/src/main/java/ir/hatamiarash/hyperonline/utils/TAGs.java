@@ -68,7 +68,7 @@ public class TAGs {
 		TOTAL_PRICE = "totalPrice";
 		DESCRIPTION = "description";
 		COUNT = "count";
-		TOTAL_COUNT = "totalPrice";
+		TOTAL_COUNT = "totalCount";
 		EMPTY = "";
 		TYPE = "type";
 		
