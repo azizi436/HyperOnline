@@ -17,6 +17,7 @@ import android.widget.Button;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.amplitude.api.Amplitude;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,15 +38,15 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.libraries.IconEditText;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -143,6 +144,8 @@ public class Activity_Login extends AppCompatActivity {
 						final JSONObject user = jObj.getJSONObject(TAGs.USER);
 						String uid = user.getString(TAGs.UNIQUE_ID);
 						Crashlytics.setUserIdentifier(uid);
+						Crashlytics.setUserName(user.getString(TAGs.NAME));
+						Amplitude.getInstance().setUserId(uid);
 						
 						db.addUser(
 								user.getString(TAGs.NAME),

@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amplitude.api.Amplitude;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -211,6 +212,8 @@ public class Activity_UserProfile extends AppCompatActivity {
 		db_user.deleteUsers();
 		db_item.deleteItems();
 		db_support.deleteMessages();
+		Amplitude.getInstance().setUserId(null);
+		Amplitude.getInstance().regenerateDeviceId();
 		hideDialog();
 		Helper.MakeToast(getApplicationContext(), "با موفقیت خارج شدید", TAGs.SUCCESS);
 		Intent i = new Intent(getApplicationContext(), Activity_Main.class);
