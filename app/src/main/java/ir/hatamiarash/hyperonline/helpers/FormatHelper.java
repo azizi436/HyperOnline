@@ -4,6 +4,9 @@
 
 package ir.hatamiarash.hyperonline.helpers;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 public class FormatHelper {
 	// define persian numbers for replacing old ones
 	private static String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
@@ -63,5 +66,11 @@ public class FormatHelper {
 		else if (c.equals("۹")) out = "9";
 		else out = c;
 		return out;
+	}
+	
+	@Contract(pure = true)
+	@NotNull
+	public static String fixResponse(@NotNull String response) {
+		return "{\"" + response.substring(response.indexOf("error"));
 	}
 }
