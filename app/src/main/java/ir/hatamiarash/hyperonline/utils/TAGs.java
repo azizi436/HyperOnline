@@ -5,7 +5,6 @@
 package ir.hatamiarash.hyperonline.utils;
 
 public class TAGs {
-	public static final String TAG;
 	public static final String ERROR;
 	public static final String ERROR_MSG;
 	public static final String SUCCESS;
@@ -47,7 +46,6 @@ public class TAGs {
 		SUCCESS = "success";
 		ERROR_MSG = "error_msg";
 		ERROR = "error";
-		TAG = "tag";
 		PHONE = "phone";
 		UID = "uid";
 		UNIQUE_ID = "unique_id";
