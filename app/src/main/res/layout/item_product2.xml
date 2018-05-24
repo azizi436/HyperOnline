@@ -65,6 +65,7 @@
 				android:layout_height="90dp"
 				android:background="?attr/selectableItemBackgroundBorderless"
 				android:clickable="true"
+				android:focusable="true"
 				android:scaleType="fitCenter"/>
 
 			<ir.hatamiarash.hyperonline.libraries.PersianTextView

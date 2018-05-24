@@ -16,11 +16,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.hatamiarash.hyperonline.libraries.CustomToast;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.libraries.CustomToast;
 import ir.hatamiarash.hyperonline.utils.ASCII;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 
@@ -29,15 +31,15 @@ public class Helper {
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
 	
-	public static boolean isValidPhone(String target) {
+	public static boolean isValidPhone(@NotNull String target) {
 		return target.startsWith("09") && target.trim().length() == 11 && target.matches("[0-9]+");
 	}
 	
-	public static boolean isValidPassword(String target) {
+	public static boolean isValidPassword(@NotNull String target) {
 		return target.length() >= 8 && ASCII.isASCII(target) && target.matches("\\A\\p{ASCII}*\\z");
 	}
 	
-	public static boolean CheckInternet(Context context) {
+	public static boolean CheckInternet(@NotNull Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		PackageManager PM = context.getPackageManager();
 		if (PM.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
@@ -67,7 +69,7 @@ public class Helper {
 		}
 	}
 	
-	public static void MakeToast(Context context, String Message, String TAG) {
+	public static void MakeToast(Context context, String Message, @NotNull String TAG) {
 		if (TAG.equals(TAGs.WARNING))
 			CustomToast.custom(context, Message, R.drawable.ic_alert, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.md_deep_orange_400), Toast.LENGTH_SHORT, true, true).show();
 		if (TAG.equals(TAGs.SUCCESS))
@@ -76,7 +78,7 @@ public class Helper {
 			CustomToast.custom(context, Message, R.drawable.ic_error, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.red), Toast.LENGTH_SHORT, true, true).show();
 	}
 	
-	public static void MakeToast(Context context, String Message, String TAG, int DURATION) {
+	public static void MakeToast(Context context, String Message, @NotNull String TAG, int DURATION) {
 		if (TAG.equals(TAGs.WARNING))
 			CustomToast.custom(context, Message, R.drawable.ic_alert, ContextCompat.getColor(context, R.color.white), ContextCompat.getColor(context, R.color.md_deep_orange_400), DURATION, true, true).show();
 		if (TAG.equals(TAGs.SUCCESS))
@@ -136,7 +138,7 @@ public class Helper {
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 4611);
 	}
 	
-	static public boolean checkSMSPermission(Activity activity){
+	static public boolean checkSMSPermission(Activity activity) {
 		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
 		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
 		int count = 0;
@@ -152,7 +154,7 @@ public class Helper {
 		return String.valueOf(new_price);
 	}
 	
-	public static boolean isAppAvailable(Context context, String appName) {
+	public static boolean isAppAvailable(@NotNull Context context, String appName) {
 		PackageManager pm = context.getPackageManager();
 		try {
 			pm.getPackageInfo(appName, PackageManager.GET_ACTIVITIES);

@@ -13,10 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class FontHelper {
 	public static final String FontPath = "fonts/sans.ttf";    // font path
-	//    public static final String FontPath = "fonts/shabnam.ttf";    // font path
-	public static final String SHABNAM = "fonts/sans.ttf";    // font path
-	//    public static final String SHABNAM = "fonts/shabnam.ttf";    // font path
-	public static final String IRAN_SANS = "fonts/sans.ttf";    // font path
+	private static final String SHABNAM = "fonts/sans.ttf";    // font path
+	private static final String IRAN_SANS = "fonts/sans.ttf";    // font path
 	private static FontHelper instance;
 	private static Typeface persianTypeface;                      // typeface
 	private static Typeface shabnam;                      // typeface

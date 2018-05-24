@@ -6,22 +6,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       android:id="@+id/my_menu">
-    <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_search"
-        android:orderInCategory="100"
-        android:title=""
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/cart"
-        android:icon="@drawable/ic_shopping"
-        android:orderInCategory="200"
-        android:title=""
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/drawer"
-        android:icon="@drawable/ic_menu"
-        android:orderInCategory="300"
-        android:title=""
-        app:showAsAction="always"/>
+	<item
+		android:id="@+id/search"
+		android:icon="@drawable/ic_search"
+		android:orderInCategory="100"
+		android:title=""
+		app:showAsAction="ifRoom"/>
+	<item
+		android:id="@+id/cart"
+		android:icon="@drawable/ic_shopping"
+		android:orderInCategory="200"
+		android:title=""
+		app:showAsAction="ifRoom"/>
+	<item
+		android:id="@+id/drawer"
+		android:icon="@drawable/ic_menu"
+		android:orderInCategory="300"
+		android:title=""
+		app:showAsAction="ifRoom"/>
 </menu>

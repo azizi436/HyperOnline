@@ -7,18 +7,17 @@ package ir.hatamiarash.hyperonline.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ConfirmManager {
 	private static final String PREF_NAME = "HOPhone";
 	private static final String KEY_PHONE = "isPhoneConfirm";
 	private static final String KEY_INFO = "isInfoConfirm";
 	private SharedPreferences pref;
 	private SharedPreferences.Editor editor;
-	Context _context;
-	int PRIVATE_MODE = 0;
 	
-	public ConfirmManager(Context context) {
-		_context = context;
-		pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+	public ConfirmManager(@NotNull Context context) {
+		pref = context.getSharedPreferences(PREF_NAME, 0);
 		editor = pref.edit();
 	}
 	
@@ -33,11 +32,10 @@ public class ConfirmManager {
 	}
 	
 	public boolean isPhoneConfirm() {
-//        return pref.getBoolean(KEY_PHONE, false);
-		return true;
+		return !pref.getBoolean(KEY_PHONE, false);
 	}
 	
 	public boolean isInfoConfirm() {
-		return pref.getBoolean(KEY_INFO, false);
+		return !pref.getBoolean(KEY_INFO, false);
 	}
 }

@@ -160,7 +160,7 @@ public class CustomToast {
 		
 		toastTextView.setTextColor(textColor);
 		toastTextView.setText(FontHelper.getSpannedString(context, message));
-		toastTextView.setTypeface(Typeface.create("sans-serif-condensed", 0));
+		toastTextView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
 		currentToast.setView(toastLayout);
 		currentToast.setDuration(duration);
 		return currentToast;

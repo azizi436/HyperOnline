@@ -33,14 +33,15 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.R;
-import ir.hatamiarash.hyperonline.utils.TAGs;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.models.Order;
+import ir.hatamiarash.hyperonline.utils.TAGs;
+
+import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
-	private static String HOST;
-	ProgressDialog mProgressDialog;
+	private ProgressDialog mProgressDialog;
 	private Context mContext;
 	private List<Order> orderList;
 	
@@ -53,8 +54,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		mProgressDialog.setCancelable(true);
-		
-		HOST = mContext.getResources().getString(R.string.url_host);
 	}
 	
 	private static String formatCurrency(String value) {
@@ -63,14 +62,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		return myFormatter.format(Double.valueOf(value));
 	}
 	
+	@NonNull
 	@Override
-	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, parent, false);
 		return new MyViewHolder(itemView);
 	}
 	
 	@Override
-	public void onBindViewHolder(final MyViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 		final Order order = orderList.get(position);
 		holder.id.setText(order.unique_id);
 //        holder.date.setText(formatDate(order.date));
@@ -128,12 +128,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 	@Override
 	public int getItemCount() {
 		return orderList.size();
-	}
-	
-	@NonNull
-	private String formatDate(String Date) {
-		String[] split = Date.split(":");
-		return split[0] + "     " + split[1];
 	}
 	
 	class MyViewHolder extends RecyclerView.ViewHolder {
@@ -225,9 +219,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 			// take CPU lock to prevent CPU from going off if the user
 			// presses the power button during download
 			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-			mWakeLock.acquire();
-			mProgressDialog.show();
+			if (pm != null) {
+				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+				mWakeLock.acquire(10000);
+				mProgressDialog.show();
+			}
 		}
 		
 		@Override

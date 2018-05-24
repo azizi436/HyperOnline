@@ -4,67 +4,72 @@
 
 package ir.hatamiarash.hyperonline.helpers;
 
+import android.support.annotation.NonNull;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class FormatHelper {
-	// define persian numbers for replacing old ones
 	private static String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
 	
-	public static String toPersianNumber(String text) {
+	@NonNull
+	public static String toPersianNumber(@NotNull String text) {
 		if (text.isEmpty())
 			return "";
-		String out = "";
+		StringBuilder out = new StringBuilder();
 		int length = text.length();
 		for (int i = 0; i < length; i++) {
 			char c = text.charAt(i);
 			if ('0' <= c && c <= '9') {
 				int number = Integer.parseInt(String.valueOf(c));
-				out += persianNumbers[number];
+				out.append(persianNumbers[number]);
 			} else if (c == '٫') {
-				out += '،';
+				out.append('،');
 			} else {
-				out += c;
+				out.append(c);
 			}
 		}
-		return out;
+		return out.toString();
 	}
 	
-	public static String toEnglishNumber(String text) {
-		if (text.isEmpty())
-			return "";
-		String out = "";
-		int length = text.length();
-		for (int i = 0; i < length; i++) {
-			char c = text.charAt(i);
-			if (c == '۰') out += '0';
-			if (c == '۱') out += '1';
-			if (c == '۲') out += '2';
-			if (c == '۳') out += '3';
-			if (c == '۴') out += '4';
-			if (c == '۵') out += '5';
-			if (c == '۶') out += '6';
-			if (c == '۷') out += '7';
-			if (c == '۸') out += '8';
-			if (c == '۹') out += '9';
-			if (c == '،') out += ',';
-		}
-		return out;
-	}
-	
-	public static String toEnglishNumber2(String c) {
+	@Contract(pure = true)
+	public static String toEnglishNumber(@NotNull String c) {
 		String out;
-		if (c.equals("۰")) out = "0";
-		else if (c.equals("۱")) out = "1";
-		else if (c.equals("۲")) out = "2";
-		else if (c.equals("۳")) out = "3";
-		else if (c.equals("۴")) out = "4";
-		else if (c.equals("۵")) out = "5";
-		else if (c.equals("۶")) out = "6";
-		else if (c.equals("۷")) out = "7";
-		else if (c.equals("۸")) out = "8";
-		else if (c.equals("۹")) out = "9";
-		else out = c;
+		switch (c) {
+			case "۰":
+				out = "0";
+				break;
+			case "۱":
+				out = "1";
+				break;
+			case "۲":
+				out = "2";
+				break;
+			case "۳":
+				out = "3";
+				break;
+			case "۴":
+				out = "4";
+				break;
+			case "۵":
+				out = "5";
+				break;
+			case "۶":
+				out = "6";
+				break;
+			case "۷":
+				out = "7";
+				break;
+			case "۸":
+				out = "8";
+				break;
+			case "۹":
+				out = "9";
+				break;
+			default:
+				out = c;
+				break;
+		}
 		return out;
 	}
 	
@@ -72,5 +77,11 @@ public class FormatHelper {
 	@NotNull
 	public static String fixResponse(@NotNull String response) {
 		return "{\"" + response.substring(response.indexOf("error"));
+	}
+	
+	@NonNull
+	private String formatDate(@NotNull String Date) {
+		String[] split = Date.split(":");
+		return split[0] + "     " + split[1];
 	}
 }

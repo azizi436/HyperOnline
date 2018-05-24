@@ -155,7 +155,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 				if (!session.isLoggedIn()) {
 					Helper.MakeToast(getApplicationContext(), "ابتدا وارد حساب کاربری شوید", TAGs.ERROR);
 					startActivity(new Intent(Activity_ShopCard.this, Activity_Login.class));
-				} else if (!confirmManager.isPhoneConfirm()) {
+				} else if (confirmManager.isPhoneConfirm()) {
 					new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 							.setTitle(FontHelper.getSpannedString(Activity_ShopCard.this, "تایید حساب"))
 							.setDescription(FontHelper.getSpannedString(Activity_ShopCard.this, "لطفا شماره تلفن خود را تایید کنید."))
@@ -174,7 +174,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 								}
 							})
 							.show();
-				} else if (!confirmManager.isInfoConfirm()) {
+				} else if (confirmManager.isInfoConfirm()) {
 					new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 							.setTitle(FontHelper.getSpannedString(Activity_ShopCard.this, "تایید حساب"))
 							.setDescription(FontHelper.getSpannedString(Activity_ShopCard.this, "متاسفانه اطلاعات حساب شما هنوز تایید نشده است. جهت اطلاعات بیشتر صندوق پیام را بررسی کرده و در صورت هر گونه سوال با ما تماس بگیرید"))
@@ -307,7 +307,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		Item = db_item.getItemsDetails();
 		StringBuilder c = new StringBuilder();
 		for (int i = 0; i < (Item.size() / 8); i++) {
-			String count = FormatHelper.toEnglishNumber2(Item.get(i * 8 + 6));
+			String count = FormatHelper.toEnglishNumber(Item.get(i * 8 + 6));
 			c.append(count).append(",");
 		}
 		return c.toString();

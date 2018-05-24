@@ -57,6 +57,7 @@ import com.flurry.android.FlurryAgent;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -227,7 +228,7 @@ public class Activity_Main extends AppCompatActivity implements
 			}
 		}
 		
-		if (!confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
+		if (confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
 			Intent i = new Intent(getApplicationContext(), Activity_ConfirmPhone.class);
 			i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
 			startActivity(i);
@@ -1070,7 +1071,7 @@ public class Activity_Main extends AppCompatActivity implements
 							String info_check = jObj.getString("c");
 							String phone_check = jObj.getString("p");
 							if (info_check.equals("OK")) {
-								if (!confirmManager.isInfoConfirm())
+								if (confirmManager.isInfoConfirm())
 									Helper.MakeToast(getApplicationContext(), "حساب شما تایید شد", TAGs.SUCCESS, Toast.LENGTH_LONG);
 								confirmManager.setInfoConfirm(true);
 							} else {

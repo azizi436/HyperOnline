@@ -12,7 +12,7 @@ import android.text.style.MetricAffectingSpan;
 public class TypefaceSpan extends MetricAffectingSpan {
 	private Typeface mTypeface;
 	
-	public TypefaceSpan(Typeface typeface) {
+	TypefaceSpan(Typeface typeface) {
 		mTypeface = typeface;
 	}
 	

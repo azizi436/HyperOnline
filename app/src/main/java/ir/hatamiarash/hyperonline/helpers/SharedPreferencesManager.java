@@ -7,17 +7,16 @@ package ir.hatamiarash.hyperonline.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.jetbrains.annotations.NotNull;
+
 public class SharedPreferencesManager {
 	private static final String PREF_NAME = "HOPhone";
 	private static final String KEY_UNREAD_MESSAGE = "unreadMSG";
 	private SharedPreferences pref;
 	private SharedPreferences.Editor editor;
-	Context _context;
-	int PRIVATE_MODE = 0;
 	
-	public SharedPreferencesManager(Context context) {
-		_context = context;
-		pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+	public SharedPreferencesManager(@NotNull Context context) {
+		pref = context.getSharedPreferences(PREF_NAME, 0);
 		editor = pref.edit();
 	}
 	

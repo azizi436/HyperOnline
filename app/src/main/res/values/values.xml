@@ -4,6 +4,5 @@
   -->
 
 <resources>
-    <color name="background_material_light">#ffffff</color>
     <item name="material_drawer_item_primary_custom" type="id"/>
 </resources>
