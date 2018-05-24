@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,11 +20,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -39,15 +36,15 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.utils.Address;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.libraries.IconEditText;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
-import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import ir.hatamiarash.hyperonline.libraries.IconEditText;
+import ir.hatamiarash.hyperonline.utils.Address;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -62,7 +59,6 @@ public class Activity_Register extends AppCompatActivity {
 	SweetAlertDialog progressDialog;
 	Response.Listener<String> listener;
 	Response.ErrorListener errorListener;
-	RequestQueue requestQueue;
 	HyperOnline application;
 	Analytics analytics;
 	
@@ -105,8 +101,6 @@ public class Activity_Register extends AppCompatActivity {
 		inputProvince.setEnabled(false);
 		inputCity.setAdapter(cityAdapter);
 		inputName.requestFocus();
-		
-		requestQueue = Volley.newRequestQueue(this);
 		
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
@@ -253,7 +247,7 @@ public class Activity_Register extends AppCompatActivity {
 				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 		));
-		requestQueue.add(stringRequest);
+		application.addToRequestQueue(stringRequest);
 	}
 	
 	private void showDialog() {
@@ -290,7 +284,7 @@ public class Activity_Register extends AppCompatActivity {
 	protected void attachBaseContext(Context newBase) {
 		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
-
+	
 	private void analyticsReport() {
 		analytics.reportScreen(CLASS);
 		analytics.reportEvent("Open " + CLASS);

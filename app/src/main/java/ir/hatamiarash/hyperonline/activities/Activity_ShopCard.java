@@ -31,11 +31,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -318,7 +316,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 	private void sendOrder(final int payMethod) {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "temp_order";
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
@@ -408,7 +405,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();
@@ -424,7 +421,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 	private void Check(final String CODE, final int level) {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = "https://pay.ir/payment/verify";
 			JSONObject params = new JSONObject();
 			params.put("api", TAGs.API_KEY);
@@ -484,7 +480,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 		}
@@ -535,7 +531,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 	private void SetOrder() {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "orders";
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
@@ -603,7 +598,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();

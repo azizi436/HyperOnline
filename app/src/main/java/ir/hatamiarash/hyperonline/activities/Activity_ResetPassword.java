@@ -20,11 +20,9 @@ import android.widget.EditText;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -36,9 +34,9 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -123,7 +121,6 @@ public class Activity_ResetPassword extends AppCompatActivity {
 	private void resetPassword(final String phone) {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "resetPassword";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phone);
@@ -155,7 +152,7 @@ public class Activity_ResetPassword extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();

@@ -19,11 +19,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -37,17 +35,17 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.libraries.IconEditText;
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
+import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -161,7 +159,6 @@ public class Activity_EditPassword extends AppCompatActivity {
 	private void UpdatePassword(String pass) {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "updatePassword";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PASSWORD, pass);
@@ -193,7 +190,7 @@ public class Activity_EditPassword extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();

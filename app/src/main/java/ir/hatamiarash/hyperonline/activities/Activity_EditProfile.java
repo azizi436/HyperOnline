@@ -20,11 +20,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -38,14 +36,14 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.libraries.IconEditText;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
-import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -171,7 +169,6 @@ public class Activity_EditProfile extends AppCompatActivity {
 	private void GetUser() {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "users/" + uid;
 			JSONObject params = new JSONObject();
 			params.put(TAGs.UNIQUE_ID, uid);
@@ -196,7 +193,7 @@ public class Activity_EditProfile extends AppCompatActivity {
 					}
 				}
 			};
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			hideDialog();
 		}
@@ -205,7 +202,6 @@ public class Activity_EditProfile extends AppCompatActivity {
 	private void UpdateUser(final String name, final String address) {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "user_update";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.NAME, name);
@@ -278,7 +274,7 @@ public class Activity_EditProfile extends AppCompatActivity {
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();

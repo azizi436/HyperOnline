@@ -20,7 +20,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amplitude.api.Amplitude;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -62,7 +61,6 @@ public class Activity_Login extends AppCompatActivity {
 	ConfirmManager confirmManager;
 	Response.Listener<String> listener;
 	Response.ErrorListener errorListener;
-	RequestQueue requestQueue;
 	HyperOnline application;
 	Analytics analytics;
 	
@@ -94,8 +92,6 @@ public class Activity_Login extends AppCompatActivity {
 		db.CreateTable();                                                        // create users table
 		session = new SessionManager(getApplicationContext());
 		confirmManager = new ConfirmManager(getApplicationContext());
-		
-		requestQueue = Volley.newRequestQueue(this);
 		
 		if (session.isLoggedIn()) {                                              // Check if user is already logged in or not
 			Intent i = new Intent(Activity_Login.this, Activity_Main.class);
@@ -259,7 +255,7 @@ public class Activity_Login extends AppCompatActivity {
 				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 		));
-		requestQueue.add(stringRequest);
+		application.addToRequestQueue(stringRequest);
 	}
 	
 	private void showDialog() {

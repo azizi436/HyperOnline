@@ -44,11 +44,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -83,24 +81,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.ronash.pushe.Pushe;
-import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
-import ir.hatamiarash.hyperonline.libraries.CustomPrimaryDrawerItem;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.libraries.GridSpacingItemDecoration;
-import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.adapters.CategoryAdapter;
+import ir.hatamiarash.hyperonline.adapters.ProductAdapter;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerMain;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSetup;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
+import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
-import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.R;
-import ir.hatamiarash.hyperonline.adapters.CategoryAdapter;
-import ir.hatamiarash.hyperonline.adapters.ProductAdapter;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.CardBadge;
+import ir.hatamiarash.hyperonline.libraries.CustomPrimaryDrawerItem;
+import ir.hatamiarash.hyperonline.libraries.GridSpacingItemDecoration;
 import ir.hatamiarash.hyperonline.models.Category;
 import ir.hatamiarash.hyperonline.models.Product;
 import ir.hatamiarash.hyperonline.utils.TAGs;
@@ -176,7 +174,6 @@ public class Activity_Main extends AppCompatActivity implements
 	SessionManager session;                          // session for check user logged
 	ConfirmManager confirmManager;
 	SharedPreferencesManager SPManager;
-	RequestQueue VolleyQueue;
 	Vibrator vibrator;
 	CategoryAdapter categoryAdapter;
 	ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
@@ -216,7 +213,6 @@ public class Activity_Main extends AppCompatActivity implements
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
-		VolleyQueue = Volley.newRequestQueue(this);
 		
 		SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
 		if (settings.getBoolean("my_first_time", true)) {
@@ -642,7 +638,6 @@ public class Activity_Main extends AppCompatActivity implements
 	private void FetchAllData() {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "main";
 			final String mRequestBody = null;
 			
@@ -939,7 +934,7 @@ public class Activity_Main extends AppCompatActivity implements
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 		}
@@ -1141,7 +1136,7 @@ public class Activity_Main extends AppCompatActivity implements
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			VolleyQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 		}
@@ -1271,7 +1266,7 @@ public class Activity_Main extends AppCompatActivity implements
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			VolleyQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 		}

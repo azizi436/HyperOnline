@@ -30,11 +30,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -56,20 +54,20 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.libraries.CustomPrimaryDrawerItem;
-import ir.hatamiarash.hyperonline.libraries.EndlessScrollListener;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
-import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
-import ir.hatamiarash.hyperonline.libraries.SymmetricProgressBar;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.CategoryAdapter_Small;
 import ir.hatamiarash.hyperonline.adapters.ProductAdapter_All;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.helpers.SessionManager;
+import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.CardBadge;
+import ir.hatamiarash.hyperonline.libraries.CustomPrimaryDrawerItem;
+import ir.hatamiarash.hyperonline.libraries.EndlessScrollListener;
+import ir.hatamiarash.hyperonline.libraries.SymmetricProgressBar;
 import ir.hatamiarash.hyperonline.models.Category;
 import ir.hatamiarash.hyperonline.models.Product;
 import ir.hatamiarash.hyperonline.utils.TAGs;
@@ -570,7 +568,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	
 	private void loadProduct(int page) {
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "products_all";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.INDEX, page);
@@ -597,7 +594,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 					}
 				}
 			};
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 			p.setVisibility(View.INVISIBLE);
@@ -607,7 +604,6 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	private void loadCategory(String level) {
 		p.setVisibility(View.VISIBLE);
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "categories_all";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.INDEX, 1);
@@ -635,7 +631,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 					}
 				}
 			};
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 			p.setVisibility(View.INVISIBLE);

@@ -36,11 +36,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -319,7 +317,6 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 	private void RequestCode() {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "verifyPhone";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phoneNumber);
@@ -350,7 +347,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();
@@ -360,7 +357,6 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 	private void syncServer() {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "verifyPhoneOK";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.PHONE, phoneNumber);
@@ -392,7 +388,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 			hideDialog();

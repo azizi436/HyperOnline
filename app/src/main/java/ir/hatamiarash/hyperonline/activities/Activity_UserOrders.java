@@ -23,11 +23,9 @@ import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -42,12 +40,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.OrderAdapter;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.CardBadge;
 import ir.hatamiarash.hyperonline.models.Order;
@@ -172,7 +170,6 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 	private void loadOrders() {
 		showDialog();
 		try {
-			RequestQueue requestQueue = Volley.newRequestQueue(this);
 			String URL = getResources().getString(R.string.url_api, HOST) + "user_orders";
 			JSONObject params = new JSONObject();
 			params.put(TAGs.UNIQUE_ID, db_user.getUserDetails().get(TAGs.UID));
@@ -203,7 +200,7 @@ public class Activity_UserOrders extends AppCompatActivity implements CardBadge 
 					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 			));
-			requestQueue.add(stringRequest);
+			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 			hideDialog();
