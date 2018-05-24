@@ -694,8 +694,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		super.onResume();
 		try {
 			updateCartMenu();
-		} catch (NullPointerException e) {
-			Crashlytics.logException(e);
+		} catch (NullPointerException ignore) {
 		}
 	}
 	

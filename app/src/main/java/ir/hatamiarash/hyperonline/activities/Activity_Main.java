@@ -992,8 +992,7 @@ public class Activity_Main extends AppCompatActivity implements
 		super.onResume();
 		try {
 			updateCartMenu();
-		} catch (NullPointerException e) {
-			Crashlytics.logException(e);
+		} catch (NullPointerException ignore) {
 		}
 		
 		if (VERSION != 0) {
