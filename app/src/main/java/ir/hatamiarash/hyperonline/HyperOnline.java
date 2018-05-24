@@ -6,8 +6,8 @@ package ir.hatamiarash.hyperonline;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 
 import com.amplitude.api.Amplitude;
@@ -35,8 +35,11 @@ public class HyperOnline extends Application {
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
 	
-	@Nullable
 	private Analytics analytics;
+	
+	static {
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+	}
 	
 	@Contract(pure = true)
 	public static synchronized HyperOnline getInstance() {

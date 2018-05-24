@@ -57,10 +57,6 @@ import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 public class Activity_Register extends AppCompatActivity {
 	private static final String CLASS = Activity_Register.class.getSimpleName();
 	
-	static {
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-	}
-	
 	SessionManager session;
 	SQLiteHandler db;
 	SweetAlertDialog progressDialog;
