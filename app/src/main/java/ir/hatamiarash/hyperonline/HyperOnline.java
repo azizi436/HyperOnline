@@ -72,7 +72,7 @@ public class HyperOnline extends Application {
 		return this.mImageLoader;
 	}
 	
-	public <T> void addToRequestQueue(Request<T> req, String tag) {
+	public <T> void addToRequestQueue(String tag, Request<T> req) {
 		req.setTag(TextUtils.isEmpty(tag) ? CLASS : tag);
 		getRequestQueue().add(req);
 	}
