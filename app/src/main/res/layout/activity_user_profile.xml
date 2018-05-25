@@ -282,13 +282,13 @@
 				android:layout_marginStart="2.5dp"
 				android:layout_weight="1"
 				android:padding="15dp"
-				fancy:fb_borderColor="#FFFFFF"
+				fancy:fb_borderColor="@color/white"
 				fancy:fb_borderWidth="1dp"
 				fancy:fb_defaultColor="@color/accent"
 				fancy:fb_focusColor="@color/colorPrimaryDark"
 				fancy:fb_radius="30dp"
 				fancy:fb_text="ویرایش"
-				fancy:fb_textColor="#FFFFFF"
+				fancy:fb_textColor="@color/white"
 				fancy:fb_textSize="20sp"/>
 
 		</LinearLayout>
