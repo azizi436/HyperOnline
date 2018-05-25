@@ -74,12 +74,16 @@ public class Activity_UserProfile extends AppCompatActivity {
 	FancyButton btnLogout;
 	@BindView(R.id.btnEdit)
 	FancyButton btnEdit;
+	@BindView(R.id.btnWallet)
+	FancyButton btnWallet;
 	@BindView(R.id.name)
 	TextView User_Name;
 	@BindView(R.id.address)
 	TextView User_Address;
 	@BindView(R.id.phone)
 	TextView User_Phone;
+	@BindView(R.id.wallet)
+	TextView User_Wallet;
 	@BindView(R.id.tPrice)
 	TextView tPrice;
 	@BindView(R.id.tCount)
@@ -92,6 +96,8 @@ public class Activity_UserProfile extends AppCompatActivity {
 	RelativeLayout user_info;
 	@BindView(R.id.order_info)
 	RelativeLayout order_info;
+	
+	String uid;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +122,14 @@ public class Activity_UserProfile extends AppCompatActivity {
 		
 		if (!session.isLoggedIn()) logoutUser();
 		
+		uid = db_user.getUserDetails().get(TAGs.UID);
+		
 		user_info.setVisibility(View.INVISIBLE);
 		order_info.setVisibility(View.INVISIBLE);
 		
 		btnEdit.setCustomTextFont("sans.ttf");
 		btnLogout.setCustomTextFont("sans.ttf");
+		btnWallet.setCustomTextFont("sans.ttf");
 		
 		btnLogout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -135,6 +144,16 @@ public class Activity_UserProfile extends AppCompatActivity {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_EditProfile.class);
 				startActivityForResult(i, 100);
+			}
+		});
+		
+		btnWallet.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				vibrator.vibrate(50);
+				Intent i = new Intent(getApplicationContext(), Activity_Wallet.class);
+				i.putExtra("uid", uid);
+				startActivity(i);
 			}
 		});
 		
@@ -154,10 +173,10 @@ public class Activity_UserProfile extends AppCompatActivity {
 						User_Name.setText(user.getString(TAGs.NAME));
 						User_Address.setText(user.getString(TAGs.ADDRESS));
 						User_Phone.setText(user.getString(TAGs.PHONE));
+						User_Wallet.setText(user.getString(TAGs.WALLET) + " تومان");
 						if (!user.getString(TAGs.IMAGE).equals(TAGs.NULL)) {
 							progressBar.setVisibility(View.VISIBLE);
-							Picasso
-									.with(getApplicationContext())
+							Picasso.with(getApplicationContext())
 									.load(getResources().getString(R.string.url_image, HOST) + user.getString(TAGs.IMAGE))
 									.networkPolicy(NetworkPolicy.NO_CACHE)
 									.memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -198,7 +217,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 			}
 		};
 		
-		GetUser(db_user.getUserDetails().get(TAGs.UID));
+		GetUser();
 		
 		analyticsReport();
 	}
@@ -222,7 +241,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 		finish();
 	}
 	
-	private void GetUser(final String uid) {
+	private void GetUser() {
 		showDialog();
 		try {
 			String URL = getResources().getString(R.string.url_api, HOST) + "users/" + uid;
@@ -277,7 +296,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 100)
 			if (resultCode == 1)
-				GetUser(db_user.getUserDetails().get(TAGs.UID));
+				GetUser();
 	}
 	
 	@Override

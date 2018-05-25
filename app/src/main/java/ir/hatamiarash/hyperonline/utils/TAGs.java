@@ -35,6 +35,8 @@ public class TAGs {
 	public static final String TOTAL_COUNT;
 	public static final String EMPTY;
 	public static final String TYPE;
+	public static final String WALLET;
+	public static final String CODE;
 	
 	public static final String API_KEY;
 	
@@ -69,6 +71,8 @@ public class TAGs {
 		TOTAL_COUNT = "totalCount";
 		EMPTY = "";
 		TYPE = "type";
+		WALLET = "wallet";
+		CODE = "code";
 		
 		API_KEY = "4d0d3be84eae7fbe5c317bf318c77e83";
 	}

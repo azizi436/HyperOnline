@@ -1,0 +1,140 @@
+<!--
+  ~ Copyright (c) 2018 - All Rights Reserved - Arash Hatami
+  -->
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:fancy="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/main"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/white">
+
+	<LinearLayout
+		android:id="@+id/back"
+		android:layout_width="match_parent"
+		android:layout_height="220dp"
+		android:background="@color/accent"
+		android:orientation="vertical">
+	</LinearLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<ir.hatamiarash.hyperonline.libraries.RoundedImageView
+			android:id="@+id/image"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="15dp"
+			android:padding="5dp"
+			android:scaleType="centerCrop"
+			android:src="@drawable/nobody"/>
+
+		<ProgressBar
+			android:id="@+id/progress_bar"
+			style="?android:attr/progressBarStyleLarge"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBottom="@+id/image"
+			android:layout_alignTop="@+id/image"
+			android:layout_centerHorizontal="true"/>
+
+		<android.support.v7.widget.CardView
+			android:layout_width="match_parent"
+			android:layout_height="80dp"
+			android:layout_above="@+id/buttons"
+			android:layout_below="@+id/image"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:layout_marginTop="15dp">
+
+			<RelativeLayout
+				android:id="@+id/wallet_info"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_margin="10dp">
+
+				<TextView
+					android:id="@+id/price"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignBottom="@+id/priceTitle"
+					android:layout_alignTop="@+id/priceTitle"
+					android:layout_marginRight="5dp"
+					android:layout_toLeftOf="@+id/priceTitle"
+					android:gravity="left|center_vertical|start"
+					android:text="TextView"
+					android:textColor="@color/black"
+					android:textSize="18sp"/>
+
+				<TextView
+					android:id="@+id/priceTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_below="@+id/title"
+					android:layout_marginTop="20dp"
+					android:text="موجودی :"
+					android:textColor="@color/accent"
+					android:textSize="19sp"
+					android:textStyle="bold"/>
+
+				<TextView
+					android:id="@+id/title"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:text="کیف پول اصلی"
+					android:textColor="@android:color/black"
+					android:textSize="22sp"/>
+
+			</RelativeLayout>
+		</android.support.v7.widget.CardView>
+
+		<LinearLayout
+			android:id="@+id/buttons"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_margin="10dp"
+			android:orientation="horizontal"
+			android:weightSum="2">
+
+			<mehdi.sakout.fancybuttons.FancyButton
+				android:id="@+id/btnCharge"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="2.5dp"
+				android:layout_marginRight="2.5dp"
+				android:layout_weight="1"
+				android:padding="15dp"
+				fancy:fb_borderColor="@color/white"
+				fancy:fb_borderWidth="1dp"
+				fancy:fb_defaultColor="@color/accent"
+				fancy:fb_focusColor="@color/accent"
+				fancy:fb_radius="30dp"
+				fancy:fb_text="انتقال اعتبار"
+				fancy:fb_textColor="@color/white"
+				fancy:fb_textSize="20sp"/>
+
+			<mehdi.sakout.fancybuttons.FancyButton
+				android:id="@+id/btnTransfer"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="2.5dp"
+				android:layout_marginStart="2.5dp"
+				android:layout_weight="1"
+				android:padding="15dp"
+				fancy:fb_borderColor="@color/white"
+				fancy:fb_borderWidth="1dp"
+				fancy:fb_defaultColor="@color/accent"
+				fancy:fb_focusColor="@color/colorPrimaryDark"
+				fancy:fb_radius="30dp"
+				fancy:fb_text="شارژ"
+				fancy:fb_textColor="@color/white"
+				fancy:fb_textSize="20sp"/>
+		</LinearLayout>
+	</RelativeLayout>
+</RelativeLayout>
