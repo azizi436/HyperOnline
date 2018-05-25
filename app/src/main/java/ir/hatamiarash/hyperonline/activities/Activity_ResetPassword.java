@@ -62,7 +62,7 @@ public class Activity_ResetPassword extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.reset_password);
+		setContentView(R.layout.activity_reset_password);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

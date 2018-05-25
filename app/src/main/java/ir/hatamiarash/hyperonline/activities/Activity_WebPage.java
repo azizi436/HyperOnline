@@ -12,9 +12,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -30,7 +30,7 @@ public class Activity_WebPage extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.webpage);
+		setContentView(R.layout.activity_webpage);
 		
 		application = (HyperOnline) getApplication();
 		analytics = application.getAnalytics();

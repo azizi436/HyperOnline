@@ -64,7 +64,7 @@ public class Activity_Factor extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.pay_log);
+		setContentView(R.layout.activity_pay_log);
 		
 		application = (HyperOnline) getApplication();
 		analytics = application.getAnalytics();

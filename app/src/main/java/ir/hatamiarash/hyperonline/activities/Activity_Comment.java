@@ -75,7 +75,7 @@ public class Activity_Comment extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.comment);
+		setContentView(R.layout.activity_comment);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

@@ -72,7 +72,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.search);
+		setContentView(R.layout.activity_search);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

@@ -38,7 +38,7 @@ public class Activity_Social extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.social);
+		setContentView(R.layout.activity_social);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

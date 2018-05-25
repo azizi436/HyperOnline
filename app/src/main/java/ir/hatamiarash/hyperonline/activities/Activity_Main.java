@@ -188,7 +188,7 @@ public class Activity_Main extends AppCompatActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_screen);
+		setContentView(R.layout.activity_main_screen);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

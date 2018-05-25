@@ -78,7 +78,7 @@ public class Activity_Login extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
+		setContentView(R.layout.activity_login);
 		
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 		ButterKnife.bind(this);

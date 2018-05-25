@@ -15,7 +15,7 @@ public class Activity_Test extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setContentView(R.layout.test);
+		setContentView(R.layout.activity_test);
 	}
 	
 	@Override

@@ -96,7 +96,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.user_profile);
+		setContentView(R.layout.activity_user_profile);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

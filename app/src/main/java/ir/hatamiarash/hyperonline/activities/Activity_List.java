@@ -120,7 +120,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list_complex);
+		setContentView(R.layout.activity_list_complex);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

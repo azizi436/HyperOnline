@@ -126,7 +126,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.shop_card);
+		setContentView(R.layout.activity_shop_card);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

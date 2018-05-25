@@ -77,7 +77,7 @@ public class Activity_EditPassword extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.edit_password);
+		setContentView(R.layout.activity_edit_password);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();

@@ -86,7 +86,7 @@ public class Activity_Register extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.register);
+		setContentView(R.layout.activity_register);
 		
 		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();
