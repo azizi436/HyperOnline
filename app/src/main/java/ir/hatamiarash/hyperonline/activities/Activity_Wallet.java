@@ -172,42 +172,35 @@ public class Activity_Wallet extends AppCompatActivity {
 	
 	private void getWallet(final String uid) {
 		showDialog();
-		try {
-			String URL = getResources().getString(R.string.url_api, HOST) + "getWallet_byUser/" + uid;
-			JSONObject params = new JSONObject();
-			params.put(TAGs.UNIQUE_ID, uid);
-			final String mRequestBody = params.toString();
+		String URL = getResources().getString(R.string.url_api, HOST) + "getWallet_byUser/" + uid;
+		final String mRequestBody = "";
+		
+		StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, listener, errorListener) {
+			@NonNull
+			@Contract(pure = true)
+			@Override
+			public String getBodyContentType() {
+				return "application/json; charset=utf-8";
+			}
 			
-			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, listener, errorListener) {
-				@NonNull
-				@Contract(pure = true)
-				@Override
-				public String getBodyContentType() {
-					return "application/json; charset=utf-8";
+			@Nullable
+			@Override
+			public byte[] getBody() {
+				try {
+					return mRequestBody.getBytes("utf-8");
+				} catch (UnsupportedEncodingException e) {
+					Crashlytics.logException(e);
+					hideDialog();
+					return null;
 				}
-				
-				@Nullable
-				@Override
-				public byte[] getBody() {
-					try {
-						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
-						hideDialog();
-						return null;
-					}
-				}
-			};
-			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-					0,
-					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-			));
-			application.addToRequestQueue(stringRequest);
-		} catch (JSONException e) {
-			Crashlytics.logException(e);
-			hideDialog();
-		}
+			}
+		};
+		stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+				0,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+		));
+		application.addToRequestQueue(stringRequest);
 	}
 	
 	private void showDialog() {

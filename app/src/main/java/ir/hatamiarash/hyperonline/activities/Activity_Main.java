@@ -640,7 +640,7 @@ public class Activity_Main extends AppCompatActivity implements
 		showDialog();
 		try {
 			String URL = getResources().getString(R.string.url_api, HOST) + "main";
-			final String mRequestBody = null;
+			final String mRequestBody = "";
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
 				@Override
