@@ -8,12 +8,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.TypedValue;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -162,5 +164,10 @@ public class Helper {
 		} catch (PackageManager.NameNotFoundException e) {
 			return false;
 		}
+	}
+	
+	public static int dpToPx(@NotNull Context context, int dp) {
+		Resources r = context.getResources();
+		return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
 	}
 }

@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -29,7 +28,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +55,6 @@ import com.flurry.android.FlurryAgent;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -109,6 +106,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
 import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
+import static ir.hatamiarash.hyperonline.helpers.Helper.dpToPx;
 
 public class Activity_Main extends AppCompatActivity implements
 		BaseSliderView.OnSliderClickListener,
@@ -517,7 +515,7 @@ public class Activity_Main extends AppCompatActivity implements
 		categoryAdapter = new CategoryAdapter(this, categoryList);
 		RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
 		category_view.setLayoutManager(mLayoutManager);
-		category_view.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(5), true));
+		category_view.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(getApplicationContext(), 5), true));
 		category_view.setItemAnimator(new DefaultItemAnimator());
 		category_view.setAdapter(categoryAdapter);
 		
@@ -629,11 +627,6 @@ public class Activity_Main extends AppCompatActivity implements
 		});
 		
 		analyticsReport();
-	}
-	
-	private int dpToPx(int dp) {
-		Resources r = getResources();
-		return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
 	}
 	
 	private void FetchAllData() {
