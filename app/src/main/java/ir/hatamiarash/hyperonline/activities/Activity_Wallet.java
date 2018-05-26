@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.helpers.PriceHelper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -62,6 +63,10 @@ public class Activity_Wallet extends AppCompatActivity {
 	TextView walletTitle;
 	@BindView(R.id.price)
 	TextView walletPrice;
+	@BindView(R.id.orderCount)
+	TextView walletOrderCount;
+	@BindView(R.id.orderPrice)
+	TextView walletOrderPrice;
 	@BindView(R.id.btnCharge)
 	FancyButton btnCharge;
 	@BindView(R.id.btnTransfer)
@@ -131,6 +136,13 @@ public class Activity_Wallet extends AppCompatActivity {
 										progressBar.setVisibility(View.GONE);
 									}
 								});
+						
+						JSONObject orders = object.getJSONObject("orders");
+						String orderCount = orders.getString(TAGs.COUNT);
+						String orderPrice = orders.getString(TAGs.PRICE);
+						
+						walletOrderCount.setText(orderCount + " خرید");
+						walletOrderPrice.setText(PriceHelper.formatPrice(orderPrice) + " تومان");
 					} else {
 						String errorMsg = object.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
