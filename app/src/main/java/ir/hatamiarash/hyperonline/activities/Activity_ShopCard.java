@@ -377,6 +377,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					Crashlytics.logException(error);
 					hideDialog();
 					finish();
 				}
@@ -447,6 +448,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					Crashlytics.logException(error);
 					if (level == 2) {
 						if (error.toString().equals("com.android.volley.ServerError"))
 							Helper.MakeToast(Activity_ShopCard.this, "پرداخت لغو شد", TAGs.ERROR);
@@ -570,6 +572,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					Crashlytics.logException(error);
 					hideDialog();
 					finish();
 				}

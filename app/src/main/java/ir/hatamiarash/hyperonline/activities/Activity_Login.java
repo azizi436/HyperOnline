@@ -206,6 +206,7 @@ public class Activity_Login extends AppCompatActivity {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				Crashlytics.logException(error);
 				hideDialog();
 				Helper.MakeToast(getApplicationContext(), "مشکلی پیش آمده است", TAGs.ERROR);
 				finish();

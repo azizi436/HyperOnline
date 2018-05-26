@@ -189,6 +189,7 @@ public class Activity_Register extends AppCompatActivity {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				Crashlytics.logException(error);
 				Helper.MakeToast(Activity_Register.this, error.toString(), TAGs.ERROR);
 				hideDialog();
 			}

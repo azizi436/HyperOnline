@@ -111,6 +111,7 @@ public class Activity_ResetPassword extends AppCompatActivity {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				Crashlytics.logException(error);
 				hideDialog();
 			}
 		};

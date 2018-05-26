@@ -908,7 +908,7 @@ public class Activity_Main extends AppCompatActivity implements
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Log.e("LOG_VOLLEY E", error.toString());
+					Crashlytics.logException(error);
 					hideDialog();
 				}
 			}) {
@@ -1110,7 +1110,7 @@ public class Activity_Main extends AppCompatActivity implements
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Log.e("CheckConfirm E", error.toString());
+					Crashlytics.logException(error);
 				}
 			}) {
 				@NonNull
@@ -1240,7 +1240,7 @@ public class Activity_Main extends AppCompatActivity implements
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Log.e("SyncServer E", error.toString());
+					Crashlytics.logException(error);
 				}
 			}) {
 				@NonNull

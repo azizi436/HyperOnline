@@ -245,6 +245,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				Crashlytics.logException(error);
 				hideDialog();
 			}
 		};

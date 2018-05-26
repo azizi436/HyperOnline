@@ -158,7 +158,8 @@ public class Activity_Wallet extends AppCompatActivity {
 		
 		errorListener = new Response.ErrorListener() {
 			@Override
-			public void onErrorResponse(VolleyError volleyError) {
+			public void onErrorResponse(VolleyError error) {
+				Crashlytics.logException(error);
 				hideDialog();
 				finish();
 			}

@@ -529,6 +529,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				Crashlytics.logException(error);
 				p.setVisibility(View.INVISIBLE);
 			}
 		};
