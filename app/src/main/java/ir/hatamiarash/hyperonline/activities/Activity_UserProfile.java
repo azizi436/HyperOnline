@@ -173,7 +173,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 						User_Name.setText(user.getString(TAGs.NAME));
 						User_Address.setText(user.getString(TAGs.ADDRESS));
 						User_Phone.setText(user.getString(TAGs.PHONE));
-						User_Wallet.setText(user.getString(TAGs.WALLET) + " تومان");
+						User_Wallet.setText(PriceHelper.formatPrice(user.getString(TAGs.WALLET)) + " تومان");
 						if (!user.getString(TAGs.IMAGE).equals(TAGs.NULL)) {
 							progressBar.setVisibility(View.VISIBLE);
 							Picasso.with(getApplicationContext())
