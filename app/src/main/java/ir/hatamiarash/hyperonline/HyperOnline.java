@@ -17,6 +17,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 
 import org.jetbrains.annotations.Contract;
 
@@ -25,6 +29,8 @@ import io.fabric.sdk.android.Fabric;
 import ir.hatamiarash.hyperonline.analytics.ApplicationAnalytics;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.libraries.LruBitmapCache;
+import ir.hatamiarash.hyperonline.logs.CrashlyticsTree;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class HyperOnline extends Application {
@@ -52,7 +58,8 @@ public class HyperOnline extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mInstance = this;
-		configureLibraries();
+		configureLibraries_Analytics();
+		configureLibraries_Log();
 		setFont();
 		HOST = getResources().getString(R.string.url_host);
 	}
@@ -96,7 +103,7 @@ public class HyperOnline extends Application {
 		);
 	}
 	
-	private void configureLibraries() {
+	private void configureLibraries_Analytics() {
 		MultiDex.install(this);
 		
 		Pushe.initialize(getApplicationContext(), true);
@@ -109,6 +116,32 @@ public class HyperOnline extends Application {
 		
 		Amplitude.getInstance().initialize(this, "37d111e62e3ec73db8327c61d6215006")
 				.enableForegroundTracking(this);
+	}
+	
+	private void configureLibraries_Log() {
+		FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+				.showThreadInfo(true)
+				.methodCount(3)
+				.methodOffset(5)
+				.tag("ARASH_LOG")
+				.build();
+		
+		Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
+			@Override
+			public boolean isLoggable(int priority, String tag) {
+				return BuildConfig.DEBUG;
+			}
+		});
+		
+		if (BuildConfig.DEBUG)
+			Timber.plant(new Timber.DebugTree() {
+				@Override
+				protected void log(int priority, String tag, @NonNull String message, Throwable t) {
+					Logger.log(priority, tag, message, t);
+				}
+			});
+		else
+			Timber.plant(new CrashlyticsTree());
 	}
 	
 	@NonNull
