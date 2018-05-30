@@ -2,7 +2,6 @@ package ir.hatamiarash.hyperonline.analytics;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.amplitude.api.Amplitude;
 import com.crashlytics.android.answers.Answers;
@@ -11,8 +10,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.BuildConfig;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import timber.log.Timber;
 
 public class ApplicationAnalytics implements Analytics {
 	private Tracker mTracker;
@@ -25,7 +25,7 @@ public class ApplicationAnalytics implements Analytics {
 		
 		if (BuildConfig.DEBUG) {
 			GoogleAnalytics.getInstance(context).setAppOptOut(true);
-			Log.w("GoogleAnalytics", "DEBUG BUILD: ANALYTICS IS DISABLED");
+			Timber.tag("GoogleAnalytics").w("DEBUG BUILD: ANALYTICS IS DISABLED");
 		}
 	}
 	

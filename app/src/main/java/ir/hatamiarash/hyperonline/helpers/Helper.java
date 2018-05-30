@@ -14,7 +14,6 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.TypedValue;
 import android.widget.Toast;
 
@@ -29,10 +28,6 @@ import ir.hatamiarash.hyperonline.utils.ASCII;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 
 public class Helper {
-	static {
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-	}
-	
 	public static boolean isValidPhone(@NotNull String target) {
 		return target.startsWith("09") && target.trim().length() == 11 && target.matches("[0-9]+");
 	}

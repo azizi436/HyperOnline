@@ -50,6 +50,7 @@ import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -161,6 +162,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 			@Override
 			public void onResponse(String response) {
 				response = fixResponse(response);
+				Timber.tag(CLASS).d(response);
 				hideDialog();
 				try {
 					JSONObject jObj = new JSONObject(response);

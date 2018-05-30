@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {
 	// The minimum amount of items to have below your current scroll position
@@ -30,18 +31,18 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
 		this.mLayoutManager = layoutManager;
 	}
 	
-	public EndlessScrollListener(GridLayoutManager layoutManager) {
+	public EndlessScrollListener(@NotNull GridLayoutManager layoutManager) {
 		this.mLayoutManager = layoutManager;
 		visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
 	}
 	
-	public EndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
+	public EndlessScrollListener(@NotNull StaggeredGridLayoutManager layoutManager) {
 		this.mLayoutManager = layoutManager;
 		visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
 	}
 	
 	@Contract(pure = true)
-	private int getLastVisibleItem(int[] lastVisibleItemPositions) {
+	private int getLastVisibleItem(@NotNull int[] lastVisibleItemPositions) {
 		int maxSize = 0;
 		for (int i = 0; i < lastVisibleItemPositions.length; i++) {
 			if (i == 0) {

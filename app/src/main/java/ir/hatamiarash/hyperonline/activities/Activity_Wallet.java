@@ -40,6 +40,7 @@ import ir.hatamiarash.hyperonline.helpers.PriceHelper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -110,6 +111,7 @@ public class Activity_Wallet extends AppCompatActivity {
 				hideDialog();
 				try {
 					response = fixResponse(response);
+					Timber.tag(CLASS).d(response);
 					JSONObject object = new JSONObject(response);
 					Boolean error = object.getBoolean(TAGs.ERROR);
 					if (!error) {

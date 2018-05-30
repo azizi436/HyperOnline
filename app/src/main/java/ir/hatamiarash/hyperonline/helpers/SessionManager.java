@@ -7,9 +7,10 @@ package ir.hatamiarash.hyperonline.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
+
+import timber.log.Timber;
 
 public class SessionManager {
 	private static final String PREF_NAME = "AndroidHiveLogin";
@@ -27,7 +28,7 @@ public class SessionManager {
 		editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
 		// commit changes
 		editor.commit();
-		Log.d(TAG, "User login session modified!");
+		Timber.tag(TAG).i("User login session modified!");
 	}
 	
 	public boolean isLoggedIn() {

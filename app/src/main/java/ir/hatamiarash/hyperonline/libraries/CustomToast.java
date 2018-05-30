@@ -15,7 +15,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,14 +33,13 @@ public class CustomToast {
 	private static final int SUCCESS_COLOR = Color.parseColor("#388E3C");
 	@ColorInt
 	private static final int WARNING_COLOR = Color.parseColor("#FFA900");
-	private static final String TOAST_TYPEFACE = "sans-serif-condensed";
 	
 	private CustomToast() {
 	}
 	
 	@CheckResult
 	public static Toast normal(@NonNull Context context, @NonNull String message) {
-		return normal(context, message, 0, (Drawable) null, false);
+		return normal(context, message, 0, null, false);
 	}
 	
 	@CheckResult
@@ -51,7 +49,7 @@ public class CustomToast {
 	
 	@CheckResult
 	public static Toast normal(@NonNull Context context, @NonNull String message, int duration) {
-		return normal(context, message, duration, (Drawable) null, false);
+		return normal(context, message, duration, null, false);
 	}
 	
 	@CheckResult
@@ -137,9 +135,9 @@ public class CustomToast {
 	@CheckResult
 	public static Toast custom(@NonNull Context context, @NonNull String message, Drawable icon, @ColorInt int textColor, @ColorInt int tintColor, int duration, boolean withIcon, boolean shouldTint) {
 		Toast currentToast = new Toast(context);
-		View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(es.dmoral.toasty.R.layout.toast_layout, (ViewGroup) null);
-		ImageView toastIcon = (ImageView) toastLayout.findViewById(es.dmoral.toasty.R.id.toast_icon);
-		TextView toastTextView = (TextView) toastLayout.findViewById(es.dmoral.toasty.R.id.toast_text);
+		View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(es.dmoral.toasty.R.layout.toast_layout, null);
+		ImageView toastIcon = toastLayout.findViewById(es.dmoral.toasty.R.id.toast_icon);
+		TextView toastTextView = toastLayout.findViewById(es.dmoral.toasty.R.id.toast_text);
 		Drawable drawableFrame;
 		if (shouldTint) {
 			drawableFrame = CustomToastUtils.tint9PatchDrawableFrame(context, tintColor);

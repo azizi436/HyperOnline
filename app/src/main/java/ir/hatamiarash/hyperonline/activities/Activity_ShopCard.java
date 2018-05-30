@@ -65,6 +65,7 @@ import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.models.Product;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -333,6 +334,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 				@Override
 				public void onResponse(String response) {
 					response = fixResponse(response);
+					Timber.tag(CLASS).d(response);
 					hideDialog();
 					try {
 						response = fixResponse(response);
@@ -432,6 +434,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 				@Override
 				public void onResponse(String response) {
 					response = fixResponse(response);
+					Timber.tag(CLASS).d(response);
 					try {
 						JSONObject jObj = new JSONObject(response);
 						int status = jObj.getInt("status");
@@ -494,8 +497,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		if (requestCode == CODE_PAYMENT)
 			Check(ORDER_CODE, 1);
 		if (requestCode == 200) {
-			//TODO
-			Log.w("PAY", "DONE");
+			Timber.tag(CLASS).d("pay done");
 		}
 	}
 	
@@ -549,6 +551,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 				@Override
 				public void onResponse(String response) {
 					response = fixResponse(response);
+					Timber.tag(CLASS).d(response);
 					hideDialog();
 					try {
 						JSONObject jObj = new JSONObject(response);

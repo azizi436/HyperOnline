@@ -7,6 +7,7 @@ package ir.hatamiarash.hyperonline.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 	private List<Category> categoryList;
 	private Vibrator vibrator;
 	
-	public CategoryAdapter(Context mContext, List<Category> categoryList) {
+	public CategoryAdapter(@NotNull Context mContext, List<Category> categoryList) {
 		this.mContext = mContext;
 		this.categoryList = categoryList;
 		vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -37,13 +40,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 	}
 	
 	@Override
-	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	@NonNull
+	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category, parent, false);
 		return new MyViewHolder(itemView);
 	}
 	
 	@Override
-	public void onBindViewHolder(final MyViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 		Category category = categoryList.get(position);
 		holder.id.setText(category.unique_id);
 		holder.name.setText(category.name);

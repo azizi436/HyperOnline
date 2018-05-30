@@ -5,6 +5,7 @@
 package ir.hatamiarash.hyperonline.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +14,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.interfaces.Refresh;
 import ir.hatamiarash.hyperonline.models.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
-	private Context mContext;
-	private List<Message> orderList;
-	private SQLiteHandlerSupport db_support;
-	private Refresh refresh;
+	Context mContext;
+	List<Message> orderList;
+	SQLiteHandlerSupport db_support;
+	Refresh refresh;
 	
 	public MessageAdapter(Context mContext, List<Message> orderList) {
 		this.mContext = mContext;
@@ -36,13 +37,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 	}
 	
 	@Override
-	public MessageAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	@NonNull
+	public MessageAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
 		return new MessageAdapter.MyViewHolder(itemView);
 	}
 	
 	@Override
-	public void onBindViewHolder(final MessageAdapter.MyViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull MessageAdapter.MyViewHolder holder, int position) {
 		final Message message = orderList.get(position);
 		holder.date.setText(message.date);
 		holder.title.setText(message.title);

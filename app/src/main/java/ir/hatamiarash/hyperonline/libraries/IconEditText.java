@@ -13,7 +13,6 @@ import android.text.method.DigitsKeyListener;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.SingleLineTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +20,7 @@ import android.widget.LinearLayout;
 
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import timber.log.Timber;
 
 public class IconEditText extends LinearLayout {
 	private static final String TAG = IconEditText.class.getSimpleName();
@@ -52,7 +52,6 @@ public class IconEditText extends LinearLayout {
 	}
 	
 	private void parseAttributes(Context context, AttributeSet attrs) {
-		Log.d(TAG, "parseAttributes()");
 		if (attrs == null)
 			return;
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.IconEditText, 0, 0);
@@ -66,7 +65,7 @@ public class IconEditText extends LinearLayout {
 			_isName = a.getBoolean(R.styleable.IconEditText_isName, false);
 			//Log.d(TAG, "{ _iconResource: " + _iconResource + ", _hint: " + _hint + ", _isPassword: " + _isPassword + "}");
 		} catch (Exception e) {
-			Log.e(TAG, "Unable to parse attributes due to: " + e.getMessage());
+			Timber.tag(TAG).w("Unable to parse attributes due to: %s", e.getMessage());
 			e.printStackTrace();
 		} finally {
 			a.recycle();
@@ -74,7 +73,6 @@ public class IconEditText extends LinearLayout {
 	}
 	
 	private void initialize() {
-		Log.d(TAG, "initialize()");
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		if (_editText == null) {
 			_editText = new PersianEditText(this.getContext());

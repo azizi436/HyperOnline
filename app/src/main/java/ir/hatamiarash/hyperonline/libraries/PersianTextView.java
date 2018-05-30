@@ -10,13 +10,13 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
 
+import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.FormatHelper;
-import ir.hatamiarash.hyperonline.R;
+import timber.log.Timber;
 
 public class PersianTextView extends android.support.v7.widget.AppCompatTextView {
 	private static final String TAG = PersianTextView.class.getSimpleName();
@@ -44,7 +44,7 @@ public class PersianTextView extends android.support.v7.widget.AppCompatTextView
 		try {
 			_font = a.getString(R.styleable.PersianTextView_my_font);
 		} catch (Exception e) {
-			Log.w(TAG, "Unable to parse attributes due to: " + e.getMessage());
+			Timber.w("Unable to parse attributes due to: %s", e.getMessage());
 			e.printStackTrace();
 		} finally {
 			a.recycle();

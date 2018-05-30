@@ -68,6 +68,7 @@ import ir.hatamiarash.hyperonline.receivers.SmsReceiver;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import ir.hatamiarash.hyperonline.utils.Values;
 import mehdi.sakout.fancybuttons.FancyButton;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -195,6 +196,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			@Override
 			public void onResponse(String response) {
 				response = fixResponse(response);
+				Timber.tag(CLASS).d(response);
 				hideDialog();
 				try {
 					JSONObject jObj = new JSONObject(response);
@@ -220,6 +222,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			@Override
 			public void onResponse(String response) {
 				response = fixResponse(response);
+				Timber.tag(CLASS).d(response);
 				hideDialog();
 				try {
 					JSONObject jObj = new JSONObject(response);

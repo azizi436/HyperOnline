@@ -49,6 +49,7 @@ import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.CardBadge;
 import ir.hatamiarash.hyperonline.models.Product;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -95,6 +96,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 			@Override
 			public void onResponse(String response) {
 				response = fixResponse(response);
+				Timber.tag(CLASS).d(response);
 				hideDialog();
 				try {
 					JSONObject jObj = new JSONObject(response);

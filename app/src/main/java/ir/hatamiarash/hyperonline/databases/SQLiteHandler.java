@@ -13,6 +13,8 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 public class SQLiteHandler extends SQLiteOpenHelper {
 	private static final String TAG = SQLiteHandler.class.getSimpleName();
 	private static final int DATABASE_VERSION = 1;             // Database Version
@@ -48,7 +50,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 				+ KEY_CITY + " TEXT"
 				+ ")";
 		db.execSQL(Query);
-		Log.d(TAG, "Database Table Created - onCreate");
+		Timber.tag(TAG).i("Database Table Created - onCreate");
 	}
 	
 	// drop and recreate table
@@ -75,7 +77,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		db.close();
-		Log.d(TAG, "Database Table Created - Manual");
+		Timber.tag(TAG).i("Database Table Created - Manual");
 	}
 	
 	// add user data to database
@@ -94,7 +96,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		long id = db.insert(TABLE_LOGIN, null, values);
 		//db.execSQL(query);
 		db.close();
-		Log.d(TAG, "New User Inserted Into Database : " + name);
+		Timber.tag(TAG).d("New User Inserted Into Database : %s", name);
 	}
 	
 	// get user details from database and send them
@@ -116,7 +118,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
-		Log.d(TAG, "User Fetched From Database : " + user.toString());
+		Timber.tag(TAG).d("User Fetched From Database : %s", user.toString());
 		return user;
 	}
 	
@@ -131,13 +133,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 				+ " WHERE " + KEY_UID + "=" + uid;
 		db.execSQL(Query);
 		db.close();
-		Log.d(TAG, "User's Table Row Updated");
+		Timber.tag(TAG).i("User's Table Row Updated");
 	}
 	
 	public void deleteUsers() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_LOGIN, null, null);
 		db.close();
-		Log.d(TAG, "User Deleted !");
+		Timber.tag(TAG).i("User Deleted !");
 	}
 }

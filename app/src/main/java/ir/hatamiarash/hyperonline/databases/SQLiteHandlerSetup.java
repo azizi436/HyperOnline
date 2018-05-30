@@ -8,9 +8,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.HashMap;
+
+import timber.log.Timber;
 
 public class SQLiteHandlerSetup extends SQLiteOpenHelper {
 	private static final String TAG = SQLiteHandlerSetup.class.getSimpleName();
@@ -33,7 +34,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
 				+ KEY_WEB + " INTEGER "
 				+ ")";
 		db.execSQL(Query);
-		Log.d(TAG, "Database table created - onCreate");
+		Timber.tag(TAG).i("Database table created - onCreate");
 	}
 	
 	// drop and recreate table
@@ -61,7 +62,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		db.close();
-		Log.d(TAG, "Database table created - Manual");
+		Timber.tag(TAG).i("Database table created - Manual");
 	}
 	
 	public void AddProperty(int value) {
@@ -69,7 +70,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
 		String Query = "UPDATE " + TABLE_SETUP + " SET " + KEY_WEB + "=" + value;
 		db.execSQL(Query);
 		db.close();
-		Log.d(TAG, "Row Updated by val " + String.valueOf(value));
+		Timber.tag(TAG).d("Row Updated by val %s", String.valueOf(value));
 	}
 	
 	public HashMap<String, String> GetProperties() {
@@ -86,7 +87,7 @@ public class SQLiteHandlerSetup extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
-		Log.d(TAG, "Fetching properties from database: " + user.toString());
+		Timber.tag(TAG).d("Fetching properties from database: %s", user.toString());
 		return user;
 	}
 }

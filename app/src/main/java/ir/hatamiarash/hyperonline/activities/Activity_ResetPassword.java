@@ -39,6 +39,7 @@ import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -90,6 +91,7 @@ public class Activity_ResetPassword extends AppCompatActivity {
 			@Override
 			public void onResponse(String response) {
 				response = fixResponse(response);
+				Timber.tag(CLASS).d(response);
 				hideDialog();
 				try {
 					JSONObject jObj = new JSONObject(response);

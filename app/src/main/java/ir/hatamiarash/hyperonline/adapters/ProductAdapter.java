@@ -7,6 +7,7 @@ package ir.hatamiarash.hyperonline.adapters;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,13 +54,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 	}
 	
 	@Override
-	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	@NonNull
+	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product2, parent, false);
 		return new MyViewHolder(itemView);
 	}
 	
 	@Override
-	public void onBindViewHolder(final MyViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 		final Product product = productList.get(position);
 		holder.id.setText(product.unique_id);
 		holder.name.setText(product.name);

@@ -8,10 +8,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class SQLiteHandlerMain extends SQLiteOpenHelper {
 	private static final String TAG = SQLiteHandlerMain.class.getSimpleName();
@@ -32,7 +33,7 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 				+ KEY_SEND_PRICE + " TEXT"
 				+ ")";
 		db.execSQL(Query);
-		Log.d(TAG, "Database table created - onCreate");
+		Timber.tag(TAG).i("Database table created - onCreate");
 	}
 	
 	// drop and recreate table
@@ -57,7 +58,7 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		db.close();
-		Log.d(TAG, "Database table created - Manual");
+		Timber.tag(TAG).i("Database table created - Manual");
 	}
 	
 	public void addItem(String send_price) {

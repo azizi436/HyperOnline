@@ -7,9 +7,9 @@ package ir.hatamiarash.hyperonline.adapters;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +22,12 @@ import com.crashlytics.android.Crashlytics;
 
 import java.util.List;
 
-import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.CardBadge;
-import ir.hatamiarash.hyperonline.utils.TAGs;
 import ir.hatamiarash.hyperonline.models.Product;
+import ir.hatamiarash.hyperonline.utils.TAGs;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -54,13 +54,14 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
 	}
 	
 	@Override
-	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	@NonNull
+	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
 		return new MyViewHolder(itemView);
 	}
 	
 	@Override
-	public void onBindViewHolder(final MyViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 		final Product product = productList.get(position);
 		holder.id.setText(product.unique_id);
 		holder.name.setText(product.name);
@@ -121,7 +122,6 @@ public class ProductAdapter_All extends RecyclerView.Adapter<ProductAdapter_All.
 //                holder.status.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
 				int off = product.off * Integer.valueOf(product.price) / 100;
 				int fPrice = Integer.valueOf(product.price) - off;
-				Log.w("price", String.valueOf(off) + " " + String.valueOf(fPrice));
 				db_item.addItem(
 						product.unique_id,
 						product.name,

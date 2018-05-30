@@ -4,18 +4,19 @@
 
 package ir.hatamiarash.hyperonline.listeners;
 
-import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.ronash.pushe.PusheListenerService;
-import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
-import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
+import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
+import ir.hatamiarash.hyperonline.helpers.SessionManager;
+import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
+import timber.log.Timber;
 
 public class PusheJSONListener extends PusheListenerService {
 	SQLiteHandlerSupport db_support;
@@ -26,7 +27,8 @@ public class PusheJSONListener extends PusheListenerService {
 	SharedPreferencesManager SPManager;
 	
 	@Override
-	public void onMessageReceived(final JSONObject message, JSONObject content) {
+	public void onMessageReceived(JSONObject message, JSONObject content) {
+		Timber.tag("Pushe").d("incoming : %s", message);
 		if (message != null && message.length() > 0) {
 			db_support = new SQLiteHandlerSupport(getApplicationContext());
 			db_user = new SQLiteHandler(getApplicationContext());
@@ -57,7 +59,7 @@ public class PusheJSONListener extends PusheListenerService {
 					}
 				}
 			} catch (JSONException e) {
-				Log.e("Pushe", "Exception : ", e);
+				Crashlytics.logException(e);
 			}
 		}
 	}

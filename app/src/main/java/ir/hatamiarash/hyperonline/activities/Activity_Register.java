@@ -46,6 +46,7 @@ import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.Address;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
@@ -168,6 +169,7 @@ public class Activity_Register extends AppCompatActivity {
 			@Override
 			public void onResponse(String response) {
 				response = fixResponse(response);
+				Timber.tag(CLASS).d(response);
 				try {
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);

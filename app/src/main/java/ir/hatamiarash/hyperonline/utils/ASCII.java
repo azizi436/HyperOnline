@@ -5,9 +5,10 @@
 package ir.hatamiarash.hyperonline.utils;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class ASCII {
-	public static boolean isASCII(String s) {
+	public static boolean isASCII(@NotNull String s) {
 		for (int i = 0; i < s.length(); i++)
 			if (!isLetterOrNumber(s.charAt(i)))
 				return false;

@@ -13,6 +13,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class SQLiteHandlerItem extends SQLiteOpenHelper {
 	private static final String TAG = SQLiteHandlerItem.class.getSimpleName();
 	private static final int DATABASE_VERSION = 1;             // Database Version
@@ -46,7 +48,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 				+ KEY_COUNT_ORIGINAL + " TEXT"
 				+ ")";
 		db.execSQL(CREATE_CARD_TABLE);
-		Log.d(TAG, "Database table created - onCreate");
+		Timber.tag(TAG).i("Database table created - onCreate");
 	}
 	
 	// drop and recreate table
@@ -72,7 +74,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(CREATE_CARD_TABLE);
 		db.close();
-		Log.d(TAG, "Database table created - Manual");
+		Timber.tag(TAG).i("Database table created - Manual");
 	}
 	
 	// add item data to database
@@ -104,7 +106,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(query);
 		db.close();
-		Log.d(TAG, name + " inserted into database");
+		Timber.tag(TAG).d("%s inserted into database", name);
 	}
 	
 	// update item's details
@@ -121,7 +123,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 				+ " WHERE " + KEY_UID + "=" + uid;
 		db.execSQL(query);
 		db.close();
-		Log.d(TAG, uid + " updated : " + count + " " + price + " " + off);
+		Timber.tag(TAG).d("%s updated : %s %s %s", uid, count, price, off);
 	}
 	
 	public void updateCount(String uid, String count, String price, String off) {
@@ -137,7 +139,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 				+ " WHERE " + KEY_UID + "=" + uid;
 		db.execSQL(query);
 		db.close();
-		Log.d(TAG, uid + " updated : " + count + " " + price + " " + off);
+		Timber.tag(TAG).d("%s updated : %s %s %s", uid, count, price, off);
 	}
 	
 	// get item's detail from database and send them
@@ -187,7 +189,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
-		Log.d(TAG, "Fetching item from Sqlite: " + item.toString());
+		Timber.tag(TAG).d("Fetching item from Sqlite : %s" , item.toString());
 		return item;
 	}
 	

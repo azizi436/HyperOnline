@@ -17,6 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RoundedImageView extends AppCompatImageView {
 	public RoundedImageView(Context context) {
 		super(context);
@@ -46,7 +48,7 @@ public class RoundedImageView extends AppCompatImageView {
 		canvas.drawBitmap(roundBitmap, 0, 0, null);
 	}
 	
-	public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+	public static Bitmap getCroppedBitmap(@NotNull Bitmap bmp, int radius) {
 		Bitmap s_bmp;
 		if (bmp.getWidth() != radius || bmp.getHeight() != radius) {
 			float smallest = Math.min(bmp.getWidth(), bmp.getHeight());
