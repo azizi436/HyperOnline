@@ -36,6 +36,10 @@ public class Helper {
 		return target.length() >= 8 && ASCII.isASCII(target) && target.matches("\\A\\p{ASCII}*\\z");
 	}
 	
+	public static boolean isValidNumber(@NotNull String target){
+		return target.matches("[0-9]+");
+	}
+	
 	public static boolean CheckInternet(@NotNull Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		PackageManager PM = context.getPackageManager();
