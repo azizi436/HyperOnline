@@ -91,6 +91,7 @@ import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.helpers.PermissionHelper;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
@@ -194,7 +195,7 @@ public class Activity_Main extends AppCompatActivity implements
 		analytics = application.getAnalytics();
 		
 		Helper.CheckInternet(getApplicationContext());
-		Helper.getPermissions(this, getApplicationContext());
+		PermissionHelper.getAllPermissions(this, getApplicationContext());
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 			getPermission(this);
 		
@@ -1271,7 +1272,7 @@ public class Activity_Main extends AppCompatActivity implements
 	}
 	
 	public void getPermission(final Activity activity) {
-		if (Helper.checkSMSPermission(activity))
+		if (PermissionHelper.checkSMSPermission(activity))
 			new MaterialStyledDialog.Builder(activity)
 					.setTitle(FontHelper.getSpannedString(activity, "تایید پیامکی"))
 					.setDescription(FontHelper.getSpannedString(activity, "جهت تایید خودکار شماره تلفن هایپرآنلاین نیاز به دسترسی دارد"))
@@ -1283,7 +1284,7 @@ public class Activity_Main extends AppCompatActivity implements
 					.onPositive(new MaterialDialog.SingleButtonCallback() {
 						@Override
 						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-							Helper.getSMSPermission(activity);
+							PermissionHelper.getSMSPermission(activity);
 						}
 					})
 					.show();

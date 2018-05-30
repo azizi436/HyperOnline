@@ -61,6 +61,7 @@ import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.helpers.PermissionHelper;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.SmsListener;
@@ -425,7 +426,7 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 	}
 	
 	public void getPermission(final Activity activity) {
-		if (Helper.checkSMSPermission(Activity_ConfirmPhone.this))
+		if (PermissionHelper.checkSMSPermission(Activity_ConfirmPhone.this))
 			new MaterialStyledDialog.Builder(activity)
 					.setTitle(FontHelper.getSpannedString(activity, "تایید پیامکی"))
 					.setDescription(FontHelper.getSpannedString(activity, "جهت تایید خودکار شماره تلفن هایپرآنلاین نیاز به دسترسی دارد"))
