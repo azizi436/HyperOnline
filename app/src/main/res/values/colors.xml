@@ -21,4 +21,6 @@
 	<color name="btn2">#00b89c</color>
 
 	<color name="album_title">#444444</color>
+
+	<color name="TransparentWhite">#9bffffff</color>
 </resources>
