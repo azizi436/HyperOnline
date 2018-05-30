@@ -122,6 +122,8 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 	FancyButton logout;
 	@BindView(R.id.phone)
 	TextView phone;
+	@BindView(R.id.toolbar)
+	Toolbar toolbar;
 	
 	boolean keyPadLockedFlag = false;
 	boolean WaitFlag = false;
@@ -154,7 +156,6 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 		phoneNumber = getIntent().getStringExtra(TAGs.PHONE);
 		phone.setText(phoneNumber);
 		
-		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		try {
 			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
