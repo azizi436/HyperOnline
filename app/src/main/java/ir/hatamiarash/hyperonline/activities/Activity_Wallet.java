@@ -1,6 +1,7 @@
 package ir.hatamiarash.hyperonline.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ import butterknife.ButterKnife;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.helpers.PriceHelper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -45,6 +45,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
 import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
+import static ir.hatamiarash.hyperonline.helpers.PriceHelper.formatPrice;
 
 public class Activity_Wallet extends AppCompatActivity {
 	private static final String CLASS = Activity_Wallet.class.getSimpleName();
@@ -62,6 +63,8 @@ public class Activity_Wallet extends AppCompatActivity {
 	ProgressBar progressBar;
 	@BindView(R.id.title)
 	TextView walletTitle;
+	@BindView(R.id.code)
+	TextView walletCode;
 	@BindView(R.id.price)
 	TextView walletPrice;
 	@BindView(R.id.orderCount)
@@ -72,6 +75,8 @@ public class Activity_Wallet extends AppCompatActivity {
 	FancyButton btnCharge;
 	@BindView(R.id.btnTransfer)
 	FancyButton btnTransfer;
+	
+	String wCode;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -105,6 +110,16 @@ public class Activity_Wallet extends AppCompatActivity {
 			}
 		});
 		
+		btnTransfer.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Activity_Wallet.this, Activity_Transfer.class);
+				intent.putExtra(TAGs.CODE, wCode);
+				intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
+				startActivity(intent);
+			}
+		});
+		
 		listener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -121,7 +136,9 @@ public class Activity_Wallet extends AppCompatActivity {
 						String code = wallet.getString(TAGs.CODE);
 						
 						walletTitle.setText("کیف پول " + title);
-						walletPrice.setText(price + " تومان");
+						walletPrice.setText(formatPrice(price) + " تومان");
+						walletCode.setText("شماره : " + code.substring(3));
+						wCode = code.substring(3);
 						Picasso.with(getApplicationContext())
 								.load(getResources().getString(R.string.url_qr, HOST, code))
 								.networkPolicy(NetworkPolicy.NO_CACHE)
@@ -144,7 +161,7 @@ public class Activity_Wallet extends AppCompatActivity {
 						String orderPrice = orders.getString(TAGs.PRICE);
 						
 						walletOrderCount.setText(orderCount + " خرید");
-						walletOrderPrice.setText(PriceHelper.formatPrice(orderPrice) + " تومان");
+						walletOrderPrice.setText(formatPrice(orderPrice) + " تومان");
 					} else {
 						String errorMsg = object.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
@@ -167,7 +184,7 @@ public class Activity_Wallet extends AppCompatActivity {
 			}
 		};
 		
-		getWallet(getIntent().getStringExtra("uid"));
+		getWallet(getIntent().getStringExtra(TAGs.UID));
 		
 		analyticsReport();
 	}

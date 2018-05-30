@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@+id/app_bar">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<android.support.v7.widget.CardView
+				android:id="@+id/info"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_below="@+id/app_bar"
+				android:layout_margin="15dp"
+				app:cardBackgroundColor="@color/Blue"
+				app:cardCornerRadius="10dp"
+				app:cardElevation="5dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:paddingBottom="15dp"
+					android:paddingLeft="10dp"
+					android:paddingRight="10dp"
+					android:paddingTop="15dp">
+
+					<TextView
+						android:id="@+id/tPriceTitle"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="مبلغ درخواستی :"
+						android:textColor="@color/TransparentWhite"/>
+
+					<TextView
+						android:id="@+id/tPrice"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:text="15000 تومان"
+						android:textColor="@color/white"
+						android:textSize="24sp"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="0.5dp"
+						android:layout_marginEnd="20dp"
+						android:layout_marginLeft="20dp"
+						android:layout_marginRight="20dp"
+						android:layout_marginStart="20dp"
+						android:layout_marginTop="10dp"
+						android:background="@color/TransparentWhite"/>
+
+					<TextView
+						android:id="@+id/cWalletTitle"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:text="از کیف پول :"
+						android:textColor="@color/TransparentWhite"/>
+
+					<TextView
+						android:id="@+id/cWallet"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:text="اصلی"
+						android:textColor="@color/white"
+						android:textSize="24sp"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="0.5dp"
+						android:layout_marginEnd="20dp"
+						android:layout_marginLeft="20dp"
+						android:layout_marginRight="20dp"
+						android:layout_marginStart="20dp"
+						android:layout_marginTop="10dp"
+						android:background="@color/TransparentWhite"/>
+
+					<TextView
+						android:id="@+id/tUserTitle"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:text="انتقال به :"
+						android:textColor="@color/TransparentWhite"/>
+
+					<TextView
+						android:id="@+id/tUser"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:text="امیر حاجی بابایی"
+						android:textColor="@color/white"
+						android:textSize="24sp"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView
+				android:id="@+id/infoMoney"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_below="@+id/info"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginTop="5dp"
+				app:cardBackgroundColor="@color/white"
+				app:cardCornerRadius="10dp"
+				app:cardElevation="5dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:paddingBottom="15dp"
+					android:paddingLeft="10dp"
+					android:paddingRight="10dp"
+					android:paddingTop="15dp">
+
+					<TextView
+						android:id="@+id/cPriceTitle"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:text="موجودی فعلی :"
+						android:textColor="@color/gray3"/>
+
+					<TextView
+						android:id="@+id/cPrice"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:text="20000 تومان"
+						android:textColor="@color/md_blue_800"
+						android:textSize="24sp"
+						android:textStyle="bold"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="0.5dp"
+						android:layout_marginEnd="20dp"
+						android:layout_marginLeft="20dp"
+						android:layout_marginRight="20dp"
+						android:layout_marginStart="20dp"
+						android:layout_marginTop="10dp"
+						android:background="@color/gray3"/>
+
+					<TextView
+						android:id="@+id/aPriceTitle"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:text="موجودی پس از انتقال :"
+						android:textColor="@color/gray3"/>
+
+					<TextView
+						android:id="@+id/aPrice"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:text="5000 تومان"
+						android:textColor="@color/md_deep_purple_700"
+						android:textSize="24sp"
+						android:textStyle="bold"/>
+
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<TextView
+				android:id="@+id/message"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="15dp"
+				android:gravity="center"
+				android:text="موجودی کافی نیست"
+				android:textColor="@color/red"
+				android:textSize="20sp"
+				android:textStyle="bold"
+				android:visibility="gone"/>
+
+			<android.support.v7.widget.CardView
+				android:id="@+id/confirm"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginTop="15dp"
+				app:cardBackgroundColor="@color/green"
+				app:cardCornerRadius="10dp"
+				app:cardElevation="0dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_margin="5dp"
+						android:gravity="center"
+						android:text="تایید"
+						android:textColor="@color/white"
+						android:textSize="24sp"/>
+
+
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+		</LinearLayout>
+	</ScrollView>
+
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/app_bar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:theme="@style/AppTheme.AppBarOverlay">
+
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:background="?attr/colorPrimary"
+			app:popupTheme="@style/AppTheme.PopupOverlay"/>
+	</android.support.design.widget.AppBarLayout>
+
+</RelativeLayout>

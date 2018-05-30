@@ -66,6 +66,18 @@
 					android:textSize="22sp"/>
 
 				<TextView
+					android:id="@+id/code"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/title"
+					android:layout_marginTop="5dp"
+					android:gravity="center"
+					android:text="HO-153"
+					android:textColor="@color/btn"
+					android:textSize="22sp"
+					android:textStyle="bold"/>
+
+				<TextView
 					android:id="@+id/price"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -86,7 +98,7 @@
 					android:layout_height="wrap_content"
 					android:layout_alignParentEnd="true"
 					android:layout_alignParentRight="true"
-					android:layout_below="@+id/title"
+					android:layout_below="@+id/code"
 					android:layout_marginTop="20dp"
 					android:text="موجودی :"
 					android:textColor="@color/accent"
@@ -162,7 +174,7 @@
 			android:weightSum="2">
 
 			<mehdi.sakout.fancybuttons.FancyButton
-				android:id="@+id/btnCharge"
+				android:id="@+id/btnTransfer"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginEnd="2.5dp"
@@ -179,7 +191,7 @@
 				fancy:fb_textSize="20sp"/>
 
 			<mehdi.sakout.fancybuttons.FancyButton
-				android:id="@+id/btnTransfer"
+				android:id="@+id/btnCharge"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="2.5dp"
