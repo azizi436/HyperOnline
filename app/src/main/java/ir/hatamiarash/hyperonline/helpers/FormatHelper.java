@@ -80,8 +80,13 @@ public class FormatHelper {
 	}
 	
 	@NonNull
-	private String formatDate(@NotNull String Date) {
+	public static String formatDate(@NotNull String Date) {
 		String[] split = Date.split(":");
 		return split[0] + "     " + split[1];
+	}
+	
+	@NonNull
+	public static String formatCardNumber(@NotNull String card) {
+		return card.replaceAll("....", "$0-").substring(0, card.length() + 3);
 	}
 }
