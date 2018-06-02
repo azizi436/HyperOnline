@@ -159,7 +159,9 @@ public class Activity_TransferConfirm extends AppCompatActivity {
 						Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
-						startActivity(new Intent(getApplicationContext(), Activity_Transactions.class));
+						intent = new Intent(getApplicationContext(), Activity_Transactions.class);
+						intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
+						startActivity(intent);
 						Helper.MakeToast(getApplicationContext(), "انتقال موفقیت آمیز بود", TAGs.SUCCESS);
 						finish();
 					} else {
