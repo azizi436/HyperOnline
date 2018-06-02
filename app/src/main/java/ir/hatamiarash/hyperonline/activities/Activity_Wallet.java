@@ -77,6 +77,8 @@ public class Activity_Wallet extends AppCompatActivity {
 	FancyButton btnCharge;
 	@BindView(R.id.btnTransfer)
 	FancyButton btnTransfer;
+	@BindView(R.id.btnTransactions)
+	FancyButton btnTransactions;
 	
 	String wCode;
 	
@@ -105,6 +107,7 @@ public class Activity_Wallet extends AppCompatActivity {
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		btnCharge.setCustomTextFont("sans.ttf");
 		btnTransfer.setCustomTextFont("sans.ttf");
+		btnTransactions.setCustomTextFont("sans.ttf");
 		
 		walletQRCode.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -119,6 +122,16 @@ public class Activity_Wallet extends AppCompatActivity {
 				vibrator.vibrate(50);
 				Intent intent = new Intent(Activity_Wallet.this, Activity_Transfer.class);
 				intent.putExtra(TAGs.CODE, wCode);
+				intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
+				startActivity(intent);
+			}
+		});
+		
+		btnTransactions.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				vibrator.vibrate(50);
+				Intent intent = new Intent(Activity_Wallet.this, Activity_Transactions.class);
 				intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
 				startActivity(intent);
 			}
