@@ -75,8 +75,6 @@ public class Activity_UserProfile extends AppCompatActivity {
 	FancyButton btnLogout;
 	@BindView(R.id.btnEdit)
 	FancyButton btnEdit;
-	@BindView(R.id.btnWallet)
-	FancyButton btnWallet;
 	@BindView(R.id.name)
 	TextView User_Name;
 	@BindView(R.id.address)
@@ -130,7 +128,6 @@ public class Activity_UserProfile extends AppCompatActivity {
 		
 		btnEdit.setCustomTextFont("sans.ttf");
 		btnLogout.setCustomTextFont("sans.ttf");
-		btnWallet.setCustomTextFont("sans.ttf");
 		
 		btnLogout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -145,16 +142,6 @@ public class Activity_UserProfile extends AppCompatActivity {
 				vibrator.vibrate(50);
 				Intent i = new Intent(getApplicationContext(), Activity_EditProfile.class);
 				startActivityForResult(i, 100);
-			}
-		});
-		
-		btnWallet.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				vibrator.vibrate(50);
-				Intent i = new Intent(getApplicationContext(), Activity_Wallet.class);
-				i.putExtra("uid", uid);
-				startActivity(i);
 			}
 		});
 		
