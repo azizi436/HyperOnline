@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 - All Rights Reserved - Arash Hatami
+  -->
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingBottom="2dp"
+	android:paddingEnd="8dp"
+	android:paddingLeft="8dp"
+	android:paddingRight="8dp"
+	android:paddingStart="8dp"
+	android:paddingTop="2dp">
+
+	<android.support.v7.widget.CardView
+		xmlns:card_view="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/product"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		card_view:cardCornerRadius="5dp"
+		card_view:cardElevation="3dp"
+		card_view:cardUseCompatPadding="true">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:padding="5dp">
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/date"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:gravity="center"
+				android:text="تاریخ"
+				android:textAlignment="center"
+				android:textDirection="anyRtl"
+				app:my_font="iran_sans"/>
+
+			<View
+				android:id="@+id/line2"
+				android:layout_width="match_parent"
+				android:layout_height="0.5dp"
+				android:layout_below="@+id/date"
+				android:layout_marginBottom="8dp"
+				android:layout_marginEnd="20dp"
+				android:layout_marginLeft="20dp"
+				android:layout_marginRight="20dp"
+				android:layout_marginStart="20dp"
+				android:background="#FFDDDDDD"/>
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/priceTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/line2"
+				android:layout_margin="5dp"
+				android:text="مبلغ :"
+				android:textColor="@color/accent"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				app:my_font="iran_sans"/>
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/price"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/line2"
+				android:layout_margin="5dp"
+				android:layout_toLeftOf="@+id/priceTitle"
+				android:layout_toStartOf="@+id/priceTitle"
+				android:text="مبلغ"
+				app:my_font="shabnam"/>
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/descTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/price"
+				android:layout_margin="5dp"
+				android:text="قیمت :"
+				android:textColor="@color/accent"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				app:my_font="iran_sans"/>
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/desc"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/price"
+				android:layout_margin="5dp"
+				android:layout_toLeftOf="@+id/descTitle"
+				android:layout_toStartOf="@+id/descTitle"
+				android:text="قیمت"
+				app:my_font="shabnam"/>
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/cardTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/desc"
+				android:layout_margin="5dp"
+				android:text="کارت :"
+				android:textColor="@color/accent"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				app:my_font="iran_sans"/>
+
+			<ir.hatamiarash.hyperonline.libraries.PersianTextView
+				android:id="@+id/card"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/desc"
+				android:layout_margin="5dp"
+				android:layout_toLeftOf="@+id/cardTitle"
+				android:layout_toStartOf="@+id/cardTitle"
+				android:gravity="end"
+				android:text="6037-7011-4519-2015"
+				app:my_font="shabnam"/>
+
+		</RelativeLayout>
+	</android.support.v7.widget.CardView>
+</LinearLayout>
