@@ -58,6 +58,7 @@ import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.CategoryAdapter_Small;
 import ir.hatamiarash.hyperonline.adapters.ProductAdapter_All;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
@@ -83,6 +84,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 	private static final String CLASS = Activity_List.class.getSimpleName();
 	
 	SQLiteHandlerItem db_item;
+	SQLiteHandler db_user;
 	Typeface persianTypeface;
 	Drawer result = null;
 	SymmetricProgressBar progressBar, p;
@@ -129,6 +131,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		
 		session = new SessionManager(getApplicationContext());
 		db_item = new SQLiteHandlerItem(getApplicationContext());
+		db_user = new SQLiteHandler(getApplicationContext());
 		SPManager = new SharedPreferencesManager(getApplicationContext());
 		list_category = Integer.valueOf(getIntent().getStringExtra(TAGs.CATEGORY));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
@@ -199,6 +202,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		PrimaryDrawerItem item_contact = new CustomPrimaryDrawerItem().withIdentifier(23).withName("ارتباط با ما").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_email);
 		PrimaryDrawerItem item_login = new CustomPrimaryDrawerItem().withIdentifier(24).withName("ورود").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
 		PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
+		PrimaryDrawerItem item_wallet = new CustomPrimaryDrawerItem().withIdentifier(26).withName("کیف پول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_balance_wallet);
 		SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
 		SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
 		
@@ -214,6 +218,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		IDrawerItem items[] = new IDrawerItem[]{
 				item_home,
 				item_profile,
+				item_wallet,
 				item_cart,
 				item_track,
 				item_inbox,
@@ -419,6 +424,11 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 							}
 							if (item == 25) {
 								Intent i = new Intent(getApplicationContext(), Activity_Register.class);
+								startActivity(i);
+							}
+							if (item == 26) {
+								Intent i = new Intent(getApplicationContext(), Activity_Wallet.class);
+								i.putExtra(TAGs.UID, db_user.getUserDetails().get(TAGs.UID));
 								startActivity(i);
 							}
 						}
