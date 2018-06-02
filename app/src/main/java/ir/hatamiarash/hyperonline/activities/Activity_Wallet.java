@@ -139,10 +139,11 @@ public class Activity_Wallet extends AppCompatActivity {
 						String price = wallet.getString(TAGs.PRICE);
 						String code = wallet.getString(TAGs.CODE);
 						
+						wCode = code.substring(3);
+						
 						walletTitle.setText("کیف پول " + title);
 						walletPrice.setText(formatPrice(price) + " تومان");
-						walletCode.setText("شماره : " + code.substring(3));
-						wCode = code.substring(3);
+						walletCode.setText("شماره : " + wCode);
 						Picasso.with(getApplicationContext())
 								.load(getResources().getString(R.string.url_qr, HOST, code))
 								.networkPolicy(NetworkPolicy.NO_CACHE)
