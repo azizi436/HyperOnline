@@ -171,7 +171,7 @@
 			android:layout_alignParentBottom="true"
 			android:layout_margin="10dp"
 			android:orientation="horizontal"
-			android:weightSum="2">
+			android:weightSum="3">
 
 			<mehdi.sakout.fancybuttons.FancyButton
 				android:id="@+id/btnTransfer"
@@ -180,7 +180,7 @@
 				android:layout_marginEnd="2.5dp"
 				android:layout_marginRight="2.5dp"
 				android:layout_weight="1"
-				android:padding="15dp"
+				android:padding="10dp"
 				fancy:fb_borderColor="@color/white"
 				fancy:fb_borderWidth="1dp"
 				fancy:fb_defaultColor="@color/accent"
@@ -197,13 +197,30 @@
 				android:layout_marginLeft="2.5dp"
 				android:layout_marginStart="2.5dp"
 				android:layout_weight="1"
-				android:padding="15dp"
+				android:padding="10dp"
 				fancy:fb_borderColor="@color/white"
 				fancy:fb_borderWidth="1dp"
 				fancy:fb_defaultColor="@color/accent"
 				fancy:fb_focusColor="@color/colorPrimaryDark"
 				fancy:fb_radius="30dp"
 				fancy:fb_text="شارژ"
+				fancy:fb_textColor="@color/white"
+				fancy:fb_textSize="20sp"/>
+
+			<mehdi.sakout.fancybuttons.FancyButton
+				android:id="@+id/btnTransactions"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="2.5dp"
+				android:layout_marginStart="2.5dp"
+				android:layout_weight="1"
+				android:padding="10dp"
+				fancy:fb_borderColor="@color/white"
+				fancy:fb_borderWidth="1dp"
+				fancy:fb_defaultColor="@color/accent"
+				fancy:fb_focusColor="@color/colorPrimaryDark"
+				fancy:fb_radius="30dp"
+				fancy:fb_text="تراکنش ها"
 				fancy:fb_textColor="@color/white"
 				fancy:fb_textSize="20sp"/>
 		</LinearLayout>
