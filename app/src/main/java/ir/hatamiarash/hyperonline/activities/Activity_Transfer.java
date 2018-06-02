@@ -120,7 +120,7 @@ public class Activity_Transfer extends AppCompatActivity {
 				if (!code.equals("")) {
 					if (!price.equals("")) {
 						if (Helper.isValidNumber(price)) {
-							getConfirmation(code, price);
+							getConfirmation(code);
 						} else {
 							Helper.MakeToast(getApplicationContext(), "مبلغ وارد شده اشتباه است", TAGs.ERROR);
 						}
@@ -144,7 +144,7 @@ public class Activity_Transfer extends AppCompatActivity {
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
 						String code = jObj.getString(TAGs.CODE);
-						transferDest.setText(code);
+						transferDest.setText(code.substring(3));
 					} else {
 						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
@@ -221,7 +221,7 @@ public class Activity_Transfer extends AppCompatActivity {
 				return;
 			String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
 			Timber.tag("QR").d("Scan result : %s", result);
-			getWalletCode(result.substring(3));
+			getWalletCode(result);
 		}
 	}
 	
@@ -266,7 +266,7 @@ public class Activity_Transfer extends AppCompatActivity {
 		}
 	}
 	
-	private void getConfirmation(String code, String price) {
+	private void getConfirmation(String code) {
 		showDialog();
 		try {
 			String URL = getResources().getString(R.string.url_api, HOST) + "getTransferConfirmationByCode";
