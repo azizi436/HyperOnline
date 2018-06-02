@@ -12,6 +12,17 @@
 	android:background="@color/md_grey_100"
 	tools:context="ir.hatamiarash.hyperonline.activities.Activity_Main">
 
+	<TextView
+		android:id="@+id/message"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:gravity="center"
+		android:text="TextView"
+		android:textColor="@color/accent"
+		android:textSize="18sp"
+		android:visibility="gone"/>
+
 	<ir.hatamiarash.hyperonline.libraries.PersianTextView
 		android:id="@+id/title"
 		android:layout_width="match_parent"

@@ -28,12 +28,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
-import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.HyperOnline;
-import ir.hatamiarash.hyperonline.adapters.MessageAdapter;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.adapters.MessageAdapter;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
+import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.Refresh;
 import ir.hatamiarash.hyperonline.models.Message;
@@ -52,6 +52,8 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 	Toolbar toolbar;
 	@BindView(R.id.list)
 	RecyclerView list;
+	@BindView(R.id.message)
+	TextView message;
 	
 	List<Message> messageList;
 	MessageAdapter messageAdapter;
@@ -118,6 +120,12 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 			}
 			SPManager.setUnreadMessage(false);
 			hideDialog();
+			if (messageList.isEmpty()) {
+				message.setVisibility(View.VISIBLE);
+				message.setText("صندوق پیام خالی است");
+			} else {
+				message.setVisibility(View.GONE);
+			}
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 			hideDialog();

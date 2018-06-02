@@ -63,6 +63,8 @@ public class Activity_Transactions extends AppCompatActivity {
 	Toolbar toolbar;
 	@BindView(R.id.list)
 	RecyclerView list;
+	@BindView(R.id.message)
+	TextView message;
 	
 	List<Transaction> transactionList;
 	TransactionAdapter transactionAdapter;
@@ -123,6 +125,12 @@ public class Activity_Transactions extends AppCompatActivity {
 							String description = transaction.getString(TAGs.DESCRIPTION);
 							
 							transactionList.add(new Transaction(date, price, card, description));
+						}
+						if (transactionList.isEmpty()) {
+							message.setVisibility(View.VISIBLE);
+							message.setText("تراکنشی ثبت نشده است");
+						} else {
+							message.setVisibility(View.GONE);
 						}
 						transactionAdapter.notifyDataSetChanged();
 					} else {
