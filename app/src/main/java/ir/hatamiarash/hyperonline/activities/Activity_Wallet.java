@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -56,6 +57,7 @@ public class Activity_Wallet extends AppCompatActivity {
 	Response.ErrorListener errorListener;
 	SweetAlertDialog progressDialog;
 	ImagePopup imagePopup;
+	Vibrator vibrator;
 	
 	@BindView(R.id.image)
 	ImageView walletQRCode;
@@ -100,6 +102,7 @@ public class Activity_Wallet extends AppCompatActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
+		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		btnCharge.setCustomTextFont("sans.ttf");
 		btnTransfer.setCustomTextFont("sans.ttf");
 		
@@ -113,6 +116,7 @@ public class Activity_Wallet extends AppCompatActivity {
 		btnTransfer.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				vibrator.vibrate(50);
 				Intent intent = new Intent(Activity_Wallet.this, Activity_Transfer.class);
 				intent.putExtra(TAGs.CODE, wCode);
 				intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));

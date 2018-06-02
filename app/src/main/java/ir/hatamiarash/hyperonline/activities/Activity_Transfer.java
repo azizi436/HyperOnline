@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +55,7 @@ public class Activity_Transfer extends AppCompatActivity {
 	Response.Listener<String> getListener;
 	Response.Listener<String> confirmListener;
 	Response.ErrorListener errorListener;
+	Vibrator vibrator;
 	
 	@BindView(R.id.btnConfirm)
 	FancyButton btnConfirm;
@@ -79,11 +81,13 @@ public class Activity_Transfer extends AppCompatActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
+		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		btnConfirm.setCustomTextFont("sans.ttf");
 		
 		scanQR.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				vibrator.vibrate(50);
 				if (PermissionHelper.checkCameraPermission(Activity_Transfer.this)) {
 					Intent i = new Intent(Activity_Transfer.this, QrCodeActivity.class);
 					startActivityForResult(i, REQUEST_CODE_QR_SCAN);
@@ -110,6 +114,7 @@ public class Activity_Transfer extends AppCompatActivity {
 		btnConfirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				vibrator.vibrate(50);
 				String code = transferDest.getText().toString();
 				String price = transferPrice.getText().toString();
 				if (!code.equals("")) {
