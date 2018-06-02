@@ -171,6 +171,8 @@ public class Activity_Transfer extends AppCompatActivity {
 						intent.putExtra(TAGs.PRICE, jObj.getString(TAGs.PRICE));
 						intent.putExtra(TAGs.CODE, transferDest.getText().toString());
 						intent.putExtra("tPrice", transferPrice.getText().toString());
+						intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
+						intent.putExtra("src_code", getIntent().getStringExtra(TAGs.CODE));
 						startActivity(intent);
 					} else {
 						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
@@ -195,7 +197,6 @@ public class Activity_Transfer extends AppCompatActivity {
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
 		if (resultCode != Activity.RESULT_OK) {
 			Timber.tag("QR").d("COULD NOT GET A GOOD RESULT.");
 			if (data == null)
@@ -271,7 +272,7 @@ public class Activity_Transfer extends AppCompatActivity {
 			String URL = getResources().getString(R.string.url_api, HOST) + "getTransferConfirmationByCode";
 			JSONObject params = new JSONObject();
 			params.put("dest_code", code);
-			params.put("src_id", getIntent().getStringExtra(TAGs.CODE));
+			params.put("src_code", getIntent().getStringExtra(TAGs.CODE));
 			params.put("user_id", getIntent().getStringExtra(TAGs.UID));
 			final String mRequestBody = params.toString();
 			
