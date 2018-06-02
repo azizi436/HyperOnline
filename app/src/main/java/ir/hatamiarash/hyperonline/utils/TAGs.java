@@ -37,6 +37,9 @@ public class TAGs {
 	public static final String TYPE;
 	public static final String WALLET;
 	public static final String CODE;
+	public static final String LIST;
+	public static final String CARD;
+	public static final String CREATE_DATE;
 	
 	public static final String API_KEY;
 	
@@ -73,6 +76,9 @@ public class TAGs {
 		TYPE = "type";
 		WALLET = "wallet";
 		CODE = "code";
+		LIST = "list";
+		CARD = "card";
+		CREATE_DATE = "create_date";
 		
 		API_KEY = "4d0d3be84eae7fbe5c317bf318c77e83";
 	}
