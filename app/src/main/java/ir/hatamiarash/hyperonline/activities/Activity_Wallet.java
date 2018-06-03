@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -79,6 +80,8 @@ public class Activity_Wallet extends AppCompatActivity {
 	FancyButton btnTransfer;
 	@BindView(R.id.btnTransactions)
 	FancyButton btnTransactions;
+	@BindView(R.id.wallet_info)
+	RelativeLayout walletInfo;
 	
 	String wCode;
 	
@@ -105,6 +108,7 @@ public class Activity_Wallet extends AppCompatActivity {
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+		walletInfo.setVisibility(View.GONE);
 		btnCharge.setCustomTextFont("sans.ttf");
 		btnTransfer.setCustomTextFont("sans.ttf");
 		btnTransactions.setCustomTextFont("sans.ttf");
@@ -164,6 +168,7 @@ public class Activity_Wallet extends AppCompatActivity {
 						
 						wCode = code.substring(3);
 						
+						walletInfo.setVisibility(View.VISIBLE);
 						walletTitle.setText("کیف پول " + title);
 						walletPrice.setText(formatPrice(price) + " تومان");
 						walletCode.setText("شماره : " + wCode);
