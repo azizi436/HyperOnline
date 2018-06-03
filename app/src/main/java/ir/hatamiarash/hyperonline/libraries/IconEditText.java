@@ -63,7 +63,6 @@ public class IconEditText extends LinearLayout {
 			_isEmail = a.getBoolean(R.styleable.IconEditText_isEmail, false);
 			_isAddress = a.getBoolean(R.styleable.IconEditText_isAddress, false);
 			_isName = a.getBoolean(R.styleable.IconEditText_isName, false);
-			//Log.d(TAG, "{ _iconResource: " + _iconResource + ", _hint: " + _hint + ", _isPassword: " + _isPassword + "}");
 		} catch (Exception e) {
 			Timber.tag(TAG).w("Unable to parse attributes due to: %s", e.getMessage());
 			e.printStackTrace();
@@ -98,7 +97,7 @@ public class IconEditText extends LinearLayout {
 				_editText.setHint(String.format("%s%s", HINT_PREFIX, _hint.toLowerCase()));
 			
 			_editText.setBackgroundDrawable(null);
-			_editText.setTextColor(ContextCompat.getColor(this.getContext(), R.color.white));
+			_editText.setTextColor(ContextCompat.getColor(this.getContext(), R.color.black));
 			_editText.setHintTextColor(ContextCompat.getColor(this.getContext(), R.color.gray));
 			_editText.setTransformationMethod(new SingleLineTransformationMethod());
 			this.addView(_editText);
@@ -109,7 +108,7 @@ public class IconEditText extends LinearLayout {
 			_icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			if (_iconResource != null && _iconResource != 0) {
 				_icon.setImageResource(_iconResource);
-				_icon.setColorFilter(getResources().getColor(R.color.white));
+				_icon.setColorFilter(getResources().getColor(R.color.black));
 			}
 			this.addView(_icon);
 		}
