@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
-import android.widget.Button;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,7 +22,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -47,6 +45,7 @@ import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -66,11 +65,11 @@ public class Activity_Login extends AppCompatActivity {
 	Analytics analytics;
 	
 	@BindView(R.id.btnLogin)
-	Button btnLogin;
+	FancyButton btnLogin;
 	@BindView(R.id.btnLinkToRegisterScreen)
-	Button btnLinkToRegister;
+	FancyButton btnLinkToRegister;
 	@BindView(R.id.btnLinkToResetPassword)
-	Button btnLinkToResetPassword;
+	FancyButton btnLinkToResetPassword;
 	@BindView(R.id.new_password_2)
 	IconEditText inputPhone;
 	@BindView(R.id.password)
@@ -93,6 +92,9 @@ public class Activity_Login extends AppCompatActivity {
 		db.CreateTable();                                                        // create users table
 		session = new SessionManager(getApplicationContext());
 		confirmManager = new ConfirmManager(getApplicationContext());
+		btnLogin.setCustomTextFont("sans.ttf");
+		btnLinkToRegister.setCustomTextFont("sans.ttf");
+		btnLinkToResetPassword.setCustomTextFont("sans.ttf");
 		
 		if (session.isLoggedIn()) {                                              // Check if user is already logged in or not
 			Intent i = new Intent(Activity_Login.this, Activity_Main.class);

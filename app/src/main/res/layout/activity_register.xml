@@ -6,15 +6,10 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:fancy="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
+	android:background="@color/accent"
 	android:layout_height="match_parent">
-
-	<ImageView
-		android:id="@+id/imageView3"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:scaleType="centerCrop"
-		android:src="@color/primary_dark"/>
 
 	<RelativeLayout
 		android:layout_width="match_parent"
@@ -41,7 +36,7 @@
 					android:layout_marginRight="20dp"
 					android:layout_marginStart="20dp"
 					android:layout_marginTop="5dp"
-					android:background="@color/common_google_signin_btn_text_light_default"
+					android:background="@drawable/rounded_edittext"
 					android:ems="10"
 					app:hint="@string/hint_name"
 					app:iconSrc="@drawable/ic_person"
@@ -56,7 +51,7 @@
 					android:layout_marginRight="20dp"
 					android:layout_marginStart="20dp"
 					android:layout_marginTop="5dp"
-					android:background="@color/common_google_signin_btn_text_light_default"
+					android:background="@drawable/rounded_edittext"
 					android:ems="10"
 					app:hint="@string/hint_phone"
 					app:iconSrc="@drawable/ic_dialpad"
@@ -66,9 +61,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_vertical"
-					android:layout_marginEnd="5dp"
-					android:layout_marginRight="5dp"
-					android:layout_marginTop="10dp"
+					android:layout_marginTop="5dp"
 					android:gravity="center"
 					android:paddingEnd="5dp"
 					android:paddingLeft="5dp"
@@ -89,7 +82,7 @@
 					android:layout_marginRight="20dp"
 					android:layout_marginStart="20dp"
 					android:layout_marginTop="5dp"
-					android:background="@color/common_google_signin_btn_text_light_default"
+					android:background="@drawable/rounded_edittext"
 					android:ems="10"
 					app:hint="@string/hint_password"
 					app:iconSrc="@drawable/ic_lock"
@@ -104,7 +97,7 @@
 					android:layout_marginRight="20dp"
 					android:layout_marginStart="20dp"
 					android:layout_marginTop="5dp"
-					android:background="@color/common_google_signin_btn_text_light_default"
+					android:background="@drawable/rounded_edittext"
 					android:ems="10"
 					app:hint="@string/hint_password2"
 					app:iconSrc="@drawable/ic_lock"
@@ -174,7 +167,7 @@
 						android:layout_marginStart="5dp"
 						android:layout_toLeftOf="@+id/tit2"
 						android:layout_toStartOf="@+id/tit2"
-						android:popupBackground="@color/common_google_signin_btn_text_light_default"/>
+						android:popupBackground="@drawable/rounded_edittext"/>
 
 					<ir.hatamiarash.hyperonline.libraries.PersianTextView
 						android:id="@+id/tit2"
@@ -196,9 +189,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_vertical"
-					android:layout_marginEnd="5dp"
-					android:layout_marginRight="5dp"
-					android:layout_marginTop="10dp"
+					android:layout_marginTop="5dp"
 					android:gravity="center"
 					android:paddingEnd="5dp"
 					android:paddingLeft="5dp"
@@ -219,7 +210,7 @@
 					android:layout_marginRight="20dp"
 					android:layout_marginStart="20dp"
 					android:layout_marginTop="5dp"
-					android:background="@color/common_google_signin_btn_text_light_default"
+					android:background="@drawable/rounded_edittext"
 					android:ems="10"
 					app:hint="@string/hint_address"
 					app:iconSrc="@drawable/ic_location"
@@ -234,7 +225,7 @@
 					android:layout_marginRight="20dp"
 					android:layout_marginStart="20dp"
 					android:layout_marginTop="5dp"
-					android:background="@color/common_google_signin_btn_text_light_default"
+					android:background="@drawable/rounded_edittext"
 					android:ems="10"
 					app:hint="@string/hint_presenter"
 					app:iconSrc="@drawable/ic_presenter"
@@ -243,27 +234,52 @@
 			</LinearLayout>
 		</ScrollView>
 
-		<ir.hatamiarash.hyperonline.libraries.PersianButton
+		<mehdi.sakout.fancybuttons.FancyButton
 			android:id="@+id/btnConfirm"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_above="@+id/btnChangePassword"
-			android:layout_marginTop="15dp"
-			android:background="@color/btn"
-			android:text="@string/btn_register"
-			android:textColor="@color/white"
-			android:textSize="24sp"/>
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="30dp"
+			android:layout_marginRight="30dp"
+			android:layout_marginEnd="30dp"
+			android:layout_marginStart="2.5dp"
+			android:paddingBottom="13dp"
+			android:paddingLeft="35dp"
+			android:paddingRight="35dp"
+			android:paddingTop="13dp"
+			fancy:fb_borderColor="@color/accent"
+			fancy:fb_borderWidth="1dp"
+			fancy:fb_defaultColor="@color/white"
+			fancy:fb_focusColor="@color/white"
+			fancy:fb_radius="30dp"
+			fancy:fb_text="@string/btn_register"
+			fancy:fb_textColor="@color/accent"
+			fancy:fb_textSize="20sp"/>
 
-		<ir.hatamiarash.hyperonline.libraries.PersianButton
+		<mehdi.sakout.fancybuttons.FancyButton
 			android:id="@+id/btnChangePassword"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:layout_marginTop="3dp"
-			android:background="@color/btn2"
-			android:text="@string/btn_link_to_login"
-			android:textColor="@color/cardview_light_background"
-			android:textSize="18sp"/>
+			android:layout_marginBottom="5dp"
+			android:layout_marginLeft="30dp"
+			android:layout_marginRight="30dp"
+			android:layout_marginEnd="30dp"
+			android:layout_marginStart="2.5dp"
+			android:layout_marginTop="10dp"
+			android:paddingBottom="13dp"
+			android:paddingLeft="35dp"
+			android:paddingRight="35dp"
+			android:paddingTop="13dp"
+			fancy:fb_borderColor="@color/white"
+			fancy:fb_borderWidth="1dp"
+			fancy:fb_defaultColor="@color/accent"
+			fancy:fb_focusColor="@color/accent"
+			fancy:fb_radius="30dp"
+			fancy:fb_text="@string/btn_link_to_login"
+			fancy:fb_textColor="@color/white"
+			fancy:fb_textSize="16sp"/>
 
 	</RelativeLayout>
 

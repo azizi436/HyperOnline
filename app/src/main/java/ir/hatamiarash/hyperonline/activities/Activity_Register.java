@@ -46,6 +46,7 @@ import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.Address;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -64,9 +65,9 @@ public class Activity_Register extends AppCompatActivity {
 	Analytics analytics;
 	
 	@BindView(R.id.btnConfirm)
-	Button btnRegister;
+	FancyButton btnRegister;
 	@BindView(R.id.btnChangePassword)
-	Button btnLinkToLogin;
+	FancyButton btnLinkToLogin;
 	@BindView(R.id.current_password)
 	IconEditText inputName;
 	@BindView(R.id.password)
@@ -93,22 +94,23 @@ public class Activity_Register extends AppCompatActivity {
 		application = (HyperOnline) getApplication();
 		analytics = application.getAnalytics();
 		
-		inputPhone.setError(Activity_Register.this, "همانند نمونه 09123456789");
-		inputPassword.setError(Activity_Register.this, "حداقل 8 حرف");
-		
-		ArrayAdapter<String> provinceAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.provinces);
-		ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.cities);
-		inputProvince.setAdapter(provinceAdapter);
-		inputProvince.setEnabled(false);
-		inputCity.setAdapter(cityAdapter);
-		inputName.requestFocus();
-		
 		progressDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 		progressDialog.setCancelable(false);
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		session = new SessionManager(getApplicationContext());
 		db = new SQLiteHandler(getApplicationContext());
+		btnRegister.setCustomTextFont("sans.ttf");
+		btnLinkToLogin.setCustomTextFont("sans.ttf");
+		
+		inputPhone.setError(Activity_Register.this, "همانند نمونه 09123456789");
+		inputPassword.setError(Activity_Register.this, "حداقل 8 حرف");
+		ArrayAdapter<String> provinceAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.provinces);
+		ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, Address.cities);
+		inputProvince.setAdapter(provinceAdapter);
+		inputProvince.setEnabled(false);
+		inputCity.setAdapter(cityAdapter);
+		inputName.requestFocus();
 		
 		if (session.isLoggedIn()) {
 			Helper.MakeToast(getApplicationContext(), "شما قبلا وارد شده اید", TAGs.WARNING);
