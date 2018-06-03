@@ -50,14 +50,8 @@ public <init>(...);
 -dontwarn org.json.**
 -dontwarn co.ronash.**
 
-#-keep class !ir.hatamiarash.** { *; }
-
--keep class android.support.** { *; }
-
-
-
-
 # Android
+-keep class android.support.** { *; }
 -keep public class * extends android.app.Activity
 -keep public class * extends android.webkit.WebView
 -keep public class * extends android.app.Application
@@ -125,6 +119,7 @@ public <init>(...);
     public static final ** CREATOR;
 }
 
+#calligraphy
 -keep class uk.co.chrisjenx.calligraphy.* { *; }
 -keep class uk.co.chrisjenx.calligraphy.*$* { *; }
 
@@ -139,5 +134,6 @@ public <init>(...);
 -dontwarn org.msgpack.**
 -keep class org.msgpack.** { *; }
 
--keep class com.google.android.gms.ads.** { *; }
-    -dontwarn okio.**
+-keep class com.google.android.gms.** { *; }
+
+-dontwarn okio.**
