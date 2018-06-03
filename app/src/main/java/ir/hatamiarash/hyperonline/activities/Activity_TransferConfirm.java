@@ -197,7 +197,7 @@ public class Activity_TransferConfirm extends AppCompatActivity {
 			params.put("dest_code", des_code);
 			params.put("src_code", src_code);
 			params.put("user_id", user_id);
-			params.put("price", price);
+			params.put(TAGs.PRICE, price);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, listener, errorListener) {

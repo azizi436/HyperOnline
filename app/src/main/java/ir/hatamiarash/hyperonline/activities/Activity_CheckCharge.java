@@ -108,7 +108,7 @@ public class Activity_CheckCharge extends AppCompatActivity {
 		};
 		
 		try {
-			int error = Integer.valueOf(uri.getQueryParameter("error"));
+			int error = Integer.valueOf(uri.getQueryParameter(TAGs.ERROR));
 			if (error == 0) {
 				new MaterialStyledDialog.Builder(Activity_CheckCharge.this)
 						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
@@ -122,7 +122,7 @@ public class Activity_CheckCharge extends AppCompatActivity {
 						.onPositive(new MaterialDialog.SingleButtonCallback() {
 							@Override
 							public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-								completeCharge(uri.getQueryParameter("code"));
+								completeCharge(uri.getQueryParameter(TAGs.CODE));
 							}
 						})
 						.show();

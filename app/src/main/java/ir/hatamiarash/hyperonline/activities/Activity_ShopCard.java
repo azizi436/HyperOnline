@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -321,13 +320,13 @@ public class Activity_ShopCard extends AppCompatActivity {
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
 			params.put("user", uid);
-			params.put("code", Pushe.getPusheId(getApplicationContext()));
+			params.put(TAGs.CODE, Pushe.getPusheId(getApplicationContext()));
 			params.put("stuffs", STUFFS);
 			params.put("stuffs_id", STUFFS_ID);
 			params.put("stuffs_count", getCounts());
 			params.put("hour", ORDER_HOUR);
 			params.put("method", payMethod);
-			params.put("description", DESCRIPTION);
+			params.put(TAGs.DESCRIPTION, DESCRIPTION);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -342,7 +341,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
 							if (payMethod == 1)
-								Pay(jObj.getString("code"));
+								Pay(jObj.getString(TAGs.CODE));
 							else {
 								new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 										.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت حضوری"))
@@ -539,12 +538,12 @@ public class Activity_ShopCard extends AppCompatActivity {
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
 			params.put("user", uid);
-			params.put("code", ORDER_CODE);
+			params.put(TAGs.CODE, ORDER_CODE);
 			params.put("stuffs", STUFFS);
 			params.put("stuffs_id", STUFFS_ID);
 			params.put("stuffs_count", getCounts());
 			params.put("hour", ORDER_HOUR);
-			params.put("description", DESCRIPTION);
+			params.put(TAGs.DESCRIPTION, DESCRIPTION);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
