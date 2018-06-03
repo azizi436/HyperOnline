@@ -879,7 +879,7 @@ public class Activity_Main extends AppCompatActivity implements
 									}
 									
 									slider.setPresetTransformer(SliderLayout.Transformer.Default);
-									slider.setDuration(2500);
+									slider.setDuration(3000);
 									slider.setCustomAnimation(new DescriptionAnimation());
 									
 									for (String name : urls.keySet()) {
