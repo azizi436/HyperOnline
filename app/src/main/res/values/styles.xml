@@ -13,4 +13,10 @@
 	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+	<style name="FullScreenColor" parent="AppTheme">
+		<item name="colorPrimary">@color/accent</item>
+		<item name="colorPrimaryDark">@color/accent</item>
+		<item name="colorAccent">@color/accent</item>
+	</style>
 </resources>
