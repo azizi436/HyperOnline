@@ -64,8 +64,6 @@
 				android:id="@+id/comment_send"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginLeft="2.5dp"
-				android:layout_marginStart="2.5dp"
 				android:paddingBottom="15dp"
 				android:paddingLeft="35dp"
 				android:paddingRight="35dp"
