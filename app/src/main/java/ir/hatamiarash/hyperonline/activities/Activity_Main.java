@@ -27,7 +27,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -1238,7 +1237,7 @@ public class Activity_Main extends AppCompatActivity implements
 					try {
 						JSONObject jObj = new JSONObject(response);
 						if (jObj.getBoolean(TAGs.ERROR))
-							Log.e("SyncServer E", jObj.getString(TAGs.ERROR_MSG));
+							Timber.tag(CLASS).e(jObj.getString(TAGs.ERROR_MSG));
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

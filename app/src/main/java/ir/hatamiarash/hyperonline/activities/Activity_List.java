@@ -20,7 +20,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -375,7 +374,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 									i.putExtra(Intent.EXTRA_TEXT, sAux);
 									startActivity(Intent.createChooser(i, "یک گزینه انتخاب کنید"));
 								} catch (Exception e) {
-									Log.e("share", e.getMessage());
+									Timber.tag("share").e(e);
 								}
 							}
 							if (item == 17) {
