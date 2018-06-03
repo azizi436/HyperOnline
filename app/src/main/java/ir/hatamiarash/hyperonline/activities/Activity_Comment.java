@@ -48,6 +48,7 @@ import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.helpers.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -69,7 +70,7 @@ public class Activity_Comment extends AppCompatActivity {
 	@BindView(R.id.comment_body)
 	EditText body;
 	@BindView(R.id.comment_send)
-	Button send;
+	FancyButton send;
 	@BindView(R.id.toolbar)
 	Toolbar toolbar;
 	
@@ -89,6 +90,7 @@ public class Activity_Comment extends AppCompatActivity {
 		progressDialog.getProgressHelper().setBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent));
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+		send.setCustomTextFont("sans.ttf");
 		
 		setSupportActionBar(toolbar);
 		try {
