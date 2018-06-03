@@ -116,6 +116,16 @@ public class Activity_Wallet extends AppCompatActivity {
 			}
 		});
 		
+		btnCharge.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				vibrator.vibrate(50);
+				Intent intent = new Intent(Activity_Wallet.this, Activity_WalletCharge.class);
+				intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
+				startActivity(intent);
+			}
+		});
+		
 		btnTransfer.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
