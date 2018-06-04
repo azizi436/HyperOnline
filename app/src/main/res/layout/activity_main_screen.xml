@@ -32,7 +32,6 @@
 		android:layout_height="match_parent"
 		android:layout_below="@+id/app_bar"
 		android:overScrollMode="always"
-		android:paddingBottom="8dp"
 		android:scrollbars="none">
 
 		<RelativeLayout
