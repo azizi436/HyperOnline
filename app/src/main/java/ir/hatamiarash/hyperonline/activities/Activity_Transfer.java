@@ -99,7 +99,7 @@ public class Activity_Transfer extends AppCompatActivity {
 					} else {
 						new MaterialStyledDialog.Builder(Activity_Transfer.this)
 								.setTitle(FontHelper.getSpannedString(Activity_Transfer.this, "اسکن"))
-								.setDescription(FontHelper.getSpannedString(Activity_Transfer.this, "جهت اسکن ، هایپرانلاین نیازمند دسترسی به دوربین می باشد."))
+								.setDescription(FontHelper.getSpannedString(Activity_Transfer.this, "جهت اسکن ، هایپرآنلاین نیازمند دسترسی به دوربین می باشد."))
 								.setStyle(Style.HEADER_WITH_TITLE)
 								.withDarkerOverlay(true)
 								.withDialogAnimation(true)
@@ -117,19 +117,22 @@ public class Activity_Transfer extends AppCompatActivity {
 				vibrator.vibrate(50);
 				String code = transferDest.getText().toString();
 				String price = transferPrice.getText().toString();
-				if (!code.equals("")) {
-					if (!price.equals("")) {
-						if (Helper.isValidNumber(price)) {
-							getConfirmation(code);
+				if (!transferDest.getText().toString().equals(getIntent().getStringExtra(TAGs.CODE)))
+					if (!code.equals("")) {
+						if (!price.equals("")) {
+							if (Helper.isValidNumber(price)) {
+								getConfirmation(code);
+							} else {
+								Helper.MakeToast(getApplicationContext(), "مبلغ وارد شده اشتباه است", TAGs.ERROR);
+							}
 						} else {
-							Helper.MakeToast(getApplicationContext(), "مبلغ وارد شده اشتباه است", TAGs.ERROR);
+							Helper.MakeToast(getApplicationContext(), "مبلغ را وارد نمایید", TAGs.ERROR);
 						}
 					} else {
-						Helper.MakeToast(getApplicationContext(), "مبلغ را وارد نمایید", TAGs.ERROR);
+						Helper.MakeToast(getApplicationContext(), "شماره کیف پول مقصد را وارد نمایید", TAGs.ERROR);
 					}
-				} else {
-					Helper.MakeToast(getApplicationContext(), "شماره کیف پول مقصد را وارد نمایید", TAGs.ERROR);
-				}
+				else
+					Helper.MakeToast(getApplicationContext(), "شما نمی توانید مبلغی به کیف پول خود منتقل کنید", TAGs.ERROR);
 			}
 		});
 		
