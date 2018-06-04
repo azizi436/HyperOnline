@@ -85,7 +85,6 @@ public class Activity_CheckCharge extends AppCompatActivity {
 						intent = new Intent(getApplicationContext(), Activity_Transactions.class);
 						intent.putExtra(TAGs.UID, db_user.getUserDetails().get(TAGs.UID));
 						startActivity(intent);
-						Helper.MakeToast(getApplicationContext(), "انتقال موفقیت آمیز بود", TAGs.SUCCESS);
 						finish();
 					} else {
 						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
