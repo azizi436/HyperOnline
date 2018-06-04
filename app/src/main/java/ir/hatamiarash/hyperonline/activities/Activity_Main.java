@@ -78,6 +78,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.ronash.pushe.Pushe;
+import io.fabric.sdk.android.services.common.CommonUtils;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.CategoryAdapter;
@@ -999,6 +1000,10 @@ public class Activity_Main extends AppCompatActivity implements
 		} catch (NullPointerException ignore) {
 		}
 		
+		if (CommonUtils.isRooted(this)) {
+			rootedDevice(Activity_Main.this);
+		}
+		
 		if (VERSION != 0) {
 			checkVersion(VERSION);
 		}
@@ -1299,6 +1304,25 @@ public class Activity_Main extends AppCompatActivity implements
 	@Override
 	protected void attachBaseContext(Context newBase) {
 		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+	}
+	
+	private void rootedDevice(Activity activity) {
+		Timber.e("Rooted Device");
+		new MaterialStyledDialog.Builder(activity)
+				.setTitle(FontHelper.getSpannedString(activity, "متاسفیم"))
+				.setDescription(FontHelper.getSpannedString(activity, "هایپرآنلاین از ارائه خدمات به دستگاه های روت شده معذور است."))
+				.setStyle(Style.HEADER_WITH_TITLE)
+				.withDarkerOverlay(true)
+				.withDialogAnimation(true)
+				.setCancelable(false)
+				.setPositiveText("باشه")
+				.onPositive(new MaterialDialog.SingleButtonCallback() {
+					@Override
+					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+						android.os.Process.killProcess(android.os.Process.myPid());
+					}
+				})
+				.show();
 	}
 	
 	private void analyticsReport() {
