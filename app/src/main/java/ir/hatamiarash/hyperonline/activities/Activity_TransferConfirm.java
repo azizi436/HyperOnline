@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -73,6 +74,8 @@ public class Activity_TransferConfirm extends AppCompatActivity {
 	TextView message;
 	@BindView(R.id.confirm)
 	TextView confirm;
+	@BindView(R.id.card)
+	CardView card;
 	
 	String transferDest;
 	String transferSrc;
@@ -131,7 +134,7 @@ public class Activity_TransferConfirm extends AppCompatActivity {
 		
 		if (afterPrice < 0) {
 			message.setVisibility(View.VISIBLE);
-			confirm.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.gray3));
+			card.setCardBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.gray3));
 		}
 		
 		confirm.setOnClickListener(new View.OnClickListener() {
