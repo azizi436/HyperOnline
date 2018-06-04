@@ -78,7 +78,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.ronash.pushe.Pushe;
-import io.fabric.sdk.android.services.common.CommonUtils;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.CategoryAdapter;
@@ -1000,8 +999,12 @@ public class Activity_Main extends AppCompatActivity implements
 		} catch (NullPointerException ignore) {
 		}
 		
-		if (CommonUtils.isRooted(this)) {
+		if (Helper.isRooted(Activity_Main.this)) {
 			rootedDevice(Activity_Main.this);
+		}
+		
+		if (Helper.isDebugging(getContentResolver())) {
+			usbDebuggingDevice(Activity_Main.this);
 		}
 		
 		if (VERSION != 0) {
@@ -1311,6 +1314,25 @@ public class Activity_Main extends AppCompatActivity implements
 		new MaterialStyledDialog.Builder(activity)
 				.setTitle(FontHelper.getSpannedString(activity, "متاسفیم"))
 				.setDescription(FontHelper.getSpannedString(activity, "هایپرآنلاین از ارائه خدمات به دستگاه های روت شده معذور است."))
+				.setStyle(Style.HEADER_WITH_TITLE)
+				.withDarkerOverlay(true)
+				.withDialogAnimation(true)
+				.setCancelable(false)
+				.setPositiveText("باشه")
+				.onPositive(new MaterialDialog.SingleButtonCallback() {
+					@Override
+					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+						android.os.Process.killProcess(android.os.Process.myPid());
+					}
+				})
+				.show();
+	}
+	
+	private void usbDebuggingDevice(Activity activity) {
+		Timber.e("Debugging Device");
+		new MaterialStyledDialog.Builder(activity)
+				.setTitle(FontHelper.getSpannedString(activity, "متاسفیم"))
+				.setDescription(FontHelper.getSpannedString(activity, "هایپرآنلاین از ارائه خدمات به دستگاه های در حال Debug معذور است."))
 				.setStyle(Style.HEADER_WITH_TITLE)
 				.withDarkerOverlay(true)
 				.withDialogAnimation(true)
