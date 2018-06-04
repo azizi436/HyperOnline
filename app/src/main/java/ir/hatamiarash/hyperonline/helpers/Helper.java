@@ -4,24 +4,22 @@
 
 package ir.hatamiarash.hyperonline.helpers;
 
-import android.Manifest;
-import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.fabric.sdk.android.services.common.CommonUtils;
+import ir.hatamiarash.hyperonline.BuildConfig;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.libraries.CustomToast;
 import ir.hatamiarash.hyperonline.utils.ASCII;
@@ -36,7 +34,7 @@ public class Helper {
 		return target.length() >= 8 && ASCII.isASCII(target) && target.matches("\\A\\p{ASCII}*\\z");
 	}
 	
-	public static boolean isValidNumber(@NotNull String target){
+	public static boolean isValidNumber(@NotNull String target) {
 		return target.matches("[0-9]+");
 	}
 	
@@ -108,5 +106,13 @@ public class Helper {
 	public static int dpToPx(@NotNull Context context, int dp) {
 		Resources r = context.getResources();
 		return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+	}
+	
+	public static boolean isRooted(@NotNull Context context) {
+		return CommonUtils.isRooted(context);
+	}
+	
+	public static boolean isDebugging(@NotNull ContentResolver contentResolver) {
+		return Settings.Secure.getInt(contentResolver, Settings.Secure.ADB_ENABLED, 0) == 1 && !BuildConfig.DEBUG;
 	}
 }
