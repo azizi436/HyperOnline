@@ -85,7 +85,6 @@ import ir.hatamiarash.hyperonline.adapters.ProductAdapter;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerMain;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSetup;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
@@ -118,7 +117,6 @@ public class Activity_Main extends AppCompatActivity implements
 	Activity_Main pointer;             // use to finish activity from anywhere
 	SQLiteHandler db_user;             // items database
 	SQLiteHandlerItem db_item;         // items database
-	SQLiteHandlerSetup db_setup;       // setup database
 	SQLiteHandlerMain db_main;         // main database
 	SQLiteHandlerSupport db_support;   // support database
 	Typeface persianTypeface;                 // persian font typeface
@@ -204,7 +202,6 @@ public class Activity_Main extends AppCompatActivity implements
 		SPManager = new SharedPreferencesManager(getApplicationContext());
 		db_user = new SQLiteHandler(getApplicationContext());
 		db_item = new SQLiteHandlerItem(getApplicationContext());
-		db_setup = new SQLiteHandlerSetup(getApplicationContext());
 		db_main = new SQLiteHandlerMain(getApplicationContext());
 		db_support = new SQLiteHandlerSupport(getApplicationContext());
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
@@ -217,7 +214,6 @@ public class Activity_Main extends AppCompatActivity implements
 		SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
 		if (settings.getBoolean("my_first_time", true)) {
 			try {
-				db_setup.CreateTable();
 				db_item.CreateTable();
 				db_main.CreateTable();
 				db_support.CreateTable();
