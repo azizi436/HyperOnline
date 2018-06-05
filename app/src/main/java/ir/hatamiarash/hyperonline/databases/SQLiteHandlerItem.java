@@ -318,4 +318,34 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		db.close();
 		CreateTable();
 	}
+	
+	// delete all items from database then return for analytics reports
+	public List<String> deleteItems2(){
+		List<String> item = new ArrayList<>();
+		String selectQuery = "SELECT * FROM " + TABLE;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		cursor.moveToFirst();
+		if (cursor.getCount() > 0) {
+			while (!cursor.isAfterLast()) {
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_UID)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_PRICE)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_INFO)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_OFF)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT)));
+				item.add(cursor.getString(cursor.getColumnIndex(KEY_COUNT_ORIGINAL)));
+				cursor.moveToNext();
+			}
+		}
+		cursor.close();
+		db.close();
+		
+		db = this.getWritableDatabase();
+		db.delete(TABLE, null, null);
+		db.close();
+		CreateTable();
+		return item;
+	}
 }
