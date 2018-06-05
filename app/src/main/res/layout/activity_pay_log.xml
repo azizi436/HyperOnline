@@ -10,7 +10,7 @@
 	android:layout_height="match_parent"
 	android:background="@color/accent">
 
-	<ir.hatamiarash.hyperonline.libraries.PersianTextView
+	<TextView
 		android:id="@+id/pay_msg"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -21,11 +21,10 @@
 		android:layout_marginStart="10dp"
 		android:layout_marginTop="20dp"
 		android:gravity="center"
-		android:text="Message"
+		android:text="از خرید شما متشکریم"
 		android:textAlignment="center"
 		android:textColor="@color/white"
-		android:textSize="28sp"
-		app:my_font="iran_sans"/>
+		android:textSize="28sp"/>
 
 	<com.airbnb.lottie.LottieAnimationView
 		android:id="@+id/animation_view"
