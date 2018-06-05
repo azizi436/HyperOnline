@@ -316,6 +316,9 @@ public class Activity_ShopCard extends AppCompatActivity {
 	private void sendOrder(final int payMethod) {
 		showDialog();
 		try {
+			String count = getCounts();
+			analytics.reportStartCheckout(Integer.valueOf(count.substring(0, count.length() - 1)), tPrice + tExtend);
+			
 			String URL = getResources().getString(R.string.url_api, HOST) + "temp_order";
 			JSONObject params = new JSONObject();
 			String uid = db_user.getUserDetails().get(TAGs.UID);
@@ -323,7 +326,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			params.put(TAGs.CODE, Pushe.getPusheId(getApplicationContext()));
 			params.put("stuffs", STUFFS);
 			params.put("stuffs_id", STUFFS_ID);
-			params.put("stuffs_count", getCounts());
+			params.put("stuffs_count", count);
 			params.put("hour", ORDER_HOUR);
 			params.put("method", payMethod);
 			params.put(TAGs.DESCRIPTION, DESCRIPTION);

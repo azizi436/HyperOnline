@@ -26,10 +26,12 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
@@ -54,6 +56,8 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 	Response.ErrorListener errorListener;
 	HyperOnline application;
 	Analytics analytics;
+	
+	List<String> itemList;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -80,12 +84,15 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
-						db_item.deleteItems();
+						itemList = db_item.deleteItems2();
+						sentSuccessfulReport(itemList);
 						Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
 						i.putExtra("order_code", uri.getQueryParameter("code"));
 						startActivity(i);
 						finish();
 					} else {
+						itemList = db_item.getItemsDetails();
+						sentUnsuccessfulReport(itemList);
 						String errorMsg = jObj.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
 					}
@@ -125,6 +132,8 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 						})
 						.show();
 			} else if (error == 1) {
+				itemList = db_item.getItemsDetails();
+				sentUnsuccessfulReport(itemList);
 				new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
 						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
 						.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید. کد خطا : " + uri.getQueryParameter("er_code")))
@@ -207,5 +216,25 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 	private void analyticsReport() {
 		analytics.reportScreen(CLASS);
 		analytics.reportEvent("Open " + CLASS);
+	}
+	
+	private void sentSuccessfulReport(@NotNull List<String> items) {
+		for (int i = 0; i < (items.size() / 8); i++) {
+			String uid = items.get(i * 8 + 1);
+			String name = items.get(i * 8 + 2);
+			String price = items.get(i * 8 + 3);
+			
+			analytics.reportPurchase(uid, name, price, true);
+		}
+	}
+	
+	private void sentUnsuccessfulReport(@NotNull List<String> items) {
+		for (int i = 0; i < (items.size() / 8); i++) {
+			String uid = items.get(i * 8 + 1);
+			String name = items.get(i * 8 + 2);
+			String price = items.get(i * 8 + 3);
+			
+			analytics.reportPurchase(uid, name, price, false);
+		}
 	}
 }

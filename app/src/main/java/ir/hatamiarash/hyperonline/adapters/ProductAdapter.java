@@ -22,22 +22,26 @@ import com.crashlytics.android.Crashlytics;
 
 import java.util.List;
 
-import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
+import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
+import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.CardBadge;
-import ir.hatamiarash.hyperonline.utils.TAGs;
 import ir.hatamiarash.hyperonline.models.Product;
+import ir.hatamiarash.hyperonline.utils.TAGs;
 
 import static android.content.Context.VIBRATOR_SERVICE;
+import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
-	private static String HOST;
 	private CardBadge cardBadge;
 	private Context mContext;
-	private List<Product> productList;
 	private SQLiteHandlerItem db_item;
 	private Vibrator vibrator;
+	private Analytics analytics;
+	
+	private List<Product> productList;
 	
 	public ProductAdapter(Context mContext, List<Product> productList) {
 		this.mContext = mContext;
@@ -50,7 +54,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 			throw new ClassCastException("Activity must implement AdapterCallback.");
 		}
 		vibrator = (Vibrator) mContext.getSystemService(VIBRATOR_SERVICE);
-		HOST = mContext.getResources().getString(R.string.url_host);
+		
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	@Override
@@ -121,6 +127,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 						String.valueOf(1),
 						String.valueOf(product.count)
 				);
+				analytics.reportCard(product.unique_id, product.name, String.valueOf(fPrice));
 				try {
 					cardBadge.updateBadge();
 				} catch (ClassCastException e) {
