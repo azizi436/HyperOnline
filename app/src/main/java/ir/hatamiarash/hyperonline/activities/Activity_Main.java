@@ -234,6 +234,7 @@ public class Activity_Main extends AppCompatActivity implements
 			finish();
 		}
 		if (session.isLoggedIn()) {
+			Timber.i("User Logged in");
 			CheckInfoConfirm(db_user.getUserDetails().get(TAGs.PHONE));
 			SyncServer(db_user.getUserDetails().get(TAGs.UID));
 		}
@@ -1229,11 +1230,16 @@ public class Activity_Main extends AppCompatActivity implements
 	
 	private void SyncServer(String id) {
 		try {
+			String pushe = Pushe.getPusheId(getApplicationContext());
+			String firebase = FirebaseInstanceId.getInstance().getToken();
+			Timber.tag("PUSHE").i(pushe);
+			Timber.tag("FIREBASE").i(firebase);
+			
 			String URL = getResources().getString(R.string.url_api, HOST) + "sync_id";
 			JSONObject params = new JSONObject();
 			params.put("u", id);
-			params.put("p", Pushe.getPusheId(getApplicationContext()));
-			params.put("f", FirebaseInstanceId.getInstance().getToken());
+			params.put("p", pushe);
+			params.put("f", firebase);
 			params.put("v", Build.VERSION.SDK_INT);
 			final String mRequestBody = params.toString();
 			
