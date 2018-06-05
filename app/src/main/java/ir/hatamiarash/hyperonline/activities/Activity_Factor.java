@@ -30,6 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
@@ -66,6 +67,7 @@ public class Activity_Factor extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pay_log);
 		
+		ButterKnife.bind(this);
 		application = (HyperOnline) getApplication();
 		analytics = application.getAnalytics();
 		
@@ -77,8 +79,6 @@ public class Activity_Factor extends Activity {
 		vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 		
 		ORDER_CODE = getIntent().getStringExtra("order_code");
-		
-		pay_msg.setText("از خرید شما متشکریم");
 		
 		animationView.setAnimation("heart.json");
 		animationView.loop(true);
