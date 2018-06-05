@@ -99,7 +99,7 @@ public class Activity_Transactions extends AppCompatActivity {
 		}
 		
 		transactionList = new ArrayList<>();
-		transactionAdapter = new TransactionAdapter(this, transactionList);
+		transactionAdapter = new TransactionAdapter(transactionList);
 		transactionAdapter.setHasStableIds(true);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 		list.setLayoutManager(linearLayoutManager);
