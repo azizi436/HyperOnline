@@ -1062,6 +1062,7 @@ public class Activity_Main extends AppCompatActivity implements
 	}
 	
 	private void CheckInfoConfirm(final String phone) {
+		analytics.reportEvent("Server - Check Info Confirmation");
 		try {
 			String URL = getResources().getString(R.string.url_api, HOST) + "checkConfirm";
 			JSONObject params = new JSONObject();
@@ -1201,6 +1202,7 @@ public class Activity_Main extends AppCompatActivity implements
 					.getPackageInfo(getPackageName(), 0);
 			int version2 = pInfo.versionCode;
 			if (version > version2 && version != 0) {
+				analytics.reportEvent("Application - Update");
 				new MaterialStyledDialog.Builder(Activity_Main.this)
 						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "به روزرسانی"))
 						.setDescription(FontHelper.getSpannedString(getApplicationContext(), "نسخه جدید هایپرآنلاین منتشر شده است. لطفا به روزرسانی کنید"))
@@ -1225,6 +1227,7 @@ public class Activity_Main extends AppCompatActivity implements
 	}
 	
 	private void SyncServer(String id) {
+		analytics.reportEvent("Server - Synchronize");
 		try {
 			String pushe = Pushe.getPusheId(getApplicationContext());
 			String firebase = FirebaseInstanceId.getInstance().getToken();

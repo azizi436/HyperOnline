@@ -10,12 +10,15 @@ import android.support.v4.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
+
 public class PermissionHelper {
-	static int REQUEST_ID_MULTIPLE_PERMISSIONS = 4611;
-	static int REQUEST_ID_SMS_PERMISSIONS = 4612;
-	static int REQUEST_ID_CAMERA_PERMISSIONS = 4613;
-	
 	static public void getAllPermissions(Activity activity, Context context) {
+		HyperOnline application = HyperOnline.getInstance();
+		Analytics analytics = application.getAnalytics();
+		analytics.reportEvent("Permissions - Get All");
+		
 		int location2 = ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION);
 		int location = ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION);
 		int network = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE);
@@ -44,12 +47,17 @@ public class PermissionHelper {
 		if (write_storage != PackageManager.PERMISSION_GRANTED)
 			listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 		
+		int REQUEST_ID_MULTIPLE_PERMISSIONS = 4611;
 		if (!listPermissionsNeeded.isEmpty())
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
 					(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
 	}
 	
 	static public void getSMSPermission(Activity activity) {
+		HyperOnline application = HyperOnline.getInstance();
+		Analytics analytics = application.getAnalytics();
+		analytics.reportEvent("Permission - Get SMS");
+		
 		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
 		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
 		List<String> listPermissionsNeeded = new ArrayList<>();
@@ -60,12 +68,17 @@ public class PermissionHelper {
 		if (sms2 != PackageManager.PERMISSION_GRANTED)
 			listPermissionsNeeded.add(Manifest.permission.BROADCAST_SMS);
 		
+		int REQUEST_ID_SMS_PERMISSIONS = 4612;
 		if (!listPermissionsNeeded.isEmpty())
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
 					(new String[listPermissionsNeeded.size()]), REQUEST_ID_SMS_PERMISSIONS);
 	}
 	
 	static public void getCameraPermission(Activity activity) {
+		HyperOnline application = HyperOnline.getInstance();
+		Analytics analytics = application.getAnalytics();
+		analytics.reportEvent("Permission - Get Camera");
+		
 		int camera = ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA);
 		List<String> listPermissionsNeeded = new ArrayList<>();
 		
@@ -73,12 +86,17 @@ public class PermissionHelper {
 			listPermissionsNeeded.add(Manifest.permission.CAMERA);
 		
 		
+		int REQUEST_ID_CAMERA_PERMISSIONS = 4613;
 		if (!listPermissionsNeeded.isEmpty())
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
 					(new String[listPermissionsNeeded.size()]), REQUEST_ID_CAMERA_PERMISSIONS);
 	}
 	
 	static public boolean checkSMSPermission(Activity activity) {
+		HyperOnline application = HyperOnline.getInstance();
+		Analytics analytics = application.getAnalytics();
+		analytics.reportEvent("Permission - Check SMS");
+		
 		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
 		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
 		int count = 0;
@@ -88,6 +106,10 @@ public class PermissionHelper {
 	}
 	
 	static public boolean checkCameraPermission(Activity activity) {
+		HyperOnline application = HyperOnline.getInstance();
+		Analytics analytics = application.getAnalytics();
+		analytics.reportEvent("Permission - Check Camera");
+		
 		int camera = ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA);
 		return camera == PackageManager.PERMISSION_GRANTED;
 	}

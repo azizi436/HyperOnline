@@ -13,6 +13,8 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import timber.log.Timber;
 
 public class SQLiteHandler extends SQLiteOpenHelper {
@@ -31,8 +33,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	private static final String KEY_PROVINCE = "province";
 	private static final String KEY_CITY = "city";
 	
+	private Analytics analytics;
+	
 	public SQLiteHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	// create tables on call
@@ -51,6 +58,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		Timber.tag(TAG).i("Database Table Created - onCreate");
+		analytics.reportEvent("Database - Create Table - onCreate");
 	}
 	
 	// drop and recreate table
@@ -78,6 +86,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		db.execSQL(Query);
 		db.close();
 		Timber.tag(TAG).i("Database Table Created - Manual");
+		analytics.reportEvent("Database - Create Table - Manual");
 	}
 	
 	// add user data to database
@@ -97,6 +106,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		//db.execSQL(query);
 		db.close();
 		Timber.tag(TAG).d("New User Inserted Into Database : %s", name);
+		analytics.reportEvent("Database - Add User");
 	}
 	
 	// get user details from database and send them
@@ -119,6 +129,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		cursor.close();
 		db.close();
 		Timber.tag(TAG).d("User Fetched From Database : %s", user.toString());
+		analytics.reportEvent("Database - Get User");
 		return user;
 	}
 	
@@ -134,6 +145,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		db.execSQL(Query);
 		db.close();
 		Timber.tag(TAG).i("User's Table Row Updated");
+		analytics.reportEvent("Database - Update User");
 	}
 	
 	public void deleteUsers() {
@@ -141,5 +153,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		db.delete(TABLE_LOGIN, null, null);
 		db.close();
 		Timber.tag(TAG).i("User Deleted !");
+		analytics.reportEvent("Database - Remove User");
 	}
 }

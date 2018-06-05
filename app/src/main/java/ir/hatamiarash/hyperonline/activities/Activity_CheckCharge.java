@@ -79,6 +79,7 @@ public class Activity_CheckCharge extends AppCompatActivity {
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
+						analytics.reportEvent("Wallet - Charge");
 						Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);

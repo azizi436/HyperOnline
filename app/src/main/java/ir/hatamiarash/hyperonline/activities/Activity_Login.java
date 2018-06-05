@@ -137,8 +137,9 @@ public class Activity_Login extends AppCompatActivity {
 				try {
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
-					if (!error) {                          // Check for error node in json
-						session.setLogin(true);            // set login status true
+					if (!error) {
+						analytics.reportEvent("User - Login");
+						session.setLogin(true);
 						final JSONObject user = jObj.getJSONObject(TAGs.USER);
 						String uid = user.getString(TAGs.UNIQUE_ID);
 						Crashlytics.setUserIdentifier(uid);

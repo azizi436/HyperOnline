@@ -20,13 +20,11 @@ import ir.hatamiarash.hyperonline.interfaces.Refresh;
 import ir.hatamiarash.hyperonline.models.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
-	Context mContext;
-	List<Message> orderList;
-	SQLiteHandlerSupport db_support;
-	Refresh refresh;
+	private List<Message> orderList;
+	private SQLiteHandlerSupport db_support;
+	private Refresh refresh;
 	
 	public MessageAdapter(Context mContext, List<Message> orderList) {
-		this.mContext = mContext;
 		this.orderList = orderList;
 		db_support = new SQLiteHandlerSupport(mContext);
 		try {

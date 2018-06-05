@@ -66,6 +66,7 @@ public class ApplicationAnalytics implements Analytics {
 				.putItemName(name)
 				.putItemId(id));
 		Timber.i("Report Card : %s - %s - %s", id, name, price);
+		reportEvent("Purchase - Add");
 	}
 	
 	@Override
@@ -77,6 +78,7 @@ public class ApplicationAnalytics implements Analytics {
 				.putItemId(id)
 				.putSuccess(status));
 		Timber.i("Report Purchase : %s - %s - %s - %b", id, name, price, status);
+		reportEvent("Purchase - Final");
 	}
 	
 	@Override
@@ -86,5 +88,6 @@ public class ApplicationAnalytics implements Analytics {
 				.putCurrency(Currency.getInstance("IRR"))
 				.putItemCount(count));
 		Timber.i("Report Checkout : %d - %d", price, count);
+		reportEvent("Purchase - Checkout");
 	}
 }

@@ -12,6 +12,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import timber.log.Timber;
 
 public class SQLiteHandlerMain extends SQLiteOpenHelper {
@@ -22,8 +24,13 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 	// Setup Table Columns names
 	private static final String KEY_SEND_PRICE = "send_price";
 	
+	private Analytics analytics;
+	
 	public SQLiteHandlerMain(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	// create tables on call
@@ -34,6 +41,7 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		Timber.tag(TAG).i("Database table created - onCreate");
+		analytics.reportEvent("Database - Create Table - onCreate");
 	}
 	
 	// drop and recreate table
@@ -59,6 +67,7 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 		db.execSQL(Query);
 		db.close();
 		Timber.tag(TAG).i("Database table created - Manual");
+		analytics.reportEvent("Database - Create Table - Manual");
 	}
 	
 	public void addItem(String send_price) {
@@ -67,6 +76,7 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 		String query = "UPDATE " + TABLE + " SET " + KEY_SEND_PRICE + "=" + send_price;
 		db.execSQL(query);
 		db.close();
+		analytics.reportEvent("Database - Add SendPrice");
 	}
 	
 	// get user details from database and send them
@@ -81,6 +91,7 @@ public class SQLiteHandlerMain extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Get SendPrice");
 		return item;
 	}
 }

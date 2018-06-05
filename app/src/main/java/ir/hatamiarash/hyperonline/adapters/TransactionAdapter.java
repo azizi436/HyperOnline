@@ -1,6 +1,5 @@
 package ir.hatamiarash.hyperonline.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,11 +17,9 @@ import static ir.hatamiarash.hyperonline.helpers.FormatHelper.formatCardNumber;
 import static ir.hatamiarash.hyperonline.helpers.PriceHelper.formatPrice;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
-	Context mContext;
-	List<Transaction> transactionList;
+	private List<Transaction> transactionList;
 	
-	public TransactionAdapter(Context mContext, List<Transaction> transactionList) {
-		this.mContext = mContext;
+	public TransactionAdapter(List<Transaction> transactionList) {
 		this.transactionList = transactionList;
 	}
 	

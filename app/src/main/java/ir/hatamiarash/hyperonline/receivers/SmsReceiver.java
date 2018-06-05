@@ -16,22 +16,30 @@ import com.crashlytics.android.Crashlytics;
 import java.util.HashMap;
 import java.util.Map;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.SmsListener;
 
 public class SmsReceiver extends BroadcastReceiver {
 	private SmsListener handler;
+	private Analytics analytics;
 	
 	public SmsReceiver() {
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	/* Constructor. Handler is the activity  *
 	 * which will show the messages to user. */
 	public SmsReceiver(SmsListener handler) {
 		this.handler = handler;
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		analytics.reportEvent("SMS - Received");
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			/* Retrieve the sms message chunks from the intent */
 			SmsMessage[] rawSmsChunks;

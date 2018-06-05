@@ -30,20 +30,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.List;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.models.Order;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
+import static ir.hatamiarash.hyperonline.helpers.PriceHelper.formatPrice;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
 	private ProgressDialog mProgressDialog;
 	private Context mContext;
 	private List<Order> orderList;
+	private Analytics analytics;
 	
 	public OrderAdapter(Context mContext, List<Order> orderList) {
 		this.mContext = mContext;
@@ -54,12 +57,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		mProgressDialog.setCancelable(true);
-	}
-	
-	private static String formatCurrency(String value) {
-		String pattern = "###,###";
-		DecimalFormat myFormatter = new DecimalFormat(pattern);
-		return myFormatter.format(Double.valueOf(value));
+		
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	@NonNull
@@ -73,10 +73,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 	public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 		final Order order = orderList.get(position);
 		holder.id.setText(order.unique_id);
-//        holder.date.setText(formatDate(order.date));
 		holder.date.setText(order.date);
 		holder.stuffs.setText(order.stuffs);
-		holder.price.setText(formatCurrency(order.price) + " تومان");
+		holder.price.setText(formatPrice(order.price) + " تومان");
 		holder.hour.setText(String.valueOf(order.hour) + " الی " + String.valueOf(order.hour + 1));
 		
 		switch (order.status) {
@@ -218,6 +217,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 			super.onPreExecute();
 			// take CPU lock to prevent CPU from going off if the user
 			// presses the power button during download
+			analytics.reportEvent("Factor - Download");
 			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 			if (pm != null) {
 				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
@@ -239,10 +239,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 		protected void onPostExecute(String result) {
 			mWakeLock.release();
 			mProgressDialog.dismiss();
-//            vibrator.vibrate(50);
 			if (result != null)
 				Helper.MakeToast(context, "خطایی رخ داده است مجددا تلاش کنید", TAGs.ERROR);
 			else {
+				analytics.reportEvent("Factor - Open");
 				Helper.MakeToast(context, "فاکتور دانلود شد... در حال بازگشایی", TAGs.SUCCESS);
 				File file = new File(Environment.getExternalStorageDirectory() + "/" + "HO-Factors" + "/" + code + ".pdf");
 				

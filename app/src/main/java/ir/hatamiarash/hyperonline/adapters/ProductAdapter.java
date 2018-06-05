@@ -127,6 +127,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 						String.valueOf(1),
 						String.valueOf(product.count)
 				);
+				analytics.reportEvent("Card - Add");
 				analytics.reportCard(product.unique_id, product.name, String.valueOf(fPrice));
 				try {
 					cardBadge.updateBadge();
@@ -140,6 +141,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 		holder.inc.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				analytics.reportEvent("Card - Increase Count");
 				vibrator.vibrate(50);
 				int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
 				
@@ -167,6 +169,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 		holder.dec.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				analytics.reportEvent("Card - Decrease count");
 				vibrator.vibrate(50);
 				int pCount = Integer.valueOf(db_item.getItemDetails(product.unique_id).get(6));
 				if (pCount == 1) {

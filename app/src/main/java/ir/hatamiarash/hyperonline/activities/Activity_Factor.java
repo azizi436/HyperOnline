@@ -193,6 +193,7 @@ public class Activity_Factor extends Activity {
 			// take CPU lock to prevent CPU from going off if the user
 			// presses the power button during download
 			try {
+				analytics.reportEvent("Factor - Download");
 				PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 				assert pm != null;
 				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
@@ -222,6 +223,7 @@ public class Activity_Factor extends Activity {
 			else {
 				Helper.MakeToast(context, "فاکتور دانلود شد... در حال بازگشایی", TAGs.SUCCESS);
 				File file = new File(Environment.getExternalStorageDirectory() + "/" + folder_main + "/" + ORDER_CODE + ".pdf");
+				analytics.reportEvent("Factor - Open");
 				try {
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					intent.setDataAndType(Uri.fromFile(file), "application/*");

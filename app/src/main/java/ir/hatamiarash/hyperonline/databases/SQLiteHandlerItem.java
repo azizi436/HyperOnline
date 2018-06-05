@@ -13,6 +13,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import timber.log.Timber;
 
 public class SQLiteHandlerItem extends SQLiteOpenHelper {
@@ -30,8 +32,13 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 	private static final String KEY_OFF = "off";
 	private static final String KEY_COUNT_ORIGINAL = "ocount";
 	
+	private Analytics analytics;
+	
 	public SQLiteHandlerItem(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	// create table on call
@@ -49,6 +56,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(CREATE_CARD_TABLE);
 		Timber.tag(TAG).i("Database table created - onCreate");
+		analytics.reportEvent("Database - Create Table - onCreate");
 	}
 	
 	// drop and recreate table
@@ -75,6 +83,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		db.execSQL(CREATE_CARD_TABLE);
 		db.close();
 		Timber.tag(TAG).i("Database table created - Manual");
+		analytics.reportEvent("Database - Create Table - Manual");
 	}
 	
 	// add item data to database
@@ -107,6 +116,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		db.execSQL(query);
 		db.close();
 		Timber.tag(TAG).d("%s inserted into database", name);
+		analytics.reportEvent("Database - Add Item");
 	}
 	
 	// update item's details
@@ -124,6 +134,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		db.execSQL(query);
 		db.close();
 		Timber.tag(TAG).d("%s updated : %s %s %s", uid, count, price, off);
+		analytics.reportEvent("Database - Update Item");
 	}
 	
 	public void updateCount(String uid, String count, String price, String off) {
@@ -140,6 +151,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		db.execSQL(query);
 		db.close();
 		Timber.tag(TAG).d("%s updated : %s %s %s", uid, count, price, off);
+		analytics.reportEvent("Database - Update Item");
 	}
 	
 	// get item's detail from database and send them
@@ -164,6 +176,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Get Items");
 		return item;
 	}
 	
@@ -190,6 +203,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		cursor.close();
 		db.close();
 		Timber.tag(TAG).d("Fetching item from Sqlite : %s" , item.toString());
+		analytics.reportEvent("Database - Get Item");
 		return item;
 	}
 	
@@ -207,6 +221,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Check Exist");
 		return false;
 	}
 	
@@ -223,6 +238,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Check Exist");
 		return false;
 	}
 	
@@ -237,6 +253,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 			count = cursor.getInt(cursor.getColumnIndex(KEY_COUNT));
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Get Count");
 		return count;
 	}
 	
@@ -255,6 +272,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Get Price");
 		return total;
 	}
 	
@@ -283,6 +301,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		int rowCount = cursor.getCount();
 		db.close();
 		cursor.close();
+		analytics.reportEvent("Database - Get Count - All");
 		return rowCount;
 	}
 	
@@ -300,6 +319,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Get Count - One");
 		return total;
 	}
 	
@@ -309,6 +329,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		uid = "'" + uid + "'";
 		db.delete(TABLE, KEY_UID + "=" + uid, null);
 		db.close();
+		analytics.reportEvent("Database - Remove Item");
 	}
 	
 	// delete all items from database
@@ -316,6 +337,7 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE, null, null);
 		db.close();
+		analytics.reportEvent("Database - Remove Items");
 		CreateTable();
 	}
 	
@@ -341,10 +363,11 @@ public class SQLiteHandlerItem extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
-		
+		analytics.reportEvent("Database - Get Items");
 		db = this.getWritableDatabase();
 		db.delete(TABLE, null, null);
 		db.close();
+		analytics.reportEvent("Database - Remove Items");
 		CreateTable();
 		return item;
 	}

@@ -176,6 +176,7 @@ public class Activity_Register extends AppCompatActivity {
 					JSONObject jObj = new JSONObject(response);
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
+						analytics.reportEvent("User - Register");
 						MakeDialog();
 					} else {
 						hideDialog();

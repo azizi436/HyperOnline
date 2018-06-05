@@ -213,6 +213,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 	}
 	
 	private void logoutUser() {
+		analytics.reportEvent("User - Logout");
 		vibrator.vibrate(50);
 		showDialog();
 		session.setLogin(false);

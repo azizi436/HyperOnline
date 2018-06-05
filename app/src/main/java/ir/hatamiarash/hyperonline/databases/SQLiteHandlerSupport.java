@@ -12,7 +12,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.hatamiarash.hyperonline.HyperOnline;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import timber.log.Timber;
+
 public class SQLiteHandlerSupport extends SQLiteOpenHelper {
+	private static final String TAG = SQLiteHandlerSupport.class.getSimpleName();
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "android_api";
 	private static final String TABLE = "support";
@@ -21,8 +26,13 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 	private static final String KEY_BODY = "body";
 	private static final String KEY_DATE = "date";
 	
+	private Analytics analytics;
+	
 	public SQLiteHandlerSupport(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		
+		HyperOnline application = HyperOnline.getInstance();
+		analytics = application.getAnalytics();
 	}
 	
 	// create table on call
@@ -34,6 +44,8 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 				+ KEY_DATE + " TEXT "
 				+ ")";
 		db.execSQL(Query);
+		Timber.tag(TAG).i("Database table created - onCreate");
+		analytics.reportEvent("Database - Create Table - onCreate");
 	}
 	
 	// drop and recreate table
@@ -54,6 +66,8 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		db.close();
+		Timber.tag(TAG).i("Database table created - Manual");
+		analytics.reportEvent("Database - Create Table - Manual");
 	}
 	
 	public void AddMessage(String title, String body, String date) {
@@ -72,6 +86,7 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 				+ ")";
 		db.execSQL(Query);
 		db.close();
+		analytics.reportEvent("Database - Add Message");
 	}
 	
 	public List<String> GetMessages() {
@@ -90,6 +105,7 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		analytics.reportEvent("Database - Get Message");
 		return item;
 	}
 	
@@ -98,6 +114,7 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 		date = "'" + date + "'";
 		db.delete(TABLE, KEY_DATE + "=" + date, null);
 		db.close();
+		analytics.reportEvent("Database - Remove Message");
 	}
 	
 	public void deleteMessages() {
@@ -105,6 +122,7 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 		db.delete(TABLE, null, null);
 		db.close();
 		CreateTable();
+		analytics.reportEvent("Database - Remove Messages");
 	}
 	
 	public int getCount() {
@@ -114,6 +132,7 @@ public class SQLiteHandlerSupport extends SQLiteOpenHelper {
 		int rowCount = cursor.getCount();
 		db.close();
 		cursor.close();
+		analytics.reportEvent("Database - Get Messages Count");
 		return rowCount;
 	}
 }

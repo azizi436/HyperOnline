@@ -159,6 +159,7 @@ public class Activity_TransferConfirm extends AppCompatActivity {
 					JSONObject object = new JSONObject(response);
 					Boolean error = object.getBoolean(TAGs.ERROR);
 					if (!error) {
+						analytics.reportEvent("Wallet - Transfer");
 						Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
