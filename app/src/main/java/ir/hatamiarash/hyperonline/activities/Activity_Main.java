@@ -226,12 +226,6 @@ public class Activity_Main extends AppCompatActivity implements
 			}
 		}
 		
-		if (confirmManager.isPhoneConfirm() && session.isLoggedIn()) {
-			Intent i = new Intent(getApplicationContext(), Activity_ConfirmPhone.class);
-			i.putExtra(TAGs.PHONE, db_user.getUserDetails().get(TAGs.PHONE));
-			startActivity(i);
-			finish();
-		}
 		if (session.isLoggedIn()) {
 			Timber.i("User Logged in");
 			CheckInfoConfirm(db_user.getUserDetails().get(TAGs.PHONE));

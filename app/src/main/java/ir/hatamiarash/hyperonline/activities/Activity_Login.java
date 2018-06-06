@@ -158,7 +158,6 @@ public class Activity_Login extends AppCompatActivity {
 								user.getString(TAGs.CITY)
 						);
 						if (Integer.valueOf(user.getString("confirmed_phone")) == 0) {
-							confirmManager.setPhoneConfirm(true);
 							confirmManager.setPhoneConfirm(false);
 							new MaterialStyledDialog.Builder(Activity_Login.this)
 									.setTitle(FontHelper.getSpannedString(Activity_Login.this, "تایید حساب"))
