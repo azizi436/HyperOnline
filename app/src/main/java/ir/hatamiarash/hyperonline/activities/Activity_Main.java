@@ -78,6 +78,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.ronash.pushe.Pushe;
+import ir.hatamiarash.hyperonline.BuildConfig;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.CategoryAdapter;
@@ -653,7 +654,7 @@ public class Activity_Main extends AppCompatActivity implements
 						if (!error) {
 							JSONObject status = jObj.getJSONObject("status");
 							
-							if (status.getInt("offline_S") == 1) {
+							if (status.getInt("offline_S") == 1 && !BuildConfig.DEBUG) {
 								title_category.setVisibility(View.GONE);
 								title_category_more.setVisibility(View.GONE);
 								category_view.setVisibility(View.GONE);
