@@ -225,7 +225,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 											payMethod = 1;
 										else
 											payMethod = 0;
-										
 										LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 										assert inflater != null;
 										final View customView = inflater.inflate(R.layout.dialog_pay_way, null);
@@ -249,7 +248,6 @@ public class Activity_ShopCard extends AppCompatActivity {
 															payWay = "cash";
 														else
 															payWay = "wallet";
-														
 														sendOrder(payMethod, payWay);
 													}
 												})
@@ -343,6 +341,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	}
 	
 	private void sendOrder(final int payMethod, final String payWay) {
+		analyticsReportEvent(payMethod, payWay);
 		showDialog();
 		try {
 			String count = getCounts();
@@ -448,6 +447,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	}
 	
 	private void Pay(String ID) {
+		analytics.reportEvent("Gateway - Open");
 		String Address = getResources().getString(R.string.url_pay, HOST) + ID;
 		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(Address));
 		startActivityForResult(i, 200);
@@ -457,7 +457,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 200) {
-			Timber.tag(CLASS).d("Pay Gateway Closed");
+			Timber.tag(CLASS).i("Pay Gateway Closed");
+			analytics.reportEvent("Gateway - Closed");
 		}
 	}
 	
@@ -661,5 +662,16 @@ public class Activity_ShopCard extends AppCompatActivity {
 	private void analyticsReport() {
 		analytics.reportScreen(CLASS);
 		analytics.reportEvent("Open " + CLASS);
+	}
+	
+	private void analyticsReportEvent(final int payMethod, final String payWay) {
+		if (payMethod == 1)
+			analytics.reportEvent("Pay - Online");
+		else
+			analytics.reportEvent("Pay - Place");
+		if (payWay.equals("cache"))
+			analytics.reportEvent("Pay - Cache");
+		else
+			analytics.reportEvent("Pay - Wallet");
 	}
 }
