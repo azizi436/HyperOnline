@@ -345,7 +345,12 @@ public class Activity_ShopCard extends AppCompatActivity {
 		showDialog();
 		try {
 			String count = getCounts();
-			analytics.reportStartCheckout(Integer.valueOf(count.substring(0, count.length() - 1)), tPrice + tExtend);
+			String[] counts = count.split(",");
+			int totalCount = 0;
+			for (String token : counts) {
+				totalCount += Integer.valueOf(token);
+			}
+			analytics.reportStartCheckout(totalCount, tPrice + tExtend);
 			
 			String URL = getResources().getString(R.string.url_api, HOST) + "temp_order";
 			JSONObject params = new JSONObject();
