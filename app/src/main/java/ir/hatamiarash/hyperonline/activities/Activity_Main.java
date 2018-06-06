@@ -1344,7 +1344,7 @@ public class Activity_Main extends AppCompatActivity implements
 			Answers.getInstance().logCustom(new CustomEvent("Debugging Device"));
 		new MaterialStyledDialog.Builder(activity)
 				.setTitle(FontHelper.getSpannedString(activity, "متاسفیم"))
-				.setDescription(FontHelper.getSpannedString(activity, "هایپرآنلاین از ارائه خدمات به دستگاه های در حال Debug معذور است."))
+				.setDescription(FontHelper.getSpannedString(activity, "هایپرآنلاین از ارائه خدمات به دستگاه های در حال Debug معذور است. جهت ادامه USB Debugging را خاموش کنید."))
 				.setStyle(Style.HEADER_WITH_TITLE)
 				.withDarkerOverlay(true)
 				.withDialogAnimation(true)
