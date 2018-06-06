@@ -219,7 +219,7 @@ public class Activity_Register extends AppCompatActivity {
 			params.put(TAGs.PASSWORD, password);
 			params.put(TAGs.STATE, state);
 			params.put(TAGs.CITY, city);
-			params.put("presenter", presenter);
+			params.put(TAGs.PRESENTER, presenter);
 			final String body = params.toString();
 			registerUser(body);
 		} catch (Exception e) {
