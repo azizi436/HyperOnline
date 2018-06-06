@@ -372,9 +372,32 @@ public class Activity_ShopCard extends AppCompatActivity {
 						JSONObject jObj = new JSONObject(response);
 						boolean error = jObj.getBoolean(TAGs.ERROR);
 						if (!error) {
-							if (payMethod == 1)
-								Pay(jObj.getString(TAGs.CODE));
-							else {
+							if (payMethod == 1) {
+								if (jObj.getInt(TAGs.PRICE) != 0)
+									Pay(jObj.getString(TAGs.CODE));
+								else
+									new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+											.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت از کیف"))
+											.setDescription(FontHelper.getSpannedString(getApplicationContext(), "با تشکر از انتخاب شما... سبد خرید ثبت شد و کل هزینه سفارش از کیف پول پرداخت شد."))
+											.setStyle(Style.HEADER_WITH_TITLE)
+											.setHeaderColor(R.color.green)
+											.withDarkerOverlay(true)
+											.withDialogAnimation(true)
+											.setCancelable(false)
+											.setPositiveText("باشه")
+											.onPositive(new MaterialDialog.SingleButtonCallback() {
+												@Override
+												public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+													db_item.deleteItems();
+													Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
+													intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+													startActivity(intent);
+													startActivity(new Intent(getApplicationContext(), Activity_UserOrders.class));
+													finish();
+												}
+											})
+											.show();
+							} else {
 								new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 										.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت حضوری"))
 										.setDescription(FontHelper.getSpannedString(getApplicationContext(), "با تشکر از انتخاب شما... سبد خرید ثبت شد !!"))
