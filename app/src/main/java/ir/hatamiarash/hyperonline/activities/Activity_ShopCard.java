@@ -4,6 +4,7 @@
 
 package ir.hatamiarash.hyperonline.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -121,6 +122,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	StringBuilder STUFFS_ID = new StringBuilder();
 	String DESCRIPTION = "";
 	
+	@SuppressLint("InflateParams")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -199,6 +201,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 						else
 							message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد.";
 						LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						assert inflater != null;
 						final View customView = inflater.inflate(R.layout.dialog_pay_method, null);
 						final TextView edit_text = customView.findViewById(R.id.edit_text);
 						final RadioGroup payMethod = customView.findViewById(R.id.payMethod);
@@ -224,6 +227,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 											payMethod = 0;
 										
 										LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+										assert inflater != null;
 										final View customView = inflater.inflate(R.layout.dialog_pay_way, null);
 										final RadioGroup payWay = customView.findViewById(R.id.payWay);
 										new MaterialStyledDialog.Builder(Activity_ShopCard.this)
@@ -467,6 +471,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			progressDialog.dismiss();
 	}
 	
+	@SuppressLint("SimpleDateFormat")
 	private int getTime(int type) {
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat;
