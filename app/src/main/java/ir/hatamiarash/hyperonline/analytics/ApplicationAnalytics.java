@@ -7,8 +7,10 @@ import com.amplitude.api.Amplitude;
 import com.crashlytics.android.answers.AddToCartEvent;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.LoginEvent;
 import com.crashlytics.android.answers.PurchaseEvent;
 import com.crashlytics.android.answers.SearchEvent;
+import com.crashlytics.android.answers.SignUpEvent;
 import com.crashlytics.android.answers.StartCheckoutEvent;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -98,5 +100,19 @@ public class ApplicationAnalytics implements Analytics {
 				.putQuery("mobile analytics"));
 		Timber.i("Report Search : %s", query);
 		reportEvent("Search");
+	}
+	
+	@Override
+	public void reportLogin() {
+		Answers.getInstance().logLogin(new LoginEvent()
+				.putMethod("Digits")
+				.putSuccess(true));
+	}
+	
+	@Override
+	public void reportRegister() {
+		Answers.getInstance().logSignUp(new SignUpEvent()
+				.putMethod("Digits")
+				.putSuccess(true));
 	}
 }

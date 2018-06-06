@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -177,6 +176,7 @@ public class Activity_Register extends AppCompatActivity {
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
 						analytics.reportEvent("User - Register");
+						analytics.reportRegister();
 						MakeDialog();
 					} else {
 						hideDialog();

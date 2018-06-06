@@ -139,6 +139,7 @@ public class Activity_Login extends AppCompatActivity {
 					boolean error = jObj.getBoolean(TAGs.ERROR);
 					if (!error) {
 						analytics.reportEvent("User - Login");
+						analytics.reportLogin();
 						session.setLogin(true);
 						final JSONObject user = jObj.getJSONObject(TAGs.USER);
 						String uid = user.getString(TAGs.UNIQUE_ID);

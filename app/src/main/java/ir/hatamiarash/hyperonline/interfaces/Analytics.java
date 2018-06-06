@@ -19,4 +19,8 @@ public interface Analytics {
 	void reportStartCheckout(int count, int price);
 	
 	void reportSearch(@NonNull String query);
+	
+	void reportRegister();
+	
+	void reportLogin();
 }
