@@ -45,6 +45,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -121,6 +123,14 @@ public class Activity_Main extends AppCompatActivity implements
 	SQLiteHandlerMain db_main;         // main database
 	SQLiteHandlerSupport db_support;   // support database
 	Typeface persianTypeface;                 // persian font typeface
+	SessionManager session;                          // session for check user logged
+	ConfirmManager confirmManager;
+	SharedPreferencesManager SPManager;
+	Vibrator vibrator;
+	SweetAlertDialog progressDialog;
+	CategoryAdapter categoryAdapter;
+	ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
+	TextView itemMessagesBadgeTextView;
 	Drawer result = null;
 	HyperOnline application;
 	Analytics analytics;
@@ -170,16 +180,8 @@ public class Activity_Main extends AppCompatActivity implements
 	@BindView(R.id.title_off_more)
 	TextView title_off_more;
 	
-	SessionManager session;                          // session for check user logged
-	ConfirmManager confirmManager;
-	SharedPreferencesManager SPManager;
-	Vibrator vibrator;
-	CategoryAdapter categoryAdapter;
-	ProductAdapter newAdapter, mostAdapter, popularAdapter, offAdapter, collectionAdapter;
 	List<Category> categoryList;
 	List<Product> newList, mostList, popularList, offList, collectionList;
-	TextView itemMessagesBadgeTextView;
-	SweetAlertDialog progressDialog;
 	long back_pressed;                       // for check back key pressed count
 	int VERSION = 0;
 	
@@ -1335,7 +1337,11 @@ public class Activity_Main extends AppCompatActivity implements
 	}
 	
 	private void usbDebuggingDevice(Activity activity) {
-		Timber.e("Debugging Device");
+		if (session.isLoggedIn())
+			Answers.getInstance().logCustom(new CustomEvent("Debugging Device")
+					.putCustomAttribute(TAGs.UID, db_user.getUserDetails().get(TAGs.UID)));
+		else
+			Answers.getInstance().logCustom(new CustomEvent("Debugging Device"));
 		new MaterialStyledDialog.Builder(activity)
 				.setTitle(FontHelper.getSpannedString(activity, "متاسفیم"))
 				.setDescription(FontHelper.getSpannedString(activity, "هایپرآنلاین از ارائه خدمات به دستگاه های در حال Debug معذور است."))
