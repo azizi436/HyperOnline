@@ -20,7 +20,7 @@
 	<string name="hint_phone">شماره تلفن</string>
 	<string name="hint_desc">توضیحات</string>
 	<string name="hint_count">تعداد</string>
-	<string name="hint_presenter">معرف ( اختیاری )</string>
+	<string name="hint_presenter">موبایل معرف ( اختیاری )</string>
 	<string name="hint_price">مبلغ به تومان</string>
 	<string name="hint_wallet_code">شماره کیف پول مقصد</string>
 
