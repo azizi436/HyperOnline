@@ -109,14 +109,12 @@ public class Activity_ShopCard extends AppCompatActivity {
 	@BindView(R.id.origin)
 	public RelativeLayout origin;
 	
-	int CODE_PAYMENT = 100;
 	int CODE_STATUS = 0;
 	int tOff = 0;
 	int tPrice = 0;
 	int tExtend = 5000;
 	int check = 0;
 	int send_time;
-	String ORDER_CODE = "-1";
 	String ORDER_AMOUNT = "1000";
 	String ORDER_HOUR;
 	String STUFFS = "";
@@ -201,7 +199,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 						else
 							message = "با توجه به زمان خدمات دهی شرکت ، سفارش شما از ساعت " + time + " الی " + time2 + extend + " برای شما ارسال خواهد شد.";
 						LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-						final View customView = inflater.inflate(R.layout.custom_dialog, null);
+						final View customView = inflater.inflate(R.layout.dialog_pay_method, null);
 						final TextView edit_text = customView.findViewById(R.id.edit_text);
 						final RadioGroup payMethod = customView.findViewById(R.id.payMethod);
 						new MaterialStyledDialog.Builder(Activity_ShopCard.this)
@@ -219,7 +217,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 									public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 										DESCRIPTION = edit_text.getText().toString();
 										RadioButton rb = customView.findViewById(payMethod.getCheckedRadioButtonId());
-										int payMethod;
+										final int payMethod;
 										if (rb.getText().toString().equals("آنلاین"))
 											payMethod = 1;
 										else
@@ -313,7 +311,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		return c.toString();
 	}
 	
-	private void sendOrder(final int payMethod) {
+	private void sendOrder(final int payMethod, final String payWay) {
 		showDialog();
 		try {
 			String count = getCounts();
@@ -329,6 +327,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 			params.put("stuffs_count", count);
 			params.put("hour", ORDER_HOUR);
 			params.put("method", payMethod);
+			params.put("way", payWay);
 			params.put(TAGs.DESCRIPTION, DESCRIPTION);
 			final String mRequestBody = params.toString();
 			
@@ -423,193 +422,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 		startActivityForResult(i, 200);
 	}
 	
-	private void Check(final String CODE, final int level) {
-		showDialog();
-		try {
-			String URL = "https://pay.ir/payment/verify";
-			JSONObject params = new JSONObject();
-			params.put("api", TAGs.API_KEY);
-			params.put("transId", CODE);
-			final String mRequestBody = params.toString();
-			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					response = fixResponse(response);
-					Timber.tag(CLASS).d(response);
-					try {
-						JSONObject jObj = new JSONObject(response);
-						int status = jObj.getInt("status");
-						if (status == 1)
-							onPaySuccess();
-						else
-							onPayCanceled();
-					} catch (JSONException e) {
-						Crashlytics.logException(e);
-						hideDialog();
-						finish();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					Crashlytics.logException(error);
-					if (level == 2) {
-						if (error.toString().equals("com.android.volley.ServerError"))
-							Helper.MakeToast(Activity_ShopCard.this, "پرداخت لغو شد", TAGs.ERROR);
-						else
-							Helper.MakeToast(Activity_ShopCard.this, error.toString(), TAGs.ERROR);
-						hideDialog();
-					} else
-						Check(CODE, 2);
-				}
-			}) {
-				@NonNull
-				@Contract(pure = true)
-				@Override
-				public String getBodyContentType() {
-					return "application/json; charset=utf-8";
-				}
-				
-				@Nullable
-				@Override
-				public byte[] getBody() {
-					try {
-						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
-						return null;
-					}
-				}
-			};
-			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-					0,
-					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-			));
-			application.addToRequestQueue(stringRequest);
-		} catch (JSONException e) {
-			Crashlytics.logException(e);
-		}
-	}
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == CODE_PAYMENT)
-			Check(ORDER_CODE, 1);
 		if (requestCode == 200) {
-			Timber.tag(CLASS).d("pay done");
-		}
-	}
-	
-	private void onPaySuccess() {
-		new MaterialStyledDialog.Builder(Activity_ShopCard.this)
-				.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-				.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت موفقیت آمیز بود. با تشکر از انتخاب شما."))
-				.setStyle(Style.HEADER_WITH_TITLE)
-				.setHeaderColor(R.color.green)
-				.withDarkerOverlay(true)
-				.withDialogAnimation(true)
-				.setCancelable(false)
-				.setPositiveText("باشه")
-				.onPositive(new MaterialDialog.SingleButtonCallback() {
-					@Override
-					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						SetOrder();
-					}
-				})
-				.show();
-	}
-	
-	private void onPayCanceled() {
-		new MaterialStyledDialog.Builder(Activity_ShopCard.this)
-				.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-				.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید."))
-				.setStyle(Style.HEADER_WITH_TITLE)
-				.withDarkerOverlay(true)
-				.withDialogAnimation(true)
-				.setCancelable(true)
-				.setPositiveText("باشه")
-				.show();
-	}
-	
-	private void SetOrder() {
-		showDialog();
-		try {
-			String URL = getResources().getString(R.string.url_api, HOST) + "orders";
-			JSONObject params = new JSONObject();
-			String uid = db_user.getUserDetails().get(TAGs.UID);
-			params.put("user", uid);
-			params.put(TAGs.CODE, ORDER_CODE);
-			params.put("stuffs", STUFFS);
-			params.put("stuffs_id", STUFFS_ID);
-			params.put("stuffs_count", getCounts());
-			params.put("hour", ORDER_HOUR);
-			params.put(TAGs.DESCRIPTION, DESCRIPTION);
-			final String mRequestBody = params.toString();
-			
-			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					response = fixResponse(response);
-					Timber.tag(CLASS).d(response);
-					hideDialog();
-					try {
-						JSONObject jObj = new JSONObject(response);
-						boolean error = jObj.getBoolean(TAGs.ERROR);
-						if (!error) {
-							db_item.deleteItems();
-							Intent i = new Intent(getApplicationContext(), Activity_Factor.class);
-							i.putExtra("order_code", ORDER_CODE);
-							startActivity(i);
-							finish();
-						} else {
-							String errorMsg = jObj.getString(TAGs.ERROR_MSG);
-							Helper.MakeToast(Activity_ShopCard.this, errorMsg, TAGs.ERROR);
-						}
-					} catch (JSONException e) {
-						Crashlytics.logException(e);
-						hideDialog();
-						finish();
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					Crashlytics.logException(error);
-					hideDialog();
-					finish();
-				}
-			}) {
-				@NonNull
-				@Contract(pure = true)
-				@Override
-				public String getBodyContentType() {
-					return "application/json; charset=utf-8";
-				}
-				
-				@Nullable
-				@Override
-				public byte[] getBody() {
-					try {
-						return mRequestBody.getBytes("utf-8");
-					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
-						hideDialog();
-						return null;
-					}
-				}
-			};
-			stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-					0,
-					DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-					DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-			));
-			application.addToRequestQueue(stringRequest);
-		} catch (JSONException e) {
-			Crashlytics.logException(e);
-			hideDialog();
+			Timber.tag(CLASS).d("Pay Gateway Closed");
 		}
 	}
 	
@@ -707,7 +524,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 		}
 		
 		@Override
-		public ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+		@NonNull
+		public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 			View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_cart_product, viewGroup, false);
 			return new ProductViewHolder(view);
 		}
@@ -718,7 +536,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		}
 		
 		@Override
-		public void onBindViewHolder(ProductViewHolder viewHolder, int i) {
+		public void onBindViewHolder(@NonNull ProductViewHolder viewHolder, int i) {
 			viewHolder.product_id.setText(products.get(i).unique_id);
 			viewHolder.product_off.setText(String.valueOf(products.get(i).off));
 			viewHolder.product_name.setText(products.get(i).name);
@@ -733,7 +551,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		}
 		
 		@Override
-		public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+		public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
 			super.onAttachedToRecyclerView(recyclerView);
 		}
 		
