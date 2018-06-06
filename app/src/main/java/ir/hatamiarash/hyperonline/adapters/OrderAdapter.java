@@ -108,6 +108,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 				if (!f.exists())
 					f.mkdirs();
 				String url = mContext.getResources().getString(R.string.url_factor, HOST) + order.code + ".pdf";
+				analytics.reportEvent("Factor - Download");
 				final OrderAdapter.DownloadTask downloadTask = new OrderAdapter.DownloadTask(mContext, order.code);
 				downloadTask.execute(url);
 			}
@@ -217,7 +218,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 			super.onPreExecute();
 			// take CPU lock to prevent CPU from going off if the user
 			// presses the power button during download
-			analytics.reportEvent("Factor - Download");
 			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 			if (pm != null) {
 				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());

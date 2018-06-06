@@ -92,6 +92,7 @@ public class Activity_Factor extends Activity {
 				if (!f.exists())
 					f.mkdirs();
 				String url = getResources().getString(R.string.url_factor, HOST) + ORDER_CODE + ".pdf";
+				analytics.reportEvent("Factor - Download");
 				final DownloadTask downloadTask = new DownloadTask(Activity_Factor.this);
 				downloadTask.execute(url);
 				back.setVisibility(View.VISIBLE);
@@ -193,7 +194,6 @@ public class Activity_Factor extends Activity {
 			// take CPU lock to prevent CPU from going off if the user
 			// presses the power button during download
 			try {
-				analytics.reportEvent("Factor - Download");
 				PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 				assert pm != null;
 				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
