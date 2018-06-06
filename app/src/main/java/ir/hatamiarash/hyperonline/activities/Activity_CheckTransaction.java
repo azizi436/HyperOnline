@@ -73,6 +73,7 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 		progressDialog.setTitleText(getResources().getString(R.string.wait));
 		
 		uri = getIntent().getData();
+		Timber.tag("PurchaseResult").i(uri.getQuery());
 		
 		listener = new Response.Listener<String>() {
 			@Override
@@ -134,21 +135,38 @@ public class Activity_CheckTransaction extends AppCompatActivity {
 			} else if (error == 1) {
 				itemList = db_item.getItemsDetails();
 				sentUnsuccessfulReport(itemList);
-				new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
-						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
-						.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید. کد خطا : " + uri.getQueryParameter("er_code")))
-						.setStyle(Style.HEADER_WITH_TITLE)
-						.withDarkerOverlay(true)
-						.withDialogAnimation(true)
-						.setCancelable(false)
-						.setPositiveText("باشه")
-						.onPositive(new MaterialDialog.SingleButtonCallback() {
-							@Override
-							public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-								finish();
-							}
-						})
-						.show();
+				if (uri.getQueryParameter("er_code").equals("-5"))
+					new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
+							.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
+							.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت لغو شد."))
+							.setStyle(Style.HEADER_WITH_TITLE)
+							.withDarkerOverlay(true)
+							.withDialogAnimation(true)
+							.setCancelable(false)
+							.setPositiveText("باشه")
+							.onPositive(new MaterialDialog.SingleButtonCallback() {
+								@Override
+								public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+									finish();
+								}
+							})
+							.show();
+				else
+					new MaterialStyledDialog.Builder(Activity_CheckTransaction.this)
+							.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت"))
+							.setDescription(FontHelper.getSpannedString(getApplicationContext(), "پرداخت با مشکل مواجه شده است. در صورت کسر وجه ، با پشتیبانی تماس حاصل فرمایید. کد خطا : " + uri.getQueryParameter("er_code")))
+							.setStyle(Style.HEADER_WITH_TITLE)
+							.withDarkerOverlay(true)
+							.withDialogAnimation(true)
+							.setCancelable(false)
+							.setPositiveText("باشه")
+							.onPositive(new MaterialDialog.SingleButtonCallback() {
+								@Override
+								public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+									finish();
+								}
+							})
+							.show();
 			}
 		} catch (NullPointerException e) {
 			Crashlytics.logException(e);
