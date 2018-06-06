@@ -8,6 +8,7 @@ import com.crashlytics.android.answers.AddToCartEvent;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.crashlytics.android.answers.PurchaseEvent;
+import com.crashlytics.android.answers.SearchEvent;
 import com.crashlytics.android.answers.StartCheckoutEvent;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -89,5 +90,13 @@ public class ApplicationAnalytics implements Analytics {
 				.putItemCount(count));
 		Timber.i("Report Checkout : %d - %d", price, count);
 		reportEvent("Purchase - Checkout");
+	}
+	
+	@Override
+	public void reportSearch(@NonNull String query) {
+		Answers.getInstance().logSearch(new SearchEvent()
+				.putQuery("mobile analytics"));
+		Timber.i("Report Search : %s", query);
+		reportEvent("Search");
 	}
 }

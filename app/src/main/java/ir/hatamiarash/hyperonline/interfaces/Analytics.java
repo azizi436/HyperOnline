@@ -17,4 +17,6 @@ public interface Analytics {
 	void reportPurchase(@NonNull String id, @NonNull String name, @NonNull String price, boolean status);
 	
 	void reportStartCheckout(int count, int price);
+	
+	void reportSearch(@NonNull String query);
 }

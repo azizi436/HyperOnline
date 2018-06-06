@@ -145,6 +145,7 @@ public class Activity_Search extends AppCompatActivity implements CardBadge {
 	}
 	
 	private void loadProduct(String word) {
+		analytics.reportSearch(word);
 		try {
 			String URL = getResources().getString(R.string.url_api, HOST) + "search";
 			JSONObject params = new JSONObject();
