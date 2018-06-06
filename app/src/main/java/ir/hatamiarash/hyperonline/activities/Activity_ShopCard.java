@@ -231,7 +231,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 										final RadioGroup payWay = customView.findViewById(R.id.payWay);
 										new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 												.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت هزینه"))
-												.setDescription(FontHelper.getSpannedString(getApplicationContext(), "در صورت انتخاب کیف پول ، تمام یا بخشی از مبلغ سبد خرید از کیف پول کسر خواهد شد."))
+												.setDescription(FontHelper.getSpannedString(getApplicationContext(), "در صورت انتخاب کیف پول در صورت داشتن موجودی کافی ، تمام یا بخشی از مبلغ سبد خرید از کیف پول کسر خواهد شد."))
 												.setStyle(Style.HEADER_WITH_TITLE)
 												.setHeaderColor(R.color.green)
 												.setCustomView(customView, 5, 5, 5, 5)
@@ -243,11 +243,11 @@ public class Activity_ShopCard extends AppCompatActivity {
 													@Override
 													public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 														RadioButton rb = customView.findViewById(payWay.getCheckedRadioButtonId());
-														final String payWay;
+														final int payWay;
 														if (rb.getText().toString().equals("نقد"))
-															payWay = "cash";
+															payWay = 1;
 														else
-															payWay = "wallet";
+															payWay = 0;
 														sendOrder(payMethod, payWay);
 													}
 												})
@@ -340,7 +340,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 		return c.toString();
 	}
 	
-	private void sendOrder(final int payMethod, final String payWay) {
+	private void sendOrder(final int payMethod, final int payWay) {
 		analyticsReportEvent(payMethod, payWay);
 		showDialog();
 		try {
@@ -664,12 +664,12 @@ public class Activity_ShopCard extends AppCompatActivity {
 		analytics.reportEvent("Open " + CLASS);
 	}
 	
-	private void analyticsReportEvent(final int payMethod, final String payWay) {
+	private void analyticsReportEvent(final int payMethod, final int payWay) {
 		if (payMethod == 1)
 			analytics.reportEvent("Pay - Online");
 		else
 			analytics.reportEvent("Pay - Place");
-		if (payWay.equals("cache"))
+		if (payWay == 1)
 			analytics.reportEvent("Pay - Cache");
 		else
 			analytics.reportEvent("Pay - Wallet");
