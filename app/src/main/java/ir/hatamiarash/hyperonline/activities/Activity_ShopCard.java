@@ -222,7 +222,34 @@ public class Activity_ShopCard extends AppCompatActivity {
 											payMethod = 1;
 										else
 											payMethod = 0;
-										sendOrder(payMethod);
+										
+										LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+										final View customView = inflater.inflate(R.layout.dialog_pay_way, null);
+										final RadioGroup payWay = customView.findViewById(R.id.payWay);
+										new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+												.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت هزینه"))
+												.setDescription(FontHelper.getSpannedString(getApplicationContext(), "در صورت انتخاب کیف پول ، تمام یا بخشی از مبلغ سبد خرید از کیف پول کسر خواهد شد."))
+												.setStyle(Style.HEADER_WITH_TITLE)
+												.setHeaderColor(R.color.green)
+												.setCustomView(customView, 5, 5, 5, 5)
+												.withDarkerOverlay(true)
+												.withDialogAnimation(true)
+												.setCancelable(true)
+												.setPositiveText("تایید")
+												.onPositive(new MaterialDialog.SingleButtonCallback() {
+													@Override
+													public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+														RadioButton rb = customView.findViewById(payWay.getCheckedRadioButtonId());
+														final String payWay;
+														if (rb.getText().toString().equals("نقد"))
+															payWay = "cash";
+														else
+															payWay = "wallet";
+														
+														sendOrder(payMethod, payWay);
+													}
+												})
+												.show();
 									}
 								})
 								.show();
