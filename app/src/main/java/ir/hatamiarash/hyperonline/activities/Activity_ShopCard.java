@@ -117,8 +117,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 	int send_time;
 	String ORDER_AMOUNT = "1000";
 	String ORDER_HOUR;
-	String STUFFS = "";
-	String STUFFS_ID = "";
+	StringBuilder STUFFS = new StringBuilder();
+	StringBuilder STUFFS_ID = new StringBuilder();
 	String DESCRIPTION = "";
 	
 	@Override
@@ -310,8 +310,8 @@ public class Activity_ShopCard extends AppCompatActivity {
 			// temporary use point count var for "original count"
 			Products_List.add(new Product(uid, name, "", price, Integer.valueOf(off), Integer.valueOf(count), 0.0, Integer.valueOf(o_count), info));
 			
-			STUFFS += "," + name;
-			STUFFS_ID += "," + uid;
+			STUFFS.append(",").append(name);
+			STUFFS_ID.append(",").append(uid);
 		}
 		if (tPrice == 0) {
 			empty.setVisibility(View.VISIBLE);
