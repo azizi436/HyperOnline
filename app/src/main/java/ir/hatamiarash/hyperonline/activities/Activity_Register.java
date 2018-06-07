@@ -40,7 +40,7 @@ import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.helpers.SessionManager;
+import ir.hatamiarash.hyperonline.preferences.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.libraries.IconEditText;
 import ir.hatamiarash.hyperonline.utils.Address;

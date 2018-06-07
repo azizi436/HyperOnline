@@ -14,9 +14,9 @@ import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
-import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
-import ir.hatamiarash.hyperonline.helpers.SessionManager;
-import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
+import ir.hatamiarash.hyperonline.preferences.ConfirmManager;
+import ir.hatamiarash.hyperonline.preferences.SessionManager;
+import ir.hatamiarash.hyperonline.preferences.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import timber.log.Timber;
 

@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -45,7 +44,7 @@ import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.helpers.SessionManager;
+import ir.hatamiarash.hyperonline.preferences.SessionManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;

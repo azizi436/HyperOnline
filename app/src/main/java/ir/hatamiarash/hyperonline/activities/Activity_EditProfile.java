@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandler;
-import ir.hatamiarash.hyperonline.helpers.ConfirmManager;
+import ir.hatamiarash.hyperonline.preferences.ConfirmManager;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;

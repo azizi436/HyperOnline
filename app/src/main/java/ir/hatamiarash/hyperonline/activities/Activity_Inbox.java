@@ -33,7 +33,7 @@ import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.adapters.MessageAdapter;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
-import ir.hatamiarash.hyperonline.helpers.SharedPreferencesManager;
+import ir.hatamiarash.hyperonline.preferences.SharedPreferencesManager;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.interfaces.Refresh;
 import ir.hatamiarash.hyperonline.models.Message;
