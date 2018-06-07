@@ -2,7 +2,7 @@
  * Copyright (c) 2018 - All Rights Reserved - Arash Hatami
  */
 
-package ir.hatamiarash.hyperonline.helpers;
+package ir.hatamiarash.hyperonline.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
