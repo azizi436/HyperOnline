@@ -10,12 +10,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,6 +27,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ceylonlabs.imageviewpopup.ImagePopup;
 import com.crashlytics.android.Crashlytics;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -38,8 +44,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
+import ir.hatamiarash.hyperonline.preferences.WalletManager;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
@@ -59,6 +67,7 @@ public class Activity_Wallet extends AppCompatActivity {
 	SweetAlertDialog progressDialog;
 	ImagePopup imagePopup;
 	Vibrator vibrator;
+	WalletManager walletManager;
 	
 	@BindView(R.id.image)
 	ImageView walletQRCode;
@@ -82,6 +91,8 @@ public class Activity_Wallet extends AppCompatActivity {
 	FancyButton btnTransactions;
 	@BindView(R.id.wallet_info)
 	RelativeLayout walletInfo;
+	@BindView(R.id.main)
+	RelativeLayout mainLayout;
 	
 	String wCode;
 	
@@ -94,6 +105,9 @@ public class Activity_Wallet extends AppCompatActivity {
 		application = (HyperOnline) getApplication();
 		analytics = application.getAnalytics();
 		
+		mainLayout.setVisibility(View.INVISIBLE);
+		
+		walletManager = new WalletManager(Activity_Wallet.this);
 		imagePopup = new ImagePopup(this);
 		imagePopup.setHideCloseIcon(true);
 		imagePopup.setImageOnClickClose(true);
@@ -195,6 +209,43 @@ public class Activity_Wallet extends AppCompatActivity {
 						
 						walletOrderCount.setText(orderCount + " خرید");
 						walletOrderPrice.setText(formatPrice(orderPrice) + " تومان");
+						
+						if (walletManager.isWalletFirstUse()) {
+							LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+							assert inflater != null;
+							final View customView = inflater.inflate(R.layout.dialog_wallet_policy, null);
+							final TextView policies = customView.findViewById(R.id.policies);
+							policies.setMovementMethod(new ScrollingMovementMethod());
+							policies.setText(getResources().getString(R.string.policy_wallet).replace("\\n", System.getProperty("line.separator")));
+							new MaterialStyledDialog.Builder(Activity_Wallet.this)
+									.setTitle(FontHelper.getSpannedString(Activity_Wallet.this, "کیف پول"))
+									.setDescription(FontHelper.getSpannedString(Activity_Wallet.this, "لطفا قبل از استفاده از کیف پول موارد زیر را خوانده و سپس تایید کنید :"))
+									.setStyle(Style.HEADER_WITH_TITLE)
+									.setHeaderColor(R.color.green)
+									.setCustomView(customView, 5, 5, 5, 5)
+									.withDarkerOverlay(true)
+									.withDialogAnimation(true)
+									.setCancelable(false)
+									.setPositiveText("می پذیرم")
+									.setNegativeText("نمی پذیرم")
+									.onPositive(new MaterialDialog.SingleButtonCallback() {
+										@Override
+										public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+											analytics.reportEvent("Wallet - Accept Policies");
+											walletManager.setWalletFirstUse(false);
+											mainLayout.setVisibility(View.VISIBLE);
+										}
+									})
+									.onNegative(new MaterialDialog.SingleButtonCallback() {
+										@Override
+										public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+											analytics.reportEvent("Wallet - Decline Policies");
+											finish();
+										}
+									})
+									.show();
+						} else
+							mainLayout.setVisibility(View.VISIBLE);
 					} else {
 						String errorMsg = object.getString(TAGs.ERROR_MSG);
 						Helper.MakeToast(getApplicationContext(), errorMsg, TAGs.ERROR);
