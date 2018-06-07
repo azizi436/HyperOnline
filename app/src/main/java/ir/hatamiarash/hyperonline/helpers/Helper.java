@@ -141,9 +141,10 @@ public class Helper {
 	}
 	
 	public static boolean isDebugging(@NotNull ContentResolver contentResolver) {
-		HyperOnline application = HyperOnline.getInstance();
-		Analytics analytics = application.getAnalytics();
-		analytics.reportEvent("Status - Check Debug");
-		return Settings.Secure.getInt(contentResolver, Settings.Secure.ADB_ENABLED, 0) == 1 && !BuildConfig.DEBUG;
+//		HyperOnline application = HyperOnline.getInstance();
+//		Analytics analytics = application.getAnalytics();
+//		analytics.reportEvent("Status - Check Debug");
+//		return Settings.Secure.getInt(contentResolver, Settings.Secure.ADB_ENABLED, 0) == 1 && !BuildConfig.DEBUG;
+		return false;
 	}
 }
