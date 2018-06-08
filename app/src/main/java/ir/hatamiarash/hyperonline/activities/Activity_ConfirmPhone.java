@@ -4,12 +4,8 @@
 
 package ir.hatamiarash.hyperonline.activities;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,7 +14,6 @@ import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,16 +27,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
-import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -60,12 +51,9 @@ import ir.hatamiarash.hyperonline.databases.SQLiteHandlerItem;
 import ir.hatamiarash.hyperonline.databases.SQLiteHandlerSupport;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.helpers.PermissionHelper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
-import ir.hatamiarash.hyperonline.interfaces.SmsListener;
 import ir.hatamiarash.hyperonline.preferences.ConfirmManager;
 import ir.hatamiarash.hyperonline.preferences.SessionManager;
-import ir.hatamiarash.hyperonline.receivers.SmsReceiver;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import ir.hatamiarash.hyperonline.utils.Values;
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -75,7 +63,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
 import static ir.hatamiarash.hyperonline.helpers.FormatHelper.fixResponse;
 
-public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListener {
+public class Activity_ConfirmPhone extends AppCompatActivity {
 	private static final String CLASS = Activity_ConfirmPhone.class.getSimpleName();
 	
 	SweetAlertDialog progressDialog;
@@ -84,7 +72,6 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 	SQLiteHandlerItem db_item;
 	SQLiteHandlerSupport db_support;
 	SessionManager session;
-	SmsReceiver receiver;
 	Vibrator vibrator;
 	Response.Listener<String> requestListener;
 	Response.Listener<String> syncListener;
@@ -194,6 +181,9 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 		help.setVisibility(View.GONE);
 		logout.setVisibility(View.GONE);
 		
+		help.setCustomTextFont("sans.ttf");
+		logout.setCustomTextFont("sans.ttf");
+		
 		requestListener = new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -255,13 +245,8 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 			}
 		};
 		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-			getPermission(Activity_ConfirmPhone.this);
-		else
-			RequestCode();
 		
-		help.setCustomTextFont("sans.ttf");
-		logout.setCustomTextFont("sans.ttf");
+		RequestCode();
 		
 		help.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -422,73 +407,6 @@ public class Activity_ConfirmPhone extends AppCompatActivity implements SmsListe
 				time.setVisibility(View.VISIBLE);
 				Timer();
 				WaitFlag = false;
-			}
-		}
-	}
-	
-	public void getPermission(final Activity activity) {
-		if (PermissionHelper.checkSMSPermission(Activity_ConfirmPhone.this))
-			new MaterialStyledDialog.Builder(activity)
-					.setTitle(FontHelper.getSpannedString(activity, "تایید پیامکی"))
-					.setDescription(FontHelper.getSpannedString(activity, "جهت تایید خودکار شماره تلفن هایپرآنلاین نیاز به دسترسی دارد"))
-					.setStyle(Style.HEADER_WITH_TITLE)
-					.withDarkerOverlay(true)
-					.withDialogAnimation(true)
-					.setCancelable(false)
-					.setPositiveText("باشه")
-					.setNegativeText("خیر")
-					.onPositive(new MaterialDialog.SingleButtonCallback() {
-						@Override
-						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-							getPermission();
-						}
-					})
-					.onNegative(new MaterialDialog.SingleButtonCallback() {
-						@Override
-						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-							RequestCode();
-						}
-					})
-					.show();
-		else {
-			registerSmsListener();
-			RequestCode();
-		}
-	}
-	
-	@Override
-	public void handleSms(String sender, String message) {
-		String sms_code = message.replaceAll("[^0-9]", "");
-		if (sms_code.equals(confirmCode)) {
-			syncServer();
-			unregisterReceiver(receiver);
-		}
-	}
-	
-	private void registerSmsListener() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-		filter.setPriority(2147483647);
-		receiver = new SmsReceiver(this);
-		registerReceiver(receiver, filter);
-	}
-	
-	private void getPermission() {
-		if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS}, 4621);
-		}
-	}
-	
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case 4621: {
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					registerSmsListener();
-					RequestCode();
-				} else {
-					RequestCode();
-				}
 			}
 		}
 	}

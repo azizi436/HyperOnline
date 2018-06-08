@@ -196,8 +196,6 @@ public class Activity_Main extends AppCompatActivity implements
 		
 		Helper.CheckInternet(getApplicationContext());
 		PermissionHelper.getAllPermissions(this, getApplicationContext());
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-			getPermission(this);
 		
 		pointer = this;
 		session = new SessionManager(getApplicationContext());
@@ -1285,25 +1283,6 @@ public class Activity_Main extends AppCompatActivity implements
 		} catch (JSONException e) {
 			Crashlytics.logException(e);
 		}
-	}
-	
-	public void getPermission(final Activity activity) {
-		if (PermissionHelper.checkSMSPermission(activity))
-			new MaterialStyledDialog.Builder(activity)
-					.setTitle(FontHelper.getSpannedString(activity, "تایید پیامکی"))
-					.setDescription(FontHelper.getSpannedString(activity, "جهت تایید خودکار شماره تلفن هایپرآنلاین نیاز به دسترسی دارد"))
-					.setStyle(Style.HEADER_WITH_TITLE)
-					.withDarkerOverlay(true)
-					.withDialogAnimation(true)
-					.setCancelable(false)
-					.setPositiveText("باشه")
-					.onPositive(new MaterialDialog.SingleButtonCallback() {
-						@Override
-						public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-							PermissionHelper.getSMSPermission(activity);
-						}
-					})
-					.show();
 	}
 	
 	@Override
