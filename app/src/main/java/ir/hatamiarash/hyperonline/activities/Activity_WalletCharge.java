@@ -107,8 +107,7 @@ public class Activity_WalletCharge extends AppCompatActivity {
 				vibrator.vibrate(50);
 				String price = chargePrice.getText().toString();
 				if (!price.equals("")) {
-					//todo
-					if (Integer.valueOf(price) >= 100) {
+					if (Integer.valueOf(price) >= 1000) {
 						if (Helper.isValidNumber(price)) {
 							requestCharge(getIntent().getStringExtra(TAGs.UID), price);
 						} else {
