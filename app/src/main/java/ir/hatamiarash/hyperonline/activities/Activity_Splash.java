@@ -30,9 +30,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
-import ir.hatamiarash.hyperonline.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;

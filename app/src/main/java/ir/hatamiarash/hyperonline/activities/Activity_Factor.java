@@ -31,9 +31,9 @@ import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
+import ir.hatamiarash.hyperonline.helpers.Helper;
 import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import ir.hatamiarash.hyperonline.utils.TAGs;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
