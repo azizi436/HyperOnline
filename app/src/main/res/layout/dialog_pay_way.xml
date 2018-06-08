@@ -6,8 +6,9 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:fancy="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
+	android:layout_height="wrap_content"
 	android:orientation="vertical">
 
 	<ir.hatamiarash.hyperonline.libraries.PersianTextView
@@ -51,5 +52,29 @@
 			android:checked="true"
 			android:text="نقد"/>
 	</RadioGroup>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dp">
+
+		<mehdi.sakout.fancybuttons.FancyButton
+			android:id="@+id/btnCharge"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:layout_margin="5dp"
+			android:padding="10dp"
+			fancy:fb_borderColor="@color/green"
+			fancy:fb_borderWidth="1dp"
+			fancy:fb_defaultColor="@color/white"
+			fancy:fb_focusColor="@color/white"
+			fancy:fb_radius="30dp"
+			fancy:fb_text="شارژ کیف پول"
+			fancy:fb_textColor="@color/green"
+			fancy:fb_textSize="15sp">
+
+		</mehdi.sakout.fancybuttons.FancyButton>
+	</RelativeLayout>
 
 </LinearLayout>

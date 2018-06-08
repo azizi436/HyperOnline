@@ -65,6 +65,7 @@ import ir.hatamiarash.hyperonline.models.Product;
 import ir.hatamiarash.hyperonline.preferences.ConfirmManager;
 import ir.hatamiarash.hyperonline.preferences.SessionManager;
 import ir.hatamiarash.hyperonline.utils.TAGs;
+import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -86,6 +87,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 	Adapter_Product adapter;
 	HyperOnline application;
 	Analytics analytics;
+	MaterialStyledDialog payMethodDialog, payWayDialog;
 	
 	@BindView(R.id.recyclerView)
 	public RecyclerView list;
@@ -205,7 +207,7 @@ public class Activity_ShopCard extends AppCompatActivity {
 						final View customView = inflater.inflate(R.layout.dialog_pay_method, null);
 						final TextView edit_text = customView.findViewById(R.id.edit_text);
 						final RadioGroup payMethod = customView.findViewById(R.id.payMethod);
-						new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+						payMethodDialog = new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 								.setTitle(FontHelper.getSpannedString(getApplicationContext(), "تکمیل خرید"))
 								.setDescription(FontHelper.getSpannedString(getApplicationContext(), message))
 								.setStyle(Style.HEADER_WITH_TITLE)
@@ -229,7 +231,20 @@ public class Activity_ShopCard extends AppCompatActivity {
 										assert inflater != null;
 										final View customView = inflater.inflate(R.layout.dialog_pay_way, null);
 										final RadioGroup payWay = customView.findViewById(R.id.payWay);
-										new MaterialStyledDialog.Builder(Activity_ShopCard.this)
+										final FancyButton walletCharge = customView.findViewById(R.id.btnCharge);
+										walletCharge.setCustomTextFont("sans.ttf");
+										walletCharge.setOnClickListener(new View.OnClickListener() {
+											@Override
+											public void onClick(View v) {
+												vibrator.vibrate(50);
+												Intent intent = new Intent(Activity_ShopCard.this, Activity_WalletCharge.class);
+												intent.putExtra(TAGs.UID, getIntent().getStringExtra(TAGs.UID));
+												payMethodDialog.dismiss();
+												payWayDialog.dismiss();
+												startActivity(intent);
+											}
+										});
+										payWayDialog = new MaterialStyledDialog.Builder(Activity_ShopCard.this)
 												.setTitle(FontHelper.getSpannedString(getApplicationContext(), "پرداخت هزینه"))
 												.setDescription(FontHelper.getSpannedString(getApplicationContext(), "در صورت انتخاب کیف پول در صورت داشتن موجودی کافی ، تمام یا بخشی از مبلغ سبد خرید از کیف پول کسر خواهد شد."))
 												.setStyle(Style.HEADER_WITH_TITLE)
