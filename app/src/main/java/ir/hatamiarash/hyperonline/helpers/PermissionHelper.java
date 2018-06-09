@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 - All Rights Reserved - Arash Hatami
+ */
+
 package ir.hatamiarash.hyperonline.helpers;
 
 import android.Manifest;
