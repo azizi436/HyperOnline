@@ -52,27 +52,6 @@ public class PermissionHelper {
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
 					(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
 	}
-
-//	static public void getSMSPermission(Activity activity) {
-//		HyperOnline application = HyperOnline.getInstance();
-//		Analytics analytics = application.getAnalytics();
-//		analytics.reportEvent("Permission - Get SMS");
-//
-//		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
-//		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
-//		List<String> listPermissionsNeeded = new ArrayList<>();
-//
-//		if (sms != PackageManager.PERMISSION_GRANTED)
-//			listPermissionsNeeded.add(Manifest.permission.READ_SMS);
-//
-//		if (sms2 != PackageManager.PERMISSION_GRANTED)
-//			listPermissionsNeeded.add(Manifest.permission.BROADCAST_SMS);
-//
-//		int REQUEST_ID_SMS_PERMISSIONS = 4612;
-//		if (!listPermissionsNeeded.isEmpty())
-//			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
-//					(new String[listPermissionsNeeded.size()]), REQUEST_ID_SMS_PERMISSIONS);
-//	}
 	
 	static public void getCameraPermission(Activity activity) {
 		HyperOnline application = HyperOnline.getInstance();
@@ -91,19 +70,6 @@ public class PermissionHelper {
 			ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray
 					(new String[listPermissionsNeeded.size()]), REQUEST_ID_CAMERA_PERMISSIONS);
 	}
-
-//	static public boolean checkSMSPermission(Activity activity) {
-//		HyperOnline application = HyperOnline.getInstance();
-//		Analytics analytics = application.getAnalytics();
-//		analytics.reportEvent("Permission - Check SMS");
-//
-//		int sms = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS);
-//		int sms2 = ContextCompat.checkSelfPermission(activity, Manifest.permission.BROADCAST_SMS);
-//		int count = 0;
-//		if (sms != PackageManager.PERMISSION_GRANTED) count++;
-//		if (sms2 != PackageManager.PERMISSION_GRANTED) count++;
-//		return count == 2;
-//	}
 	
 	static public boolean checkCameraPermission(Activity activity) {
 		HyperOnline application = HyperOnline.getInstance();
