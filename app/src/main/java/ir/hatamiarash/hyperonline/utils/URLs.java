@@ -4,12 +4,9 @@
 
 package ir.hatamiarash.hyperonline.utils;
 
+import ir.hatamiarash.hyperonline.BuildConfig;
+
 public class URLs {
-	private static final String Share_CafeBazaar = "https://cafebazaar.ir/app/ir.hatamiarash.hyperonline/?l=fa";
-	private static final String Share_IranApps = "http://iranapps.ir/app/ir.hatamiarash.hyperonline";
-	private static final String Share_Myket = "https://myket.ir/app/ir.hatamiarash.hyperonline";
-	private static final String Share_Normal = "https://t.me/online_hyper";
-	
-	public static final String Share_App = Share_Normal;
-	public static final String Update_App = Share_App;
+	public static final String Share_App = BuildConfig.SHARE_URL;
+	public static final String Update_App = BuildConfig.DOWNLOAD_URL;
 }
