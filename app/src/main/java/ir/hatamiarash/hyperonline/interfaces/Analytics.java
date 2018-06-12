@@ -27,4 +27,6 @@ public interface Analytics {
 	void reportRegister();
 	
 	void reportLogin();
+	
+	void reportException(Throwable exception);
 }
