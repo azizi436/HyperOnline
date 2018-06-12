@@ -15,8 +15,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.bugsnag.android.Bugsnag;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -40,6 +42,7 @@ public class HyperOnline extends Application {
 	private static HyperOnline mInstance;
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
+	private MixpanelAPI mixpanelAPI;
 	
 	private Analytics analytics;
 	
@@ -112,10 +115,16 @@ public class HyperOnline extends Application {
 		
 		new FlurryAgent.Builder()
 				.withLogEnabled(true)
-				.build(this, "4WKBBTSJTHP7P8RBTDTH");
+				.build(this, BuildConfig.FLURRY_API);
 		
-		Amplitude.getInstance().initialize(this, "37d111e62e3ec73db8327c61d6215006")
+		Amplitude.getInstance().initialize(this, BuildConfig.AMPLITUSE_API)
 				.enableForegroundTracking(this);
+		
+		Bugsnag.init(this);
+		Bugsnag.setAutoCaptureSessions(true);
+		Bugsnag.setAppVersion(BuildConfig.VERSION_NAME);
+		
+		mixpanelAPI = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_API);
 	}
 	
 	private void configureLibraries_Log() {
@@ -151,5 +160,9 @@ public class HyperOnline extends Application {
 			analytics.init(this);
 		}
 		return analytics;
+	}
+	
+	public MixpanelAPI getMixpanelAPI() {
+		return mixpanelAPI;
 	}
 }
