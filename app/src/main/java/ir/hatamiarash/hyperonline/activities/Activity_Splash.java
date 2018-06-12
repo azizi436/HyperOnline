@@ -66,6 +66,7 @@ public class Activity_Splash extends AppCompatActivity {
 		if (Helper.CheckInternet2(getApplicationContext())) {
 			new CheckInternet().execute(getResources().getString(R.string.url_check, HOST));
 		} else {
+			analytics.reportEvent("Internet - Disconnected");
 			new MaterialStyledDialog.Builder(Activity_Splash.this)
 					.setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))
 					.setDescription(FontHelper.getSpannedString(getApplicationContext(), "اتصال به اینترنت را بررسی نمایید."))
@@ -115,11 +116,13 @@ public class Activity_Splash extends AppCompatActivity {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if (result) {
+				analytics.reportEvent("Internet - Connected");
 				Intent i = new Intent(Activity_Splash.this, Activity_Main.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(i);
 				finish();
 			} else {
+				analytics.reportEvent("Internet - Disconnected");
 				new MaterialStyledDialog.Builder(Activity_Splash.this)
 						.setTitle(FontHelper.getSpannedString(getApplicationContext(), "خطا"))
 						.setDescription(FontHelper.getSpannedString(getApplicationContext(), "اتصال به اینترنت را بررسی نمایید"))
