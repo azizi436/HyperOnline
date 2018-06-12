@@ -22,7 +22,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -184,7 +183,7 @@ public class Activity_Register extends AppCompatActivity {
 						Helper.MakeToast(Activity_Register.this, errorMsg, TAGs.ERROR); // show error message
 					}
 				} catch (JSONException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 					hideDialog();
 					finish();
 				}
@@ -194,7 +193,7 @@ public class Activity_Register extends AppCompatActivity {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Crashlytics.logException(error);
+				analytics.reportException(error);
 				Helper.MakeToast(Activity_Register.this, error.toString(), TAGs.ERROR);
 				hideDialog();
 			}
@@ -223,7 +222,7 @@ public class Activity_Register extends AppCompatActivity {
 			final String body = params.toString();
 			registerUser(body);
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	
@@ -243,7 +242,7 @@ public class Activity_Register extends AppCompatActivity {
 				try {
 					return body.getBytes("utf-8");
 				} catch (UnsupportedEncodingException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 					return null;
 				}
 			}

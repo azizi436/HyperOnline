@@ -44,7 +44,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -220,7 +219,7 @@ public class Activity_Main extends AppCompatActivity implements
 				db_support.CreateTable();
 				settings.edit().putBoolean("my_first_time", false).apply();
 			} catch (Exception e) {
-				Crashlytics.logException(e);
+				analytics.reportException(e);
 			}
 		}
 		
@@ -445,7 +444,7 @@ public class Activity_Main extends AppCompatActivity implements
 									startActivity(Intent.createChooser(i, "یک گزینه انتخاب کنید"));
 								} catch (Exception e) {
 									Timber.tag(CLASS).e(e);
-									Crashlytics.logException(e);
+									analytics.reportException(e);
 								}
 							}
 							if (item == 17) {
@@ -896,14 +895,14 @@ public class Activity_Main extends AppCompatActivity implements
 							Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						hideDialog();
 					}
 				}
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Crashlytics.logException(error);
+					analytics.reportException(error);
 					hideDialog();
 				}
 			}) {
@@ -920,7 +919,7 @@ public class Activity_Main extends AppCompatActivity implements
 					try {
 						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						return null;
 					}
 				}
@@ -932,7 +931,7 @@ public class Activity_Main extends AppCompatActivity implements
 			));
 			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	
@@ -1109,13 +1108,13 @@ public class Activity_Main extends AppCompatActivity implements
 							Helper.MakeToast(Activity_Main.this, errorMsg, TAGs.ERROR);
 						}
 					} catch (JSONException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 					}
 				}
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Crashlytics.logException(error);
+					analytics.reportException(error);
 				}
 			}) {
 				@NonNull
@@ -1131,7 +1130,7 @@ public class Activity_Main extends AppCompatActivity implements
 					try {
 						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						return null;
 					}
 				}
@@ -1143,7 +1142,7 @@ public class Activity_Main extends AppCompatActivity implements
 			));
 			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	
@@ -1217,7 +1216,7 @@ public class Activity_Main extends AppCompatActivity implements
 						.show();
 			}
 		} catch (PackageManager.NameNotFoundException e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	
@@ -1253,7 +1252,7 @@ public class Activity_Main extends AppCompatActivity implements
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					Crashlytics.logException(error);
+					analytics.reportException(error);
 				}
 			}) {
 				@NonNull
@@ -1269,7 +1268,7 @@ public class Activity_Main extends AppCompatActivity implements
 					try {
 						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						return null;
 					}
 				}
@@ -1281,7 +1280,7 @@ public class Activity_Main extends AppCompatActivity implements
 			));
 			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	

@@ -203,7 +203,7 @@ public class Activity_Login extends AppCompatActivity {
 						Helper.MakeToast(Activity_Login.this, errorMsg, TAGs.ERROR); // show error message
 					}
 				} catch (JSONException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 					hideDialog();
 					finish();
 				}
@@ -213,7 +213,7 @@ public class Activity_Login extends AppCompatActivity {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Crashlytics.logException(error);
+				analytics.reportException(error);
 				hideDialog();
 				Helper.MakeToast(getApplicationContext(), "مشکلی پیش آمده است", TAGs.ERROR);
 				finish();
@@ -233,7 +233,7 @@ public class Activity_Login extends AppCompatActivity {
 			final String body = params.toString();
 			CheckLogin(body);
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	
@@ -253,7 +253,7 @@ public class Activity_Login extends AppCompatActivity {
 				try {
 					return body.getBytes("utf-8");
 				} catch (UnsupportedEncodingException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 					return null;
 				}
 			}

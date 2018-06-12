@@ -32,7 +32,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -474,7 +473,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 						Helper.MakeToast(Activity_List.this, errorMsg, TAGs.ERROR);
 					}
 				} catch (JSONException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 				}
 			}
 		};
@@ -533,7 +532,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 						finish();
 					}
 				} catch (JSONException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 				}
 			}
 		};
@@ -541,7 +540,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Crashlytics.logException(error);
+				analytics.reportException(error);
 				p.setVisibility(View.INVISIBLE);
 			}
 		};
@@ -601,7 +600,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 					try {
 						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						p.setVisibility(View.INVISIBLE);
 						return null;
 					}
@@ -609,7 +608,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			};
 			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 			p.setVisibility(View.INVISIBLE);
 		}
 	}
@@ -638,7 +637,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 					try {
 						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						p.setVisibility(View.INVISIBLE);
 						return null;
 					}
@@ -646,7 +645,7 @@ public class Activity_List extends AppCompatActivity implements CardBadge {
 			};
 			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 			p.setVisibility(View.INVISIBLE);
 		}
 	}

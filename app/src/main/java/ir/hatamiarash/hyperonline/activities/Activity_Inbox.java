@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
 		} catch (NullPointerException e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 		
 		messageList = new ArrayList<>();
@@ -127,7 +126,7 @@ public class Activity_Inbox extends AppCompatActivity implements Refresh {
 				message.setVisibility(View.GONE);
 			}
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 			hideDialog();
 		}
 	}

@@ -25,7 +25,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.crashlytics.android.Crashlytics;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -123,7 +122,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 						Helper.MakeToast(Activity_ListDetails.this, errorMsg, TAGs.ERROR);
 					}
 				} catch (JSONException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 				}
 			}
 		};
@@ -131,7 +130,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Crashlytics.logException(error);
+				analytics.reportException(error);
 				hideDialog();
 			}
 		};
@@ -180,7 +179,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 					try {
 						return mRequestBody.getBytes("utf-8");
 					} catch (UnsupportedEncodingException e) {
-						Crashlytics.logException(e);
+						analytics.reportException(e);
 						hideDialog();
 						return null;
 					}
@@ -188,7 +187,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 			};
 			application.addToRequestQueue(stringRequest);
 		} catch (Exception e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 			hideDialog();
 		}
 	}
@@ -227,7 +226,7 @@ public class Activity_ListDetails extends AppCompatActivity implements CardBadge
 			getSupportActionBar().setCustomView(v, p);
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
 		} catch (NullPointerException e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 		}
 	}
 	

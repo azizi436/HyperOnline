@@ -22,7 +22,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -140,7 +139,7 @@ public class Activity_EditPassword extends AppCompatActivity {
 						Helper.MakeToast(Activity_EditPassword.this, errorMsg, TAGs.ERROR);
 					}
 				} catch (JSONException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 					hideDialog();
 					finish();
 				}
@@ -150,7 +149,7 @@ public class Activity_EditPassword extends AppCompatActivity {
 		errorListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Crashlytics.logException(error);
+				analytics.reportException(error);
 				hideDialog();
 				finish();
 			}
@@ -195,7 +194,7 @@ public class Activity_EditPassword extends AppCompatActivity {
 			));
 			application.addToRequestQueue(stringRequest);
 		} catch (JSONException e) {
-			Crashlytics.logException(e);
+			analytics.reportException(e);
 			hideDialog();
 		}
 	}

@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.crashlytics.android.Crashlytics;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.hatamiarash.hyperonline.HyperOnline;
@@ -67,7 +65,7 @@ public class Activity_Social extends AppCompatActivity {
 				try {
 					startActivity(likeIng);
 				} catch (ActivityNotFoundException e) {
-					Crashlytics.logException(e);
+					analytics.reportException(e);
 					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/online.hyper")));
 				}
 			}

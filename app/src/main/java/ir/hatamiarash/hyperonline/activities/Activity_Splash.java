@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.github.ybq.android.spinkit.style.Wave;
@@ -30,14 +29,19 @@ import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ir.hatamiarash.hyperonline.HyperOnline;
 import ir.hatamiarash.hyperonline.R;
 import ir.hatamiarash.hyperonline.helpers.FontHelper;
 import ir.hatamiarash.hyperonline.helpers.Helper;
+import ir.hatamiarash.hyperonline.interfaces.Analytics;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static ir.hatamiarash.hyperonline.HyperOnline.HOST;
 
 public class Activity_Splash extends AppCompatActivity {
+	HyperOnline application;
+	Analytics analytics;
+	
 	@BindView(R.id.logo)
 	public ImageView logo;
 	@BindView(R.id.spinner)
@@ -48,6 +52,9 @@ public class Activity_Splash extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		ButterKnife.bind(this);
+		
+		application = (HyperOnline) getApplication();
+		analytics = application.getAnalytics();
 		
 		Wave animation = new Wave();
 		spinner.setIndeterminateDrawable(animation);
@@ -93,13 +100,13 @@ public class Activity_Splash extends AppCompatActivity {
 				connection.setConnectTimeout(2000);
 				return connection.getResponseCode() == HttpsURLConnection.HTTP_OK;
 			} catch (SocketTimeoutException | MalformedURLException e) {
-				Crashlytics.logException(e);
+				analytics.reportException(e);
 				return false;
 			} catch (IOException e) {
-				Crashlytics.logException(e);
+				analytics.reportException(e);
 				return false;
 			} catch (Exception e) {
-				Crashlytics.logException(e);
+				analytics.reportException(e);
 				return false;
 			}
 		}
