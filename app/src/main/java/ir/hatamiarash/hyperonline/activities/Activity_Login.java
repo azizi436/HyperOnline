@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bugsnag.android.Bugsnag;
 import com.crashlytics.android.Crashlytics;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -146,6 +147,7 @@ public class Activity_Login extends AppCompatActivity {
 						Crashlytics.setUserIdentifier(uid);
 						Crashlytics.setUserName(user.getString(TAGs.NAME));
 						Amplitude.getInstance().setUserId(uid);
+						Bugsnag.setUser(uid, user.getString(TAGs.PHONE), user.getString(TAGs.NAME));
 						
 						db.addUser(
 								user.getString(TAGs.NAME),
