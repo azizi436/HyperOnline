@@ -135,3 +135,5 @@ public <init>(...);
 -keep class org.msgpack.** { *; }
 
 -keep class com.google.android.gms.** { *; }
+
+-dontwarn com.mixpanel.**
