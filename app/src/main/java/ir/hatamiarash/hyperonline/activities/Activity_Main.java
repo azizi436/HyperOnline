@@ -271,6 +271,7 @@ public class Activity_Main extends AppCompatActivity implements
 		PrimaryDrawerItem item_login = new CustomPrimaryDrawerItem().withIdentifier(24).withName("ورود").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
 		PrimaryDrawerItem item_register = new CustomPrimaryDrawerItem().withIdentifier(25).withName("ثبت نام").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_create);
 		PrimaryDrawerItem item_wallet = new CustomPrimaryDrawerItem().withIdentifier(26).withName("کیف پول").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_account_balance_wallet);
+		PrimaryDrawerItem item_request = new CustomPrimaryDrawerItem().withIdentifier(27).withName("سفارش خارج برنامه").withTypeface(persianTypeface).withIcon(GoogleMaterial.Icon.gmd_add_shopping_cart);
 		SectionDrawerItem item_section = new SectionDrawerItem().withName("هایپرآنلاین").withTypeface(persianTypeface);
 		SectionDrawerItem item_section2 = new SectionDrawerItem().withName("محصولات").withTypeface(persianTypeface);
 		
@@ -291,6 +292,7 @@ public class Activity_Main extends AppCompatActivity implements
 				item_track,
 				item_inbox,
 				item_comment,
+				item_request,
 				item_section2,
 				item_categories,
 				item_collections,
@@ -497,6 +499,11 @@ public class Activity_Main extends AppCompatActivity implements
 							}
 							if (item == 26) {
 								Intent i = new Intent(getApplicationContext(), Activity_Wallet.class);
+								i.putExtra(TAGs.UID, db_user.getUserDetails().get(TAGs.UID));
+								startActivity(i);
+							}
+							if (item == 27) {
+								Intent i = new Intent(getApplicationContext(), Activity_RequestList.class);
 								i.putExtra(TAGs.UID, db_user.getUserDetails().get(TAGs.UID));
 								startActivity(i);
 							}
