@@ -9,3 +9,4 @@
 *.db
 /app/src/main/AndroidManifest.xml
 /app/fabric.properties
+/app/.externalNativeBuild/
