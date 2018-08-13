@@ -1241,6 +1241,7 @@ public class Activity_Main extends AppCompatActivity implements
 			params.put("p", pushe);
 			params.put("f", firebase);
 			params.put("v", Build.VERSION.SDK_INT);
+			params.put("a", BuildConfig.VERSION_CODE);
 			final String mRequestBody = params.toString();
 			
 			StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
