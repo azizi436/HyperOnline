@@ -72,7 +72,7 @@ public class Activity_RequestList extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main_screen);
+		setContentView(R.layout.activity_request_list);
 		ButterKnife.bind(this);
 		
 		application = (HyperOnline) getApplication();
